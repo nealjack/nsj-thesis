@@ -1,0 +1,56 @@
+\section{Discussion}
+\label{sec:disc}
+While we have verified that our model generally matches reality, many
+assumptions were made that impact its predictions. Specifically,
+lifetime estimates produced by the model can be described as optimistic. We are
+skeptical of the reality of these lifetimes when considering the myriad of
+factors not considered by our model.\\
+
+\vspace{-6pt}
+\noindent
+\textbf{Model Limitations.}
+Many assumptions were made when designing the model and considering different
+parameters and behaviors.  In particular, many dynamic parameters are modeled
+as static. For example, leakage is dependent on state of charge and age,
+but we assume a static leakage rate. Similarly, many
+components like solar panels and boost regulators have dynamic efficiencies,
+that we consider to be static. Nominal voltages for solar panels and
+batteries are used
+%throughout
+to calculate energy output and capacity,
+%in our model,
+but they
+are really dynamic. In addition, we do not consider the effects of temperature
+and ignore cycle capacity degradation for supercapacitors and
+secondary-cells. We also assume that every platform can wake up
+and perform a task at any point in its voltage curve. In reality,
+many intermittent systems must recharge to a threshold voltage. We attempt
+to ensure that these assumptions favor intermittent systems over
+larger capacity designs so that
+our conclusions are not distorted by inaccuracies in the model.\\
+
+\vspace{-6pt}
+\noindent
+\textbf{Theoretically Infinite vs. Reality.}
+We discuss capacitor-based systems as perpetual throughout the
+paper and even predict that \name will have 30-50 years lifetimes
+under some configurations and harvesting conditions. While in theory
+this is true, it is highly unlikely that any sensor nodes we build and deploy today
+will be functional, let alone relevant in 50\,years.
+We expect physical degradation of not only energy storage components, but
+also the silicon itself. The MCU architectures in use on these systems have
+only been commercially available for 1-2 decades. This makes it
+difficult to state that failure rates will remain low for over five.
+Components like MEMS sensors and oscillators
+will age and lose calibration well before this time.
+Outside of physical degradation, we must also consider the potential decline of common
+protocols and standards that dictate wireless and security functions, and special
+care will need to be taken to ensure long term operation ~\cite{kininghamCESEL16}.
+%While it is still worthwhile to consider how we might build system and power
+%supply architectures that support very long lifetime operation,
+Before advances in device and sensor technologies are realized,
+we expect that the increases in usable energy shown in this work may translate into
+sensor nodes that are smaller in size or more capable,
+rather than sensor nodes with multi-decade lifetimes.
+
+

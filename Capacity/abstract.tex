@@ -1,0 +1,181 @@
+% ABSTRACT
+
+%Battery-powered sensors have long been the standard for simple and
+%reliable sensor deployments, however as the power of individual components
+%lowers, energy harvesting becomes an ever more viable means of powering
+%sensors.
+%even in deployment scenarios with low amounts of ambient energy.
+%
+%Today most energy harvesting systems rely entirely on harvested energy,
+Today, most sensors that harvest energy
+%attempting to subsist on the small amounts
+%of energy harvested
+from indoor solar, ambient RF, or thermal gradients
+%rely entirely on this harvested energy,
+buffer small amounts of energy in capacitors as they intermittently work through a sensing task.
+%
+While the utilization of capacitors for energy storage affords these systems
+indefinite lifetimes, their low energy capacity
+necessitates complex intermittent programming models for state retention and
+energy management.
+%
+However, recent advances in battery technology lead us to reevaluate the impact
+that increased energy storage capacity may have on the necessity of these
+programming models and the reliability of energy harvesting sensors.
+
+In this paper, we propose a capacity-based framework to help structure
+energy harvesting sensor design,
+analyze the impact of capacity on key reliability metrics
+using a data-driven simulation, and
+consider how backup energy storage alters the design space.
+%
+We find that for many designs that utilize solar energy harvesting, increasing
+energy storage capacity to 1-10~mWh can obviate the need for intermittent
+programming techniques, augment the total harvested energy by 1.4-2.3x, and
+improve the availability of a sensor by 1.3-2.6x.  We also show that a hybrid
+design using energy harvesting with a secondary-cell battery and a backup
+primary-cell battery can achieve 2-4x the lifetime of primary-cell only designs
+while eliminating the failure modes present in energy harvesting systems.
+%
+%By modeling the charge-discharge patterns of energy stores in indoor solar
+%harvesting environments, we
+%find that increasing energy storage capacity
+%afforded by rechargeable batteries
+%allows a sensor to capture 1.5-2.2x the available energy and
+%increases its availability
+%by a factor of up to 2.5x.
+%
+%We also consider the addition of a primary-cell battery
+%as a backup energy store in addition to energy harvesting and find that this
+%hybrid design can achieve 4-6x the lifetime of primary-cell only designs while
+%eliminating the failure modes present in energy harvesting systems.
+%
+Finally, we implement an indoor, solar energy harvesting sensor based on
+our analysis and find that its behavior aligns with
+our simulation's predictions.
+
+
+
+%rely entirely
+%on harvested energy, buffering small amounts in
+%this new class of sensors relied entirely on harvested energy, buffering
+%small amounts in capacitors as they intermittently worked through a sensing task.
+
+%they suffer from short lifetimes and
+%high maintenance costs associated with battery replacement.
+%In response, a new class of sensors emerged that eschew batteries and rely entirely on harvested
+%energy, buffering small amounts in a capacitor to intermittently work
+%through a sensing task.
+%While these systems
+%achieve a power supply with an indefinite lifetime,
+%avoid batteries,
+%which are dismissed as expensive, failure-prone,
+%fragile, and temperature sensitive,
+%they must tolerate the decreased
+%availability, lower energy utilization,
+%and more complex programming models inherent to a low-capacity,
+%intermittent design.
+%This work reevaluates the use of batteries and argues for sensor designs that utilize rechargeable and non-rechargeable batteries in tandem.
+%, both rechargeable and non-rechargable,
+%bridges the gap between these two design points,
+%advocating
+%for their use in energy harvesting sensors
+%to extend the lifetime of
+%a sensor node,
+%observing that the increased energy capacity afforded by rechargeable batteries can increase harvestable energy utilization and in turn, system availability, responsiveness, and capability.
+%Additionally, the inclusion of non-rechargeable batteries
+%grants a sensor a finite non-intermittent lifetime.
+%By modeling the charge-discharge patterns of energy stores in indoor solar
+%harvesting environments, under both periodic and event-driven workloads, we
+%observe that the increased energy capacity afforded by rechargeable batteries
+%can capture 1.5-2.2x the available energy of capacitor-only designs.
+%For the majority of workloads and harvesting conditions considered, this
+%increase in available energy
+%%substantially
+%%increases system availability,
+%%responsiveness, and capability,
+%allows a modeled sensor to perform 100\% of expected tasks on time, compared to 40-80\% for a system that utilizes capacitors.
+%The inclusion of a non-rechargeable battery
+%achieves 4-6x the lifetime of primary-cell only designs. We consider new
+%battery technology and management techniques, and conclude that many of the
+%past criticisms against their use are outdated or mitigated for many
+%applications in human-centric environments.
+%%We conclude that power supplies that utilize batteries
+%%are suitable for many sensor applications in human-centric environments,
+%%ensure a minimum 100\% available and responsive lifetime and entirely avoid intermittency throughout the sensor's lifetime.
+%For these applications, systems
+%that employ batteries can entirely avoid the reduced availability, complex
+%energy management, and special-purpose hardware platforms associated with
+%intermittency and still achieve a long, but finite, lifetime.
+
+%We support these claims by modeling the charge-discharge patterns of energy
+%stores placed in real energy harvesting scenarios under periodic and event
+%based workloads, and we defend our use of batteries by showing that
+%the claims against them are either unfounded, outdated, or easily mitigated
+%for the vast majority of real use-cases.
+%
+%
+%
+%By modeling the charge-discharge patterns of energy stores placed in real
+%energy-harvesting scenarios under periodic and event-based workloads, we show
+%the performance increases associated
+%
+%of
+%the sensor node. To support these decisions we model the charge-discharge patterns
+%of energy stores when placed in real, energy-harvesting scenarios under periodic
+%and event-based workloads,
+%
+%
+%
+%By forgoing the high capacity of
+%batteries however, these everyla
+%
+%
+%however they inherently trade-off
+%reliability
+%
+%Harvesting ambient energy to power distributed sensor nodes has the
+%potential to extend their lifetimes and increase their performance compared
+%to non-harvesting, battery-powered designs. Sensor platforms presented
+%in prior work take advantage of this harvested energy by temporarily storing it in
+%capacitors before using it to perform a small number of operations, intermittently
+%working through a sensing task. Some authors
+%
+%Energy harvesting has the potential to extend the lifetime and increase
+%the available
+%
+%however current
+%energy harvesting architectures
+%
+%Energy harvesting has the potential to power distributed sensing nodes,
+%extending their lifetimes, increasing the energy available to
+%perform sensing tasks, and reducing the maintenance cost of a sensor
+%deployment. In the past five years a trend has even
+%emerged pushing for ``perpetual'' batteryless sensors,
+%supported by claims that batteries are fragile, toxic, temperature
+%sensitive, and prone to long-term cycling failure. Alternative
+%designs temporarily store harvested energy in capacitors before performing
+%a small number of operations, intermittently working through a sensing task.
+%These intermittent designs, however, are inherently prone to low reliability
+%for many workloads, present users with non-standard programming models to mask
+%their intermittency, and make poor utilization of the harvestable ambient
+%energy.
+%
+%We argue that utilizing batteries, both rechargeable and non-rechargeable cells,
+%can solve these problems for the vast majority
+%of real workloads and deployment scenarios while still providing
+%the key benefits of energy harvesting.
+%By analyzing the reliability, lifetime and harvestable energy utilization
+%for a variety of energy storage systems we motivate the need to use
+%batteries, and we welcome their use by
+%showing that many claims against them are unfounded, outdated or easily mitigated.
+%To perform the analysis, we model the charge-discharge patterns of
+%energy stores when placed in real, energy-harvesting
+%scenarios under periodic and event-based workloads, and we evaluate this
+%model by comparing it to implementations of several points in the design space.
+%We show that for reasonable energy storage sizes, workloads, and
+%energy availability, sensor
+%nodes utilizing batteries along with energy harvesting can capture \hl{6x} the available
+%energy of capacitor-only designs and achieve at least \hl{4x} the lifetime of
+%primary-cell only designs, all while avoiding the poor reliability and painful
+%programming models associated with intermittency.

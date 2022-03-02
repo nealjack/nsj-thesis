@@ -1,0 +1,549 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{00}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{{\tt DOI:}\penalty0{#1}\ }
+  \fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{Adkins, Campbell, DeBruin, Ghena, Kempke,
+  Klugman, Kuo, Natarajan, Pannuto, Zachariah, et~al\mbox{.}}{Adkins
+  et~al\mbox{.}}{2015}]%
+        {adkins2015michigan}
+\bibfield{author}{\bibinfo{person}{J.\ Adkins}, \bibinfo{person}{B.\ Campbell},
+  \bibinfo{person}{S.\ DeBruin}, \bibinfo{person}{B.\ Ghena},
+  \bibinfo{person}{B.\ Kempke}, \bibinfo{person}{N.\ Klugman},
+  \bibinfo{person}{Y.-s.\ Kuo}, \bibinfo{person}{D.\ Natarajan},
+  \bibinfo{person}{P.\ Pannuto}, \bibinfo{person}{T.\ Zachariah}, {and}
+  \bibinfo{person}{others}} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Demo: Michigan's IoT Toolkit} {\em
+  (\bibinfo{series}{SenSys'15})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Adkins, Ghena, Jackson, Pannuto, Rohrer,
+  Campbell, and Dutta}{Adkins et~al\mbox{.}}{2018}]%
+        {adkins2018signpost}
+\bibfield{author}{\bibinfo{person}{J.\ Adkins}, \bibinfo{person}{B.\ Ghena},
+  \bibinfo{person}{N.\ Jackson}, \bibinfo{person}{P.\ Pannuto},
+  \bibinfo{person}{S.\ Rohrer}, \bibinfo{person}{B.\ Campbell}, {and}
+  \bibinfo{person}{P.\ Dutta}} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{The Signpost Platform for City-Scale Sensing} {\em
+  (\bibinfo{series}{IPSN'18})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{{Analog Devices}}{{Analog Devices}}{2017}]%
+        {adp5091}
+\bibfield{author}{\bibinfo{person}{{Analog Devices}}}.
+\newblock \bibinfo{title}{ADP5091 Datasheet}.
+\newblock
+  \bibinfo{howpublished}{\url{http://www.analog.com/media/en/technical-documentation/data-sheets/ADP5091-5092.pdf}}.
+    (\bibinfo{year}{2017}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{{AVX}}{{AVX}}{2018}]%
+        {tantalumDatasheet}
+\bibfield{author}{\bibinfo{person}{{AVX}}}.
+\newblock \bibinfo{title}{TPS Series Capacitor Datasheet}.
+\newblock \bibinfo{howpublished}{\url{http://datasheets.avx.com/TPS.pdf}}.
+  (\bibinfo{year}{2018}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Belharouak, Koenig, and Amine}{Belharouak
+  et~al\mbox{.}}{2011}]%
+        {belharouakElectrochemistry11}
+\bibfield{author}{\bibinfo{person}{I.\ Belharouak}, \bibinfo{person}{G.~M.\
+  Koenig}, {and} \bibinfo{person}{K.\ Amine}},
+  \showarticletitle{Electrochemistry and safety of Li4Ti5O12 and graphite
+  anodes paired with LiMn2O4 for hybrid electric vehicle Li-ion battery
+  applications}.
+\newblock \bibinfo{journal}{{\em Journal of Power Sources\/}}
+  \bibinfo{volume}{196}, \bibinfo{number}{23} (\bibinfo{year}{2011}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Brunell, Hanauer, Loveridge, Dashwood, and
+  Bhagat}{Brunell et~al\mbox{.}}{2016}]%
+        {brunell2016effect}
+\bibfield{author}{\bibinfo{person}{M.\ Brunell}, \bibinfo{person}{B.\ Hanauer},
+  \bibinfo{person}{M.\ Loveridge}, \bibinfo{person}{R.\ Dashwood}, {and}
+  \bibinfo{person}{R.\ Bhagat}} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Effect of Zero Volt Storage on Commercial Lithium
+  Titanate Cells}. In \bibinfo{booktitle}{{\em Meeting Abstracts}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Brush, Lee, Mahajan, Agarwal, Saroiu, and
+  Dixon}{Brush et~al\mbox{.}}{2011}]%
+        {brushHome11}
+\bibfield{author}{\bibinfo{person}{A.~B.\ Brush}, \bibinfo{person}{B.\ Lee},
+  \bibinfo{person}{R.\ Mahajan}, \bibinfo{person}{S.\ Agarwal},
+  \bibinfo{person}{S.\ Saroiu}, {and} \bibinfo{person}{C.\ Dixon}}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Home Automation in the Wild: Challenges and
+  Opportunities} {\em (\bibinfo{series}{CHI '11})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Campbell and Dutta}{Campbell and
+  Dutta}{2014}]%
+        {campbellEnergy14}
+\bibfield{author}{\bibinfo{person}{B.\ Campbell} {and} \bibinfo{person}{P.\
+  Dutta}} \bibinfo{year}{2014}\natexlab{}.
+\newblock \showarticletitle{An Energy-harvesting Sensor Architecture and
+  Toolkit for Building Monitoring and Event Detection} {\em
+  (\bibinfo{series}{BuildSys'14})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Colin, Harvey, Lucia, and Sample}{Colin
+  et~al\mbox{.}}{2016}]%
+        {colin2016energy}
+\bibfield{author}{\bibinfo{person}{A.\ Colin}, \bibinfo{person}{G.\ Harvey},
+  \bibinfo{person}{B.\ Lucia}, {and} \bibinfo{person}{A.~P.\ Sample}},
+  \showarticletitle{An energy-interference-free hardware-software debugger for
+  intermittent energy-harvesting systems}.
+\newblock \bibinfo{journal}{{\em ACM SIGOPS Operating Systems Review\/}}
+  \bibinfo{volume}{50}, \bibinfo{number}{2} (\bibinfo{year}{2016}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Colin, Ruppel, and Lucia}{Colin
+  et~al\mbox{.}}{2018}]%
+        {colinReconfigurable18}
+\bibfield{author}{\bibinfo{person}{A.\ Colin}, \bibinfo{person}{E.\ Ruppel},
+  {and} \bibinfo{person}{B.\ Lucia}} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{A Reconfigurable Energy Storage Architecture for
+  Energy-harvesting Devices} {\em (\bibinfo{series}{ASPLOS '18})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Corke, Valencia, Si, Wark, and Overs}{Corke
+  et~al\mbox{.}}{2007}]%
+        {corke2007long}
+\bibfield{author}{\bibinfo{person}{P.\ Corke}, \bibinfo{person}{P.\ Valencia},
+  \bibinfo{person}{P.\ Si}, \bibinfo{person}{T.\ Wark}, {and}
+  \bibinfo{person}{L.\ Overs}} \bibinfo{year}{2007}\natexlab{}.
+\newblock \showarticletitle{Long-duration solar-powered wireless sensor
+  networks} {\em (\bibinfo{series}{SenSys'07})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{DeBruin, Campbell, and Dutta}{DeBruin
+  et~al\mbox{.}}{2013}]%
+        {debruin2013monjolo}
+\bibfield{author}{\bibinfo{person}{S.\ DeBruin}, \bibinfo{person}{B.\
+  Campbell}, {and} \bibinfo{person}{P.\ Dutta}}
+  \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Monjolo: An energy-harvesting energy meter
+  architecture} {\em (\bibinfo{series}{SenSys'13})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Edwards and Grinter}{Edwards and
+  Grinter}{2001}]%
+        {edwardsHome01}
+\bibfield{author}{\bibinfo{person}{W.~K.\ Edwards} {and}
+  \bibinfo{person}{R.~E.\ Grinter}} \bibinfo{year}{2001}\natexlab{}.
+\newblock \showarticletitle{At Home with Ubiquitous Computing: Seven
+  Challenges} {\em (\bibinfo{series}{UbiComp '01})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Gorlatova, Wallwater, and Zussman}{Gorlatova
+  et~al\mbox{.}}{2013}]%
+        {gorlatova2013networking}
+\bibfield{author}{\bibinfo{person}{M.\ Gorlatova}, \bibinfo{person}{A.\
+  Wallwater}, {and} \bibinfo{person}{G.\ Zussman}},
+  \showarticletitle{Networking low-power energy harvesting devices:
+  Measurements and algorithms}.
+\newblock \bibinfo{journal}{{\em IEEE Transactions on Mobile Computing\/}}
+  \bibinfo{volume}{12}, \bibinfo{number}{9} (\bibinfo{year}{2013}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Hester, Sitanayah, and Sorber}{Hester
+  et~al\mbox{.}}{2015}]%
+        {hesterTragedy15}
+\bibfield{author}{\bibinfo{person}{J.\ Hester}, \bibinfo{person}{L.\
+  Sitanayah}, {and} \bibinfo{person}{J.\ Sorber}}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Tragedy of the Coulombs: Federating Energy Storage
+  for Tiny, Intermittently-Powered Sensors} {\em (\bibinfo{series}{SenSys
+  '15})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Hester and Sorber}{Hester and Sorber}{2017a}]%
+        {hesterFlicker17}
+\bibfield{author}{\bibinfo{person}{J.\ Hester} {and} \bibinfo{person}{J.\
+  Sorber}} \bibinfo{year}{2017}\natexlab{a}.
+\newblock \showarticletitle{Flicker: Rapid Prototyping for the Batteryless
+  Internet-of-Things} {\em (\bibinfo{series}{SenSys '17})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Hester and Sorber}{Hester and Sorber}{2017b}]%
+        {hesterNew17}
+\bibfield{author}{\bibinfo{person}{J.\ Hester} {and} \bibinfo{person}{J.\
+  Sorber}} \bibinfo{year}{2017}\natexlab{b}.
+\newblock \showarticletitle{The Future of Sensing is Batteryless, Intermittent,
+  and Awesome} {\em (\bibinfo{series}{SenSys '17})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Hester, Storer, and Sorber}{Hester
+  et~al\mbox{.}}{2017}]%
+        {hesterTimely17}
+\bibfield{author}{\bibinfo{person}{J.\ Hester}, \bibinfo{person}{K.\ Storer},
+  {and} \bibinfo{person}{J.\ Sorber}} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Timely Execution on Intermittently Powered
+  Batteryless Sensors} {\em (\bibinfo{series}{SenSys '17})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{{HuaHui New Energy}}{{HuaHui New
+  Energy}}{2013}]%
+        {LTODatasheet}
+\bibfield{author}{\bibinfo{person}{{HuaHui New Energy}}}.
+\newblock \bibinfo{title}{LTO Battery Specification}.
+\newblock
+  \bibinfo{howpublished}{\url{http://www.batteryspace.com/prod-specs/7455.pdf}}.
+    (\bibinfo{year}{2013}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{{HuaHui New Energy}}{{HuaHui New
+  Energy}}{2018}]%
+        {LTODatasheet2}
+\bibfield{author}{\bibinfo{person}{{HuaHui New Energy}}}.
+\newblock \bibinfo{title}{LTO Battery Catalog}.
+\newblock \bibinfo{howpublished}{Self hosted. Removed for Anonymity.}.
+  (\bibinfo{year}{2018}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Jackson, Adkins, and Dutta}{Jackson
+  et~al\mbox{.}}{2018}]%
+        {jackson2018reconsidering}
+\bibfield{author}{\bibinfo{person}{N.\ Jackson}, \bibinfo{person}{J.\ Adkins},
+  {and} \bibinfo{person}{P.\ Dutta}} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{Reconsidering Batteries in Energy Harvesting
+  Sensing} {\em (\bibinfo{series}{ENSsys'18})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Jiang, Polastre, and Culler}{Jiang
+  et~al\mbox{.}}{2005}]%
+        {jiang2005perpetual}
+\bibfield{author}{\bibinfo{person}{X.\ Jiang}, \bibinfo{person}{J.\ Polastre},
+  {and} \bibinfo{person}{D.\ Culler}} \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{Perpetual environmentally powered sensor networks}
+  {\em (\bibinfo{series}{IPSN'05})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Kansal, Hsu, Zahedi, and Srivastava}{Kansal
+  et~al\mbox{.}}{2007}]%
+        {kansal2007power}
+\bibfield{author}{\bibinfo{person}{A.\ Kansal}, \bibinfo{person}{J.\ Hsu},
+  \bibinfo{person}{S.\ Zahedi}, {and} \bibinfo{person}{M.~B.\ Srivastava}},
+  \showarticletitle{Power management in energy harvesting sensor networks}.
+\newblock \bibinfo{journal}{{\em ACM Transactions on Embedded Computing Systems
+  (TECS)\/}} \bibinfo{volume}{6}, \bibinfo{number}{4} (\bibinfo{year}{2007}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Kim, Andersen, Chen, Kumar, Zhao, Ma, and
+  Culler}{Kim et~al\mbox{.}}{2018}]%
+        {kim2018system}
+\bibfield{author}{\bibinfo{person}{H.-S.\ Kim}, \bibinfo{person}{M.~P.\
+  Andersen}, \bibinfo{person}{K.\ Chen}, \bibinfo{person}{S.\ Kumar},
+  \bibinfo{person}{W.~J.\ Zhao}, \bibinfo{person}{K.\ Ma}, {and}
+  \bibinfo{person}{D.~E.\ Culler}} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{System Architecture Directions for Post-SoC/32-bit
+  Networked Sensors}. In \bibinfo{booktitle}{{\em Proceedings of the 16th ACM
+  Conference on Embedded Networked Sensor Systems. ACM}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Kiningham, Horowitz, Levis, and
+  Boneh}{Kiningham et~al\mbox{.}}{2016}]%
+        {kininghamCESEL16}
+\bibfield{author}{\bibinfo{person}{K.\ Kiningham}, \bibinfo{person}{M.\
+  Horowitz}, \bibinfo{person}{P.\ Levis}, {and} \bibinfo{person}{D.\ Boneh}}
+  \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{CESEL: Securing a Mote for 20 Years} {\em
+  (\bibinfo{series}{EWSN '16})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Larsson and Mellander}{Larsson and
+  Mellander}{2014}]%
+        {larssonAbuse14}
+\bibfield{author}{\bibinfo{person}{F.\ Larsson} {and} \bibinfo{person}{B.-E.\
+  Mellander}}, \showarticletitle{Abuse by External Heating, Overcharge and
+  Short Circuiting of Commercial Lithium-Ion Battery Cells}.
+\newblock \bibinfo{journal}{{\em Journal of The Electrochemical Society\/}}
+  \bibinfo{volume}{161}, \bibinfo{number}{10} (\bibinfo{year}{2014}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Levis, Patel, Culler, and Shenker}{Levis
+  et~al\mbox{.}}{2004}]%
+        {levis2004trickle}
+\bibfield{author}{\bibinfo{person}{P.\ Levis}, \bibinfo{person}{N.\ Patel},
+  \bibinfo{person}{D.\ Culler}, {and} \bibinfo{person}{S.\ Shenker}}
+  \bibinfo{year}{2004}\natexlab{}.
+\newblock \showarticletitle{Trickle: A self-regulating algorithm for code
+  propagation and maintenance in wireless sensor networks} {\em
+  (\bibinfo{series}{NSDI '04})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Lin, Yu, Hsu, Zahedi, Lee, Friedman, Kansal,
+  Raghunathan, and Srivastava}{Lin et~al\mbox{.}}{2005}]%
+        {lin2005heliomote}
+\bibfield{author}{\bibinfo{person}{K.\ Lin}, \bibinfo{person}{J.\ Yu},
+  \bibinfo{person}{J.\ Hsu}, \bibinfo{person}{S.\ Zahedi}, \bibinfo{person}{D.\
+  Lee}, \bibinfo{person}{J.\ Friedman}, \bibinfo{person}{A.\ Kansal},
+  \bibinfo{person}{V.\ Raghunathan}, {and} \bibinfo{person}{M.\ Srivastava}}
+  \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{Heliomote: enabling long-lived sensor networks
+  through solar energy harvesting} {\em (\bibinfo{series}{SenSys'05})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Lucia, Balaji, Colin, Maeng, and Ruppel}{Lucia
+  et~al\mbox{.}}{2017}]%
+        {luciaIntermittent17}
+\bibfield{author}{\bibinfo{person}{B.\ Lucia}, \bibinfo{person}{V.\ Balaji},
+  \bibinfo{person}{A.\ Colin}, \bibinfo{person}{K.\ Maeng}, {and}
+  \bibinfo{person}{E.\ Ruppel}} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Intermittent Computing: Challenges and
+  Opportunities}. In \bibinfo{booktitle}{{\em SNAPL}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Lucia and Ransford}{Lucia and
+  Ransford}{2015}]%
+        {lucia2015simpler}
+\bibfield{author}{\bibinfo{person}{B.\ Lucia} {and} \bibinfo{person}{B.\
+  Ransford}}, \showarticletitle{A simpler, safer programming and execution
+  model for intermittent systems}.
+\newblock \bibinfo{journal}{{\em ACM SIGPLAN Notices\/}} \bibinfo{volume}{50},
+  \bibinfo{number}{6} (\bibinfo{year}{2015}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Mainwaring, Culler, Polastre, Szewczyk, and
+  Anderson}{Mainwaring et~al\mbox{.}}{2002}]%
+        {mainwaring2002wireless}
+\bibfield{author}{\bibinfo{person}{A.\ Mainwaring}, \bibinfo{person}{D.\
+  Culler}, \bibinfo{person}{J.\ Polastre}, \bibinfo{person}{R.\ Szewczyk},
+  {and} \bibinfo{person}{J.\ Anderson}} \bibinfo{year}{2002}\natexlab{}.
+\newblock \showarticletitle{Wireless sensor networks for habitat monitoring}
+  {\em (\bibinfo{series}{WSNA'02})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Margolies, Gorlatova, Sarik, Stanje, Zhu,
+  Miller, Szczodrak, Vigraham, Carloni, Kinget, et~al\mbox{.}}{Margolies
+  et~al\mbox{.}}{2015}]%
+        {margolies2015energy}
+\bibfield{author}{\bibinfo{person}{R.\ Margolies}, \bibinfo{person}{M.\
+  Gorlatova}, \bibinfo{person}{J.\ Sarik}, \bibinfo{person}{G.\ Stanje},
+  \bibinfo{person}{J.\ Zhu}, \bibinfo{person}{P.\ Miller}, \bibinfo{person}{M.\
+  Szczodrak}, \bibinfo{person}{B.\ Vigraham}, \bibinfo{person}{L.\ Carloni},
+  \bibinfo{person}{P.\ Kinget}, {and} \bibinfo{person}{others}},
+  \showarticletitle{Energy-harvesting active networked tags (EnHANTs):
+  Prototyping and experimentation} {\em (\bibinfo{series}{TOSN})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Martin, Charbiwala, and Srivastava}{Martin
+  et~al\mbox{.}}{2012}]%
+        {martin2012doubledip}
+\bibfield{author}{\bibinfo{person}{P.\ Martin}, \bibinfo{person}{Z.\
+  Charbiwala}, {and} \bibinfo{person}{M.\ Srivastava}}
+  \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{DoubleDip: Leveraging thermoelectric harvesting for
+  low power monitoring of sporadic water use} {\em
+  (\bibinfo{series}{SenSys'12})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{{Maxim Integrated}}{{Maxim
+  Integrated}}{2017}]%
+        {max17222}
+\bibfield{author}{\bibinfo{person}{{Maxim Integrated}}}.
+\newblock \bibinfo{title}{MAX17222 Datasheet}.
+\newblock
+  \bibinfo{howpublished}{\url{https://datasheets.maximintegrated.com/en/ds/MAX17220-MAX17225.pdf}}.
+    (\bibinfo{year}{2017}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Murata}{Murata}{2016}]%
+        {murataCap}
+\bibfield{author}{\bibinfo{person}{Murata}}.
+\newblock \bibinfo{title}{DMF Series EDLCs}.
+\newblock
+  \bibinfo{howpublished}{\url{https://www.murata.com/en-us/products/productdata/8796857270302/MFCDSF1E.pdf}}.
+    (\bibinfo{year}{2016}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Omar, Monem, Firouz, Salminen, Smekens,
+  Hegazy, Gaulous, Mulder, den Bossche, Coosemans, and Mierlo}{Omar
+  et~al\mbox{.}}{2014}]%
+        {omarLithium14}
+\bibfield{author}{\bibinfo{person}{N.\ Omar}, \bibinfo{person}{M.~A.\ Monem},
+  \bibinfo{person}{Y.\ Firouz}, \bibinfo{person}{J.\ Salminen},
+  \bibinfo{person}{J.\ Smekens}, \bibinfo{person}{O.\ Hegazy},
+  \bibinfo{person}{H.\ Gaulous}, \bibinfo{person}{G.\ Mulder},
+  \bibinfo{person}{P.~V.\ d.\ Bossche}, \bibinfo{person}{T.\ Coosemans}, {and}
+  \bibinfo{person}{J.~V.\ Mierlo}}, \showarticletitle{Lithium iron phosphate
+  based battery---Assessment of the aging parameters and development of cycle
+  life model}.
+\newblock \bibinfo{journal}{{\em Applied Energy\/}}  \bibinfo{volume}{113}
+  (\bibinfo{year}{2014}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Polastre, Szewczyk, and Culler}{Polastre
+  et~al\mbox{.}}{2005}]%
+        {polastre2005telos}
+\bibfield{author}{\bibinfo{person}{J.\ Polastre}, \bibinfo{person}{R.\
+  Szewczyk}, {and} \bibinfo{person}{D.\ Culler}}
+  \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{Telos: enabling ultra-low power wireless research}
+  {\em (\bibinfo{series}{IPSN'05})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{{Pressac}}{{Pressac}}{2017}]%
+        {pressac}
+\bibfield{author}{\bibinfo{person}{{Pressac}}}.
+\newblock \bibinfo{title}{Pressac CO2 Sensor Datasheet}.
+\newblock
+  \bibinfo{howpublished}{\url{http://www.pressac.com/help/CO2TemperatureAndHumiditySensor.html}}.
+    (\bibinfo{year}{2017}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Raisigel, Chabanis, Ressejac, and
+  Trouillon}{Raisigel et~al\mbox{.}}{2010}]%
+        {raisigel2010autonomous}
+\bibfield{author}{\bibinfo{person}{H.\ Raisigel}, \bibinfo{person}{G.\
+  Chabanis}, \bibinfo{person}{I.\ Ressejac}, {and} \bibinfo{person}{M.\
+  Trouillon}} \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{Autonomous wireless sensor node for building
+  climate conditioning application} {\em (\bibinfo{series}{SENSORCOMM'10})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Ransford, Sorber, and Fu}{Ransford
+  et~al\mbox{.}}{2012}]%
+        {ransford2012mementos}
+\bibfield{author}{\bibinfo{person}{B.\ Ransford}, \bibinfo{person}{J.\ Sorber},
+  {and} \bibinfo{person}{K.\ Fu}}, \showarticletitle{Mementos: System support
+  for long-running computation on RFID-scale devices}.
+\newblock \bibinfo{journal}{{\em Acm Sigplan Notices\/}} \bibinfo{volume}{47},
+  \bibinfo{number}{4} (\bibinfo{year}{2012}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Shehan and Edwards}{Shehan and
+  Edwards}{2007}]%
+        {shehanHome07}
+\bibfield{author}{\bibinfo{person}{E.\ Shehan} {and} \bibinfo{person}{W.~K.\
+  Edwards}} \bibinfo{year}{2007}\natexlab{}.
+\newblock \showarticletitle{Home Networking and HCI: What Hath God Wrought?}
+  {\em (\bibinfo{series}{CHI '07})}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{{Shenzhen Hibatt Technology}}{{Shenzhen Hibatt
+  Technology}}{2018}]%
+        {30mahlifepo}
+\bibfield{author}{\bibinfo{person}{{Shenzhen Hibatt Technology}}}.
+\newblock \bibinfo{title}{Mini LiFePo4 Battery}.
+\newblock
+  \bibinfo{howpublished}{\url{https://www.alibaba.com/product-detail/Mini-LiFePO4-battery-10130-30mAh-3_60717575578.html}}.
+    (\bibinfo{year}{2018}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{{Texas Instruments}}{{Texas
+  Instruments}}{2015}]%
+        {bq25505}
+\bibfield{author}{\bibinfo{person}{{Texas Instruments}}}.
+\newblock \bibinfo{title}{BQ25505 Datasheet}.
+\newblock
+  \bibinfo{howpublished}{\url{http://www.ti.com/lit/ds/symlink/bq25505.pdf}}.
+  (\bibinfo{year}{2015}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Wang, Liu, Hicks-Garner, Sherman, Soukiazian,
+  Verbrugge, Tataria, Musser, and Finamore}{Wang et~al\mbox{.}}{2011}]%
+        {wangCycle11}
+\bibfield{author}{\bibinfo{person}{J.\ Wang}, \bibinfo{person}{P.\ Liu},
+  \bibinfo{person}{J.\ Hicks-Garner}, \bibinfo{person}{E.\ Sherman},
+  \bibinfo{person}{S.\ Soukiazian}, \bibinfo{person}{M.\ Verbrugge},
+  \bibinfo{person}{H.\ Tataria}, \bibinfo{person}{J.\ Musser}, {and}
+  \bibinfo{person}{P.\ Finamore}}, \showarticletitle{Cycle-life model for
+  graphite-LiFePO4 cells}.
+\newblock \bibinfo{journal}{{\em Journal of Power Sources\/}}
+  \bibinfo{volume}{196}, \bibinfo{number}{8} (\bibinfo{year}{2011}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Yerva, Campbell, Bansal, Schmid, and
+  Dutta}{Yerva et~al\mbox{.}}{2012}]%
+        {yervaGrafting12}
+\bibfield{author}{\bibinfo{person}{L.\ Yerva}, \bibinfo{person}{B.\ Campbell},
+  \bibinfo{person}{A.\ Bansal}, \bibinfo{person}{T.\ Schmid}, {and}
+  \bibinfo{person}{P.\ Dutta}} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{Grafting Energy-harvesting Leaves Onto the
+  Sensornet Tree} {\em (\bibinfo{series}{IPSN'12})}.
+\newblock
+
+
+\end{thebibliography}

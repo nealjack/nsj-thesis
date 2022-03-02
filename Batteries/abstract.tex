@@ -1,0 +1,123 @@
+% ABSTRACT
+
+%Battery-powered sensor nodes have long been the standard for simple and
+%reliable sensor deployments, however they can suffer from short lifetimes and
+%high maintenance costs associated with battery replacement.
+%
+
+For the past decade, the status-quo for energy harvesting sensors
+has been to buffer small amounts of energy in capacitors to
+intermittently work through a sensing task. While using capacitors for storage
+offers these systems indefinite lifetime, it comes at a cost --
+%While these systems avoid
+%batteries, which are often dismissed as expensive, failure-prone, fragile, and
+%temperature sensitive,
+they must tolerate the decreased availability, lower energy utilization, and more complex programming models
+inherent to a volatile, intermittent design.
+We argue that many of these problems stem from insufficient energy storage and
+could be eliminated with the use of batteries.  Recent advances in rechargeable battery
+technology weaken the
+historical arguments against their use. We believe that using batteries
+in energy harvesting sensors will push us closer to a class of reliable,
+general purpose devices that can better serve human-centric sensing applications
+than their capacitor-based counterparts at the cost of having a finite, but long, lifetime.
+
+%
+%and new sensor designs that employ them
+%will benefit greatly from the increased energy storage afforded by rechargeable
+%batteries.
+%
+%While batteries do have a finite, but long, lifetime, their
+%capacity allows future sensors to avoid
+%costs and single-purpose designs associated with perpetual but
+%intermittent sensors.
+%poor availability, painful
+%programming,
+
+%This work bridges the gap between these two design points, advocating
+%for the use of energy harvesting to extend the lifetime of
+%a sensor node, exploiting rechargeable batteries to increase the
+%utilization of harvestable energy, and relying on non-rechargeable batteries
+%to ensure availability and avoid intermittency throughout the sensor's lifetime.
+%We support this use of batteries by showing that many of the criticisms lodged against
+%them are unfounded, outdated, or easily mitigated for the great majority of
+%use cases. By modeling the charge-discharge patterns of
+%energy stores in indoor harvesting
+%environments, under both periodic and event-driven workloads, we show that this design
+%can capture 1.5-2.2x the available energy of capacitor-only
+%designs and achieve 4-6x the lifetime of primary-cell only designs, all
+%while avoiding the poor availability, painful programming models, and special-purpose
+%hardware platforms associated
+%with intermittency.
+
+%We support these claims by modeling the charge-discharge patterns of energy
+%stores placed in real energy harvesting scenarios under periodic and event
+%based workloads, and we defend our use of batteries by showing that
+%the claims against them are either unfounded, outdated, or easily mitigated
+%for the vast majority of real use-cases.
+%
+%
+%
+%By modeling the charge-discharge patterns of energy stores placed in real
+%energy-harvesting scenarios under periodic and event-based workloads, we show
+%the performance increases associated
+%
+%of
+%the sensor node. To support these decisions we model the charge-discharge patterns
+%of energy stores when placed in real, energy-harvesting scenarios under periodic
+%and event-based workloads,
+%
+%
+%
+%By forgoing the high capacity of
+%batteries however, these everyla
+%
+%
+%however they inherently trade-off
+%availability
+%
+%Harvesting ambient energy to power distributed sensor nodes has the
+%potential to extend their lifetimes and increase their performance compared
+%to non-harvesting, battery-powered designs. Sensor platforms presented
+%in prior work take advantage of this harvested energy by temporarily storing it in
+%capacitors before using it to perform a small number of operations, intermittently
+%working through a sensing task. Some authors
+%
+%Energy harvesting has the potential to extend the lifetime and increase
+%the available
+%
+%however current
+%energy harvesting architectures
+%
+%Energy harvesting has the potential to power distributed sensing nodes,
+%extending their lifetimes, increasing the energy available to
+%perform sensing tasks, and reducing the maintenance cost of a sensor
+%deployment. In the past five years a trend has even
+%emerged pushing for ``perpetual'' batteryless sensors,
+%supported by claims that batteries are fragile, toxic, temperature
+%sensitive, and prone to long-term cycling failure. Alternative
+%designs temporarily store harvested energy in capacitors before performing
+%a small number of operations, intermittently working through a sensing task.
+%These intermittent designs, however, are inherently prone to low availability
+%for many workloads, present users with non-standard programming models to mask
+%their intermittency, and make poor utilization of the harvestable ambient
+%energy.
+%
+%We argue that utilizing batteries, both rechargeable and non-rechargeable cells,
+%can solve these problems for the vast majority
+%of real workloads and deployment scenarios while still providing
+%the key benefits of energy harvesting.
+%By analyzing the availability, lifetime and harvestable energy utilization
+%for a variety of energy storage systems we motivate the need to use
+%batteries, and we welcome their use by
+%showing that many claims against them are unfounded, outdated or easily mitigated.
+%To perform the analysis, we model the charge-discharge patterns of
+%energy stores when placed in real, energy-harvesting
+%scenarios under periodic and event-based workloads, and we evaluate this
+%model by comparing it to implementations of several points in the design space.
+%We show that for reasonable energy storage sizes, workloads, and
+%energy availability, sensor
+%nodes utilizing batteries along with energy harvesting can capture \hl{6x} the available
+%energy of capacitor-only designs and achieve at least \hl{4x} the lifetime of
+%primary-cell only designs, all while avoiding the poor availability and painful
+%programming models associated with intermittency.

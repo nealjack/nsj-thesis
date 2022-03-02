@@ -1,0 +1,206 @@
+\section{Model Evaluation}
+\label{sec:eval}
+To evaluate the model, we perform a three-month-long deployment in a partially sunlit room
+using i) a primary-cell only system, ii) an intermittent, capacitor-only system, and iii) \name, our
+system that features both a secondary and primary-cell. We model these
+systems over the same period and compare the availability of \name to the
+intermittent system.
+
+\subsection{Model Analysis}
+\label{sec:eval:model}
+We analyze the deployment of these systems
+%in a partially sunlit room for three months
+and compare their behavior to our
+model's predictions: i) ten CR2032 primary-cell only devices, ii) an
+intermittent system configured with just 500\textmu F of capacitance (about
+0.36\,\textmu Wh at 2.2\,V), and iii) \name, configured with a 20\,mAh
+(48\,mWh) secondary-cell, half of which is usable, and a CR2032 backup.  The
+primary-cell only device performs environmental sensing over BLE every second.
+The intermittent system  sends a beacon as soon as its capacitor bank is full.
+When its energy is depleted, it powers off and charges
+again. \name is running the ``sense and send'' workload that we described in
+\cref{sec:overview}, and sends illuminance measurements every second. This
+workload stresses the model and requires more charge and discharge cycles.  We
+use \name illuminance readings to estimate irradiance using the same scaling factors used by
+Yerva et al.~\cite{yervaGrafting12}, and use these traces as
+model input.\\
+
+\vspace{-6pt}
+\noindent
+\textbf{Primary-Cell Only.}
+We model the workload of the primary-cell system and produce estimates for
+lifetime.  Our model predicts the platform lifetime
+to be 58 days.  We find that the average lifetime of the 10 devices is 61 days.
+%,
+%from initial deployment to energy depletion, is 61 days.
+\\
+
+\vspace{-6pt}
+\noindent
+\textbf{Intermittent.}
+We model the number of packets sent each hour by the
+intermittent system over a three week period, and compare against the results of an actual device in
+\cref{fig:eval:pkt}.
+The average daily error of the model versus our results is 15\%, with a standard deviation of
+17\%. This error can attributed to two primary sources. Illuminance is measured
+close to, but not exactly at the solar panel of the test device. Occasional
+direct sunbeams, like that experienced on day 16, can illuminate the solar
+panel but not the sensor, or vice versa. This
+results in a substantial over or underestimate of available light. In addition
+to inaccurate light measurements, we introduce error through our estimation of
+irradiance. We measure illuminance
+instead of irradiance, and must resort to a piecewise linear estimation, when
+in reality the relationship is not well defined and non-linear when considering
+different light sources. In the case of our estimation, results
+indicate that the model consistently underestimates high irradiance measurements.\\
+\placefigure{tab:components}
+\placefigure[t]{fig:evalcmp}
+
+\vspace{-6pt}
+\noindent
+\textbf{Secondary and Primary-Cell.}
+We compare our model's predicted state of charge to a deployed \name over a seven
+day period in \cref{fig:eval:soc}. We estimate state of charge from the reported secondary-cell
+voltage,
+%,
+%and measured voltage
+%curves of the installed 20\,mAh battery
+and irradiance from
+lux measurements. In this figure, the state of
+charge cycles between configured battery hysteresis limits, as the workload is
+too intense to be sustained by energy harvesting alone.
+%and the Permamote must
+%use energy from its primary cell.
+Flat and upward slopes of the curve represent the
+device in hysteresis, using the primary battery to perform its workload. Upper slopes
+indicate the secondary cell is charging from harvested energy.
+Downward slopes indicate the device is out of hysteresis and is using harvested
+energy stored in its secondary battery to perform its workload.
+%The device is
+%charging and in
+%hysteresis during upward
+%slopes.
+The shaded ``nighttime'' regions are not uniform, as the
+deployment environment is occupied by graduate students that occasionally work
+late hours or forget to turn off the lights.  The model correctly predicts the
+cycling
+behavior of the deployed device for two days, but deviates
+during the third day. The model predicts that the device would charge above the upper
+hysteresis limit and begin supplying energy from the secondary-cell before the
+test device actually does.  This inaccuracy, like that of the last of
+experiment, is partially due to our inexact estimation of irradiance.  In
+addition, real device hysteresis limits are set using resistor networks.  The
+resistors used have 1-5\% tolerance, and are susceptible to temperature
+changes, which introduces dynamic errors that is not accounted for in our model.
+Even though the predicted state of charge deviates after two days, the length
+and frequency of periods in which harvested energy is stored and used %in the secondary-cell
+are identical to our experimental measurements.
+%While our model correctly predicts cycling timing and frequency, it appears the
+%state of charge  does not quite match that of the measurements.  This is
+%because the voltage measured is not the open circuit voltage, and is affected
+%by voltage droop due to the applied system load as well as inflated charging
+%voltage from the energy harvesting front end.  Ignoring these effects, the
+%cycling of the model's prediction is closely synchronized with the estimated
+%state of charge.
+%We compare the model's predicted
+%state of charge over time to the outputs of systems we
+%have deployed. For energy harvesting systems we collect lux measurements
+%throughout the deployment and convert lux to irradiance based on the
+%data collected in Yerva et al.~\cite{yervaGrafting12}. \\
+%\vspace{-6pt}
+%\noindent
+%\textbf{Permamote.}\\
+\subsection{\name Performance}
+\placefigure[t]{fig:eval}
+\label{sec:eval:permamote}
+%In addition to evaluating our model,
+We also compare the performance of the
+deployed intermittent system and \name. In \cref{fig:evalcmp}, we show the
+number of packets sent per hour for two days. \name sends data every
+second, while the intermittent system sends as fast as possible. \name is
+able to collect and send its data continuously, while the
+intermittent system is limited to sending only during the day. This
+demonstrates the increased availability afforded by increasing secondary
+capacity and including a backup energy store.
+
+We also use our model to explore the estimated performance of \name
+compared to prior systems.
+To isolate the analysis to just power supply types and sizing, we assume each
+system uses the same low-power hardware and is performing the same workload.
+The results of this modeling are shown in \cref{tab:related}. Our model estimates that
+\name can expect several decades of 100\% reliable lifetime when configured as
+it was deployed for this evaluation, albeit configured with a less intense workload.
+%While the workload used with \name is not
+%sustainable for the multi-decade lifetimes we are targeting, it still
+%exemplifies the increase in reliability afforded by including a primary-cell.
+
+
+\begin{definefigure}{fig:eval}
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/capacity/experiment_pkt/exp_vs_sim_pkt}
+    \caption{Intermittent Node}
+    \label{fig:eval:pkt}
+  \end{subfigure}\\%\hspace{0.5cm}
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/capacity/experiment_soc/exp_vs_sim_soc}
+    \caption{Permamote}
+    \label{fig:eval:soc}
+  \end{subfigure}
+    \caption{Model comparison to deployed hardware.
+    \normalfont
+    Data from a three month deployment of two systems is used to verify our model.
+    (a) We use three weeks of lux measurements %from a month-long deployment
+    to estimate irradiance and model the number of packets transmitted by an
+    intermittent node. Average daily error is 15\%, with a standard deviation
+    of 17\%. (b) We model and measure a \name's state of charge while running a
+    ``sense and send'' workload with a 1\,s period for a week, beginning at
+    midnight on the first day. Secondary charging hysteresis
+    limits of the devices are set at 51\% and 43\%. Shaded regions
+    represent periods of low harvestable potential
+    (<\,15\,\textmu W/cm\textsuperscript{2}),
+    i.e. nighttime. For the first two days, model predictions
+    closely track the experimental measurements. Errors
+    in hysteresis and irradiance estimation cause the model to reach its upper
+    hysteresis sooner than the experiment does, annotated by the
+    \textbf{\textcolor{fig-green}{green circle}}. In actuality, the device
+    exits charging hysteresis at the peak marked with the
+    \textbf{\textcolor{fig-purple}{purple square}}.
+    More importantly, the
+    frequency and length of periods spent using harvested
+    energy collected in the secondary-cell (downward slopes) are identical.
+    %For the intermittent node we see our model
+    %underestimate the number of transmitted packets by 10-20\% except for the
+    %first day which predicts significantly more packets.  We believe this error
+    %is primarily due to a piecewise linear estimation of irradiance from our
+    %collected illuminance data, when in reality the relationship is complex and
+    %non-linear.  For (b) we estimate the state of charge of \name
+    %based on the secondary
+    %cell voltage. Differences between the estimated state of charge and the
+    %modeled state of charge are primarily due to inflated voltage during
+    %charging and voltage droop and bounce back when \name
+    %draws current from the secondary-cell.
+    %Even though estimated state of
+    %charge is not accurate due to this voltage swing, it is clear that the
+    %timing of charge and discharge aligns between the model and the
+    %experimental data.
+    }
+\end{definefigure}
+
+\begin{definefigure}{fig:evalcmp}
+    \centering
+    \includegraphics[width=\linewidth]{figs/capacity/experiment_sys_compare/exp_packets_recv}
+    \caption{
+      \normalfont
+        Packets received over two days.
+      This figure compares the reliability of an
+      intermittent design and \name. \name sends a packet every second and does
+      so without fail, while the intermittent system is only able to send when
+      light is available.
+      %This results in periods at night where the
+      %intermittent device does not harvest enough energy to sustain operation.
+      }
+\end{definefigure}
+\placefigure{tab:related}

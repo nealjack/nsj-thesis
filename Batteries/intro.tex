@@ -1,0 +1,285 @@
+\section{Introduction}
+\label{sec:intro}
+
+%Since the early 2000s, sensor network power supply design has
+%experienced two significant design philosophies: using non-rechargeable energy
+%stores, and relying partly or fully on energy harvesting from the ambient
+%environment.
+%
+%The first sensor networks used nodes that rely entirely on large
+%non-rechargeable batteries for energy~\cite{mainwaring2002wireless,
+%polastre2005telos}. These large cells provide reliable power but ultimately a
+%limited lifetime. When considering dense
+%deployments of these devices to enable applications like industrial monitoring
+%and building automation, the cost of battery replacement with such frequency is untenable.
+
+The first sensor network nodes relied on non-rechargeable batteries
+(primary cells) for energy storage~\cite{mainwaring2002wireless, polastre2005telos}. These primary
+cells provided reliable power that enabled quick
+initial
+tests and deployments. However the drawbacks of this design quickly became
+clear---the short sensor node
+lifetimes achievable with reasonably sized primary cells required frequent
+battery replacement for nodes to remain operational, and as a result, researchers
+started looking to energy harvesting as an alternative power source. This began
+with outdoor solar harvesting, but soon transformed as researchers
+started to leverage lower power components and new
+programming models to enable energy harvesting
+sensor nodes with significantly less capable power supplies.
+
+Starting with directed, RFID-based sources~\cite{smithWirelessly06}, and moving
+to less reliable energy sources like indoor solar and vibration~\cite{gorlatovaPrototyping10, yervaGrafting12, campbellEnergy14},
+these designs fueled a vision of perpetually
+operational sensor nodes powered by the ambient environment.
+At the time, capacitors were the only easy, off-the-shelf method
+of storing energy from these ultra-low current power sources.
+Supercapacitors had high leakage that could waste a significant portion
+of the already limited energy.
+%Supercapacitors can have high leakage immediately after charging that
+%wastes a significant portion of the already limited energy.
+Lithium batteries were difficult to manage, as low power battery
+management and charging ICs were not readily available.
+%and there were not low power battery management
+%ICs, often required for the practical use of lithium batteries.
+Additionally
+the theoretically infinite lifetime of
+capacitors further supported the goals of perpetual sensing, especially
+compared to the life-cycle limits of batteries. Over time, other weaknesses of
+batteries compounded the arguments, including their temperature sensitivity,
+physically large form factor, and potential danger for both the user and
+the environment.
+
+%mostly used capacitors to store the small amounts of energy
+%they could harvest
+
+%Many researchers, realizing new technology, have
+%explored the potential to use energy harvesting methods to power sensors in order to
+%lengthen lifetimes and avoid the replacement of non-rechargeable batteries.  As
+%recently as a decade ago,
+%researchers began to explore using energy harvesting in indoor environments
+%using small, unobtrusive devices that harvest energy from ambient
+%lighting, the thermal gradient between surfaces, or vibration from
+%human motion~\cite{yervaGrafting12, campbellEnergy14, campbellThermes14}.
+
+%To buffer the harvested energy, these early systems opted
+%to use capacitors, both low capacity tantalum and ceramic, as well as higher
+%capacity supercapacitors (supercapacitors), rather than rechargeable batteries~\cite{yervaGrafting12, colinReconfigurable18, hesterFlicker17}. The decision to
+%eschew batteries, even though they offered substantially more energy capacity,
+%was predicated by the many undesirable qualities that defined batteries at the
+%time, most notably that they were expensive, possessed very short cycle lifetimes (the number
+%of cycles until a battery's capacity is significantly
+%degraded), were temperture-sensitive and inefficient, were not available in
+%small packages, and were potentially dangerous in unsupervised applications
+%such as sensor deployments.
+%Additionally, the theoretically infinite lifetime of ceramic and tantalum
+%capacitors is extremely attractive for sensor designers. It is possible to
+%design sensors with power supplies with indefinite lifetimes, seemingly paving
+%the way to pervasive and perpetual sensing.
+Unfortunately, capacitors offer very low energy density, often much less than 1~Wh/L (compared to ~100~Wh/L for a small LiPo cell), and devices that use
+them must cope with the limitations this presents. These include lower energy
+utilization (if a device could harvest but the capacitor is full), reduced
+availability (a sensor cannot perform a required task because its capacitor is already depleted), decreased responsiveness
+(if the capacitor does not have energy to detect and respond to an event), and the inability
+to easily perform high-energy tasks (if the capacitor does not have enough total
+energy storage for task completion).
+
+Many solutions have been proposed to tackle
+these problems. Software checkpointing and associated programming models
+that ease their use allow relatively high-energy tasks to be completed
+correctly~\cite{luciaIntermittent17}. The introduction of wakeups based on the
+sensed phenomena decreases the probability of missing an
+event~\cite{campbellEnergy14}. Federating
+energy stores for each predefined component workloads decreases latency between
+tasks and eases modularity~\cite{hesterTragedy15}. Reconfigurable energy
+buffer sizing lowers inter-task latency for arbitrary workloads~\cite{colinReconfigurable18}.
+Even with these solutions, however, it is still not easy to program and
+use capacitor-based energy harvesting sensors, and they still have decreased
+availability and energy utilization compared to a solution with larger
+energy storage capacity.
+
+
+%This leads to an intermittent mode of operation where devices slowly
+%work through a task, waiting until their capacitor bank is full before continuing
+
+
+%intermittently, cycling between performing tasks until stored energy is
+%depleted and off and recharging.
+%Due to the small energy capacity of capacitor buffers,
+%these systems are known as intermittent, as
+%they are only as reliable as their source of energy, which is often
+%unpredictable.
+
+%This design has remained
+%the status quo for cutting-edge energy harvesting sensor research for the last decade.
+%before this sentence had problems in parrallelism -> federating = reconfiguring
+%While recent designs have explored new techniques including federating the capacitor
+%bank to better match the energy of a system component to its predefined task
+%~\cite{hesterTragedy15}, or dynamically reconfiguring the size of a
+%capacitor bank to minimize the latency between tasks in a given
+%workload~\cite{colinReconfigurable18}, these designs
+%still depend entirely on capacitors (or occassionally supercapacitors)
+%suffer the costs associated with small energy
+%capacity.
+
+%For the past decade, researchers have tackled with the difficulties using and
+%programming devices that depend on capacitor storage, also known as
+%intermittent systems.
+%These devices are known
+%as intermittent systems because their low-capacity capacitor buffers are quickly
+%depleted when performing tasks, sometimes in the middle of computation.
+%In the worst case, these devices can get stuck in a sisyphean loop of turning
+%on, attempting to perform a task, and running out of energy.  This phenomena
+%makes these devices difficult to program, as their operation is tied to the
+%volatility of immediately available harvestable energy. Additionally, the low energy capacity of a capacitor buffer
+
+While capacitors may have been the best choice for energy harvesting sensors a decade
+ago, this decision should be reevaluated in the face of new, modern technology.
+We consider the changes in battery chemistries and associated
+battery management ICs, and we argue that for modern sensor designs, a power
+supply that offers an indefinite lifetime may not justify the cost of low energy
+capacity. We believe that new battery technologies address many of the original
+assumptions that limited their early adoption, and while they do not provide theoretically
+infinite lifetimes, nor will they operate in all sensing scenarios, they may be
+a better choice for the vast many common sensing tasks. It is time to reconsider the
+use of batteries in ultra-low power energy harvesting sensors.
+
+%they may provide lifetimes that are longer than the usable lifetime of most sensors.
+%We believe it is time to reevaluate energy harvesting sensor s
+%decreased
+%usability, energy utilization, and availability, as well as the inability to
+%perform long-running computations and tasks.
+%Additionally, if one considers the
+%finite lifetime of other components in a sensor, the usefulness of of an
+%indefinite power supply is diminished.  After a decade of designing
+%intermittent systems, we believe it is time to reevaluate energy harvesting
+%sensor storage, and suggest that modern rechargeable batteries provide
+%substantially more energy capacity, greatly improve upon the inadequacies of
+%older batteries, and possess a finite, but sufficiently long lifetime.
+
+%Batteries have been
+%the preferred method of powering sensor nodes for both academic
+%and commercial applications. They enable sensors that are easy to design, simple to program,
+%and reliable to operate until their batteries die (and must be replaced).
+%However, as we look toward dense and ubiquitous sensor deployments aimed
+%at supporting applications such as building automation and industrial monitoring,
+%the human costs of battery replacement are beginning to seem untenable. This
+%is especially true if battery replacement must occur frequently.
+%
+%To address this issue, many researchers have explored the potential to power
+%sensor systems through energy harvesting. Starting with outdoor solar
+%powered nodes and eventually moving to nodes which scavenge power from the
+%vibrations of our transportation infrastructure,
+%ambient indoor lighting, or the thermal gradient
+%between pipes, we have designed systems to monitor our world\textemdash at least
+%when they have enough power. Most recently, a new class of
+%computing systems has embraced this uncertainty by buffering small
+%amounts of energy and intermittently working through
+%a sensing task. These intermittent systems have eschewed both rechargeable
+%and non-rechargeable batteries as expensive, failure-prone, fragile, and
+%temperature sensitive, instead choosing to adopt capacitors as the
+%more resilient option in their push
+%toward perpetual sensing.
+%
+%While embracing capacitors increases the theoretical lifetime of such systems,
+%lifetime gains come at the cost of usability and availability. Small energy
+%stores lead to less utilization of the available ambient energy,
+%have inherently lower availability, and experience higher degrees
+%of intermittency that require
+%complex programming models designed to micro-manage the remaining system energy.
+%For many applications, especially those that are controlling spaces and
+%systems which are human-facing, unpredictable degradation in availability is worse than
+%the human costs of predictable battery replacement.
+%
+%In this work we show that by adopting batteries in energy
+%harvesting systems rather than eschewing them, we can address these problems
+%for the great majority of sensing workloads and harvesting scenarios.
+%By modeling the charge/discharge patterns of energy buffers for periodic
+%and event-driven workloads under real energy harvesting conditions, we find that rechargeable
+%energy stores the size of a small battery achieve near maximum ambient
+%energy utilization and significant availability gains over their capacitor-sized
+%counterparts. To abolish the remaining bits of unavailability
+%that are present during periods of high activity and long energy droughts, we propose the
+%use of a backing energy store, most likely a non-rechargeable battery, and we
+%show that the lifetime of this battery is improved by 4-6x over similar
+%systems without energy harvesting. And while prior work is correct
+%that these batteries will not operate at extreme temperatures, our analysis
+%of the key complaints against batteries show that they are largely unfounded,
+%outdated, or easily mitigated, and ultimately that batteries are well
+%suited for powering sensor nodes in the most common sensing environments:
+%those occupied and used by people.
+%
+%We implement these design decisions in a platform named \name and
+%present the new and lower-power components selected for its design. The power measurements
+%of these components are used as the basis for the standard workloads that
+%we define and model.
+%To verify function of the model, we deploy \name along with
+%a battery-powered and intermittent
+%system and compare their functionality to the functionality
+%predicted by the model. We show
+%that the timing of charge discharge cycles,
+%and expected number of transmissions
+%are similar to that of the deployed systems.
+%
+%By using batteries along with energy harvesting, we believe that we can
+%create extremely long-lived and reliable sensor nodes.
+%These sensor nodes will not need to micro-manage
+%their energy state and can instead adapt their lifetime and energy
+%usage over the course of weeks, months, or not at all. This push
+%toward availability will enable more standard programming models and
+%ultimately useful applications to be built on top of dense and ubiquitous
+%sensor deployments.
+
+
+
+
+
+%Some key thoughts on framing
+%    - We need to make sure that it comes through this is targeting what
+%    we define as the ``common'' use case.
+%        - We should be clear about what we consider the common use case,
+%        and I think it's obvious from our current direction that this should
+%        be indoor/building sensing (Although we could consider trying
+%        and outdoor scenario?? higher harvesting potential better
+%        drives the point of having a rechargeable battery.)
+%    - When we talk about availability it should be clear how we are defining
+%    it and why it is important. Really it is the important metric (along with
+%    lifetime). I'm going to try to look for some citations about
+%    how humans respond to failure. My sense has always been that even low
+%    failure rates are really frustrating, but we should have some data to back
+%    this up.
+%    - availability also means liveness. This is the most frustrating thing
+%    about deploying intermittent sensors! is it dead or just not getting
+%    energy? It's hard to pre-emptively catch failure if you can't test
+%    failure until it's too late.
+%    - There is this idea that we designing a more usable node by using
+%    batteries. Rather than micro-optimizing every transaction batteries
+%    allow us to macro-optimize energy and applications over time. This could
+%    mean adapting your application without missing your deadline (i.e occupancy
+%    sensors that only sense lack of occupancy every 10 minutes instead of every
+%    minute).  It's unclear to me how much this should come through. I definitely
+%    think that intermittency pushes functionality away from the edge, and
+%    reliablity pushes it toward the edge, but that is its own argument so we
+%    probably have to be careful.
+%    - How much of a role does permamote play into this story. Currently it is relegated
+%    to the platform that came out of these design decisions. This is not a platform
+%    paper. It could arguably be a platform paper. What is the next version of
+%    the sensor node everyone uses? Maybe it is the sensor that integrates
+%    this work on energy harvesting. The current paper is not framed this way though
+%    so we should decide sooner rather than later if that's a good idea. I generally
+%    think that platform papers are more hit or miss.
+%        - If permamote plays a role we should absolutely include its components
+%        selection matrices. Not the trendlines, but the lines motivating that
+%        these really are the best parts and by choosing them we get significant (2-4x)
+%        lifetime improvements over designs that are even a few years old. (AKA stop using the RF233).
+%When someone is done reading this paper what do we want them to take away?
+%    - Using batteries primary and secondary cells
+%    on sensor nodes prioritizes the common case
+%    (long lifetime, normal environment, high availability) which we are currently leaving behind.
+%    - For very little physical volume we can completely avoid intermittency for a very
+%    long time and that is a worthy tradeoff. Even if your primary cell dies
+%    you are no worse than an intermittent node.
+%    - Batteries are not as bad as everyone thinks and they are getting much
+%    better in time.
+%    - Something about node size? This was toyed at in the grafting paper, and
+%    I think we have the chance to really nail it. At what point can do the following tradeoffs occur:
+
