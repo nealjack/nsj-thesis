@@ -1,6 +1,29 @@
 \chapter{Design Intuition for Energy Harvesting Systems}
 \label{chap:intuition}
 
+\section{Is Energy Harvesting Worth It?}
+
+\placefigure{fig:intuition:eh_worth_it}
+
+\section{Defining the Application Space}
+The designed purpose of a wireless sensor is generally a simple one: measure some phenomena, optionally perform some filtering or calculation on that measurement, and transmit the results. 
+This has been the prevailing archetype of research and industrial sensing since the inception of wireless sensor networks. 
+The acceptable reliability, and reporting frequency is highly dependent on application requirements. Many safety critical or industrial applications require high reliability and frequent and immediate sensing and reporting. Conversely, an amount of unreliability, incomplete data, or reporting delay is acceptable in some citizen science sensing applications, where any data is better than no data.
+
+This section seeks to better explore the design space of wireless sensors, especially with respect to how requirements on the kind of data being reported, the reporting frequency, and reliability, affect the requirements on the sensor power supply design. 
+
+\subsection{Data type}
+
+\subsubsection{Counting}
+
+\subsubsection{Measurement}
+
+\subsection{Reporting Frequency}
+
+\subsubsection{Periodic}
+
+\subsubsection{Reactive}
+
 \section{A Taxonomy of Wireless Sensor Power Supply Architectures}
 \label{sec:intuition_related}
 
@@ -323,6 +346,8 @@ of the energy income and workload of the sensor, we also develop a numerical sim
 quantify the impact of capacity
 on key metrics including energy utilization, availability and reactivity.
 
+\section{Application feasibility}
+
 \section{An Intuitive Case for Capacity}
 
 \begin{definetable}{tab:related}
@@ -398,3 +423,11 @@ on key metrics including energy utilization, availability and reactivity.
   }
 \end{definefigure}
 
+
+\begin{definefigure}{fig:intuition:eh_worth_it}
+  \centering
+  \includegraphics[width=\columnwidth]{figs/is_eh_worth_it.pdf}
+  \caption{
+  blah
+  }
+\end{definefigure}

@@ -42,7 +42,7 @@ To model the harvestable light in an occupied indoor environment, we use
 the EnHANTS indoor irradiance dataset~\cite{gorlatova2013networking}. We
 find that it is the most complete and extensive dataset for indoor light
 irradiance traces, capturing over a year of data in several situations.
-The traces we use for our model are summarized in \cref{tab:rep}.\\
+The traces we use for our model are summarized in \cref{tab:capacity:rep}.\\
 
 \vspace{-6pt}
 \noindent
@@ -52,7 +52,7 @@ independent of the differences of energy intensity or efficiency in device
 component selection. To do so, we define an example solar energy harvesting
 sensor platform that utilizes available, state-of-the-art, commercial
 components.
-\placefigure[t]{tab:rep}
+\placefigure[t]{tab:capacity:rep}
 We choose new
 components in an attempt to better represent prior energy storage designs and
 give them the benefit of the improvements that have occurred in recent years.
@@ -60,7 +60,7 @@ We take benchmark
 measurements of various tasks performed by this platform, such as the
 amount of time and energy required to sample a sensor or send a Bluetooth Low
 Energy (BLE) packet. These benchmarks are used to generate energy utilization metrics
-for our representative workloads shown in \cref{tab:rep}.
+for our representative workloads shown in \cref{tab:capacity:rep}.
 The physical size of the solar panel used by this sensor
 is assumed to be
 10.9~cm\textsuperscript{2} and the volume of the sensor node is similar to prior
@@ -111,7 +111,7 @@ system based on its current state and available stored energy.  Occasionally,
 the model performs a workload event based on either a periodic schedule (in the
 case of a sense-and-send workload) or from a random distribution (reactive
 event detection or a high-power event). For our modeling, workload schedules
-are generated from values listed in \cref{tab:rep}.
+are generated from values listed in \cref{tab:capacity:rep}.
 This simulation is performed for the entirety of an
 input irradiance trace, which constitutes about a year of data. During
 a simulation, metrics such as energy utilization, the fraction of completed
@@ -278,7 +278,7 @@ idle overnight waiting for solar power.
     is 30\,s and the reactive application events are scaled to
     represent a maximum of 2000 events per hour.
     %Harvesting scenarios and workloads
-    %are described in \cref{sec:overview} and \cref{tab:rep}, and
+    %are described in \cref{sec:overview} and \cref{tab:capacity:rep}, and
     The backup
     sizes correspond to those found in common coin cell batteries:
     90\,mWh, 720\,mWh, 4500\,mWh for the CR927, CR2032, and CR123A respectively.
@@ -299,7 +299,10 @@ idle overnight waiting for solar power.
     }
 \end{definefigure*}
 
-\section{Reliability Requires Backup}
+\section{Necessary Reliability}
+this section will be about achieving .99, .999, and 100\% reliability, assuming sufficient \textit{average} energy. What is the cost in energy capacity?
+
+\section{100\% Reliability Requires Backup}
 \label{sec:primary}
 
 Increasing secondary capacity greatly improves
@@ -419,7 +422,7 @@ due to energy harvesting.
   \caption{\normalfont Ambient energy utilization
     as a function of idealized secondary storage capacity for different
     harvesting scenarios and workloads. The harvesting scenarios and workloads
-    are described in \cref{sec:overview} and \cref{tab:rep}.  The x-axis is
+    are described in \cref{sec:overview} and \cref{tab:capacity:rep}.  The x-axis is
     split by energy capacities possible with capacitors, supercapacitors, and
     batteries. The upper extents of capacity for (super)capacitors represent
     ten 100\,\si{\micro\farad} tantalum capacitors~\cite{tantalumDatasheet}, and one
@@ -490,7 +493,7 @@ due to energy harvesting.
     }
 \end{definefigure*}
 
-\begin{definetable}{tab:rep}
+\begin{definetable}{tab:capacity:rep}
     \begin{threeparttable}
     \centering
     \scriptsize
