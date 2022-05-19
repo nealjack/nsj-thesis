@@ -7,15 +7,15 @@ Many modern platforms are attempting to push the energy bounds of sensing, compu
 These decisions are made despite the obvious option for energy capacity: batteries.
 %Due to an increased need for energy storage to enable more advanced sensing and processing, the majority of modern batteryless research energy harvesting platforms utilize supercapacitors instead of tantalum or ceramic capacitors due to their superior energy density.
 These designers have eschewed batteries as an option, despite their vastly superior energy density, dismissing them qualitatively as 
-bulky~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, yervaGrafting12},
+bulky~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, yervaGrafting12, majid2020continuous},
 inefficient~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17},
-expensive~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17},
-short-lived~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, colinReconfigurable18, luciaIntermittent17, yervaGrafting12}.
+expensive~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, majid2020continuous},
+short-lived~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, majid2020continuous}.
 %high-maintenance~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, colinReconfigurable18, luciaIntermittent17},
 temperature-sensitive~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, colinReconfigurable18, luciaIntermittent17},
 %difficult to monitor~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, colinReconfigurable18, luciaIntermittent17},
 %fragile~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17},
-and dangerous~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17}. 
+and dangerous~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, majid2020continuous}. 
 %These qualitative claims against batteries were valid when considering some of the first available rechargeable batteries. 
 
 In this chapter, I reexamine each of these arguments with respect to modern capacitor, supercapacitor, and battery technology. 
@@ -77,13 +77,13 @@ Perhaps the most promising replacement for graphite anodes is lithium titanate o
 Lithium titanate oxide, abbreviated LTO, is usually paired with an LMO cathode, and sometimes an NMC cathode~\cite{nitta2015li, belharouakElectrochemistry11, sandhya2014lithium}. LTO offers superior thermal stability, high discharge/charge rates, and longer lifetimes compared to graphite. These improvements come at a cost of the more expensive titanium compound, and a lower energy density and nominal voltage (2.4\si{\volt})~\cite{nitta2015li,sandhya2014lithium}. Cells that incorporate LTO anodes are also extremely safe compared to those that use graphite~\cite{nitta2015li, belharouakElectrochemistry11, sandhya2014lithium}. Unlike graphite, LTO anodes do not produce Li dendrites after considerable cycling~\cite{nitta2015li}. This reduces the risk of inadvertent internal shorts and thermal runaway. LTO anodes also remain stable and do not break down at high temperatures~\cite{belharouakElectrochemistry11}.
 
 \subsection{Solid-state}
-All cylindrical or pouch Li-ion batteries employ a liquid or gel electrolyte of lithium salts dissolved in an organic, non-aqueous solvent~\cite{doughty2012general}. Liquid electrolyte requires specific packaging to prevent leaks, and an internal separator to prevent shorts between the electrodes. This limits the miniaturization of Li-ion batteries, as this packaging is increasingly difficult to manufacture at smaller sizes. This results in smaller batteries that have uncharacteristically high internal resistance and lower energy density compared to larger cells with the same chemistry.
+All cylindrical or pouch Li-ion batteries employ a liquid or gel electrolyte of lithium salts dissolved in an organic, non-aqueous solvent~\cite{doughty2012general}. Liquid electrolyte requires specific packaging to prevent leakage, and an internal separator to prevent shorts between the electrodes. This limits the miniaturization of Li-ion batteries, as this packaging is increasingly difficult to manufacture at smaller sizes. This results in smaller batteries that have uncharacteristically high internal resistance and lower energy density compared to larger cells with the same chemistry.
 The organic solvent used in liquid and gel electrolytes also can react exothermically with any oxygen released upon the breakdown of electrode material and cause thermal runaway. In addition to developing new anode and cathode materials to mitigate this, researchers and companies have also begun experimenting with replacing the non-solid electrolyte non-reactive alternatives. Solid-state batteries are safer, due to the use of non-reactive solid electrolytes, come in smaller packages, offer longer lifetimes, and have very low self-discharge~\cite{kim2015review}. However, solid-state batteries generally have limited energy and power density and high internal resistance compared to aqueous Li-ion cells. Solid-state batteries are also currently expensive to manufacture, and their commercial viability has been limited~\cite{kim2015review}.
 
 \subsection{Summary}
-Capacitors possess superior power density and have functionally infinite lifetimes, but can only store minute amounts of energy. Supercapacitors provide one to two orders of magnitude more energy density than MLCC and tantalum capacitors, at the cost of reduced power density, and more limited lifetimes. By contrast, batteries offer one to two orders of magnitude more energy density than supercapacitors. However, batteries do have limited lifetimes based on cycles, are more temperature sensitive, and some can be dangerous if mishandled. 
+Capacitors possess superior power density and have functionally infinite lifetimes, but can only store minute amounts of energy. Supercapacitors provide one to two orders of magnitude more energy density than MLCC and tantalum capacitors, at the cost of reduced power density, and more limited lifetimes. By contrast, batteries offer one to two orders of magnitude more energy density than supercapacitors. However, batteries do have limited lifetimes based on cycle counts, are more temperature sensitive, and some can be dangerous if mishandled. 
 
-In the rest of this chapter, I seek to explore these comparisons in more depth. The following sections directly analyze each of the high-level qualitative arguments that "batteryless" platform designers have leveled against batteries. Namely, that they are bulky, inefficient, expensive, short-lived, temperature-sensitive, and dangerous. 
+In the rest of this chapter, I seek to compare these technologies in more depth. The following sections directly analyze each of the high-level qualitative arguments that "batteryless" platform designers have leveled against batteries. Namely, that they are bulky, inefficient, expensive, short-lived, temperature-sensitive, and dangerous. 
 
 
 \section{Volume and Density}
@@ -208,13 +208,14 @@ Generally, one can expect the short-term self-discharge of supercapacitors to be
 \label{sec:battery:cost}
 Like the bulkiness argument, the claim that batteries are "expensive" is only valid when directly comparing the cost of a battery to that of single ceramic or tantalum capacitor. This view is reductionist, and this section seeks to explore this argument in more detail.
 
-Most batteries are actually comparatively cheap when considering energy capacity and density. Solid-state batteries are still costly, as they are a newly commercialized technology and their manufacture is still expensive. 
+Most batteries are actually comparatively cheap when considering energy capacity and density. 
 A single battery provides significantly more energy storage per dollar than any capacitor, supercapacitor, or banked configuration.
 \Cref{fig:battery:eperd} illustrates this by comparing the energy per dollar one can expect from capacitors, supercapacitors, and batteries. 
-Solid-state batteries offer a similar magnitude of energy per dollar to supercapacitors.
+Solid-state batteries are still costly, as they are a newly commercialized technology and their manufacture is still expensive. 
+Despite this, solid-state batteries offer a similar magnitude of energy capacity per dollar to supercapacitors.
 Other battery types offer several orders of magnitude more energy capacity per dollar than capacitors and supercapacitors.
 
-The expensiveness of capacitors is accentuated when considering that some designs require multiple parallel capacitors or supecapacitors to build up enough energy capacity. For example, the Capybara design is configured with 14 of the 7.5\si{\milli\farad} Seiko supercapacitors, each costing ~\$2.42 USD, for a total of \$33.88~\cite{colinReconfigurable18}. The small 1.8 \si{\milli\Ah} battery still offers 4.4x the energy capacity of these 14 parallel supercapacitors, for only \$1.25.
+The expensiveness of capacitors is accentuated when considering that some designs require multiple parallel capacitors or supecapacitors to build up enough energy capacity to enable required atomic operations. For example, the Capybara design is configured with 14 of the 7.5\si{\milli\farad} Seiko supercapacitors, each costing ~\$2.42 USD, for a total of \$33.88~\cite{colinReconfigurable18}. The small 1.8 \si{\milli\Ah} battery offers 4.4x the energy capacity of the combined 14 parallel supercapacitors, for only \$1.25.
 It would require 61 of the Seiko supercapacitors to provide the same amount of energy capacity as the 1.8\si{\milli\Ah} battery. Those 61 supercapacitors would cost \$148.
 
 Besides the Seiko supercapacitor, several of the selected supercapacitors in \cref{tab:battery:cost} are as expensive or more expensive than the selected batteries~\cite{murataCap,kemetCap,seikoCap,bestCap}.
@@ -232,7 +233,7 @@ the driving cost. Batteries are by far the most cost effective option for provid
 \section{Lifetime}
 Batteries are often considered "short-lived" due to their limited cycle lifetimes, especially when compared to ceramic and tantalum capacitors. 
 Ceramic and tantalum capacitors lifetimes are estimated to be thousands to millions of years with proper voltage derating and when used at room temperature~\cite{kemetLife}. 
-The lifetime of capacitors, supercapacitors, and batteries generally refers to the lifetime before the device experiences parametric failure. Parametric failure is when the device is no longer within spec, usually when rated capacitance/capacity is lower than 20\% its original value, or when ESR or other parasitics are sufficiently higher than rated.
+The lifetime of capacitors, supercapacitors, and batteries generally refers to the lifetime before the device experiences parametric failure. Parametric failure is when the device is no longer within specification, usually when rated capacitance/capacity is lower than 20\% its original value, or when ESR or other parasitics are sufficiently higher than rated.
 This section serves as an effort to quantify and compare battery lifetime with capacitors and supercapacitors, and to investigate methods for elongating their cycle lifetimes.
 While modern battery technology will never compete with the longevity of capacitors, for low power energy harvesting, cycle lifetime is unlikely to be the limiting factor on the lifetime of a battery, never mind the system as a whole. 
 
@@ -264,7 +265,7 @@ Shelf-life represents the amount of time a battery can sit uncharged before depl
 It is conceivable that energy harvesting systems may be deployed in areas with little available harvestable energy, and be unable to charge their batteries for long periods of time. 
 The shelf-life for lithium-based batteries is approximately one decade, however, LTO chemistries have been shown to exhibit no long-term cell
 damage when undervolted, even to zero volts~\cite{brunell2016effect}.
-This is a significant improvement more traditional technologies like Li-ion and LiPo which suffer capacity degradation if undervolted due to long storage and absence of charging. 
+This is a significant improvement over traditional technologies like LCO, LMO, and NMC which suffer capacity degradation if undervolted due to long storage and absence of charging. 
 Regardless of the type of battery, designs should utilize the myriad of small battery charger and management ICs that exist to properly manage battery state and minimize the effects of shelf-life~\cite{ltc4071Datasheet,bq25505,adp5091}.
 
 The lifetime of an energy harvesting system is also not solely dependent on the lifetime of its power supply.
@@ -273,8 +274,9 @@ There is also the question of relevancy in the face of decades of future
 progress in networking, processor efficiency, and MEMS sensors. At some point, the wireless sensor platforms built today
 will be obsolete and less useful, regardless of their theoretical lifetimes. Sensors do not need to last indefinitely, they need to last long enough and provide enough
 benefit to justify their original deployment. Replacement and renovation is inevitable.
-Conservatively, rechargeable batteries have the capability to last between 10 and 20 years when managed properly. While not cycle limited, supercapacitors have similar lifetime estimates on the order of a decade or two. 
-When considering this reality, only systems that employ ceramic and tantalum capacitors can claim to support indefinite lifetimes. It is unclear that supercapacitor-based batteryless systems are any better off in terms of lifetime than battery-based systems.
+Conservatively, rechargeable batteries have the capability to last between 10 and 20 years when managed properly. While not cycle limited, supercapacitors have similar lifetime estimates on the order of ecades. 
+When considering this reality, only systems that employ ceramic and tantalum capacitors can claim to support indefinite lifetimes. 
+%It is unclear that supercapacitor-based batteryless systems are any better off in terms of lifetime than battery-based systems.
 
 \section{Temperature Sensitivity}
 In addition to lifetime considerations, batteries are also notorious for their temperature sensitivity. As mentioned previously, in temperature extremes, batteries exhibit higher ESR, self discharge, and have accelerated capacity degradation. Out of the many arguments against batteries, temperature sensitivity is the most coherent. This section seeks to quantify and compare the temperature sensitivity of capacitors, supercapacitors, and batteries and identify the applications for which it has a significant impact.
@@ -323,13 +325,13 @@ Despite their safety, battery management is still important to limit damage to a
 Not all lithium batteries are equivalent, and the claim that \textit{all} batteries are dangerous disregards the many safety improvements made with newer electrode and electrolyte materials.
 
 \section{Summary}
-Among the various arguments that "batteryless" platforms have levied against batteries, very few are relevant in the face of improved battery technology. Out of all addressed here, temperature sensitivity is the only real limitation of batteries. This complicates their usage in extreme environments, but by no means discounts them. Batteries can not compete against some supercapacitors in terms of power density and cycling performance, but for low power applications, this metric is inconsequential. 
-In reality, batteries are by far the most energy dense rechargeable storage device developed and they provide many orders of magnitude more energy capacity per dollar than any capacitor or supercapacitor. New battery technology provides comparable efficiency, lifetime, and safety to many modern supercapacitors. 
+Among the various arguments that "batteryless" platforms have levied against batteries, very few are relevant in the face of improved battery technology. Out of all addressed here, temperature sensitivity is the only real limitation of batteries. This complicates their usage in extreme environments, but by no means discounts them. Batteries can not compete against some supercapacitors in terms of power density and cycling performance, but for low power applications, these metrics are inconsequential. 
+In reality, batteries are by far the most energy dense rechargeable storage device available and they provide many orders of magnitude more energy capacity per dollar than any capacitor or supercapacitor. New battery technology provides comparable efficiency, lifetime, and safety to many modern supercapacitors. 
 
-These qualitative arguments are the same made in the early 2000s, when battery technology was admittedly not well suited for long-lived, low power applications. Two decades later, these arguments have not been revisited, and are instead used ad nauseam to further justify the design decisions made to enable indefinite wireless sensor lifetimes. 
+These qualitative arguments are the same made in the early 2000s, when battery technology was admittedly not well suited for long-lived, low power applications. Two decades later, these arguments have not been revisited, and are instead used ad nauseam to further justify design decisions made to enable theoretically indefinite lifetimes. 
 %It has resulted in a lazy or intentionally obtuse view of energy harvesting system design research, where no thought is given to properly sizing components to optimally enable an application. 
 %Instead, the decision to use a supercapacitor is the default, chosen to make an application work, but not work well. Research in this area has pivoted from trying to solve interesting and hard problems with wireless sensor networks, to creating complex and overbearing software solutions to shoehorn supercapacitors into applications they are poorly suited for. The real problem is in reality a hardware one: these platforms do not have enough energy capacity. There is also very simple hardware solution: \textbf{use a battery}. 
-The choice to use a (super)capacitor has become the default, often selected to provide just enough energy storage to allow an application to function, but nowhere near enough to function well. This lack of energy capacity in the name of immortality has forced researchers to develop complex software and hardware solutions to shoehorn capacitors and supercapacitors into applications they are poorly suited for. There is a far simpler solution: \textbf{use a battery}.
+The choice to use a (super)capacitor has become the default, often selected to provide just enough energy storage to allow an application to function, but nowhere near enough to function well. This lack of energy capacity in the name of immortality has forced researchers to develop complex software and hardware solutions and shoehorn capacitors and supercapacitors into applications they are poorly suited for. There is a far simpler solution: \textbf{use a battery}.
 
 \begin{definetable*}{tab:battery:cost}
     \begin{adjustbox}{width=1.3\textheight}

@@ -1,207 +1,180 @@
-\chapter{Design Intuition for Energy Harvesting Systems}
+\chapter{Design Intuition for Low Power Energy-harvesting Systems}
 \label{chap:intuition}
 
-\section{Is Energy Harvesting Worth It?}
+%There is a rift between industry and research in the way that indoor wireless sensors are powered. Industry has largely eschewed energy harvesting methods, opting instead for the reliability offered by high-density non-rechargeable batteries. 
+%Conversely, energy-harvesting is extremely popular for research systems, which have largely abandoned the use of non-rechargeable cells in the pursuit of building systems with indefinite lifetimes. 
+%Given this disparity, it is obvious that there is a lack of clarity regarding how wireless sensors should be powered to enable various applications. 
+This chapter explores the design space of wireless sensor power supplies. 
+The goal of this chapter is to provide high-level guidance for when/if energy harvesting is a beneficial technique instead of, or in addition to, a non-rechargeable storage, how prospective workloads drive component sizing, and if energy-harvesting is utilized, what techniques are required to ensure a minimum useful operation or what is required to maximize energy capture and system reliability. 
+This chapter, along with the following chapters, focus on photovoltaic energy harvesting because in indoor conditions, it offers an order of magnitude more energy than other methods.
+
+\section{Formalizing Design Constraints}
+
+The application space for wireless sensors is broad, and very difficult or impossible to enumerate fully. However, there are common application constraints that drive design. By asking a few questions to determine an application requirements, one can begin to describe the design constraints. These questions, in order of their impact on the answers to the other questions, are:
+These constraints can be described and parameterized.
+In particular, the size, operational lifetime, and harvesting viability 
+There are \textit{many} applications that are untenable to enumerate fully. However, they can be described and parameterized by their requirements. An envisioned application can provide constraints on a wireless sensor's size, component selection and sizing, 
+
+
+%data type quanta vs rate
+%reporting rate periodic, reactive
+
+Given a set of application requirements, what are the constraints on the power supply?
+\begin{enumerate}
+%\item Mobile or static?
+\item What size does it have to be?
+
+    $V_{max} = L_{max} * W_{max} * H_{max}$
+    
+    $V_{primary} + V_{secondary} < V_{max}$
+    
+\item What are the average power requirements, and what is the largest atomic energy quanta?
+    
+    $P_{avg, period} = \frac{P_{sleep} * (T_{period} - T_{work}) + P_{work} * T_{work}}{T_{period}}$
+    
+    Assuming a Poisson distribution over a period $T$:
+    
+    $P_{avg, reactive} = \frac{P_{sleep} * (T - \lambda * T_{work}) + \lambda * P_{work} * T_{work}}{T}$ 
+   
+    $P_{avg, intermittent} = P_{harvest}$
+    
+    $E_{work} = \sum\limits_{e_i\in E} e_i$
+    
+    $E_{atomic} = \max{E}$
+    
+    $E_{comms} \in E$
+    
+    
+\item What are the energy storage and lifetime requirements?
+    
+    $E_{primary} < \rho_{primary} * V_{primary}$
+    
+    $E_{secondary} < \rho_{secondary} * V_{secondary}$
+    
+    $E_{secondary} > E_{atomic}$
+    
+    How to express size of secondary mathematically?
+    Energy capacity represents a moving capped sum, is this like a moving average? What is the smallest window that gives us the most return on energy capture?
+    At some point, a large enough window allows us to consider the average of harvestable energy, instead of the actual distribution. What is that size?
+    
+    Given a time series vectors of harvestable and consumed energy of length $N$ 
+    
+    $E_{trace} = [e_1, e_2, \dots, e_N]$
+    $E_{work} =  [w_1, w_2, \dots, w_N]$
+    
+    at every time, the cumulative energy will be
+    
+    $ y_0 = \begin{cases} 
+        0         & \text{if $e_i - w_i < 0$} \\
+        e_i - w_i & \text{if $e_i - w_i > 0$} \\
+        E_{secondary} & \text{if $e_i - w_i > E_{secondary}$}
+    \end{cases}$
+    
+    $ y_i = \begin{cases} 
+        0             & \text{if $y_{i-1} + e_i - w_i < 0$} \\
+        y_{i-1} + e_i - w_i     & \text{if $y_{i-1} + e_i - w_i > 0$} \\
+        E_{secondary} & \text{if $y_{i-1} + e_i - w_i > E_{secondary}$}
+    \end{cases}$
+    
+    for an ideal limitless storage:
+     
+    $ x_0 = \begin{cases} 
+        0         & \text{if $e_i - w_i < 0$} \\
+        e_i - w_i & \text{if $e_i - w_i > 0$} \\
+    \end{cases}$
+    
+    $ x_i = \begin{cases} 
+        0             & \text{if $x_{i-1} + e_i - w_i < 0$} \\
+        x_{i-1} + e_i - w_i     & \text{if $x_{i-1} + e_i - w_i > 0$} \\
+    \end{cases}$
+    
+    Unused energy:
+    
+    $ w_i = x_i - y_i$
+    
+    $ E_{unused} = \sum_{i=0}^N w_i$
+    
+    Assuming all energy can be harvested:    
+
+    $E_{h, total} = P_{harvest} * T_{life}$
+  
+    actual:
+   
+    $E_{h, actual} = E_{h, total} - E_{unused}$ 
+    
+    $P_{h, actual} = E_{h, actual} / T_{life}$
+    
+    
+   
+    $E_{total} = E_{primary} + E_{h} $
+    
+    $E_{total} \ge P_{avg} * T_{life}$
+    
+    $T_{life} = \frac{E_{total}}{P_{avg}}$
+    
+    
+\item How does the average power requirements compare to available harvestable power? 
+    
+    Energy neutrality:
+    
+    $P_{h} \ge P_{avg}$ 
+    
+\item What are the reliability requirements?
+\item What are the latency requirements?
+\end{enumerate}
 
 \placefigure{fig:intuition:eh_worth_it}
+\section{When is Energy-harvesting Worth It?}
+This is a question that is often glossed over by energy-harvesting system designers. Many platforms are built under the assumption that energy-harvesting is strictly superior to a primary-only system. 
+However, it is important to revisit this question, especially in the context of indoor, low power energy-harvesting. 
 
-\section{Defining the Application Space}
-The designed purpose of a wireless sensor is generally a simple one: measure some phenomena, optionally perform some filtering or calculation on that measurement, and transmit the results. 
-This has been the prevailing archetype of research and industrial sensing since the inception of wireless sensor networks. 
-The acceptable reliability, and reporting frequency is highly dependent on application requirements. Many safety critical or industrial applications require high reliability and frequent and immediate sensing and reporting. Conversely, an amount of unreliability, incomplete data, or reporting delay is acceptable in some citizen science sensing applications, where any data is better than no data.
+\subsection{Power and Energy}
+Energy-harvesting is an attractive option for low power designs, as has the potential to supply energy indefinitely. However, that energy is unreliable, and power delivery is limited. Conversely, primary-only systems have a limited amount of energy, but can use that energy at any rate they please, within the power limits of the battery. 
+Because of these differences, it can be difficult to directly compare their performance and determine at what scale and in which conditions harvesting is a preferable power source than a primary cell.
+Prior work has attempted to approach this comparison with a theoretical cubic sensor of volume $L^3$, with the assumption that the entire sensor volume is dominated by a lithium primary, or the entirety of one $L^2$ face is dominated by a photovoltaic panel.
+The authors compare the power provided by the battery cube, with that of the photovoltaic square. 
+The energy and power, respectively, provided by a cube of length $L$ is: 
 
-This section seeks to better explore the design space of wireless sensors, especially with respect to how requirements on the kind of data being reported, the reporting frequency, and reliability, affect the requirements on the sensor power supply design. 
+\begin{equation} \label{eqn:intuition:b_energy}
+E_b = \rho L^3
+\end{equation}
+\begin{equation} \label{eqn:intuition:b_power}
+P_b = \frac{\rho L^3}{T}
+\end{equation}
 
-\subsection{Data type}
+\noindent Where the energy density $\rho$ is assumed to be 653\si{\milli\Wh\per\cm\cubed}, and $T$ is the lifetime of the battery.
+The authors of \cite{yervaGrafting12} assume a 7 year lifetime based on shelf-life in order to calculate the power provided by a primary cell. This assumption very conservative and ignores the impact of sensor workload. 
+A more fair estimation for battery lifetime is:
 
-\subsubsection{Counting}
+\begin{equation}
+T = \frac{\rho L^3}{P_w + P_l}
+\end{equation}
 
-\subsubsection{Measurement}
+\noindent Where $P_w$ is the average power required to drive a sensor workload, and $P_l$ is the self-discharge power of the battery, generally about 1\% a year for a lithium primary battery. Shelf-life effects are not considered, as they are not measurable, and only a manufacturer guarantee. Any aging effects beyond self-discharge are unpredictable. 
+With this new definition of battery lifetime, the comparison of power is not as useful a metric, as power provided by the battery is now independent of the battery capacity. 
+The power provided by a battery \textit{is} technically limited by its maximum rated load current, which is often related to its capacity. However, this limit is not relevant with low power operation. 
+Instead of power, the energy provided to a workload by a primary cell and the energy captured by a similarly sized photovoltaic over the course of the lifetime of the primary cell are directly comparable.
 
-\subsection{Reporting Frequency}
+The power provided by a photovoltaic of area $L^2$ is:
+\begin{equation}
+P_p = \eta E_e L^2
+\end{equation}
 
-\subsubsection{Periodic}
+\noindent 
+Where 
+$\eta$ denotes the efficiency of the photovoltaic, and is often between 15 and 18\%. 
+The spectrial irradiance, $E_e$, is generally between 10 and 100\si{\micro\watt\per\centi\meter\squared} in indoor conditions~\cite{yervaGrafting12,gorlatova2013networking}. 
+The authors of \cite{yervaGrafting12} assume the lower end of irradiance, but ignore photovoltaic efficiency.
+The amount of energy collected by a photovoltaic over time $T$ is:
 
-\subsubsection{Reactive}
+\begin{equation}
+E_p = \eta E_e L^2 T
+\end{equation}
 
-\section{A Taxonomy of Wireless Sensor Power Supply Architectures}
-\label{sec:intuition_related}
-
-Prior work regarding energy harvesting sensor systems can be broadly
-divided into two categories: those which make use of intermittent computing
-techniques and those which do not.
-Intermittent systems often exist in a regime of unreliable and ultra low harvester power, where
-operation and uptime are not guaranteed. As such, they often lose power and
-reboot while intermittently working through a sensing task.
-A wealth of work has been devoted to
-making these systems usable and reliable.
-Other energy harvesting systems, especially those deployed outside, have access
-to significantly more harvestable energy and are able to store more of this energy
-for later use, so they
-do not use intermittent computing techniques to complete their workloads.
-\subsection{Intermittent Sensors}
-\label{sec:related:intermittent}
-
-Energy harvesting systems that rely
-exclusively on repeatedly buffering small amounts of energy to
-operate are commonly referred to as intermittent systems.
-Many choose to employ
-capacitors as an energy buffer due to their theoretically infinite lifetime,
-but are limited to small energy capacities, and are only as reliable and
-lively as their source of harvested energy.
-In situations of energy drought, 
-these platforms often deplete their 
-small energy stores, and lacking energy,
-they power off and lose
-state, potentially in the middle of an important operation or for an extended
-period of time.
-\\
-
-\vspace{-6pt}
-\noindent
-\textbf{One-shot Intermittency.}
-The Gecko and Monjolo platforms ignore the difficulties associated with
-completing longer workloads and instead allocate
-just enough capacitance to turn on and perform a simple task. Sometimes, the
-rate of harvesting is the sensor itself~\cite{campbellEnergy14,
-yervaGrafting12, debruin2013monjolo}.  However, this approach can require
-tedious and non-standard optimization of the cold start process and is severely
-limited in its simplicity. Performing any sensing or computing outside of the
-hardware's intended use case is often not possible,
-and it is difficult to distinguish sensor failure from a lack of energy.
-\\
-
-\vspace{-6pt}
-\noindent
-\textbf{Checkpointing.}
-Other work in this space attempts to cope with
-intermittency
-by developing tools and
-programming language primitives that allow %can perform
-complex and energy intensive tasks to execute despite limited energy storage.
-Intermittent-aware programming
-models and compilers were developed to enable checkpointing and progress latching over
-workloads that may require more energy than can be stored or harvested in a
-reasonable time~\cite{lucia2015simpler, ransford2012mementos, hesterTimely17}. New debugging tools
-spanning both the hardware and software domains
-measure the energy required for specific code operations
-and restore energy state during code breakpoints~\cite{colin2016energy}.
-\\
-
-\vspace{-6pt}
-\noindent
-\textbf{Hardware Hysteresis Management.}
-In addition to intermittent software techniques,
-hardware platforms have been developed to
-increase availability and responsiveness through the fine-grained management
-of capacitor charging hysteresis.
-For these systems,
-it is often assumed that the upper hysteresis threshold, the point at which a
-charging device turns on, is the voltage at which a capacitor is full, and the
-lower threshold, the point at which the system turns off or sleeps, is the minimum
-operating voltage of components in a system.
-Smaller capacitors can charge to an upper
-threshold and turn on faster, but store less energy.  Hysteresis management
-techniques attempt to combine different sized capacitors to
-minimize charging time while also maximizing available energy.
-
-The Flicker
-platform employs federated
-energy storage in which each peripheral has its own storage tuned to the task
-it is expected to perform~\cite{hesterTragedy15,hesterFlicker17}. This has the
-effect of allowing various components to charge their storage faster, as well
-as isolating power failure to independent components.  The Capybara platform is
-similar, but provides even more flexibility by dynamically resizing its banked
-capacitor store to match the energy required by a task
-~\cite{colinReconfigurable18}. This leads to the lowest possible cold start and
-capacitor recharge times to support a given
-operation.
-
-We believe the assumption that operation should be coupled to full-swing hysteresis
-is not valid
-for many systems. Capybara does explore the possibility of setting an upper
-threshold to less than the maximum voltage and using an adjustable bottom
-threshold instead of dynamically resizing their capacitor store.
-However, they disregard these options due to high voltage comparator
-power and long cold start times, respectively.
-While these decisions make sense in this context, the importance they place on cold start optimization
-is specific to their design. Capybara's power supply has a significant
-"power overhead of the power system" that limits the effectiveness of
-sleeping. Due to this, they opt to fully discharge their storage on every
-operation and optimize cold start.  In practice, if a system has the ability to
-enter a low power sleep mode or power off, it can
-avoid cold start and control its energy usage by willfully entering these
-states. With this operating principle, the benefits of hardware hysteresis management
-are limited to reducing cold start time and are workload independent.
-
-These complex software and hardware solutions, while increasing usability and reliability, do not address the singular problem for capacitor-based energy
-harvesting systems: in the face of plentiful harvestable energy, they are not
-able to store the energy for later use (in times of energy drought).
-As a result, they must
-micro-optimize the little energy they have.  In many applications, if these
-systems had sufficient capacity, they could instead adjust sensing rate and
-workloads over periods of days or weeks.  We show that the energy captured
-by these systems and their subsequent availability
-could be substantially improved by using larger energy buffers.
-\subsection{Non-intermittent Sensors}
-\label{sec:related:nonintermittent}
-Non-intermittent energy harvesting sensors
-have largely existed in environments with plentiful harvestable energy
-and have been designed with sufficient capacity to capture this energy. Some
-devices have also embraced backup primary-cells to further ensure
-reliable operation.  \\
-
-\vspace{-6pt}
-\noindent
-\textbf{Rechargeable Batteries.}
-Most examples of such devices are deployed outdoors.
-For these systems, the obvious choice is to use secondary-cells, as they can
-better capture a significant portion of copious solar energy
-~\cite{jiang2005perpetual, kansal2007power, corke2007long, lin2005heliomote, adkins2018signpost}.
-Most notable of this group is Prometheus,
-which utilizes a supercapacitor as a short term energy store, and when full,
-charges a backup rechargeable lithium battery~\cite{jiang2005perpetual}. At
-the time of its design, lithium cells offered highly limited recharge cycles,
-and by utilizing a supercapacitor, much of this
-charge-discharge volatility was masked from the secondary-cell, extending its lifetime.
-Rechargeable batteries have also been applied to indoor sensing.
-The EnHANTs sensor uses an intentionally oversized NiMH
-battery, with plans to eventually use a thin-film battery~\cite{margolies2015energy}.
-While the choice to use batteries allows for more energy capacity,
-NiMH and thin film chemistries offer poor
-energy density and lower cycle life compared to lithium
-based chemistries. DoubleDip and other sensors~\cite{martin2012doubledip,raisigel2010autonomous} use a
-lithium-manganese battery.  DoubleDip notes that supercapacitors offer
-lower energy density and higher leakage when compared to batteries, but admits
-that the lithium-manganese chemistry suffers from low maximum output currents
-and a limited number of charge-discharge cycles.
-While the limitations of past batteries have slowed their adoption in
-low energy harvesting scenarios, we claim that recent developments in battery
-technology will enable higher capacity energy storage without these trade offs.
-\\
-
-\vspace{-6pt}
-\noindent
-\textbf{Backup Energy Store.}
-Regardless of which energy store is used, energy harvesting systems will
-experience some degree of intermittency. We advocate that a non-rechargeable
-backup energy store can be utilized to mask this intermittency, cold
-start electrical components, and provide consistent, reliable, and lively operation.
-The only system we find that employs a non-rechargeable
-backup is the Pressac line of capacitor-based energy harvesting sensors which
-use battery backup to obtain an estimated 10 years of continuous operation
-\cite{pressac}.  This work suggests that these sensors could significantly
-increase their lifetime by using a larger secondary energy store.
-There has been little
-exploration on the benefits of this hybrid design and the use of
-primary-cells to avoid intermittency, cold start harvesting circuits,
-and provide baseline reliability.
-
-
-\section{A Framework for Energy Harvesting Power Supply Design}
+\section{A Framework for Power Supply Design}
 \label{sec:framework}
-We seek to illustrate the design space for energy harvesting sensors in two
-ways. The first defines an energy harvesting sensor framework to examine
+We seek to illustrate the design space for energy-harvesting sensors in two
+ways. The first defines an energy-harvesting sensor framework to examine
 when designs are feasible and when they require intermittent techniques to make meaningful forward progress.
 The second examines dynamic income energy and device behavior through numerical
 modeling and simulation.  The framework is based on three key metrics:
@@ -233,7 +206,7 @@ energy required to perform a workload's largest atomic operation, with energy ha
 during the operation itself, then that operation will not have enough energy to
 complete.  Neither of these designs will make forward progress and are
 therefore infeasible.
-Common atomic operations on energy harvesting sensors include sampling a sensor,
+Common atomic operations on energy-harvesting sensors include sampling a sensor,
 sending a radio packet, booting the processor, and performing a checkpoint.
 \\
 
@@ -313,7 +286,7 @@ providing just enough energy for a deep sleep mode with state retention rather
 than a full power down when the system depletes its stored energy. It could also
 cold start energy buffer charging to eliminate the need for reconfigurable
 power supplies, or to increase the efficiency of
-the energy harvesting front-end at low voltages.
+the energy-harvesting front-end at low voltages.
 Finally, in periods of long energy drought, the backup energy store could increase
 sensor availability.
 
@@ -321,9 +294,9 @@ While the use of a backup energy store
 does constrain the sensor to a finite lifetime,
 %especially since current technology favors non-rechargeable, primary-cells as
 %backup energy stores,
-energy harvesting can substantially extend these lifetimes under certain harvesting
+energy-harvesting can substantially extend these lifetimes under certain harvesting
 conditions.\\
-%We explore the lifetime of energy harvesting
+%We explore the lifetime of energy-harvesting
 %designs with backup energy stores in \cref{sec:primary}.
 
 \vspace{-6pt}
@@ -345,8 +318,6 @@ Because the extent of this impact is completely dependent on the variability
 of the energy income and workload of the sensor, we also develop a numerical simulation to
 quantify the impact of capacity
 on key metrics including energy utilization, availability and reactivity.
-
-\section{Application feasibility}
 
 \section{An Intuitive Case for Capacity}
 
@@ -387,7 +358,7 @@ on key metrics including energy utilization, availability and reactivity.
   \end{threeparttable}
   \caption{
   \normalfont
-      Modeled performance of energy harvesting systems.
+      Modeled performance of energy-harvesting systems.
     For each  platform considered, we model the performance of its energy storage
     architecture. Periodic workload and lifetime estimates are based on a 10\,s
     period, and the reactive workload is scaled to
@@ -402,9 +373,9 @@ on key metrics including energy utilization, availability and reactivity.
   \centering
   \includegraphics[width=\columnwidth]{figs/capacity/harvesting_framework/framework}
   \caption{
-  %Energy harvesting
+  %energy-harvesting
   %sensors have different capabilities and requirements
-  \normalfont Design space for energy harvesting sensors based on their energy
+  \normalfont Design space for energy-harvesting sensors based on their energy
   income (which we assume is constant for this analysis), energy storage capacity, and workload.
   Workload is represented by the largest atomic/non-atomic operations supported
   by a design, as well as the deep sleep and leakage power.  The plot breaks
@@ -427,6 +398,15 @@ on key metrics including energy utilization, availability and reactivity.
 \begin{definefigure}{fig:intuition:eh_worth_it}
   \centering
   \includegraphics[width=\columnwidth]{figs/is_eh_worth_it.pdf}
+  \caption{
+  An updated energy-harvesting reality check~\cite{yervaGrafting12}. This figure compares the energy offered by a battery with that of potential harvestable energy over the lifetime of the same battery. Assuming a cubic sensor, driven by a  principal dimension $L$, a battery of size $L^3$ provides a lifetime of $T$, under different average workloads, here represented by the orange (average 25\si{\micro\watt}) and red (100\si{\micro\watt}). 
+  A solar cell of size $L^2$ accumulates energy over that same lifetime $T$, and if large enough and in sufficient harvesting conditions, will exceed that of a similar sized battery, albeit only in 2 dimensions.  The point at which the harvesting lines (orange, red) cross the battery line (blue) indicate the size at which a solar panel of size $L^2$ will harvest the same amount of energy provided by a battery of size $L^3$ over its lifetime. At a sufficient size and in sufficient harvesting conditions, while powering an appropriate workload, solar energy-harvesting can provide more energy over the same time frame as a lithium battery.
+  }
+\end{definefigure}
+
+\begin{definefigure}{fig:intuition:primary+harvesting}
+  \centering
+  \includegraphics[width=\columnwidth]{figs/primary+harvesting.pdf}
   \caption{
   blah
   }
