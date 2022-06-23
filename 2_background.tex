@@ -1,30 +1,30 @@
 \chapter{Background}
 
 %\hl{rework this}\\
-%The popularity of batteryless designs in the research community has increased over the past decade. This popularity has resulted in a focus on improving the design of these systems to mitigate their drawbacks. 
+%The popularity of batteryless designs in the research community has increased over the past decade. This popularity has resulted in a focus on improving the design of these systems to mitigate their drawbacks.
 %The end goal of batteryless researchers is to create a design pattern that can be reused for general-purpose applications, resulting in a fixation on design, without sufficient grounding in real applications~\cite{hester2017future}. The reality is that the batteryless archetype will never be able to provide a general purpose solution for reliable and consistent sensing, and is only appropriate for niche applications.
 %This chapter explores the landscape of wireless sensor power supply design and applications,
 %identifying several overarching design archetypes and
 %grounding the design process through an application-focused lens.
-%By abandoning previous assumptions 
-%%about the necessity of the batteryless archetype, 
+%By abandoning previous assumptions
+%%about the necessity of the batteryless archetype,
 %and starting with a blank slate and a holistic view of available technology and application requirements, we can return to application-focused power supply design to create simpler, long-lived, and reliable solutions.
-%%This chapter defines common wireless sensor power supply design archetypes, and situates these archetypes within a deconstructed view of the application landscape. 
+%%This chapter defines common wireless sensor power supply design archetypes, and situates these archetypes within a deconstructed view of the application landscape.
 
 \section{Batteryless Sensing}
 
 The batteryless, or intermittent wireless sensor movement has abandoned batteries (both rechargeable and non-rechargeable) under the assumption that current battery technology has too many detracting qualities to be suitable for wireless sensor energy harvesting storage. Most notably, they assume that batteries provide insufficient lifetimes to build long-lasting deployments.
-Batteryless systems instead utilize capacitors, which have insufficient energy capacity to support traditional sensor workloads. 
+Batteryless systems instead utilize capacitors, which have insufficient energy capacity to support traditional sensor workloads.
 As a rule of thumb, the capacitance of these systems is generally sized to hold enough energy to support the most energy intensive atomic task, such as turning on, operating a sensor, performing some quanta of computation, or transmitting a single radio packet~\cite{nardello2019camaroptera,colinReconfigurable18, shukla2019skinnypower, hesterFlicker17}.
 While (super)capacitor storage results in a system that can technically perform the operations of a wireless sensor, it does not mean it does them well.
 A batteryless system is only as reliable and lively as its source of harvestable energy.
 Often this source of energy is intermittent, resulting in a system that operates intermittently.
-In situations of energy drought, 
-these platforms quickly deplete their 
+In situations of energy drought,
+these platforms quickly deplete their
 small energy stores, and lacking energy,
 they power off and lose
 state, potentially in the middle of an important operation or for an extended period of time.
-The intermittent reality of many harvesting sources necessitates extremely careful management of energy and complex software control of volatile state to ensure that \textit{any} forward progress can be made. 
+The intermittent reality of many harvesting sources necessitates extremely careful management of energy and complex software control of volatile state to ensure that \textit{any} forward progress can be made.
 Batteryless devices and applications are also extremely difficult to debug and develop software for, as in addition to software bugs, energy is no longer guaranteed at any point during execution.
 Platform builders have also experimented with hardware techniques to increase responsiveness by reducing charging hysteresis.
 Despite the vast amount of work on new software and hardware techniques to enable and improve the reliability and usability of batteryless systems, these techniques are unable to address the fundamental limitation of energy storage offered by batteryless energy storage.
@@ -34,8 +34,8 @@ Despite the vast amount of work on new software and hardware techniques to enabl
 %capacitors as an energy buffer due to their theoretically infinite lifetime,
 %but are limited to small energy capacities, and are only as reliable and
 %lively as their source of harvested energy.
-%In situations of energy drought, 
-%these platforms quickly deplete their 
+%In situations of energy drought,
+%these platforms quickly deplete their
 %small energy stores, and lacking energy,
 %they power off and lose
 %state, potentially in the middle of an important operation or for an extended period of time.
@@ -43,66 +43,85 @@ Despite the vast amount of work on new software and hardware techniques to enabl
 %designing more predictable and usable batteryless systems. This has resulted in several different hardware and software design methods and techniques for intermittent systems.
 
 \subsection{One-shot Intermittency}
-One of the simplest methods employed by batteryless systems does not bother to attempt to retain state across power loss and reboots 
-and instead just allocates enough capacitance to turn on and perform a predefined task, like sending a packet. 
-This method is reminiscent of the simple reply behavior of RFID tags, upon which the design of early intermittent systems is based on~\cite{sample2008design}. 
+One of the simplest methods employed by batteryless systems does not bother to attempt to retain state across power loss and reboots
+and instead just allocates enough capacitance to turn on and perform a predefined task, like sending a packet.
+This method is reminiscent of the simple reply behavior of RFID tags, upon which the design of early intermittent systems is based on~\cite{sample2008design}.
 These systems may act as a simple beacon~\cite{campbell2016cinamin,saoda2019no}, or a sensor~\cite{yervaGrafting12, debruin2013monjolo, campbellEnergy14, campbellThermes14}.
 For some platforms, most notably the Monjolo family of devices, the rate of harvesting is used as the sensor itself. Every wake-up and transmit event corresponds to an amount of energy harvested, and can be used to quantify the harvested phenomenon~\cite{campbellThermes14, campbellEnergy14, debruin2013monjolo}.
-This method of coupling harvesting and sensing is the only way to ensure that interesting sensor data is observed by a batteryless sensor. 
-Otherwise, when a batteryless sensor is built to sense a phenomena other than what it is harvesting, it is inevitable that the majority of instances, changes in the sensed phenomena will be missed because the sensor is offline. 
+This method of coupling harvesting and sensing is the only way to ensure that interesting sensor data is observed by a batteryless sensor.
+Otherwise, when a batteryless sensor is built to sense a phenomena other than what it is harvesting, it is inevitable that the majority of instances, changes in the sensed phenomena will be missed because the sensor is offline.
 However, even when sensing and harvesting is coupled, a one-shot batteryless design often does not have the energy required to support message retransmission in the case of packet loss, or caching in the event of poor network availability. Any observation may be lost upon packet failure, and the next time the sensor wakes up it only has enough energy to be concerned with transmitting its current, more recent observation.
 This one-shot method is relatively simple compared to other approaches to batteryless software, but it still requires tedious cold-start software optimization and capacitance tuning to allow the device to power on and complete its workload within the constraints of its tiny energy storage.
-This severely limits the generality of systems developed with this approach. 
+This severely limits the generality of systems developed with this approach.
 Performing any sensing or computing outside of the hardware's intended use case is often not possible.
 Like all batteryless sensors, it is also impossible to distinguish between sensor failure and a lack of energy.
 
-\subsection{State Preservation}
-The workloads that are possible within the energy envelope of a single discharge cycle of capacitor or supercapacitor buffer are extremely limited. 
+\subsection{State Preservation and Programming}
+The workloads that are possible within the energy envelope of a single discharge cycle of capacitor or supercapacitor buffer are extremely limited.
 Applications and devices that employ a one-shot technique are generally only able to perform a few seconds or less of computation, or send a single packet before powering off.
 Since the development of the WISP platform~\cite{sample2008design}, researchers have continuously developed software and compiler tools and techniques to save state and resume operation across power outages.
+Researchers have also developed tools and techniques for improving the programmming and debugging experience for batteryless programmers.
 
+\subsubsection{Checkpointing}
+One method of enabling forward progress across reboots involves saving important volatile state
 Mementos~\cite{ransford2012mementos} utilizes a modified LLVM compiler, as well as a run-time library, to automatically place checkpointing triggers within a program. During run-time, at these trigger points, mementos measures the system voltage, and if low enough, portions of volatile RAM state are written into non-volatile flash.
-The introduction of new non-volatile technologies like Ferroelectric RAM (FRAM) allows more energy and time efficient checkpointing, while simultaneously simplifying the state preservation logic. Hibernus~\cite{balsamo2014hibernus} does not use predefined trigger points, and instead utilizes a hardware interrupt to detect a low system voltage threshold, and immediately copies volatile state to FRAM. This state is subsequently restored on a rising voltage interrupt. 
+The introduction of new non-volatile technologies like Ferroelectric RAM (FRAM) allows more energy and time efficient checkpointing, while simultaneously simplifying the state preservation logic.
+Hibernus~\cite{balsamo2014hibernus} does not use predefined trigger points, and instead utilizes a hardware interrupt to detect a low system voltage threshold, and immediately copies volatile state to FRAM. This state is subsequently restored on a rising voltage interrupt.
+
+
+\subsubsection{Batteryless Debugging}
+For batteryless systems, it
+is very difficult to properly and correctly develop software, especially when non-volatile memory like FRAM is involved.
+One-shot system software is difficult to tune and optimize to complete all within the envelope of capacitor storage.
+For checkpointing systems, if checkpoints are improperly placed such that atomic blocks are not completed entirely before power loss, and yet their partial state is recorded in non-volatile memory,
+it can result in corruption that would not have happened with continuous operation.
+Software development and debugging for batteryless systems must also consider energy state in addition to normal embedded software bugs.
+To this end, researchers have developed hardware-software debugging tools that emulate and replay energy state based on energy trace captures.
+Ekho is an energy emulator that recreates and repeats energy harvesting conditions for low power energy harvesting devices~\cite{hester2014ekho}.
+Another tool, the energy-interference-free debugger (EDB), also replays energy state, specifically for intermittent systems~\cite{colin2016energy}.
+EDB augments normal interactive debugging tools like GDB to allow real time playback of energy state, in addition to interactive program debugging.
+
+\subsubsection{Checkpointing-free}
 The advent of FRAM (as well as other non-volatile RAM technologies) results in methods that can avoid explicitly saving and reading back the majority of application state.
-While this seems like a straightforward task, it is complicated by a shrinking 
-boundary between volatile and non-volatile state, which can result in corruption if code is executed multiple times~\cite{maeng2017alpaca}. 
-Programming frameworks and models like DINO~\cite{lucia2015simpler}, Chain~\cite{colin2016chain}, 
-and Alpaca~\cite{maeng2017alpaca} all attempt to provide improved programming methods and solutions to ensure safer operation and forward progress in intermittent computing contexts.
-Beyond safety concerns, through the course of many power failures and reboots, an in-progress task or computation may no longer be as useful and important as a newer one. 
-In intermittent computation, it can be difficult to manage data priority with few guarantees about future energy availability. The Mayfly~\cite{hesterTimely17} programming language and runtime attempts to address this by explicitly pairing time with data to maximize data freshness within intermittent execution. 
+While this seems like a straightforward task, it is complicated by a shrinking
+boundary between volatile and non-volatile state, which can result in corruption if code is executed multiple times~\cite{maeng2017alpaca}.
+The aftermentioned debugging tools can help to detect and fix intermittent bugs during runtime testing.
+Programming frameworks and models like DINO~\cite{lucia2015simpler}, Chain~\cite{colin2016chain},
+and Alpaca~\cite{maeng2017alpaca} all attempt to prevent these sorts of bugs from happening in the first place, by enforcing correctness during programming and compilation.
+These solutions result in safer intermittent execution without explicit checkpointing.
+
+Beyond safety concerns, through the course of many power failures and reboots, an in-progress task or computation may no longer be as useful and important as a newer one.
+In intermittent computation, it can be difficult to manage data priority with few guarantees about future energy availability. The Mayfly~\cite{hesterTimely17} programming language and runtime attempts to address this by explicitly pairing time with data to maximize data freshness within intermittent execution.
 All of these techniques necessarily limit programming scope to ensure various constraints and guarantees of safety and timeliness. These techniques also introduce significant software and compiler complexity on top of an already complex embedded software development toolchain.
 These constrained programming models require programmers to learn and adopt new programming models that incorporate new concepts like tasks, channels, and flows~\cite{colin2016chain,maeng2017alpaca,hesterTimely17}.
 
 These techniques are effective in that they enable safe forward progress across reboots and intermittent operation is almost entirely hidden from the programmer.
 While often these sorts of software abstractions of hardware realities are beneficial, this has misled many system designers regarding the reliability and eventual success of batteryless systems for many applications.
 An abstraction that guarantees forward progress removes the requirement for a programmer to
-reason about what it means to build applications on top of systems that inconsistently operate. 
-The eventual forward progress allowed by these techniques inflates the perceived utility of these systems, 
-as they suggest continuous and eventual operation and progress. In reality, they operate with no guarantee of reliability or even eventual task completion. 
-This results in systems that technically function in the sense that they occasionally perform a task, but depending on the availability of harvestable energy, their performance and reliability varies widely. 
+reason about what it means to build applications on top of systems that inconsistently operate.
+The eventual forward progress allowed by these techniques inflates the perceived utility of these systems,
+as they suggest continuous and eventual operation and progress. In reality, they operate with no guarantee of reliability or even eventual task completion.
+This results in systems that technically function in the sense that they occasionally perform a task, but depending on the availability of harvestable energy, their performance and reliability varies widely.
 No amount of software techniques and improvements will address reliability, as it is fundamentally due to limited energy storage.
-%These software techniques essentially provide an abstraction for programmers that allows the successful programming and usage of batteryless systems, without concerning themselves with the reality of batteryless operation. This as well as any quantifiable metrics of the actual performance of the system. 
+%These software techniques essentially provide an abstraction for programmers that allows the successful programming and usage of batteryless systems, without concerning themselves with the reality of batteryless operation. This as well as any quantifiable metrics of the actual performance of the system.
 %they are left with the assumption that a batteryless system is an appropriate solution to most, if not any and all applications.
-%By hiding this reality from programmers and application designers, it makes it more difficult to properly design systems that fulfill the requirements of real applications. 
+%By hiding this reality from programmers and application designers, it makes it more difficult to properly design systems that fulfill the requirements of real applications.
 
 %Beyond
 %Other work in this space attempts to cope with
 %intermittency
-%by 
+%by
 %developing tools and
 %programming language primitives that allow %can perform
 %complex and energy intensive tasks to execute despite limited energy storage.
 %Intermittent-aware programming
 %models and compilers enable checkpointing and progress latching over
 %workloads that may require more energy than can be stored
-%~\cite{lucia2015simpler, ransford2012mementos, hesterTimely17}. 
+%~\cite{lucia2015simpler, ransford2012mementos, hesterTimely17}.
 %New debugging tools
 %spanning both the hardware and software domains
 %measure the energy required for specific code operations
 %and restore energy state during code breakpoints~\cite{colin2016energy}.
-
-\subsection{Debugging Tools}
-Beyond software tools that enable forward progress
 
 
 \subsection{Hardware Hysteresis Management.}
@@ -126,46 +145,46 @@ platform employs federated
 energy storage in which each peripheral has its own storage tuned to the task
 it is expected to perform~\cite{hesterTragedy15,hesterFlicker17}. This has the
 effect of allowing various components to charge their storage quickly and turn on before other parts of the system, as well
-as isolating power failure to independent components.  
-The Capybara platform also manages capacitance,  
+as isolating power failure to independent components.
+The Capybara platform also manages capacitance,
 but provides even more flexibility by dynamically resizing its banked
 capacitor store to match the energy required by a task
 ~\cite{colinReconfigurable18}. This leads to the lowest possible cold start and capacitor recharge times to support a given operation.
 
-The assumption that device operation should be coupled to full-swing hysteresis is a questionable one. 
-While the design decisions to manage capacitance make sense in the intermittent context, the importance placed on cold start optimization is specific to the power efficiency of a design, and limited energy capacity. 
+The assumption that device operation should be coupled to full-swing hysteresis is a questionable one.
+While the design decisions to manage capacitance make sense in the intermittent context, the importance placed on cold start optimization is specific to the power efficiency of a design, and limited energy capacity.
 Capybara's power supply has a significant
 "power overhead of the power system" that limits the effectiveness of
-sleeping~\cite{colinReconfigurable18}. The energy storage provided by capacitors and small supercapacitors is also very limited, making it difficult to sustain a sleeping state for a long time. 
-Due to this, most intermittent system designs opt to fully discharge energy storage on every operation instead of sleeping and instead focus on optimizing cold start.  
+sleeping~\cite{colinReconfigurable18}. The energy storage provided by capacitors and small supercapacitors is also very limited, making it difficult to sustain a sleeping state for a long time.
+Due to this, most intermittent system designs opt to fully discharge energy storage on every operation instead of sleeping and instead focus on optimizing cold start.
 In practice, if a system has the ability to enter a low power sleep mode with state retention, it can avoid frequent cold start and control its energy usage by willfully entering these
-states. 
+states.
 Cold start is expensive, as harvesting ICs and boost converters are optimized for steady state operation and not cold start efficiency. This results in wasted energy and time on charging a capacitor to a working voltage.
 %With this operating principle, the benefits of hardware hysteresis management are limited to reducing cold start time and are workload independent.
 
-These complex software and hardware solutions, while increasing usability and reactiveness of batteryless systems, has not led to widespread adoption by industry. 
+These complex software and hardware solutions, while increasing usability and reactiveness of batteryless systems, has not led to widespread adoption by industry.
 While a few companies are developing batteryless products, including EnOcean, Perpetua, and Everactive~\cite{enocean, perpetua, everactive}, the majority still employ non-rechargeable batteries.
 This is because existing intermittent work has not been able to address the singular problem for (super)capacitor-based energy
 harvesting systems: in the face of plentiful harvestable energy, they are not
 able to store the energy for later use (in times of energy drought).
 As a result, they must
-micro-optimize the little energy they have. 
+micro-optimize the little energy they have.
 In many applications, if these
 systems had sufficient capacity, they could capture a greater share of available energy, and simply adjust sensing rate and
-sleep periods to achieve energy-neutral operation. 
+sleep periods to achieve energy-neutral operation.
 %We show that the energy captured
 %by these systems and their subsequent availability
 %could be substantially improved by using larger energy buffers.
 
-Simultaneously sensing and harvesting the same phenomenon is one of the most effective use cases of batteryless sensors, however being able to simultaneously sense and harvest is not always possible, and is generally limited to light, temperature differentials, vibration, and RF sources. 
+Simultaneously sensing and harvesting the same phenomenon is one of the most effective use cases of batteryless sensors, however being able to simultaneously sense and harvest is not always possible, and is generally limited to light, temperature differentials, vibration, and RF sources.
 
 \section{Application Space}
 Over the past two decades, researchers have developed numerous examples of effective and useful applications using wireless sensors.
-As technological improvements in sensing, processing, and connectivity capability and efficiency increases, wireless sensors provide a large opportunity for autonomous, low or zero-maintenance sensing in many different sectors, including commercial, industrial, and personal sensing. 
+As technological improvements in sensing, processing, and connectivity capability and efficiency increases, wireless sensors provide a large opportunity for autonomous, low or zero-maintenance sensing in many different sectors, including commercial, industrial, and personal sensing.
 Attempting to fully enumerate and identify all of existing applications as well as future opportunities is untenable.
-Instead, this section seeks to identify common wireless sensor application requirements and identify their impact on power supply design.  
+Instead, this section seeks to identify common wireless sensor application requirements and identify their impact on power supply design.
 
-While the popularity and excitement around energy harvesting and batteryless sensing has led to progressively better batteryless systems, the focus on batteryless design has ignored the requirements of real world applications, and the limitations of the batteryless archetype. 
+While the popularity and excitement around energy harvesting and batteryless sensing has led to progressively better batteryless systems, the focus on batteryless design has ignored the requirements of real world applications, and the limitations of the batteryless archetype.
 Constraints like sensor size, lifetime, the availability of harvestable energy, and the reliability and consisistency of an application should all contribute to the end design of a wireless sensor, and many applications will have requirements that make a batteryless design an unsuitable choice.
 Instead of starting with the assumption that a design must be batteryless, a design should start from application requirements. Given an application, a set of questions should be asked to define its requirements and better define design parameters.
 While not an exhaustive list, an appropriate set of questions to help define the power supply requirements should resemble the following:
@@ -183,7 +202,7 @@ While not an exhaustive list, an appropriate set of questions to help define the
 These constraints will help provide intuitive, application-based guidance for energy harvesting sensor design.
 
 \subsection{Example Applications}
-Based on the first requirement question, applications can be categorized by their average power requirements. The next few sections describe several wireless sensor applications, placing them within different power regimes. This includes applications that require Milliwatts of average power, ones that require Microwatts, and those that require Nanowatts. 
+Based on the first requirement question, applications can be categorized by their average power requirements. The next few sections describe several wireless sensor applications, placing them within different power regimes. This includes applications that require Milliwatts of average power, ones that require Microwatts, and those that require Nanowatts.
 
 \subsubsection{Milliwatt regime}
 This regime consists of applications that subsist on Milliwatts of power. Often, these applications are examples of older work, with less efficient technology, as well as applications with large batteries, or ones that exist in environments with plenty of available harvestable energy, allowing relatively high average power requirements.
@@ -227,28 +246,28 @@ This regime consists of applications that subsist on Milliwatts of power. Often,
 
 \section{Power Supply Design Archetypes}
 
-All wireless sensors require electrical energy to function. 
-That energy must either be allocated prior to deployment, or provided or collected during deployment. 
+All wireless sensors require electrical energy to function.
+That energy must either be allocated prior to deployment, or provided or collected during deployment.
 The archetypes presented in \cref{fig:background:archetypes} represent the high-level architectural possibilities for storing energy and powering wireless sensors.
-Energy storage and harvesting technology is rapidly improving, and varied application requirements will result in different design parameters. Despite this, the power supplies for all wireless sensors can be divided into clearly delineated design patterns. 
-Most simply, energy can be provisioned in a finite energy storage like a battery, also known as a primary cell. In situations where there is harvestable energy, it can be captured and stored in rechargeable storage, or a secondary cell. 
-If the available harvestable energy is on or below the edge of being sufficient to fully power a sensor and its workload, harvesting can be paired with a backup primary source to ensure consistent, reliable operation with an extended lifetime. 
-These three classes of design archetypes encompass the options for wireless sensor power supplies, if not for all electronic devices. 
-The next few sections explore the gradient of design space in more detail, and identify existing systems and their place within the design space. 
+Energy storage and harvesting technology is rapidly improving, and varied application requirements will result in different design parameters. Despite this, the power supplies for all wireless sensors can be divided into clearly delineated design patterns.
+Most simply, energy can be provisioned in a finite energy storage like a battery, also known as a primary cell. In situations where there is harvestable energy, it can be captured and stored in rechargeable storage, or a secondary cell.
+If the available harvestable energy is on or below the edge of being sufficient to fully power a sensor and its workload, harvesting can be paired with a backup primary source to ensure consistent, reliable operation with an extended lifetime.
+These three classes of design archetypes encompass the options for wireless sensor power supplies, if not for all electronic devices.
+The next few sections explore the gradient of design space in more detail, and identify existing systems and their place within the design space.
 
 \subsection{Primary-only}
 Non-rechargeable (primary-cell) batteries have been the preferred
 method of powering sensors for both academic experimentation
-and commercial and industrial applications. 
+and commercial and industrial applications.
 The Telos family of motes, originally designed in 2004~\cite{polastre2005telos},
 is still the wireless platform of choice for some modern research projects~\cite{mohammad2018codecast,li2019privacy}.
 The Hamilton mote is an example of an attempt to provide a more modern, cost-effective alternative to older motes~\cite{andersen2017hamilton}.
 Besides research platforms, the majority of commercial smart home sensors, like those offered by Ecobee, Honeywell, Lutron, Nest, Phillips, among many others, all opt to use non-rechargeable batteries as their source of energy
-~\cite{ecobeeSensor, honeywellThermostat, lutronSolutions, googleNestTemperature, hueSensor}. 
+~\cite{ecobeeSensor, honeywellThermostat, lutronSolutions, googleNestTemperature, hueSensor}.
 Industrial offerings from Emerson, GE, Honeywell, and others also utilize non-rechargeable power cells in their reliable wireless sensors~\cite{emersonRosemount,GEInsightMesh,honeywellOneWireless}.
 The use of primary-cells is popular in commercial and industrial sensing because they enable sensors with predictable lifetimes that are easy to
-design, simple to program, and reliable to operate. 
-A finite energy storage provides a finite lifetime, meaning battery replacement is inevitable. However, advances in energy efficiency and battery technology have resulted in reliable sensors that can last up to 10 years without battery maintenance~\cite{emersonRosemount,honeywellOneWireless, lutronSolutions}. 
+design, simple to program, and reliable to operate.
+A finite energy storage provides a finite lifetime, meaning battery replacement is inevitable. However, advances in energy efficiency and battery technology have resulted in reliable sensors that can last up to 10 years without battery maintenance~\cite{emersonRosemount,honeywellOneWireless, lutronSolutions}.
 
 \subsection{Energy Capture with Buffer}
 %Prior work regarding energy-harvesting sensor systems can be broadly
@@ -265,16 +284,16 @@ A finite energy storage provides a finite lifetime, meaning battery replacement 
 %do not use intermittent computing techniques to complete their workloads.
 
 Instead of preallocating energy, a system can utilize external sources of energy.
-The quantity, and consistency of external energy can vary widely. If the energy is predictable or reliable, a system can be powered entirely from the external source. If the source is unpredictable, captured energy can be stored or buffered in rechargeable storage, generally a (super)capacitor or battery to use in times where external energy is unavailable. 
+The quantity, and consistency of external energy can vary widely. If the energy is predictable or reliable, a system can be powered entirely from the external source. If the source is unpredictable, captured energy can be stored or buffered in rechargeable storage, generally a (super)capacitor or battery to use in times where external energy is unavailable.
 
 At one extreme of power delivery, a wireless sensor can be powered by a reliable source, like wired power.
-As much as it seems like an antithesis to "wireless" sensors, wired power is a solution for a class of applications where using a battery is more costly than installing wired power. 
-This is especially true for applications that are monitoring powered devices or measuring mains power. 
-For example, the Powerblade power meter is connected to AC mains power for both measurement and power supply~\cite{debruin15powerblade}. 
+As much as it seems like an antithesis to "wireless" sensors, wired power is a solution for a class of applications where using a battery is more costly than installing wired power.
+This is especially true for applications that are monitoring powered devices or measuring mains power.
+For example, the Powerblade power meter is connected to AC mains power for both measurement and power supply~\cite{debruin15powerblade}.
 Its proximity to readily available AC power and its small form factor make the inclusion of a battery infeasible compared to scavenging off mains power.
 
-The majority of wireless sensors that depend on external sources of energy are energy-harvesting. They utilize 
-%e, energy harvesting that is utilized in environments with sparse and inconsistent energy results in extremely low power designs, and designs that operate intermittently. 
+The majority of wireless sensors that depend on external sources of energy are energy-harvesting. They utilize
+%e, energy harvesting that is utilized in environments with sparse and inconsistent energy results in extremely low power designs, and designs that operate intermittently.
 photovoltaic, thermoelectric, piezoelectric, ambient RF harvesting or other methods to scavenge energy from their environment.
 This results in limited and unreliable energy income.
 Parameters like harvester size or surface area, and harvesting method, impact the amount of potential power delivered to the sensor, while the size and capacity of the rechargeable storage determines how much energy can be buffered.
@@ -285,20 +304,20 @@ This device class can be further differentiated by how captured energy is stored
 \label{sec:related:nonintermittent}
 Non-intermittent energy-harvesting sensors
 have largely existed in environments with plentiful harvestable energy
-and have been designed with sufficient capacity to capture this energy. 
+and have been designed with sufficient capacity to capture this energy.
 %Some
 %devices have also embraced backup primary-cells to further ensure
-%reliable operation.  
-%In the middle, in environments with sufficient and predictable available energy, designs can scavenge energy and store it in a rechargeable battery to power their workload. 
-Most examples of such devices are deployed outdoors with photovoltaics~\cite{jiang2005perpetual, kansal2007power, corke2007long, lin2005heliomote, adkins2018signpost}. 
-%Energy harvesting in industrial environments is also possible with sufficient heat differential or vibrational sources~\cite{perpetua, kinergizer}. 
+%reliable operation.
+%In the middle, in environments with sufficient and predictable available energy, designs can scavenge energy and store it in a rechargeable battery to power their workload.
+Most examples of such devices are deployed outdoors with photovoltaics~\cite{jiang2005perpetual, kansal2007power, corke2007long, lin2005heliomote, adkins2018signpost}.
+%Energy harvesting in industrial environments is also possible with sufficient heat differential or vibrational sources~\cite{perpetua, kinergizer}.
 %However, the adoption and application of such harvesting methods is limited and non-rechargeable batteries remain the most popular option for powering industrial sensors.
 %Notably, Prometheus utilizes a supercapacitor as a short term energy store, and when full,
 %charges a backup rechargeable lithium battery~\cite{jiang2005perpetual}. At
 %the time of its design, lithium cells offered highly limited recharge cycles,
 %and by utilizing a supercapacitor, much of this
 %charge-discharge volatility was masked from the secondary-cell, extending its lifetime.
-Non-intermittent sensors have also been employed indoors. 
+Non-intermittent sensors have also been employed indoors.
 The EnHANTs sensor uses an indoor photovoltaic panel to charge an intentionally oversized NiMH
 battery, with plans to eventually use a thin-film battery~\cite{margolies2015energy}.
 DoubleDip utilizes thermoelectric harvesting to charge a lithium-manganese battery~\cite{martin2012doubledip}
@@ -317,15 +336,15 @@ The popularity of batteryless systems has led to a distinct lack of modern resea
 \subsection{Energy Capture with Buffer and Primary}
 
 Regardless of which energy store is used, energy-harvesting systems will
-experience some degree of uncertainty regarding energy income. 
+experience some degree of uncertainty regarding energy income.
 A non-rechargeable
 backup energy store can be utilized to mask this uncertainty, cold
 start electrical components, and provide consistent, reliable, and lively operation.
-A third design archetype is a combination of the first two: 
+A third design archetype is a combination of the first two:
 external energy capture paired with a backup non-rechargeable cell.
-While this archetype makes sense from the perspective of maximizing system lifetime and reliability, it is not commonly employed. 
-The Pressac line of supercapacitor-based energy-harvesting sensors 
-use a battery backup to obtain an estimated 10 years of continuous, reliable operation~\cite{pressac}.  
+While this archetype makes sense from the perspective of maximizing system lifetime and reliability, it is not commonly employed.
+The Pressac line of supercapacitor-based energy-harvesting sensors
+use a battery backup to obtain an estimated 10 years of continuous, reliable operation~\cite{pressac}.
 %This work suggests that these sensors could significantly
 %increase their lifetime by using a larger secondary energy store.
 There has been little
