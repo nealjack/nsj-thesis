@@ -13,21 +13,23 @@
 
 \section{Batteryless Sensing}
 
-The batteryless, or intermittent wireless sensor movement has abandoned batteries (both rechargeable and non-rechargeable) under the assumption that current battery technology has too many detracting qualities to be suitable for wireless sensor energy harvesting storage. Most notably, they assume that batteries provide insufficient lifetimes to build long-lasting deployments.
+The batteryless, or intermittent, wireless sensor movement has abandoned batteries (both rechargeable and non-rechargeable) under the assumption that current battery technology has too many detracting qualities to be suitable for wireless sensor energy harvesting storage.
+Most notably, they assume that batteries provide insufficient lifetimes to build long-lasting deployments.
 Batteryless systems instead utilize capacitors, which have insufficient energy capacity to support traditional sensor workloads.
 As a rule of thumb, the capacitance of these systems is generally sized to hold enough energy to support the most energy intensive atomic task, such as turning on, operating a sensor, performing some quanta of computation, or transmitting a single radio packet~\cite{nardello2019camaroptera,colinReconfigurable18, shukla2019skinnypower, hesterFlicker17}.
-While (super)capacitor storage results in a system that can technically perform the operations of a wireless sensor, it does not mean it does them well.
+While capacitor and super-capacitor storage results in a system that can technically perform the operations of a wireless sensor, it does not mean it does them well.
 A batteryless system is only as reliable and lively as its source of harvestable energy.
 Often this source of energy is intermittent, resulting in a system that operates intermittently.
-In situations of energy drought,
-these platforms quickly deplete their
+In situations of energy drought, these platforms quickly deplete their
 small energy stores, and lacking energy,
 they power off and lose
 state, potentially in the middle of an important operation or for an extended period of time.
 The intermittent reality of many harvesting sources necessitates extremely careful management of energy and complex software control of volatile state to ensure that \textit{any} forward progress can be made.
 Batteryless devices and applications are also extremely difficult to debug and develop software for, as in addition to software bugs, energy is no longer guaranteed at any point during execution.
-Platform builders have also experimented with hardware techniques to increase responsiveness by reducing charging hysteresis.
+Platform builders have also experimented with novel hardware techniques to increase responsiveness by reducing charging hysteresis.
 Despite the vast amount of work on new software and hardware techniques to enable and improve the reliability and usability of batteryless systems, these techniques are unable to address the fundamental limitation of energy storage offered by batteryless energy storage.
+The software solutions presented by batteryless researchers are solutions developed for self-imposed problems, and hardware solutions offer marginal improvements to system responsiveness.
+The next few sections discuss system design, software and hardware techniques, and tools meant to make more usable and capable batteryless systems.
 %Energy-harvesting systems that rely
 %on small (super)capacitor energy buffers are commonly referred to as intermittent systems, as they only store enough energy to perform single atomic tasks, and are unable to operate when external energy is not present.
 %Many choose to employ
@@ -63,11 +65,11 @@ Since the development of the WISP platform~\cite{sample2008design}, researchers 
 Researchers have also developed tools and techniques for improving the programmming and debugging experience for batteryless programmers.
 
 \subsubsection{Checkpointing}
-One method of enabling forward progress across reboots involves saving important volatile state
-Mementos~\cite{ransford2012mementos} utilizes a modified LLVM compiler, as well as a run-time library, to automatically place checkpointing triggers within a program. During run-time, at these trigger points, mementos measures the system voltage, and if low enough, portions of volatile RAM state are written into non-volatile flash.
+One method of enabling forward progress is checkpointing, where
+progress is saved across reboots via automatically saving and restoring important volatile state at predetermined and run time locations in code.
+Mementos~\cite{ransford2012mementos} utilizes a modified LLVM compiler, as well as a run-time library, to automatically place checkpointing triggers within a program. During run-time, at these trigger points, mementos measures the system voltage, and if low enough, portions of volatile RAM state are written into non-volatile flash before turning off.
 The introduction of new non-volatile technologies like Ferroelectric RAM (FRAM) allows more energy and time efficient checkpointing, while simultaneously simplifying the state preservation logic.
 Hibernus~\cite{balsamo2014hibernus} does not use predefined trigger points, and instead utilizes a hardware interrupt to detect a low system voltage threshold, and immediately copies volatile state to FRAM. This state is subsequently restored on a rising voltage interrupt.
-
 
 \subsubsection{Batteryless Debugging}
 For batteryless systems, it
@@ -94,35 +96,6 @@ Beyond safety concerns, through the course of many power failures and reboots, a
 In intermittent computation, it can be difficult to manage data priority with few guarantees about future energy availability. The Mayfly~\cite{hesterTimely17} programming language and runtime attempts to address this by explicitly pairing time with data to maximize data freshness within intermittent execution.
 All of these techniques necessarily limit programming scope to ensure various constraints and guarantees of safety and timeliness. These techniques also introduce significant software and compiler complexity on top of an already complex embedded software development toolchain.
 These constrained programming models require programmers to learn and adopt new programming models that incorporate new concepts like tasks, channels, and flows~\cite{colin2016chain,maeng2017alpaca,hesterTimely17}.
-
-These techniques are effective in that they enable safe forward progress across reboots and intermittent operation is almost entirely hidden from the programmer.
-While often these sorts of software abstractions of hardware realities are beneficial, this has misled many system designers regarding the reliability and eventual success of batteryless systems for many applications.
-An abstraction that guarantees forward progress removes the requirement for a programmer to
-reason about what it means to build applications on top of systems that inconsistently operate.
-The eventual forward progress allowed by these techniques inflates the perceived utility of these systems,
-as they suggest continuous and eventual operation and progress. In reality, they operate with no guarantee of reliability or even eventual task completion.
-This results in systems that technically function in the sense that they occasionally perform a task, but depending on the availability of harvestable energy, their performance and reliability varies widely.
-No amount of software techniques and improvements will address reliability, as it is fundamentally due to limited energy storage.
-%These software techniques essentially provide an abstraction for programmers that allows the successful programming and usage of batteryless systems, without concerning themselves with the reality of batteryless operation. This as well as any quantifiable metrics of the actual performance of the system.
-%they are left with the assumption that a batteryless system is an appropriate solution to most, if not any and all applications.
-%By hiding this reality from programmers and application designers, it makes it more difficult to properly design systems that fulfill the requirements of real applications.
-
-%Beyond
-%Other work in this space attempts to cope with
-%intermittency
-%by
-%developing tools and
-%programming language primitives that allow %can perform
-%complex and energy intensive tasks to execute despite limited energy storage.
-%Intermittent-aware programming
-%models and compilers enable checkpointing and progress latching over
-%workloads that may require more energy than can be stored
-%~\cite{lucia2015simpler, ransford2012mementos, hesterTimely17}.
-%New debugging tools
-%spanning both the hardware and software domains
-%measure the energy required for specific code operations
-%and restore energy state during code breakpoints~\cite{colin2016energy}.
-
 
 \subsection{Hardware Hysteresis Management.}
 In addition to intermittent software techniques, researchers have developed
@@ -176,7 +149,38 @@ sleep periods to achieve energy-neutral operation.
 %by these systems and their subsequent availability
 %could be substantially improved by using larger energy buffers.
 
-Simultaneously sensing and harvesting the same phenomenon is one of the most effective use cases of batteryless sensors, however being able to simultaneously sense and harvest is not always possible, and is generally limited to light, temperature differentials, vibration, and RF sources.
+%Simultaneously sensing and harvesting the same phenomenon is one of the most effective use cases of batteryless sensors, however being able to simultaneously sense and harvest is not always possible, and is generally limited to light, temperature differentials, vibration, and RF sources.
+
+
+\subsection{Necessary Complexity}
+These techniques are effective in that they enable safe forward progress across reboots and intermittent operation is almost entirely hidden from the programmer.
+While often these sorts of software abstractions of hardware realities are beneficial, this has misled many system designers regarding the reliability and eventual success of batteryless systems for many applications.
+An abstraction that guarantees forward progress removes the requirement for a programmer to
+reason about what it means to build applications on top of systems that inconsistently operate.
+The eventual forward progress allowed by these techniques inflates the perceived utility of these systems,
+as they suggest continuous and eventual operation and progress. In reality, they operate with no guarantee of reliability or even eventual task completion.
+This results in systems that technically function in the sense that they occasionally perform a task, but depending on the availability of harvestable energy, their performance and reliability varies widely.
+No amount of software techniques and improvements will address reliability, as it is fundamentally due to limited energy storage.
+%These software techniques essentially provide an abstraction for programmers that allows the successful programming and usage of batteryless systems, without concerning themselves with the reality of batteryless operation. This as well as any quantifiable metrics of the actual performance of the system.
+%they are left with the assumption that a batteryless system is an appropriate solution to most, if not any and all applications.
+%By hiding this reality from programmers and application designers, it makes it more difficult to properly design systems that fulfill the requirements of real applications.
+
+%Beyond
+%Other work in this space attempts to cope with
+%intermittency
+%by
+%developing tools and
+%programming language primitives that allow %can perform
+%complex and energy intensive tasks to execute despite limited energy storage.
+%Intermittent-aware programming
+%models and compilers enable checkpointing and progress latching over
+%workloads that may require more energy than can be stored
+%~\cite{lucia2015simpler, ransford2012mementos, hesterTimely17}.
+%New debugging tools
+%spanning both the hardware and software domains
+%measure the energy required for specific code operations
+%and restore energy state during code breakpoints~\cite{colin2016energy}.
+
 
 \section{Application Space}
 Over the past two decades, researchers have developed numerous examples of effective and useful applications using wireless sensors.
