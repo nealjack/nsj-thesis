@@ -16,26 +16,27 @@
 The batteryless, or intermittent, wireless sensor movement has abandoned batteries (both rechargeable and non-rechargeable) under the assumption that current battery technology has too many detracting qualities to be suitable for energy-harvesting wireless sensor storage.
 Most notably, they assume that batteries provide insufficient lifetimes to build long-lasting deployments~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, hester2017future, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, majid2020continuous}.
 Batteryless systems instead utilize capacitors, which are long lasting, but provide very little energy storage when compared to batteries. Ceramic and tantalum capacitors possess functionally infinite lifetimes, while supercapacitors offer lifetimes on the order of decades to a century~\cite{kemetLife}.
-The batteryless design decision results in two major limitations: batteryless systems are only as reliable as their energy income, and the amount of work they can do in one charge cycle is limited by the amount of energy stored their capacitors.
+%The relatively small energy storage afforded by capacitors and supercapacitors is a fundamental limitation and is the trade off when prioritizing power supply lifetime over any other performance metric. 
+Despite this, the batteryless design decision results in two major drawbacks: 
+batteryless system operational capability is limited to the energy provided by the short discharge cycle of its capacitor bank, 
+and the availability and reliability of the system is determined by energy income. 
 
-With capacitor storage,
-a batteryless system can technically perform the operations of a wireless sensor. However, it does not mean it does them well.
+A batteryless system can technically perform the operations of a wireless sensor with capacitor storage. However, it does not mean it does them well.
+When these systems are harvesting enough power to turn on and do work, they can only perform operations that require less energy than their capacitor storage can hold. 
 Often a batteryless system's source of energy is intermittent, resulting in a system that operates intermittently.
-In situations of energy drought, batteryless systems quickly deplete their
+When harvestable energy is unavailable, batteryless systems quickly deplete their
 small energy stores, and lacking any future energy,
 they power off and lose
-state, potentially in the middle of an important operation or for an extended and unknown period of time.
+volatile state, potentially in the middle of an important operation and for an extended and unknown period of time.
 
-When these systems are harvesting enough power to turn on and do work, they can only perform operations that require less energy than their capacitor storage can hold. Due to this, the general rule of thumb is that the capacitance is sized to hold enough energy to support the most energy intensive atomic task of the system, such as operating a sensor, performing some quanta of computation, or transmitting a single radio packet~\cite{nardello2019camaroptera,colinReconfigurable18, shukla2019skinnypower, hesterFlicker17}.
 The intermittent reality of many harvesting sources necessitates extremely careful management of energy and complex software control of volatile state to ensure that \textit{any} forward progress can be made.
-
 Much of the past work on batteryless systems has been focused on developing software solutions to enable forward progress between reboots. This extends the capability of applications beyond that of a single capacitor buffer discharge cycle, and is useful for building more general systems.
 Batteryless devices are also extremely difficult to debug and develop software for, as in addition to software bugs, energy is no longer guaranteed at any point during execution.
 To this end, researchers have also built tools to recreate energy conditions to help diagnose and fix intermittent energy bugs.
 %Platform builders have also experimented with novel hardware techniques to increase responsiveness by reducing charging hysteresis.
-Often, batteryless device operation is tied to a full swing capacitor charge/discharge hysteresis. Once they capture enough energy, they begin executing their workload until they have exhausted their stored energy. Researchers have worked on building hardware solutions that maximize individual component uptime, as well as methods for dynamically tuning capacitance to meet operation energy requirements.
+Researchers have built hardware solutions that maximize individual component uptime, as well as methods for dynamically tuning capacitance to meet operation energy requirements.
 %The software solutions presented by batteryless researchers are solutions developed for self-imposed problems stemming from limited energy storage, and hardware solutions offer marginal improvements to system responsiveness at a prohibitive cost.
-The next sections discuss various system designs, tools, and software and hardware techniques meant to improve batteryless system generality, usability, and availability.
+The next sections discuss various system designs, tools, and software and hardware techniques meant to improve these two drawbacks to batteryless systems. 
 %Energy-harvesting systems that rely
 %on small (super)capacitor energy buffers are commonly referred to as intermittent systems, as they only store enough energy to perform single atomic tasks, and are unable to operate when external energy is not present.
 %Many choose to employ
@@ -50,32 +51,37 @@ The next sections discuss various system designs, tools, and software and hardwa
 %Due to this reality, researchers have spent the past decade
 %designing more predictable and usable batteryless systems. This has resulted in several different hardware and software design methods and techniques for intermittent systems.
 
-\subsection{One-shot Intermittency}
-One of the simplest methods employed by batteryless systems does not bother to attempt to retain state across power loss and reboots
-and instead just allocates enough capacitance to turn on and perform a predefined task, like sending a packet.
+\subsection{Forward Progress and State Preservation}
+The type and amount of work that is possible within the energy envelope of a single discharge cycle of capacitor or supercapacitor buffer is extremely limited.
+%Applications and devices that employ a one-shot technique are 
+Batteryless systems are generally only able to perform a few seconds or less of computation, or send a single packet before depleting their capacitor storage and powering off, even with modestly sized supercapacitors.
+
+\subsubsection{One-shot Intermittency}
+One of the simplest methods employed by batteryless systems does not bother to attempt to retain state across power loss and reboots.
+One-shot intermittent designs instead just allocate enough capacitance to turn on and perform a predefined task, like sending a packet.
 This method is reminiscent of the simple reply behavior of RFID tags, upon which the design of early intermittent systems is based on~\cite{sample2008design}.
 These systems may act as a simple beacon~\cite{campbell2016cinamin,saoda2019no}, or a sensor~\cite{yervaGrafting12, debruin2013monjolo, campbellEnergy14, campbellThermes14}.
 For some platforms, most notably the Monjolo family of devices, the rate of harvesting is used as the sensor itself. Every wake-up and transmit event corresponds to an amount of energy harvested, and can be used to quantify the harvested phenomenon~\cite{campbellThermes14, campbellEnergy14, debruin2013monjolo}.
 This method of coupling harvesting and sensing is the only way to ensure that interesting sensor data is observed by a batteryless sensor.
 Otherwise, when a batteryless sensor is built to sense a phenomena other than what it is harvesting, it is inevitable that the majority of instances, changes in the sensed phenomena will be missed because the sensor is offline.
-However, even when sensing and harvesting is coupled, a one-shot batteryless design often does not have the energy required to support message retransmission in the case of packet loss, or caching in the event of poor network availability. Any observation may be lost upon packet failure, and the next time the sensor wakes up it only has enough energy to be concerned with transmitting its current, more recent observation.
+However, even when sensing and harvesting is coupled, a one-shot batteryless design often does not have the energy required to support message retransmission in the case of packet loss, or generally support any network reliability mechanisms. 
+Any observation may be lost upon packet failure, and the next time the sensor wakes up it only has enough energy to be concerned with transmitting its current, more recent observation.
 This one-shot method is relatively simple compared to other approaches to batteryless software, but it still requires tedious cold-start software optimization and capacitance tuning to allow the device to power on and complete its workload within the constraints of its tiny energy storage.
 This severely limits the generality of systems developed with this approach.
 Performing any sensing or computing outside of the hardware's intended use case is often not possible.
 Like all batteryless sensors, it is also impossible to distinguish between sensor failure and a lack of energy.
 
-\subsection{State Preservation and Programming}
-The workloads that are possible within the energy envelope of a single discharge cycle of capacitor or supercapacitor buffer are extremely limited.
-Applications and devices that employ a one-shot technique are generally only able to perform a few seconds or less of computation, or send a single packet before powering off.
-Since the development of the WISP platform~\cite{sample2008design}, researchers have continuously developed software and compiler tools and techniques to save state and resume operation across power outages, allowing for longer running computation or transmitting more data than a single capacitor bank would support.
-Researchers have also developed tools and techniques for improving the programmming and debugging experience for batteryless programmers. Writing programs for intermittent operation introduces bugs that do not exist with continuous operation, and requires more advanced debugging techniques to address them.
-
 \subsubsection{Checkpointing}
+Given the limitations of the one-shot technique, researchers have developed tools and techniques for 
+ensuring forward progress across system reboots to enable longer and more complex workloads than a single capacitor bank can support.
+%Since the development of the WISP platform~\cite{sample2008design}, researchers have continuously developed software tools, methods, and techniques to save state and resume operation across power outages, allowing for longer running computation or transmitting more data than a single capacitor bank would support.
 One method of enabling forward progress is checkpointing,
 where important volatile state is saved at predetermined and run time locations in code before a power outage, and restored upon rebooting. Many methods have been proposed, using both static and dynamic methods.
 Mementos~\cite{ransford2012mementos} utilizes a modified LLVM compiler, as well as a run-time library, to automatically place checkpointing triggers within a program. During run-time, at these trigger points, Mementos measures the system voltage, and if low enough, portions of volatile RAM state are written into non-volatile flash before turning off.
 The introduction of new non-volatile technologies like Ferroelectric RAM (FRAM) allows more energy and time efficient checkpointing, while simultaneously simplifying the state preservation logic.
 Hibernus~\cite{balsamo2014hibernus} does not use predefined trigger points, and instead utilizes a hardware interrupt to detect a low system voltage threshold, and immediately copies volatile state to FRAM. This state is subsequently restored on a rising voltage interrupt.
+%improving the programmming and debugging experience for batteryless programmers. 
+%Writing programs for intermittent operation introduces bugs that do not exist with continuous operation, and requires more advanced debugging techniques to address them.
 
 \subsubsection{Batteryless Debugging}
 For batteryless systems, it
@@ -90,11 +96,11 @@ Another tool, the energy-interference-free debugger (EDB), also replays energy s
 EDB augments normal interactive debugging tools like GDB to allow real time playback of energy state, in addition to interactive program debugging.
 
 \subsubsection{Checkpointing-free}
-While conceptually simple, checkpointing is not a perfect solution to saving state, especially as that state begins to increase in footprint as applications increase in capability and complexity. There is an upper bound to the size of volatile state, where the energy required to save and read state to and from non-volatile memory exceeds that of various capacitor storage sizes.
-The advent of FRAM (as well as other non-volatile RAM technologies) results in methods that can avoid explicitly saving and reading back the majority of application state. State that would normally reside in volatile RAM can now be placed within non-volatile FRAM, allowing this state to persist across power outages.
+While conceptually simple, checkpointing is not a perfect solution to saving state, especially as that state begins to increase in footprint as applications increase in capability and complexity. There is an upper bound to the size of checkpoints, where the energy required to save and read state to and from non-volatile memory exceeds that of various capacitor storage sizes.
+The advent of FRAM (as well as other non-volatile RAM technologies) results in methods that can avoid explicitly saving and reading back the majority of application state. State that would normally reside in volatile RAM can now be placed within non-volatile memory, allowing this state to persist across power outages.
 While this seems like a straightforward solution to preserving state, it is complicated by the shrinking
 boundary between volatile and non-volatile state. Often both SRAM and FRAM are memory mapped and accessed the same way. Writes and reads to either are indistinguishable to the programmer and compiler.
-Code is often executed multiple times through the course of intermittent execution, and if volatile and non-volatile state are not carefully managed and accessed, re-execution of various code sections can result in consistency violations~\cite{maeng2017alpaca}.
+Code is often executed multiple times through the course of intermittent execution, and if volatile and non-volatile state are not carefully managed and accessed by the programmer, re-execution of various code sections can result in consistency violations~\cite{maeng2017alpaca}.
 
 The aftermentioned debugging tools can help to detect and fix intermittency bugs during runtime testing. However, many researchers have developed solutions to avoid these bugs by design.
 Task-based programming frameworks and models like
@@ -120,16 +126,22 @@ No amount of software techniques and improvements will address the unreliability
 %they are left with the assumption that a batteryless system is an appropriate solution to most, if not any and all applications.
 %By hiding this reality from programmers and application designers, it makes it more difficult to properly design systems that fulfill the requirements of real applications.
 
-\subsection{Hardware Hysteresis Management}
+\subsection{Approaches for Responsiveness and Reliability}
 Beyond software techniques to improve the intermittent programming experience,
-researchers have also developed novel hardware designs to
-increase the availability and responsiveness of batteryless systems. These hardware techniques focus on the fine-grained management
-of capacitor charging hysteresis.
+researchers have also developed novel hardware and system designs to
+increase the responsiveness and availability of batteryless systems. 
+Many hardware techniques focus on the fine-grained management
+of capacitor charging hysteresis. 
+Other approaches attempt to maximize availability through networks of redundant batteryless sensors. 
 %Unlike the relatively stable voltage provided by a battery, a capacitor's voltage is related to the square root of stored energy. This means that during a discharge cycle, an intermittent system will experience a pronounced voltage drop from a maximum $V_{max}$ to a minimum $V_{min}$.
-Batteryless systems operate within the bounds of capacitor storage voltage thresholds, which varies directly with regards to the energy stored in them. The
-%For batteryless systems,
-%it is often assumed that the
-upper hysteresis threshold $V_{max}$, the point at which the device turns on during charging, is the voltage at which a capacitor is full, and the lower threshold $V_{min}$, the point at which the system turns off, is the minimum
+
+\subsubsection{Hardware Hysteresis Management}
+Often, batteryless device operation is tied to a full swing capacitor charge/discharge hysteresis. Once they capture enough energy, they begin executing their workload until they have exhausted their stored energy. 
+
+The general rule of thumb for batteryless system capacitor sizing is that it must hold enough energy to support the most energy intensive atomic task of the system, such as operating a sensor, performing some quanta of computation, or transmitting a single radio packet~\cite{nardello2019camaroptera,colinReconfigurable18, shukla2019skinnypower, hesterFlicker17}.
+All batteryless systems operate within the bounds of capacitor storage voltage thresholds, 
+The voltage across a capacitor electrodes varies directly with regards to the energy stored in it. 
+The upper hysteresis threshold $V_{max}$, the point at which the device turns on during charging, is the voltage at which a capacitor is full, and the lower threshold $V_{min}$, the point at which the system turns off, is the minimum
 operating voltage of the components in the system.
 Smaller capacitors can charge to an upper
 threshold and turn on faster, but store less energy.  Larger capacitors store more energy, but charge slower.
@@ -140,8 +152,8 @@ Managing hysteresis also allows for more platform generality, as the capacitor s
 Notable examples of platforms that utilize this technique are the Flicker and Capybara platforms~\cite{hesterFlicker17, colinReconfigurable18}.
 
 The Flicker
-platform is a modular batteryless platform, where each module (sensor, radio, microcontroller) has its own built in energy storage~\cite{hesterFlicker17}. This design point is known as federated energy storage, where each peripheral possesses its own energy storage that is tuned to the task
-it is expected to perform~\cite{hesterTragedy15}. This has the
+platform that practices federated energy storage, where each module (sensor, radio, microcontroller) has its own built in capacitor that is tunded to the task it is expected to perform~\cite{hesterFlicker17, hesterTragedy15}. 
+This has the
 effect of allowing various components to charge their storage quickly and begin operating before other parts of the system turn on or are needed. This also
 isolates power failure to independent components.
 Federated storage provides only marginal improvements with regard to component availability and energy harvesting efficiency. A federated approach only provides an average increase of 6.7\% of microcontroller uptime (from 64.2\% to 70.9\%) and a 1.5\% increase for radio uptime (from 3.8\% to 5.24\%) over a single capacitor discharge cycle. Likewise, a federated approach provides at most a 10\% improvement in energy harvested over the capacitor charge/discharge cycle~\cite{hesterTragedy15}.
