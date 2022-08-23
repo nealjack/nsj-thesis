@@ -7,15 +7,15 @@ Many modern platforms are attempting to push the energy bounds of sensing, compu
 These decisions are made despite the obvious option for energy capacity: batteries.
 %Due to an increased need for energy storage to enable more advanced sensing and processing, the majority of modern batteryless research energy harvesting platforms utilize supercapacitors instead of tantalum or ceramic capacitors due to their superior energy density.
 These designers have eschewed batteries as an option, despite their vastly superior energy density, dismissing them qualitatively as 
-bulky~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, yervaGrafting12, majid2020continuous},
-inefficient~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17},
-expensive~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, majid2020continuous},
-short-lived~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, majid2020continuous}.
+bulky~\cite{yervaGrafting12, hester2017future, hesterTragedy15, luciaIntermittent17, hesterFlicker17, hesterTimely17, colinReconfigurable18, yildirim2018ink, nardello2019camaroptera, geissdoerfer2019shepherd, majid2020continuous, shukla2019skinnypower},
+inefficient~\cite{yervaGrafting12, luciaIntermittent17, nardello2019camaroptera, shukla2019skinnypower},
+expensive~\cite{hester2017future, hesterTragedy15, hesterFlicker17, hesterTimely17, yildirim2018ink, majid2020continuous},
+short-lived~\cite{hester2017future, hesterFlicker17, hesterTimely17, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, shukla2019skinnypower, geissdoerfer2019shepherd, nardello2019camaroptera, fraternali2020ember, majid2020continuous}.
 %high-maintenance~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, colinReconfigurable18, luciaIntermittent17},
-temperature-sensitive~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, colinReconfigurable18, luciaIntermittent17},
+temperature-sensitive~\cite{hester2017future, hesterFlicker17, hesterTimely17, luciaIntermittent17, colinReconfigurable18},
 %difficult to monitor~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, colinReconfigurable18, luciaIntermittent17},
 %fragile~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17},
-and dangerous~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, majid2020continuous}. 
+and dangerous~\cite{hester2017future, hesterFlicker17, hesterTimely17,  yildirim2018ink, geissdoerfer2019shepherd, majid2020continuous}. 
 %These qualitative claims against batteries were valid when considering some of the first available rechargeable batteries. 
 
 In this chapter, I reexamine each of these arguments with respect to modern capacitor, supercapacitor, and battery technology. 
@@ -24,7 +24,7 @@ battery electrode materials and improved lithium-ion manufacturing processes hav
 that do not possess the same negative qualities as older battery technology. 
 %These new batteries still possess orders of magnitude more energy density than capacitors and supercapacitors.
 New battery technology paired with newly available low power energy harvesting and battery management ICs~\cite{bq25505,adp5091} enables the design of high-capacity energy harvesting systems.
-Despite improvements, batteries still underperform in some metrics compared to supercapacitors, but these deficiencies are likely inconsequential for the majority of wireless sensor applications, and the substantial increase in energy capacity outweighs any detracting tradeoffs.\\
+Despite improvements, batteries still underperform in some metrics compared to supercapacitors, but these deficiencies are likely inconsequential for the majority of wireless sensor applications, and the substantial increase in energy capacity outweighs any detracting trade-offs.\\
 
 \begin{landscape}
 \placefigure{tab:battery:cost}
@@ -43,7 +43,7 @@ Tantalum capacitors also do not exhibit any aging effects, whereas MLCCs experie
 Compared to batteries and supercapacitors, MLCC and tantalum capacitors provide infinitely longer lifetimes and higher power density, but are severely limited in energy capacity and density.
 
 \subsection{Supercapacitors}
-Electrochemical double layer capacitors (EDLC) are the most common type of supercapacitor, and is utilized in many batteryless platforms~\cite{colinReconfigurable18,libich2018supercapacitors,nardello2019camaroptera}.
+Electrochemical double layer capacitors (EDLC) are the most common type of supercapacitor, and are utilized in many batteryless platforms~\cite{colinReconfigurable18,libich2018supercapacitors,nardello2019camaroptera}.
 Supercapacitors generally consist of electrodes separated by a liquid electrolyte, like batteries, however energy accumulation is through electrostatic interaction instead of chemical reactions~\cite{libich2018supercapacitors,vangari2013supercapacitors}.
 EDLCs achieve significantly higher energy density than MLCC and tantalum capacitors due to their large effective surface area and very small charge separation distances. Supercapacitors are also durable and long-lived, capable of millions of cycles~\cite{libich2018supercapacitors}. 
 supercapacitors excel in high power, high cycling applications, where large amounts of charge must be stored and provided quickly, at a high frequency.
