@@ -534,7 +534,7 @@ Through the course of the 3.5 year deployment, the battery deployment experience
 Due to these outages, the authors turn to batteryless designs for their environment and vibration sensors, producing custom application-specific hardware and software designs.
 
 The authors do not explicitly mention many quantitative details of their designs including power and energy requirements for different operations, making it difficult to gleam the average application power requirements.
-However, the off the shelf components used for the first deployment, along with the described workload provide some insight. 
+However, the off the shelf components used for the first deployment, along with the described workload provide some insight, enough to make an educated guess.
 The first deployment utilized a Libelium Waspmote and an XBee 868LP sub-\si{\giga\hertz} radio~\cite{waspmote,xbeeradio}.
 Combined, these two components require a sleep current of 34.7\si{\micro\ampere} at 3.3\si{\volt}.
 The Waspmote is powered by an ATmega1281 and has an active current of 17\si{\milli\ampere} and frequency of 14.7456\si{\mega\hertz}.
@@ -545,9 +545,20 @@ The temperature sensor workload consists of measuring temperature and humidity e
 Similarly, the vibration sensors capture a one minute burst of accelerometer data every 20 minutes.
 Every hour the acceleration data is summarized via an FFT, the fundamental frequency and spectral density is computed, and the results are compressed and sent.
 With this information, we can estimate an average power draw for each system by making a few assumptions.
-We assume every packet consists of a 32 byte combined header and overhead, individual data are encoded as 32-bit values, and the FFT is 128 in length, of which only the real half needs to be transmitted, encoded individually as 8-bit values.
+We assume every packet consists of a 32 byte combined header and overhead, individual data are encoded as 32-bit values, and the FFT is 128 in length, of which only the real half needs to be transmitted, encoded individually as 8-bit values. \hl{TODO: power estimations}
 
+The original battery-based deployment utilizes 6 C cell alkaline batteries for each sensor.
+The authors do not note if the cells are configured in series or parallel.
+These 6 cells can be configured 2x3 or 3x2 to achieve a nominal 3\si{\volt} or 4.5\si{\volt} supply respectively.
+Both configurations provide voltages outside the acceptable range of the Waspmote (3.3-4.2\si{\volt})~\cite{waspmote_block}.
+Alkaline batteries quickly drop to 1.4\si{\V} when under load~\cite{alkaline_c}, providing an acceptable voltage in a 3x2 configuration.
+The Waspmote only includes a 3.3\si{\volt} step down regulator (either a DC/DC converter or an LDO, the design diagrams do not specify) for the 3.3\si{\volt} supply to its MCU and other subsystems.
+It does have a 5\si{\volt} DC/DC boost converter, however it is only provided to external modules. 
+This configuration of 6 C-type batteries provides a maximum of 16\si{\ampere\hour} at 4.5V.
+However, the voltage curve of alkaline cells is fairly linear, and without regulation this configuration will drop below the minimum voltage requirement of 3.3\si{\volt}(1.1\si{V} per cell) at about one half of its full capacity~\cite{alkaline_c}.
 
+This can result in 
+This estimated power is not sufficient to explain
 
 \subsubsection{Cathodic Protection Monitoring}
 Beyond the coupling of sensing to harvesting, sometimes harvestable power is reliable. 
