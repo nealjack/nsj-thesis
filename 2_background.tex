@@ -18,34 +18,34 @@ Most notably, they argue that batteries provide insufficient lifetimes to build 
 Batteryless systems instead utilize capacitors, some types of which offer functionally infinite lifetimes~\cite{kemetLife}.
 However, capacitors and supercapacitors provide very little energy storage when compared to batteries.
 %. Ceramic and tantalum capacitors possess functionally infinite lifetimes, while supercapacitors offer lifetimes on the order of decades to a century~\cite{kemetLife}.
-%The relatively small energy storage afforded by capacitors and supercapacitors is a fundamental limitation and is the trade off when prioritizing power supply lifetime over any other performance metric. 
-Due to this, the batteryless design decision results in two major drawbacks: 
-at any given time, a batteryless system is limited to the energy provided by the short discharge cycle of its capacitor bank, 
-and the availability of the system is determined by the consistency and intensity of energy income. 
+%The relatively small energy storage afforded by capacitors and supercapacitors is a fundamental limitation and is the trade off when prioritizing power supply lifetime over any other performance metric.
+Due to this, the batteryless design decision results in two major drawbacks:
+at any given time, a batteryless system is limited to the energy provided by the short discharge cycle of its capacitor bank,
+and the availability of the system is determined by the consistency and intensity of energy income.
 
-A batteryless system can technically perform the operations of a wireless sensor. 
+A batteryless system can technically perform the operations of a wireless sensor.
 However, it does not mean it does them well.
-When these systems are harvesting enough power to turn on and operate, they can only perform operations that require less energy than their capacitor storage can hold. 
+When these systems are harvesting enough power to turn on and operate, they can only perform operations that require less energy than their capacitor storage can hold.
 Often a batteryless system's source of energy is intermittent, resulting in a system that operates intermittently.
 When harvestable energy is unavailable, batteryless systems quickly deplete their
 small energy stores, and lacking any future energy,
 they power off and lose
 volatile state, potentially in the middle of an important operation and for an extended and unknown period of time.
-The intermittent reality of many harvesting sources necessitates extremely careful management of energy 
-%and complex software control of volatile state 
+The intermittent reality of many harvesting sources necessitates extremely careful management of energy
+%and complex software control of volatile state
 and detailed and thorough software optimization
-to ensure that \textit{any} operations can be completed. 
+to ensure that \textit{any} operations can be completed.
 
 Despite these complications, the concept of an immortal wireless sensor is extremely tantalizing, and is the driving motivation behind batteryless systems research.
-%This potential for extremely long-lived sensors has led to significant work to enable and improve batteryless systems. 
-This has resulted in a wealth of batteryless systems work, the majority of which is focused on developing software solutions that manage and preserve volatile state to enable forward progress between reboots. 
+%This potential for extremely long-lived sensors has led to significant work to enable and improve batteryless systems.
+This has resulted in a wealth of batteryless systems work, the majority of which is focused on developing software solutions that manage and preserve volatile state to enable forward progress between reboots.
 This extends the capability of applications beyond that of a single capacitor buffer discharge cycle, and is useful for building more general and capable systems.
 Batteryless devices are also extremely difficult to debug and develop software for, as in addition to software bugs, energy is no longer guaranteed at any point during execution.
 To this end, researchers have also built tools to recreate energy conditions to help diagnose and fix intermittent energy bugs.
 %Platform builders have also experimented with novel hardware techniques to increase responsiveness by reducing charging hysteresis.
 In addition to sofware solutions, researchers have designed hardware platforms that maximize individual component availability, as well as platforms that dynamically tune capacitance to meet individual operation energy requirements.
 %The software solutions presented by batteryless researchers are solutions developed for self-imposed problems stemming from limited energy storage, and hardware solutions offer marginal improvements to system responsiveness at a prohibitive cost.
-The next sections discuss various system designs, tools, and software and hardware techniques meant to alleviate the two fundamental drawbacks to batteryless systems. 
+The next sections discuss various system designs, tools, and software and hardware techniques meant to alleviate the two fundamental drawbacks to batteryless systems.
 %Energy-harvesting systems that rely
 %on small (super)capacitor energy buffers are commonly referred to as intermittent systems, as they only store enough energy to perform single atomic tasks, and are unable to operate when external energy is not present.
 %Many choose to employ
@@ -62,7 +62,7 @@ The next sections discuss various system designs, tools, and software and hardwa
 
 \subsection{Forward Progress and State Preservation}
 The type and amount of work that is possible within the energy envelope of a single discharge cycle of capacitor or supercapacitor buffer is extremely limited.
-%Applications and devices that employ a one-shot technique are 
+%Applications and devices that employ a one-shot technique are
 Batteryless systems are generally only able to perform a few seconds or less of computation, or send a single packet before depleting their capacitor storage and powering off, even with modestly sized supercapacitors.
 
 \subsubsection{One-shot Intermittency}
@@ -74,7 +74,7 @@ These systems may act as a simple beacon~\cite{campbell2016cinamin,saoda2019no},
 For some platforms, most notably the Monjolo family of devices, the rate of harvesting is used as the sensor itself. Every wake-up and transmit event corresponds to an amount of energy harvested, and can be used to quantify the harvested phenomenon~\cite{campbellThermes14, campbellEnergy14, debruin2013monjolo}.
 This method of coupling harvesting and sensing is the only way to ensure that interesting sensor data is observed by a batteryless sensor.
 Otherwise, when a batteryless sensor is built to sense a phenomena other than what it is harvesting, it is inevitable that the majority of instances, changes in the sensed phenomena will be missed because the sensor is offline.
-However, even when sensing and harvesting is coupled, a one-shot batteryless design often does not have the energy required to support message retransmission in the case of packet loss, or generally support any network reliability mechanisms. 
+However, even when sensing and harvesting is coupled, a one-shot batteryless design often does not have the energy required to support message retransmission in the case of packet loss, or generally support any network reliability mechanisms.
 Any observation may be lost upon packet failure, and the next time the sensor wakes up it only has enough energy to be concerned with transmitting its current, more recent observation.
 This one-shot method is relatively simple compared to other approaches to batteryless software, but it still requires tedious cold-start software optimization and capacitance tuning to allow the device to power on and complete its workload within the constraints of its tiny energy storage.
 This severely limits the generality of systems developed with this approach.
@@ -82,7 +82,7 @@ Performing any sensing or computing outside of the hardware's intended use case 
 Like all batteryless sensors, it is also impossible to distinguish between sensor failure and a lack of energy.
 
 \subsubsection{Checkpointing}
-Given the limitations of the one-shot technique, researchers have developed tools and techniques for 
+Given the limitations of the one-shot technique, researchers have developed tools and techniques for
 ensuring forward progress across system reboots to enable longer and more complex workloads than a single capacitor bank can support.
 %Since the development of the WISP platform~\cite{sample2008design}, researchers have continuously developed software tools, methods, and techniques to save state and resume operation across power outages, allowing for longer running computation or transmitting more data than a single capacitor bank would support.
 One method of enabling forward progress is checkpointing,
@@ -90,8 +90,8 @@ where important volatile state is saved at predetermined and run time locations 
 Mementos~\cite{ransford2012mementos} utilizes a modified LLVM compiler, as well as a run-time library, to automatically place checkpointing triggers within a program. During run-time, at these trigger points, Mementos measures the system voltage, and if low enough, portions of volatile RAM state are written into non-volatile flash before turning off.
 The introduction of new non-volatile technologies like Ferroelectric RAM (FRAM) allows more energy and time efficient checkpointing, while simultaneously simplifying the state preservation logic.
 Hibernus~\cite{balsamo2014hibernus} does not use predefined trigger points, and instead utilizes a hardware interrupt to detect a low system voltage threshold, and immediately copies volatile state to FRAM. This state is subsequently restored on a rising voltage interrupt.
-Checkpointing is an effective method for enabling forward progress, however software development with checkpointing can be very difficult to develop and debug, and can become prohibitively expensive in non-volatile state, time, and energy as volatile state increases. 
-%improving the programmming and debugging experience for batteryless programmers. 
+Checkpointing is an effective method for enabling forward progress, however software development with checkpointing can be very difficult to develop and debug, and can become prohibitively expensive in non-volatile state, time, and energy as volatile state increases.
+%improving the programmming and debugging experience for batteryless programmers.
 %Writing programs for intermittent operation introduces bugs that do not exist with continuous operation, and requires more advanced debugging techniques to address them.
 
 \subsubsection{Batteryless Debugging}
@@ -115,26 +115,26 @@ boundary between volatile and non-volatile state. Often both SRAM and FRAM are m
 Code is often executed multiple times through the course of intermittent execution, and if volatile and non-volatile state are not carefully managed and accessed by the programmer, re-execution of various code sections can result in consistency violations~\cite{maeng2017alpaca}.
 The aftermentioned debugging tools can help to detect and fix intermittency bugs during runtime testing. However, many researchers have developed solutions to avoid these bugs by design.
 Task-based programming frameworks and models like
-Chain~\cite{colin2016chain} and Alpaca~\cite{maeng2017alpaca} 
+Chain~\cite{colin2016chain} and Alpaca~\cite{maeng2017alpaca}
 ensure forward progress and prevent intermittent consistency bugs.
 The task model of execution splits a software application into idempotent code blocks that read inputs from other tasks, and upon completion write their own results to channels of non-volatile memory. This has the effect of increasing task throughput in addition to ensuring safe forward progress.
 
 \subsubsection{The Wrong Abstraction}
-While effective in ensuring safe forward progress, all of these techniques introduce 
-significant software and compiler complexity. 
+While effective in ensuring safe forward progress, all of these techniques introduce
+significant software and compiler complexity.
 %on top of an already complex embedded software development toolchain.
-They also necessarily limit programming scope to defined frameworks and concepts to ensure various constraints and guarantees of safety. 
+They also necessarily limit programming scope to defined frameworks and concepts to ensure various constraints and guarantees of safety.
 Batteryless programmers must learn and adopt new programming models that incorporate potentially unfamiliar concepts like tasks, channels, and flows~\cite{colin2016chain,maeng2017alpaca,hesterTimely17}.
 Once programmers have mastered the new patterns and methods of batteryless programming, intermittency is largely hidden from them.
-This is by design and one of the main goals of these programming models and frameworks. 
-However, the abstraction of continuous progress is more harmful for application developers than helpful. 
+This is by design and one of the main goals of these programming models and frameworks.
+However, the abstraction of continuous progress is more harmful for application developers than helpful.
 %To a programmer, the abstraction of continuous progress is easily conflated with continuous operation.
 This abstraction provides the illusion of continuous computing progress in processor time, while robbing programmers and users of any meaningful notion of progress in wall clock time.
 Continuous operation of a batteryless systems is often impossible, and software methods for forward progress only guarantee \textit{eventual} task completion.
-While these techniques may make it easier to program batteryless systems, 
+While these techniques may make it easier to program batteryless systems,
 the abstraction of continuous forward progress is misleading regarding the timeliness and availability of batteryless systems for many applications.
 System designers and programmers are left without a way to reason about the actual performance of applications built on top of fundamentally unreliable systems.
-%An abstraction that guarantees forward progress without feedback or some metric of \textit{what} that forward progress consists of or how long it takes removes agency from the programmer. 
+%An abstraction that guarantees forward progress without feedback or some metric of \textit{what} that forward progress consists of or how long it takes removes agency from the programmer.
 %This abstraction makes it extremely difficult to reason about the actual reliability and availability of applications built on top of fundamentally unreliable systems.
 %The eventual forward progress allowed by these techniques inflates the perceived utility of these systems,
 %as they suggest continuous and eventual operation and progress. In reality, they operate with no guarantee of reliability or even eventual task completion.
@@ -144,44 +144,44 @@ System designers and programmers are left without a way to reason about the actu
 
 \subsection{Timeliness and Availability}
 While convenient during programming, the abstraction of continuous operation without a notion of real performance does not result in responsive and available batteryless systems.
-While they ensure safety and improve performance over checkpointing-based approaches, the aftermentioned task-based programming models 
+While they ensure safety and improve performance over checkpointing-based approaches, the aftermentioned task-based programming models
 do not consider or provide solutions for increasing batteryless system responsiveness and availability,
-two qualities that are especially important for wireless sensing. 
-Timeliness and availability are goals that are generally at odds with the reality of batteryless sensing, as no guarantees can be made about energy income and thus the timeliness of event completion or system availability. 
+two qualities that are especially important for wireless sensing.
+Timeliness and availability are goals that are generally at odds with the reality of batteryless sensing, as no guarantees can be made about energy income and thus the timeliness of event completion or system availability.
 A batteryless system's intermittent execution can span unknown periods of time, where it iteratively works on a task whose results may be stale and no longer useful by the time it finishes. There is also no way to ensure that a batteryless system is awake to witness a given event.
-Despite this, researchers have developed both software and hardware solutions in attempts to improve batteryless responsiveness and availability. 
+Despite this, researchers have developed both software and hardware solutions in attempts to improve batteryless responsiveness and availability.
 
 \subsubsection{Software Timeliness and Availability}
-Mayfly~\cite{hesterTimely17} and InK~\cite{yildirim2018ink} are task-based software frameworks like Chain and Alpaca. In addition to ensuring safe forward progress, they also attempt to maximize system timeliness and availability respectively. Mayfly associates tasks and the data they produce with deadlines, and maintains time through power failures. 
-After a datum's deadline passes, it is discarded and energy is not used to further process or transmit it. 
-This approach prioritizes fresh data, and allocates more energy towards completing tasks that can be completed within their deadline. 
+Mayfly~\cite{hesterTimely17} and InK~\cite{yildirim2018ink} are task-based software frameworks like Chain and Alpaca. In addition to ensuring safe forward progress, they also attempt to maximize system timeliness and availability respectively. Mayfly associates tasks and the data they produce with deadlines, and maintains time through power failures.
+After a datum's deadline passes, it is discarded and energy is not used to further process or transmit it.
+This approach prioritizes fresh data, and allocates more energy towards completing tasks that can be completed within their deadline.
 This enables applications that depend on timely data, such as activity recognition. Alpaca and Chain are unsuitable for such applications, as they are unable to distinguish between expired irrelevant data and new fresh data.
 While it increases the timeliness of a system, Mayfly does not increase the amount of reported data by a system or its availability. By design, it must sacrifice stale, potentially important data in order to report fresh data.
-It is uniquely suited for applications that are only concerned with close to real time data. 
+It is uniquely suited for applications that are only concerned with close to real time data.
 
-InK prioritizes availability by incorporating timers, interrupts, and event handling into a batteryless context. 
+InK prioritizes availability by incorporating timers, interrupts, and event handling into a batteryless context.
 The runtime utilizes sleep states and low power interrupts to persist for longer periods and increase the likelihood of detecting and capturing events. It also utilizes an ultra-low power timer subsystem to ensure timekeeping across power failures.
 With these improvements, a system using Ink is able to capture 14x the number of events over the same system using Alpaca.
 While this seems like a dramatic increase, Alpaca was simply not designed for event detection, and performs abysmally when applied to such a task. Additionally, the system with Ink was only able to capture slightly over half of the events even when in controlled solar harvesting conditions~\cite{yildirim2018ink}. The authors sadly did not compare the performance of these runtimes with that of a traditionally programmed and continuously powered embedded system, so there is no baseline comparison.
 
-While these approaches increase the timeliness and availability of a system, 
-it is \textit{impossible} for a batteryless system without continuous energy income to ever approach 100\% event detection or data capture and transmission reliability. 
+While these approaches increase the timeliness and availability of a system,
+it is \textit{impossible} for a batteryless system without continuous energy income to ever approach 100\% event detection or data capture and transmission reliability.
 Fundamentally, there will be periods of time where there is no available energy, a batteryless system will remain off, and important events will remain undetected and important data will be discarded as it grows stale.
 
 %Beyond software techniques to improve the intermittent programming experience, ensure forward progress, and increase reactivity,
 %researchers have also developed novel hardware and system designs to
-%increase the responsiveness and availability of batteryless systems. 
+%increase the responsiveness and availability of batteryless systems.
 %Many hardware techniques focus on the fine-grained management
-%of capacitor charging hysteresis. 
+%of capacitor charging hysteresis.
 %Unlike the relatively stable voltage provided by a battery, a capacitor's voltage is related to the square root of stored energy. This means that during a discharge cycle, an intermittent system will experience a pronounced voltage drop from a maximum $V_{max}$ to a minimum $V_{min}$.
 
 \subsubsection{Hardware Hysteresis Management}
 Beyond software techniques, researchers have also explored building specialized hardware solutions to increase system availability.
-Batteryless system operation is generally tied to a full swing capacitor charge/discharge hysteresis. Once enough energy is captured, a batteryless system will begin executing its workload until it has exhausted its stored energy. 
+Batteryless system operation is generally tied to a full swing capacitor charge/discharge hysteresis. Once enough energy is captured, a batteryless system will begin executing its workload until it has exhausted its stored energy.
 The general rule of thumb for batteryless system capacitor sizing is that it must hold enough energy to support the most energy intensive atomic task of the system, such as operating a sensor, performing some quanta of computation, or transmitting a single radio packet~\cite{nardello2019camaroptera,colinReconfigurable18, shukla2019skinnypower, hesterFlicker17}.
 This represents the smallest amount of energy storage that results in a feasible system with checkpointing or other forward progress mechanism.
-All batteryless systems operate within the bounds of capacitor storage voltage thresholds. 
-The energy stored within a capacitor is directly related to the voltage across its electrodes. 
+All batteryless systems operate within the bounds of capacitor storage voltage thresholds.
+The energy stored within a capacitor is directly related to the voltage across its electrodes.
 \begin{equation}
 \label{eq:cap_energy}
     E = \frac{1}{2}C(V_{max}^2 - V_{min}^2)
@@ -197,7 +197,7 @@ Managing hysteresis also allows for more platform generality, as the capacitor s
 Notable examples of platforms that utilize this technique are the Flicker and Capybara platforms~\cite{hesterFlicker17, colinReconfigurable18}.
 
 The Flicker
-platform practices federated energy storage, where each module (sensor, radio, microcontroller) has its own built in capacitor that is tuned to the task it is expected to perform~\cite{hesterFlicker17, hesterTragedy15}. 
+platform practices federated energy storage, where each module (sensor, radio, microcontroller) has its own built in capacitor that is tuned to the task it is expected to perform~\cite{hesterFlicker17, hesterTragedy15}.
 This has the
 effect of allowing various components to charge their storage quickly and begin operating before other parts of the system turn on or are needed. This also
 isolates power failure to independent components.
@@ -241,48 +241,48 @@ Over the course of operation, a batteryless system will experience many repeated
 %Simultaneously sensing and harvesting the same phenomenon is one of the most effective use cases of batteryless sensors, however being able to simultaneously sense and harvest is not always possible, and is generally limited to light, temperature differentials, vibration, and RF sources.
 
 \subsubsection{Redundancy for Statistical Availability}
-Beyond software and hardware techniques for forward progress, timeliness, availability, and reactivity, researchers have also explored approaches that utilize cooperation within a network of batteryless devices. 
-Most notably, the Coalesced Intermittent Sensor (CIS) is an abstraction of a group of intermittent sensors that combines the availability of each sensor to increase the availability of the group as a whole~\cite{majid2020continuous}. 
-The approach leverages the theoretical uniform distribution of on-times of an ensemble of sensors, each of which is intermittently operating, to maximize the probability that at least one sensor is on to detect a phenomena at any given time. 
-While this approach may work in carefully controlled environments with specific applications, it is dependent on several assumptions that are difficult to justify when considering real world conditions. 
+Beyond software and hardware techniques for forward progress, timeliness, availability, and reactivity, researchers have also explored approaches that utilize cooperation within a network of batteryless devices.
+Most notably, the Coalesced Intermittent Sensor (CIS) is an abstraction of a group of intermittent sensors that combines the availability of each sensor to increase the availability of the group as a whole~\cite{majid2020continuous}.
+The approach leverages the theoretical uniform distribution of on-times of an ensemble of sensors, each of which is intermittently operating, to maximize the probability that at least one sensor is on to detect a phenomena at any given time.
+While this approach may work in carefully controlled environments with specific applications, it is dependent on several assumptions that are difficult to justify when considering real world conditions.
 
-It is assumed that all nodes within a CIS ensemble have a priori knowledge about the size of the deployment and all nodes are sufficiently co-located to experience the same harvesting conditions and sense the same phenomena. 
-These assumptions are unrealistic when considering real-world deployment scenarios. 
+It is assumed that all nodes within a CIS ensemble have a priori knowledge about the size of the deployment and all nodes are sufficiently co-located to experience the same harvesting conditions and sense the same phenomena.
+These assumptions are unrealistic when considering real-world deployment scenarios.
 Without a mechanism to autonomously and dynamically update network node count, it is onerous for system maintainers to physically reprogram and update each node when a new member is added to the CIS.
 If all nodes need to be co-located for the CIS algorithm to function, it raises the question as to why this problem could not be solved with a single node with a proportionally larger solar panel and energy storage, instead of the 20-50 nodes it would require to achieve high availability in low light levels.
-The evaluation of the CIS greatly overestimates the light levels available to an indoor sensor, 
-and assumes that node on-times are uniformly distributed. 
+The evaluation of the CIS greatly overestimates the light levels available to an indoor sensor,
+and assumes that node on-times are uniformly distributed.
 In a real deployment, with sensors that are not co-located, light levels can differ by at least 10x,
 and indoors levels are usually much lower than 300 lux~\cite{yervaGrafting12}.
-The evaluation of the CIS sensor shows less than 50\% availability when exposed to 300 lux. The only scenario in which the CIS approaches 100\% availability is when it is exposed to an LED array providing a constant 1000 lux, an unrealistic environment for many indoor sensors. 
+The evaluation of the CIS sensor shows less than 50\% availability when exposed to 300 lux. The only scenario in which the CIS approaches 100\% availability is when it is exposed to an LED array providing a constant 1000 lux, an unrealistic environment for many indoor sensors.
 The CIS approach, like all batteryless approaches, is dependent the existence of any harvestable energy.
 In most real-world situations, periods of no energy are common, such as nighttime. These periods result in 0\% availability, regardless of the amount of node redundancy.
 For infrequent events with high light levels, the on-times for nodes within the CIS are extended as they are exposed to more energy allowing longer sleep. Nodes that are simultaneously sleeping may then trigger on the same event, essentially synchronizing their on and off times. This results in duplicate event detection and missed subsequent unique events, and temporarily breaks the assumption of uniformly distributed on-times.
 Beyond the questionable assumptions made by the CIS approach, the event-detection applications that are appropriate for a CIS are limited to short and burst events that can be captured in one intermittent duty cycle.
 
 \subsection{The Batteryless Fallacy}
-The aforementioned programming models, runtime systems, debugging tools, hardware platforms, and device redundancy schemes represent over a decade of successive and increasing complexity and sunk cost in batteryless design. 
-%As an almost perfect example of the sunk cost fallacy, the researchers that have designed these solutions argue that all these complex techniques are justified and necessary for the usability and functionality of batteryless systems, despite their marginal gains in performance. 
+The aforementioned programming models, runtime systems, debugging tools, hardware platforms, and device redundancy schemes represent over a decade of successive and increasing complexity and sunk cost in batteryless design.
+%As an almost perfect example of the sunk cost fallacy, the researchers that have designed these solutions argue that all these complex techniques are justified and necessary for the usability and functionality of batteryless systems, despite their marginal gains in performance.
 The researchers who have developed these solutions would almost definitely argue that this body of work is justified and necessary for the usability and functionality of batteryless systems, and wireless system design in general.
-Beyond the ability for a system to safely progress across reboots, the gains in performance provided by various software and hardware techniques are marginal. 
+Beyond the ability for a system to safely progress across reboots, the gains in performance provided by various software and hardware techniques are marginal.
 The value of these improvements is reduced when considering the abysmal baseline and maximum theoretical performance of a batteryless system.
-Due to the nature of batteryless systems, the maximum achievable performance is entirely limited by the availability of energy, which is often low and unpredictable in real world applications. 
+Due to the nature of batteryless systems, the maximum achievable performance is entirely limited by the availability of energy, which is often low and unpredictable in real world applications.
 Despite the simultaneous high complexity and poor performance of batteryless systems, proponents of the design believe that they are the future of wireless sensor design~\cite{hester2017future}.
 %The complexity and unreliability of batteryless designs make them unattractive for industry solutions, especially when battery-based systems are able to achieve high reliability with decade-plus lifetimes with modern microcontroller and radio technology.
 
 Batteryless proponents believe that batteries are the single greatest threat~\cite{hester2017future} or the main obstacle or barrier for truly ubiquitous sensing~\cite{majid2020continuous, shukla2019skinnypower}.
-The general batteryless position is that the only \textit{reasonable} option for the future of wireless sensors is to abandon batteries. 
-Many of the arguments vilifying batteries lack citations or quantitative evidence~\cite{hester2017future, hesterTragedy15, hesterFlicker17, hesterTimely17, hester2017future, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, majid2020continuous}. When citations are provided, they are often outdated and are misrepresentative or ignorant of current battery technology~\cite{majid2020continuous}. 
-This has resulted in a community that continuously republishes the same dishonest and incorrect arguments, 
+The general batteryless position is that the only \textit{reasonable} option for the future of wireless sensors is to abandon batteries.
+Many of the arguments vilifying batteries lack citations or quantitative evidence~\cite{hester2017future, hesterTragedy15, hesterFlicker17, hesterTimely17, hester2017future, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, majid2020continuous}. When citations are provided, they are often outdated and are misrepresentative or ignorant of current battery technology~\cite{majid2020continuous}.
+This has resulted in a community that continuously republishes the same dishonest and incorrect arguments,
 woefully ignorant of or unwilling to embrace the technology improvements (including batteries) that would render many of their batteryless solutions irrelevant and extraneous.
 
-There is a valid argument that the batteryless design archetype is suitable for various niche applications, which is further explored in \cref{sec:background:app}, however it is incorrect to argue that \textit{all} applications can be supported by batteryless sensors. 
-Despite this, many proponents of the batteryless design point do argue that the approach is general purpose. They argue that with sufficient technology improvements, batteryless sensors will eventually be able to support a majority of wireless sensor network applications~\cite{hester2017future}. 
-This claim ignores the significant downsides to batteryless design, all stemming from an insufficient energy capacity that is unable to support sensor operation beyond a single duty cycle, and only when external energy is available. 
+There is a valid argument that the batteryless design archetype is suitable for various niche applications, which is further explored in \cref{sec:background:app}, however it is incorrect to argue that \textit{all} applications can be supported by batteryless sensors.
+Despite this, many proponents of the batteryless design point do argue that the approach is general purpose. They argue that with sufficient technology improvements, batteryless sensors will eventually be able to support a majority of wireless sensor network applications~\cite{hester2017future}.
+This claim ignores the significant downsides to batteryless design, all stemming from an insufficient energy capacity that is unable to support sensor operation beyond a single duty cycle, and only when external energy is available.
 This limitation is \textit{fundamental and inescapable}, regardless of the myriad of software or hardware micro-optimizations performed.
 No matter what software framework is used, however the resizable capacitor bank is configured, or how many sensors are deployed within a coalesced sensor, a batteryless system is an unresponsive hunk of FR4 and silicon whenever energy is unavailable: at nighttime, when stationary, without a nearby RFID transmitter, or exposed to an insufficient temperature gradient.
 To truly address this problem, batteryless systems builders are left waiting for dramatic and transformative technology improvements. Either capacitor energy density must increase by 100-1000x, or system-wide power efficiency must similarly improve~\cite{curtiss2021facebit} to render capacitor-based storage appropriate for many applications.
-This has resulted in industry continuing to build reliable and predictable battery-based sensors. 
+This has resulted in industry continuing to build reliable and predictable battery-based sensors.
 With the efficiency of current processor and radio technology, many applications can persist for a decade or more on just battery power~\cite{emersonRosemount,GEInsightMesh,honeywellOneWireless}.
 
 %Right now, we have the technology to build long-lasting, reliable, and capable sensor networks that can address the needs of many applications. We do not need to wait for capacitors, radios, or processors to get better to enable some vision of a batteryless future.
@@ -324,7 +324,7 @@ With the efficiency of current processor and radio technology, many applications
 
 \section{Wireless Sensor Application Space}
 \label{sec:background:app}
-Many real applications have requirements for availability, latency, and data reliability that are at odds with what can currently be provided by batteryless systems, and in some cases energy harvesting methods as a whole. 
+Many real applications have requirements for availability, latency, and data reliability that are at odds with what can currently be provided by batteryless systems, and in some cases energy harvesting methods as a whole.
 There is a clear niche for batteryless systems for applications that can tolerate relaxed requirements, or are designed for reliable energy income, however it is disingenuous to argue that batteryless systems represent the future for all sensing applications.
 The next section explores several example applications from the literature and industry, with qualitative and high level quantitative feasibility analysis.
 
@@ -338,35 +338,35 @@ While the popularity and excitement around energy harvesting and batteryless sen
 Constraints like sensor size, lifetime, the availability of harvestable energy, and the reliability and consistency of an application should all contribute to the end design of a wireless sensor, and many applications will have requirements that make a batteryless design an unsuitable choice.
 Instead of starting with the assumption that a design must be batteryless, a design should start from application requirements. Given an application, a set of questions should be asked to define its requirements and better define design parameters.
 While not an exhaustive list, an appropriate set of questions to help define the power supply requirements should resemble the following:
-    
+
 \begin{enumerate}
     \item \textbf{What is the application lifetime requirement?}
-    
-    This question primarily defines the required lifetime of the wireless sensors driving the application. Secondarily, it also defines the acceptability of occasional power supply maintenance. 
-    
+
+    This question primarily defines the required lifetime of the wireless sensors driving the application. Secondarily, it also defines the acceptability of occasional power supply maintenance.
+
     \item \textbf{What level of availability is required by the application?}
-    
-    In this question, availability refers to the general ability of the sensor to remain online and maintain sensing at the rate required by an application. In this sense, availability is also analogous to reliability. 
-    Availability can be defined depending on the application reporting frequency and distribution. For applications that require measurements on a uniform sensing period, availability is defined by the percentage of intervals that the sensor was able to measure, or how often it was able to measure on schedule. For applications that are event driven, availability can be defined by the percentage of events captured by the sensor compared to the baseline distribution of events. 
-    
+
+    In this question, availability refers to the general ability of the sensor to remain online and maintain sensing at the rate required by an application. In this sense, availability is also analogous to reliability.
+    Availability can be defined depending on the application reporting frequency and distribution. For applications that require measurements on a uniform sensing period, availability is defined by the percentage of intervals that the sensor was able to measure, or how often it was able to measure on schedule. For applications that are event driven, availability can be defined by the percentage of events captured by the sensor compared to the baseline distribution of events.
+
     \item \textbf{What are the average sensor power requirements to drive the application?}
-    
+
     The power requirements of a sensor generally define application limitations for the size of the sensor, the feasibility of various energy harvesting methods, as well as the maximum lifetime on battery power.
-    For opportunistic batteryless sensors, average power has a different meaning, as such sensors use any energy that is instantaneously available, and the average power they utilize varies with supply. 
-    There is still a limitation, as there is a minimum power required for a batteryless system to turn on and successfully activate. 
-    
+    For opportunistic batteryless sensors, average power has a different meaning, as such sensors use any energy that is instantaneously available, and the average power they utilize varies with supply.
+    There is still a limitation, as there is a minimum power required for a batteryless system to turn on and successfully activate.
+
     \item \textbf{What are the limits of area, volume, weight, and cost for each unit in the application?}
-    
+
     The limits of size, weight, and cost of a sensor directly affects the amount of energy storage that can be allocated, or the available surface area for an energy harvester. Many applications have various limitations on the size of individual sensors as to not be burdensome, difficult to deploy, or unaesthetic.
-    
+
     \item \textbf{What is the maximum atomic energy quanta required by the application?}
-    
+
     This requirement is primarily related to batteryless systems, which are severely limited by energy capacity. Assuming a perfect mechanism for ensuring forward progress, the energy storage of any wireless sensor must be large enough to support the most energy intensive operation of an application. In most cases, this is the amount of energy to send a single radio transmission.
-    
+
 \end{enumerate}
 
-\noindent In the following subsections, several example applications from prior work are presented and their requirements placed within the context of the above questions. While this is by no means an exhaustive list, the examples discussed form a subset that provides broad coverage of applications that can and can not be supported by a batteryless design. 
-Some of these applications were developed before the introduction of batteryless sensors, however they are analyzed as if the technology and ideas existed to enable a batteryless option. 
+\noindent In the following subsections, several example applications from prior work are presented and their requirements placed within the context of the above questions. While this is by no means an exhaustive list, the examples discussed form a subset that provides broad coverage of applications that can and can not be supported by a batteryless design.
+Some of these applications were developed before the introduction of batteryless sensors, however they are analyzed as if the technology and ideas existed to enable a batteryless option.
 In \cref{chap:intuition}, these questions form the basis of formalizing a set of high-level application constraint equations to determine power supply design.
 These constraints will help provide intuitive, application-based guidance for energy harvesting sensor design.
 
@@ -375,33 +375,33 @@ Perhaps the most notable seminal work in wireless sensor networks research is th
 These sensors were built and deployed to measure the environmental conditions inside and around seabird nesting burrows, as well as their occupancy during breeding season.
 This subsection attempts to explore this application's requirements and identify the suitability of energy harvesting and batteryless sensors to fulfill these requirements.
 
-This habitat monitoring application has a necessary lifetime of 9 months, a time period that encapsulates the average 7 month sea bird breeding period. 
-The goal of the study is to measure burrow conditions and usage patterns consistently over a 24-72 hour cycle. The sensor must be able to measure occupancy consistently every 5-10 minutes overnight and in the early morning, when it is most likely that birds are leaving and entering the burrow. 
-It is acceptable to measure general environmental conditions within and outside the burrows every hour. 
+This habitat monitoring application has a necessary lifetime of 9 months, a time period that encapsulates the average 7 month sea bird breeding period.
+The goal of the study is to measure burrow conditions and usage patterns consistently over a 24-72 hour cycle. The sensor must be able to measure occupancy consistently every 5-10 minutes overnight and in the early morning, when it is most likely that birds are leaving and entering the burrow.
+It is acceptable to measure general environmental conditions within and outside the burrows every hour.
 Thus, the in-burrow sensor must be able to sense occupancy and environmental conditions at regular intervals, without interruption.
 
-To perform this task, based on technology available when this work was published, the burrow sensors required on average ~300\si{\micro\watt}. This power requirement is low enough to be powered by various energy harvesting methods, however there are not many options for harvesting within a sea bird burrow. Solar and thermal differential harvesting are both not an option unless a harvester is placed externally. This is not feasible without potentially making the burrows unappealing to sea birds, not to mention substantially increasing the deployment effort. 
-External to the burrows, the gateway infrastructure for the deployment has plentiful solar energy to harvest from. 
+To perform this task, based on technology available when this work was published, the burrow sensors required on average ~300\si{\micro\watt}. This power requirement is low enough to be powered by various energy harvesting methods, however there are not many options for harvesting within a sea bird burrow. Solar and thermal differential harvesting are both not an option unless a harvester is placed externally. This is not feasible without potentially making the burrows unappealing to sea birds, not to mention substantially increasing the deployment effort.
+External to the burrows, the gateway infrastructure for the deployment has plentiful solar energy to harvest from.
 
-Given the application requirement of reliable and periodic measurement, as well as the unavailability of harvestable energy for in-burrow motes, this application is poorly suited for a batteryless solution. 
-While batteryless design The sensor designers chose to utilize non-rechargeable batteries as a source of energy, and tailored the size of the batteries as well as the sensor workload in order to support a 9 month lifetime. 
+Given the application requirement of reliable and periodic measurement, as well as the unavailability of harvestable energy for in-burrow motes, this application is poorly suited for a batteryless solution.
+While batteryless design The sensor designers chose to utilize non-rechargeable batteries as a source of energy, and tailored the size of the batteries as well as the sensor workload in order to support a 9 month lifetime.
 Given the nature of this application, this design decision would be unlikely to change, even given modern technology.
 There simply is no opportunity for energy harvesting, and the availability required of the in-burrow motes is higher than can be provided by any batteryless solution, even if energy was available.
 
 \subsection{Wildlife Tracking}
 Zebranet also represents a seminal work in wireless sensor design, involving the development and deployment of 30 tracking collars on zebras under study~\cite{juang2002energy}. Researchers were primarily interested in tracking the location and migration of zebras in an environment with no cellular or other broadcast communications. The collars include a GPS system, a short and long-range wireless transceiver, and a processor.
 
-The wildlife biologists working with the system designers were interested in capturing GPS position every 3 minutes for at least 1 year of operation with no human maintenance or intervention. The biologists understandably want to limit the amount of tranquilizing and re-collaring of the zebras as much as possible. Like the habitat monitoring application, Zebranet also requires continuous and reliable operation to collect periodic GPS updates. Due to the lack of options for long range networking, the ZebraNet collars utilize peer-to-peer networking and mobile base stations to provide eventual data collection from the monitored zebras. 
+The wildlife biologists working with the system designers were interested in capturing GPS position every 3 minutes for at least 1 year of operation with no human maintenance or intervention. The biologists understandably want to limit the amount of tranquilizing and re-collaring of the zebras as much as possible. Like the habitat monitoring application, Zebranet also requires continuous and reliable operation to collect periodic GPS updates. Due to the lack of options for long range networking, the ZebraNet collars utilize peer-to-peer networking and mobile base stations to provide eventual data collection from the monitored zebras.
 
 Conservatively, ZebraNet collars require an average of 405\si{\milli\watt} to perform GPS sampling and occasional peer-to-peer and base station networking. ZebraNet collars are relatively high power, even compared to its contemporaries like the Great Duck Island burrow sensors.
 GPS and long range radio technology were fairly power hungry at the time the collars were designed.
 The authors note that to power a collar for just 5 days would require a 13.5 \si{\ampere\hour} non-rechargeable battery, weighing 4 pounds. Not only would a non-rechargeable battery be unable to provide sufficient energy, it would also be too large and heavy to put on a zebra's neck.
-Instead, the collar designers opted to use solar energy harvesting with a lithium polymer battery, resulting in a significantly smaller collar, weighing only 2.54~lbs total. 
-This allows the collar to harvest the copious amounts of sunlight during the day, and power the zebra localization workload all day and night. 
+Instead, the collar designers opted to use solar energy harvesting with a lithium polymer battery, resulting in a significantly smaller collar, weighing only 2.54~lbs total.
+This allows the collar to harvest the copious amounts of sunlight during the day, and power the zebra localization workload all day and night.
 With a batteryless design, the collars would be unable to function overnight or in the early morning, producing significant holes in zebra localization and behavior data.
 Given modern technology, the collar \textit{could} utilize thermal gradient harvesting in addition to solar harvesting. This would allow harvesting overnight, as the gradient between zebra skin and ambient nighttime temperatures would be likely be sufficient to generate energy.
 However, the relative power provided via thermal harvesting is several orders of magnitude less than harvesting direct sunlight, and much less than is required by the workload.
-Even with additional harvesting sources, a batteryless collar would have to necessarily degrade the frequency of GPS sampling and communication with peers or the base station during times where the average power supplied by harvesting is less than required by the ideal workload. 
+Even with additional harvesting sources, a batteryless collar would have to necessarily degrade the frequency of GPS sampling and communication with peers or the base station during times where the average power supplied by harvesting is less than required by the ideal workload.
 
 \subsection{Asset Tracking}
 
@@ -410,8 +410,8 @@ Asset tracking sensors have the potential to provide finer granularity tracking 
 The lifetime of an asset consists of the amount of time it takes an item to traverse a supply chain end-to-end, from production to end retailer and user, potentially spending an unknown amount of time in a warehouse or on retail shelves.
 The potential number of tracked items requires that such tracking sensors be small, cheap, and easily disposable or recyclable. Their lifetime must resemble the maximum shelf lifetime of any given product, which can vary widely.
 
-Generally, these sensors are simple, and only need to report their location occasionally at each step of production or delivery, or respond to queries when inventory is taken. 
-This means their power requirements are modest, as 
+Generally, these sensors are simple, and only need to report their location occasionally at each step of production or delivery, or respond to queries when inventory is taken.
+This means their power requirements are modest, as
 they do not need to consistently and periodically report their location or existence.
 Asset tracking is a uniquely situated application that can benefit from batteryless design.
 The infrequency of location reporting coupled with the requirement for cheap and easily disposable tags results in a design space that favors the batteryless regime.
@@ -424,19 +424,19 @@ For applications where RFID infrastructure is sparse or inadequate, Williot also
 Jeeva Wireless is also developing low power RF-harvesting solutions for asset tracking. However, instead of active BLE transmissions, they rely on bidirectional backscatter communication with a wireless router~\cite{jeevawireless}.
 When online and transmitting, a BLE advertiser like the Williot pixel will require on the order of 10s of \si{\micro\ampere} when advertising every 500\si{\milli\second}. A tag that utilizes backscatter will require much less to transmit data, on the order of single \si{\micro\ampere} or less depending on sleep state efficiency. This average power is well below the capabilities for directed RF harvesting from a device similar to an RFID reader, which can typically supply hundreds of \si{\micro\watt} at a minimum~\cite{sample2008design}.
 
-Along with low power operation, asset tags must also be physically small and lightweight. 
-Arguably, the most convenient form factor resembles that of a traditional ``dumb'' tracking label: a peel and stick tracker with an integrated harvester and radio. 
+Along with low power operation, asset tags must also be physically small and lightweight.
+Arguably, the most convenient form factor resembles that of a traditional ``dumb'' tracking label: a peel and stick tracker with an integrated harvester and radio.
 This form factor does not allow much space for a traditional non-rechargeable battery, but can supply enough surface area to support an energy harvesting RF antenna, an active antenna, and a limited amount of energy storage.
-At most, the minimum atomic operation of an asset tracker must be sending 
-%energy storage of a tracker must be sufficient to 
-sending a single transmission indicating the tag's existence. 
-This amount of energy is easily supplied by a bank of capacitors~\cite{debruin2013monjolo, campbellEnergy14, yervaGrafting12}. 
-Beyond size, these asset trackers must also be inexpensive, and the cost difference between a non-rechargeable battery and a bank of ceramic or tantalum capacitors is substantial at scale. 
+At most, the minimum atomic operation of an asset tracker must be sending
+%energy storage of a tracker must be sufficient to
+sending a single transmission indicating the tag's existence.
+This amount of energy is easily supplied by a bank of capacitors~\cite{debruin2013monjolo, campbellEnergy14, yervaGrafting12}.
+Beyond size, these asset trackers must also be inexpensive, and the cost difference between a non-rechargeable battery and a bank of ceramic or tantalum capacitors is substantial at scale.
 
-In environments with plentiful and reliable harvestable energy, like in the case of asset trackers within a factory or warehouse with widely deployed RFID readers, the batteryless design point allows for simple, small, and inexpensive wireless devices that require nearly no maintenance. 
-However, when a batteryless asset tracker is out of range due to theft, accidental loss, or other reasons, it is impossible to locate them as they have no energy or way to communicate. 
-The value of batteryless trackers is strictly limited to specific locations and areas where the tracker is expected to be. 
-It is likely that such events are rare, and for most asset tracking use cases with plentiful infrastructure, a batteryless tracker is an ideal solution. 
+In environments with plentiful and reliable harvestable energy, like in the case of asset trackers within a factory or warehouse with widely deployed RFID readers, the batteryless design point allows for simple, small, and inexpensive wireless devices that require nearly no maintenance.
+However, when a batteryless asset tracker is out of range due to theft, accidental loss, or other reasons, it is impossible to locate them as they have no energy or way to communicate.
+The value of batteryless trackers is strictly limited to specific locations and areas where the tracker is expected to be.
+It is likely that such events are rare, and for most asset tracking use cases with plentiful infrastructure, a batteryless tracker is an ideal solution.
 In situations where infrastructure is insufficient to power batteryless tags, non-rechargeable batteries may be necessary, as is the case for Williot's battery-powered trackers.
 
 \subsection{Wearables}
@@ -446,8 +446,8 @@ In situations where infrastructure is insufficient to power batteryless tags, no
 Many aspects of the human body are useful to measure for wellness, activity, and augmentation applications.
 For many of these applications, the best and sometimes only way to accurately measure or interact with the body is to collocate a sensor on the body.
 These wearable sensors are uniquely situated.
-For a wearable, a human is naturally always present and able to provide light maintenance or a recharge. 
-This allows wearables to have shorter one-charge lifetimes. 
+For a wearable, a human is naturally always present and able to provide light maintenance or a recharge.
+This allows wearables to have shorter one-charge lifetimes.
 Humans have generally accepted the cost of nightly smartphone recharging, making daily or weekly wearable charging also acceptable.
 %Assuming the wearable provides similar utility or satisfaction to a smartphone, users should be willing to frequently recharge it.
 A batteryless wearable would not have a charging constraint, however
@@ -461,7 +461,7 @@ They must support a lifetime of at least as long as a human user is awake, but a
 \subsection{Amalgamated Harvesting and Sensing}
 There is a niche of applications where sensed phenomena is correlated with a method of harvesting.
 As mentioned previously in \cref{cha:background:one-shot}, there are one-shot batteryless sensors that do not directly sense any phenomena, and instead simply transmit packets when their capacitor storage is charged and full.
-The rate of packet transmission by these simple sensors can be used to directly estimate the rate of harvesting, and the intensity of a phenomena. 
+The rate of packet transmission by these simple sensors can be used to directly estimate the rate of harvesting, and the intensity of a phenomena.
 There are other applications that take this primitive one step further, and integrate active sensing for more direct and accurate measurements.
 Applications that harvest the same phenomena that they sense are well situated for batteryless designs.
 The inherent unreliability of a batteryless supply is not as impactful, as whenever there is energy to be harvested corresponds to when it is important to be sensing.
@@ -469,68 +469,69 @@ While energy harvesting methods are limited to just a few types, many valuable a
 
 \subsubsection{Power Metering}
 %While it may seem counterintuitive or deceptive to argue that a sensor directly connected or close enough to be connected
-%Sensors that are directly connected or near household power have a significantly easier time regarding harvesting energy. However, sometimes it is beneficial to 
+%Sensors that are directly connected or near household power have a significantly easier time regarding harvesting energy. However, sometimes it is beneficial to
 Usually, the proximity to existing power infrastructure presents relatively easy solutions for powering power meters.
-For some use cases, this proximity is not enough to justify the cost of deployment. 
-It is generally burdensome and costly to instrument a building's circuit panel, as traditional submetering equipment must directly connect to a circuit, which requires an electrician install. 
-Many plug-load power meters are bulky and often block nearby outlets, and they require substantial standby power to operate. 
+For some use cases, this proximity is not enough to justify the cost of deployment.
+It is generally burdensome and costly to instrument a building's circuit panel, as traditional submetering equipment must directly connect to a circuit, which requires an electrician install.
+Many plug-load power meters are bulky and often block nearby outlets, and they require substantial standby power to operate.
 The Monjolo power meter~\cite{debruin2013monjolo} instead utilizes a current transformer wrapped around one path of an AC power line to harvest energy.
 The Monjolo operates on a one-shot batteryless design principle where the quantity and rate of packets can be used to determine the intensity and rate of current on the instrumented AC line.
 %This design is not only easier to install, but is smaller and requires less standby power compared to power meters with converting power supplies.
 
-The availability of a Monjolo power meter is also the availability of load power. For many loads, the sensor is not able to operate continuously, and when no load current is flowing, it will remain off and not send packets. 
+The availability of a Monjolo power meter is also the availability of load power. For many loads, the sensor is not able to operate continuously, and when no load current is flowing, it will remain off and not send packets.
 %Unlike other batteryless sensors that utilize desperate harvesting and sensing methods, where useful data may be missed if harvesting potential is insufficient during an interesting sensing event, i
 When a Monjolo is offline for an extended period, it can be assumed that the measured load is also offline and drawing no power.
 The zero-load assumption breaks down when considering real-world situations where operation and packet reception are not reliable.
-If a Monjolo fails, or its packets are not reliably received for an extended period, it is impossible to distinguish from the sensor measuring no load. 
-Additionally, any missed packets has an impact on the reconstructed power rate estimation resulting in underestimation of power. 
-To account for this, Monjolo employs a monotonically increasing counter sent with each packet such that high level energy aggregation remains accurate. 
-However, this technique does not correct the loss in temporal power resolution from lost packets. 
+If a Monjolo fails, or its packets are not reliably received for an extended period, it is impossible to distinguish from the sensor measuring no load.
+Additionally, any missed packets has an impact on the reconstructed power rate estimation resulting in underestimation of power.
+To account for this, Monjolo employs a monotonically increasing counter sent with each packet such that high level energy aggregation remains accurate.
+However, this technique does not correct the loss in temporal power resolution from lost packets.
 
 Because the Monjolo sensor operation is directly tied to its energy income, its power requirements vary depending on the measured load. At a minimum, it requires a load of at least 17\si{\watt} to harvest enough power to turn on and send a packet. This corresponds to a coil output power of less than 1\si{\milli\watt}. At some point the induced power from the magnetically coupled load is enough to power the Monjolo indefinitely. This point represents a maximum possible measurement, as the rate of packets is limited by how fast the sensor's software and hardware can queue and send packets when running continuously. For the Monjolo, this maximum corresponds to a measured load of 480\si{\watt}, and a packet frequency of 8.5\si{\hertz}.
 
 Regarding size, the Monjolo platform must fit easily within a circuit breaker panel. Most of the volume of the Monjolo is dedicated to its coil harvester.
 The 500\si{\micro\watt} storage capacitance and circuitry is small and amortized in comparison.
 This capacitance is tuned to support a single Monjolo activation, allowing the sensor to wake up and transmit a packet.
-However, with consistently powered or high current loads, the Monjolo harvester can provide significant energy, and a larger or more dense energy storage option could allow for better energy capture. This would potentially support continuous operation and more advanced active sensing to directly measure current and voltage of the load without the need for power estimation from packet rate, and the limitations of upper and lower bounds of measurement. 
+However, with consistently powered or high current loads, the Monjolo harvester can provide significant energy, and a larger or more dense energy storage option could allow for better energy capture.
+This would potentially support continuous operation and more advanced active sensing to directly measure current and voltage of the load without the need for power estimation from packet rate, and the limitations of upper and lower bounds of measurement.
 %From the lessons of the Monjolo platform, among other works, industry has iterated upon this design and has utilized a rechargeable lithium battery.
 
 In fact,
 the Monjolo harvesting method and split-coil form factor has directly influenced further work and industry solutions.
 The Triumvi system is a direct improvement over the Monjolo design, directly measuring voltage through capacitive coupling, and the current transformer to harvest energy and measure current to a load~\cite{campbell2018energy}.
-Like Monjolo, Triumvi is designed with a batteryless power supply, but supports an optional rechargeable battery for reliable, short term instrumentation. 
+Like Monjolo, Triumvi is designed with a batteryless power supply, but supports an optional rechargeable battery for reliable, short term instrumentation.
 Triumvi also supports charge sharing between devices, allowing a sensor harvesting and measuring a high load to share its harvesting energy with a sensor measuring a smaller load.
 This increases the overall reliability and uptime of the entire deployment.
-%However, industry has abandoned the batteryless principle of operation for more reliable and consistent operation, as well as direct, and accurate measurement methods. 
-Vizi metering is commercializing the Monjolo and Triumvi designs with some improvements. 
-%and developing the first non-contact voltage and current meter based on the Monjolo harvesting design~\cite{vizimetering}. 
-Instead of utilizing the one-shot activation and packet rate counting method of the Monjolo, the Vizi meter directly measures and reports current and voltage like Triumvi. This direct measurement is much higher accuracy than estimation through packet counting, with no phase information or voltage measurement. 
+%However, industry has abandoned the batteryless principle of operation for more reliable and consistent operation, as well as direct, and accurate measurement methods.
+Vizi metering is commercializing the Monjolo and Triumvi designs with some improvements.
+%and developing the first non-contact voltage and current meter based on the Monjolo harvesting design~\cite{vizimetering}.
+Instead of utilizing the one-shot activation and packet rate counting method of the Monjolo, the Vizi meter directly measures and reports current and voltage like Triumvi. This direct measurement is much higher accuracy than estimation through packet counting, with no phase information or voltage measurement.
 Unlike both Monjolo and Triumvi, the Vizi meter is not batteryless. I uses a small rechargeable battery as its primary energy storage.
 The Triumvi design has an option for a rechargeable battery, but it is considered secondary to the batteryless capacitor bank, and rechargeable batteries were only used for short investigative deployments.
-Because of the onboard rechargeable battery, the Vizi meter can run continuously. 
+Because of the onboard rechargeable battery, the Vizi meter can run continuously.
 Continuous operation allows the meter to utilize reliable transport mechanisms to ensure all measurements are received successfully.
 This preserves measurement temporal resolution.
-%To support continuous operation, the meter utilizes a larger energy storage, replacing the capacitor bank with a rechargeable battery. 
-Like Triumvi, the Vizi meter also supports charge sharing. 
+%To support continuous operation, the meter utilizes a larger energy storage, replacing the capacitor bank with a rechargeable battery.
+Like Triumvi, the Vizi meter also supports charge sharing.
 If some meters within a circuit panel are connected to a infrequently active or low power load, and unable to harvest enough energy to support their workload, they are all daisy-chained such that meters on high-powered loads can share their harvesting energy among the entire deployment.
 This daisy-chained connection also allows communication between sensors, primarily to synchronize measurements. This is especially useful for measuring three-phase or split-phase circuits.
-Even though the Monjolo principle of operation is intuitive and a seemingly appropriate fit for a batteryless design, the limitations of measurement accuracy, resolution, and range are not appropriate for an industrial sensor. It was necessary for Vizi to abandon the batteryless aspect of Monjolo and Triumvi to achieve their availability, accuracy, and resolution goals. 
+Even though the Monjolo principle of operation is intuitive and a seemingly appropriate fit for a batteryless design, the limitations of measurement accuracy, resolution, and range are not appropriate for an industrial sensor. It was necessary for Vizi to abandon the batteryless aspect of Monjolo and Triumvi to achieve their availability, accuracy, and resolution goals.
 
 \subsubsection{Archaeological Site Monitoring}
 There are actually very few real-world deployments of long-term batteryless sensors that do not utilize outdoor solar harvesting.
-One of the few examples is a 3.5 year deployment in the Mithræum of the Circus Maximus to measure ambient temperature, humidity, and structural vibrations~\cite{afanasov2020battery}. 
+One of the few examples is a 3.5 year deployment in the Mithræum of the Circus Maximus to measure ambient temperature, humidity, and structural vibrations~\cite{afanasov2020battery}.
 Having data regarding the environmental conditions of the site helps restorers identify the necessary techniques for preservation.
 The sensors involved with the deployment were originally battery powered sensors built with off the shelf components, and evolved into two classes of custom built batteryless sensors, one to measure temperature and humidity and the other vibrations.
 This work is an interesting and unique analysis of the trade offs of battery-based and batteryless design.
 
-The Mithræum is completely underground and only accessible through spiral staircases, and entry is closely regulated to protect the site. 
-Specifically, the installation of vibration sensors requires difficult climbing on potentially fragile vaults, putting not only the site in danger of damage, but also the safety of people installing sensors. 
+The Mithræum is completely underground and only accessible through spiral staircases, and entry is closely regulated to protect the site.
+Specifically, the installation of vibration sensors requires difficult climbing on potentially fragile vaults, putting not only the site in danger of damage, but also the safety of people installing sensors.
 This makes periodic sensor network maintenance extremely costly.
-While no sensor lifetime goal is stated explicitly by the authors, it should be maximized as much as possible. 
+While no sensor lifetime goal is stated explicitly by the authors, a lifetime should be maximized as much as possible.
 The authors originally begin with a non-rechargeable battery-based design built with off the shelf processor, radio, and sensor modules.
-Through the course of the 3.5 year deployment, the battery deployment experiences frequent outages, an average of 9 a year. 
+Through the course of the 3.5 year deployment, the battery deployment experiences frequent outages, an average of 9 a year.
 %Clearly, performing battery replacement and sensor maintenance every month is unacceptable for such a deployment.
-%The ideal would be for the deployment to persist indefinitely, so 
+%The ideal would be for the deployment to persist indefinitely, so
 Due to these outages, the authors turn to batteryless designs for their environment and vibration sensors, producing custom application-specific hardware and software designs.
 
 The authors do not explicitly mention many quantitative details of their designs including power and energy requirements for different operations, making it difficult to gleam the average application power requirements.
@@ -541,50 +542,84 @@ The Waspmote is powered by an ATmega1281 and has an active current of 17\si{\mil
 %The ATmega1281 itself has an efficiency of 625\si[per-mode=symbol]{\micro\ampere\per\mega\hertz}.
 The Xbee sub-\si{\giga\hertz} radio requires 45\si{\milli\ampere} when active and can transmit at 80\si[per-mode=symbol]{\kilo\bit\per\second}.
 The temperature and humidity sensor only requires 600\si{\micro\ampere} when measuring, while the accelerometer requires 18\si{\milli\ampere} when active.
-The temperature sensor workload consists of measuring temperature and humidity every 20 minutes, and transmitting an average and standard deviation every hour. 
+The temperature sensor workload consists of measuring temperature and humidity every 20 minutes, and transmitting an average and standard deviation every hour.
 Similarly, the vibration sensors capture a one minute burst of accelerometer data every 20 minutes.
 Every hour the acceleration data is summarized via an FFT, the fundamental frequency and spectral density is computed, and the results are compressed and sent.
 With this information, we can estimate an average power draw for each system by making a few assumptions.
-We assume every packet consists of a 32 byte combined header and overhead, individual data are encoded as 32-bit values, and the FFT is 128 in length, of which only the real half needs to be transmitted, encoded individually as 8-bit values. \hl{TODO: power estimations}
+We assume every packet consists of a 32 byte combined header and overhead, individual data are encoded as 32-bit values, and the FFT is 128 bytes in length, of which only the real half needs to be transmitted, encoded individually as 8-bit values. \hl{TODO: power estimations}
 
 The original battery-based deployment utilizes 6 C cell alkaline batteries for each sensor.
 The authors do not note if the cells are configured in series or parallel.
 These 6 cells can be configured 2x3 or 3x2 to achieve a nominal 3\si{\volt} or 4.5\si{\volt} supply respectively.
-Both configurations provide voltages outside the acceptable range of the Waspmote (3.3-4.2\si{\volt})~\cite{waspmote_block}.
+Both configurations supply voltage levels outside the acceptable range of the Waspmote (3.3-4.2\si{\volt})~\cite{waspmote_block}.
 Alkaline batteries quickly drop to 1.4\si{\V} when under load~\cite{alkaline_c}, providing an acceptable voltage in a 3x2 configuration.
 The Waspmote only includes a 3.3\si{\volt} step down regulator (either a DC/DC converter or an LDO, the design diagrams do not specify) for the 3.3\si{\volt} supply to its MCU and other subsystems.
-It does have a 5\si{\volt} DC/DC boost converter, however it is only provided to external modules. 
+It does have a 5\si{\volt} DC/DC boost converter, however it is only provided to external modules.
 This configuration of 6 C-type batteries provides a maximum of 16\si{\ampere\hour} at 4.5V.
 However, the voltage curve of alkaline cells is fairly linear, and without regulation this configuration will drop below the minimum voltage requirement of 3.3\si{\volt}(1.1\si{V} per cell) at about one half of its full capacity~\cite{alkaline_c}.
+When considering the requirements of the vibration sensor, this battery configuration should provide around a year of continuous operation.
+The temperature and humidity sensor is lower power, and should last much longer.
 
-This can result in 
-This estimated power is not sufficient to explain
+Despite this significant and sufficient lifetime estimation, the amount and
+frequency of failures experienced by the real deployment points to multiple
+issues that were not predictable at design time.
+The authors make indirect
+arguments that the sensor power draw is higher than
+expected, but do not give a reason. Perhaps power draw is higher due to
+software bugs.
+It is difficult to design low power software that avoids all
+unintentional energy usage or instances of inescapable high power states.
+The authors make efforts to lower system power
+with little impact (a 1.7\% improvement).
+Besides energy efficiency of the system, the authors lay most of the blame of
+sensor failures on batteries.
+They claim that temperature fluctuations and high humidity in the
+underground chambers of the Mithræum cause frequent battery failure.
+The authors describe these battery failures due to
+environmental conditions anecdotally, without any quantitative experimentation into
+why batteries are prematurely failing.
+The authors also claim that different primary battery types, such as
+lithium, exhibit the same issues.
+To solve this problem, the authors elect to change their sensor design to be batteryless.
+Their first attempt uses the same COTS components but connected to a harvester.
+The second attempt is a custom application-specific hardware design with more efficient
+components.
+The authors never
+descuss any efforts to
+mitigate
+humidity with waterproof enclosures, humidity absorbers, or conformal
+coatings and epoxy.
+It is my opinion that the authors were searching for a reason to make a
+batteryless design, and found a reason when they encountered initial difficulties with
+batteries in humid environments.
+Despite this, this work presents an interesting, if incomplete, side-by-side
+comparison of a battery-powered deployment and a batteryless deployment.
 
 \subsubsection{Cathodic Protection Monitoring}
-Beyond the coupling of sensing to harvesting, sometimes harvestable power is reliable. 
+Beyond the coupling of sensing to harvesting, sometimes harvestable power is reliable.
 Reliable power can be produced from a consistent temperature differential between a hot steam pipe and the ambient air, microbial activity within soil or wastewater fuel cells, or the voltage potential produced from a sacrificial anode in a home water heater, a boat, or a bridge.
 In these situations, reliable harvestable energy results in a reliable system, even when batteryless.
 This allows a batteryless system to maintain a regular and periodic sensing schedule.
-These applications are clever and convenient for batteryless systems, as a reliable power source allows them to avoid the uncertainty of an unreliable income. 
+These applications are clever and convenient for batteryless systems, as a reliable power source allows them to avoid the uncertainty of an unreliable income.
 
 Researchers have built proof-of-concept sensors that monitor and harvest from the corrosion of cathodic protection systems~\cite{jagtap2021repurposing}.
 A corrosion protection system is sometimes employed on critical infrastructure, especially in aqueous environments, to prevent corrosion.
-This protection usually consists of bars of a sacrificial metal, usually of elements that are more easily corroded, like aluminum or magnesium. 
+This protection usually consists of bars of a sacrificial metal, usually of elements that are more easily corroded, like aluminum or magnesium.
 The critical metal structure is protected from corrosion, as the sacrificial metal corrodes first.
 %In some cases, an active system is deployed that applies reverse DC current to prevent corrosion.
 It is important to monitor the state of a cathodic protection system, because as soon as it is depleted, the metal structure that was being protected will begin to corrode.
 
-The chemical process of corrosion is the same process as a galvanic battery. 
+The chemical process of corrosion is the same process as a galvanic battery.
 A cathodic protection system is not a \textit{good} battery.
 It provides a very low peak power, and has very high equivalent series resistance.
-However, a cathodic protection system can be used to slowly charge an actual battery, a bank of capacitors, or a supercapacitor. 
-This stored energy can then be used to monitor the health of the protection system, powering periodic voltage measurements between the sacrificial anode and the protected cathode, and reporting these readings via radio transmissions. 
+However, a cathodic protection system can be used to slowly charge an actual battery, a bank of capacitors, or a supercapacitor.
+This stored energy can then be used to monitor the health of the protection system, powering periodic voltage measurements between the sacrificial anode and the protected cathode, and reporting these readings via radio transmissions.
 As long as a sacrificial cathode exists and is performing its function, a sensor will be able to scavenge energy from it.
 Such a system must persist for the life of the cathode or infrastructure, which in the case of a water heater can be between 1-3 years for the cathode, and around 10 years for the heater itself~\cite{jagtap2021repurposing}.
 While this lifetime could be supported by a non-rechargeable battery, it is both more elegant and less wasteful to employ an energy harvesting solution.
 Since the degradation of a sacrificial anode is slow, over the course of multiple years in the case of a water heater, such a sensor does not need to report frequently.
 Once a day is sufficient to track the health of the sacrificial anode and predict its failure.
-%The authors do note that harvesting energy from a cathodic protection system can accelerate its degradation, however an ultra-low power system is unlikely to have a noticeable effect. 
+%The authors do note that harvesting energy from a cathodic protection system can accelerate its degradation, however an ultra-low power system is unlikely to have a noticeable effect.
 
 The authors propose a fully energy harvesting solution, meaning that the average power of their application must be energy neutral, and fully dependent on income from the weak corrosive battery.
 Via multiple experiments with a small corrosion cell consisting of a steel bucket and a magnesium rod, the researchers have discovered a maximum power point at around 300\si{\milli\volt} and 1.6\si{\milli\ampere} for a peak power of 480\si{\micro\watt}.
@@ -600,14 +635,14 @@ The authors decide to use a parallel array of three 1\si{\farad} supercapacitors
 This bank of supercapacitors is sized such that it provides enough energy storage for the system to run continuously and measure the voltage between the anode and cathode every 4 hours on average.
 The system then transmits the results via a LoRa radio, which has relatively high power and energy costs.
 The authors avoid tantalum and ceramic capacitors used in past designs, as their energy density is insufficient to support LoRa operations within a reasonable form factor.
-Alternatively, such a system could utilize a rechargeable battery. 
+Alternatively, such a system could utilize a rechargeable battery.
 A single small rechargeable battery is more energy dense and significantly less costly than the bank of three large supercapacitors used.
 This would result in a smaller, lighter, and cheaper system.
 The authors' concerns of battery cycle lifetime, charging characteristics, and voltage requirements, are actually inconsequential, especially for this application.
 They do not provide any citations for any of these assertions.
 Given the application's infrequent periodicity, cycle depth is shallow, and average discharge and charge rates are low, resulting in less cell damage and an extended cycle lifetime~\cite{omarLithium14,wangCycle11}.
 For most lithium-based batteries, this would result in at least the 10 year lifetime of the instrumented water heater, never mind the 1-3 year lifetime of the sacrificial anode.
-The authors' issue with voltage levels is easily addressed with a buck or boost regulator, depending on the battery chemistry. 
+The authors' issue with voltage levels is easily addressed with a buck or boost regulator, depending on the battery chemistry.
 These trade-offs between capacitors, supercapacitors, and batteries are further explored in \cref{chap:battery}.
 
 \subsection{Smart Dust and the Future}
