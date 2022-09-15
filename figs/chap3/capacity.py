@@ -27,48 +27,46 @@ b = 2*math.pi / SECONDS_IN_DAY
 a = np.array([x * 1E-6 for x in range(10, 101, 10)])
 seconds = np.array(range(0, DAYS_TO_MODEL * SECONDS_IN_DAY))
 disparity = np.array([x/10 for x in range(2,12,2)])
-capacity = np.logspace(-2, 1, num=10)
+capacity = np.logspace(-3, 1, num=100)
 print(len(capacity), len(a), len(disparity))
 
 def run(a, d, c):
     e = np.zeros(seconds.shape)
-    full = np.zeros(seconds.shape)
     # model income as sinusoid with day period and shifted to be positive
     income = a * np.sin(b * seconds + 3/2 * math.pi) + a
+    actual_work = np.zeros(seconds.shape)
     w = a * d
-    print("settings:", w, a, c)
+    print("settings: ", w, a, c)
 
-    total = 0
 
     for ind, i in enumerate(income):
-        total += i
         if ind == 0:
             e[ind] = i - w
         else:
             e[ind] = e[ind-1] + i - w
 
+        actual_work[ind] = w
+
         if e[ind] > c:
             e[ind] = c
         elif e[ind] < 0:
             e[ind] = 0
+            actual_work[ind] = 0
 
     total = np.sum(income)
-    actual = np.sum(income[full < 1])
-
-    plt.plot(income)
-    plt.plot(e)
-    plt.show()
+    actual = np.sum(actual_work)
 
     result = {"income": a, "disparity": d, "capacity": c, "workload": w, "total": total, "actual": actual, "actual_avg": actual/(DAYS_TO_MODEL*SECONDS_IN_DAY)}
 
     return result
 
-amp = a[4]
-for y in disparity:
-    for z in capacity:
-        r = run(amp, y, z)
-
-exit()
+#amp = a[4]
+#for y in disparity:
+#    print(y)
+#    r = run(amp, y, 10)
+#    print(r['actual_avg'] / r['workload'])
+#
+#exit()
 
 
 if not os.path.isfile("capacity.csv"):
@@ -101,7 +99,6 @@ for i in df.income.unique():
     ax.set_xscale("log")
     ax.legend()
     fig.savefig(("%.1E" % i).replace(".", "o") + "_test")
-    exit()
 
 fig, ax = plt.subplots()
 
