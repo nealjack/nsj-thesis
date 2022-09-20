@@ -26,21 +26,18 @@ SECONDS_IN_YEAR = 60*60*24*365
 DAYS_TO_MODEL = 365
 
 b = 2*math.pi / SECONDS_IN_DAY
-a = np.logspace(-6, -4, 5) #np.array([x * 1E-6 for x in range(10, 101, 10)])
+a = np.logspace(-6, -4, 10) #np.array([x * 1E-6 for x in range(10, 101, 10)])
 seconds = np.array(range(0, DAYS_TO_MODEL * SECONDS_IN_DAY))
 disparity = [1]#np.array([x/10 for x in range(2,12,2)])
-capacity = np.logspace(-3, 1, num=5)
+capacity = np.logspace(-3, 3, num=50)
 print(len(capacity), len(a), len(disparity))
 
 sine = np.sin(b * seconds + 3/2 * math.pi)
 sine_funcs = np.dot(a.reshape((len(a), 1)), sine.reshape((1, len(sine))))
 for row, value in zip(sine_funcs, a):
     row += value
-sine_funcs *= np.sin(2*math.pi / SECONDS_IN_YEAR * seconds) + 1
-#print(a[0], np.mean(sine_funcs[0]))
-#plt.plot(sine_funcs[0])
-#plt.show()
-#exit()
+season_sine = np.sin(2*math.pi / SECONDS_IN_YEAR * seconds) + 1
+sine_funcs *= season_sine
 
 random_funcs = []
 np.random.seed(42)
@@ -101,28 +98,29 @@ else:
 
 print(df)
 
-#for i in df.income.unique():
-#    dfi = df[df["income"] == i]
-#
-#    fig, ax = plt.subplots()
-#
-#    for d in dfi.disparity.unique():
-#        dfid = dfi[dfi["disparity"] == d]
-#        dfid = dfid.sort_values("capacity")
-#        #print(dfid)
-#        ax.plot(dfid["capacity"], dfid["actual_avg"] / (dfid["workload"]), label=str(d))
-#    ax.set_xlabel("Capacity (J)")
-#    ax.set_ylabel("Workload captured (%)")
-#    ax.set_xscale("log")
-#    ax.legend()
-#    fig.savefig(("%.1E" % i).replace(".", "o") + "_test")
+fig, ax = plt.subplots()
+for i in df.income.unique():
+    dfi = df[df["income"] == i]
+
+
+    for d in dfi.disparity.unique():
+        dfid = dfi[dfi["disparity"] == d]
+        dfid = dfid.sort_values("capacity")
+        #print(dfid)
+        ax.plot(dfid["capacity"], dfid["actual_avg"] / (dfid["workload"]), label=str(d) + " " + str(i))
+
+ax.set_xlabel("Capacity (J)")
+ax.set_ylabel("Workload captured (%)")
+ax.set_xscale("log")
+ax.legend()
+fig.savefig("percent_workload")
 
 fig, ax = plt.subplots()
 
 df["actual_avg_vs_work"] = df["actual_avg"] / df["workload"]
 dfd = df[df["disparity"] == 1.0]
 dfd = dfd.sort_values(["capacity", "income_index"])
-
+print(dfd)
 income_v_sufficient_capacity = []
 for ind in range(0, len(a)):
     dfd_slice = dfd[dfd["income_index"] == ind]
@@ -144,5 +142,7 @@ ax.set_ylabel("Minimum Capacity for 99% Workload Capture (J)")
 ax.set_xscale("log")
 fig.savefig("required_capacity", bbox_inches='tight')
 
+p = np.polyfit(income_v_sufficient_capacity[:,0], income_v_sufficient_capacity[:,1], 1)
+print(p)
 
 exit()
