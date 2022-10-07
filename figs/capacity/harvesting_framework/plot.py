@@ -9,7 +9,7 @@ from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.colors import ListedColormap
 
 plt.rcParams["font.family"] = "Arial"
-plt.rcParams["font.size"] = "12"
+plt.rcParams["font.size"] = "14"
 plt.rcParams["xtick.major.width"] = "0.8"
 plt.rcParams["xtick.major.size"]  = "6"
 plt.rcParams["xtick.minor.width"] = "0.8"
@@ -57,7 +57,7 @@ plt.tight_layout(rect=(0.03,0,1,1))
 #max power
 plt.plot([0, 1],[0.9,0.9],color='black',linewidth=0.5)
 plt.fill([0,0,1,1],[0.9,1,1,0.9],color=t10[green],alpha=0.5,linewidth=0)
-plt.text(-0.11,0.84,'max sensor\npower',multialignment='right')
+plt.text(-0.11,0.84,'max sensor\npower',multialignment='right', fontsize=12)
 art = plt.plot([-0.007, 0.007],[0.9,0.9],color='black',linewidth=1)
 art[0].set_clip_on(False)
 plt.text(0.50,0.94,'Always on',multialignment='center')
@@ -69,7 +69,7 @@ plt.plot([0, 0.05],[0.1,0.1],color='black',linewidth=0.5,linestyle='--')
 plt.plot([0.05, 1],[0.1,0.1],color='black',linewidth=0.5)
 plt.fill([0,0,0.05],[0.1,0.9,0.1],color=t10[red],alpha=0.5,linewidth=0)
 plt.fill([0,0,1,1],[0,0.1,0.1,0],color=t10[red],alpha=0.5,linewidth=0)
-plt.text(-0.08,0.09,'leakage',multialignment='right')
+plt.text(-0.08,0.09,'leakage',multialignment='right',fontsize=12)
 art = plt.plot([-0.007, 0.007],[0.1,0.1],color='black',linewidth=1)
 art[0].set_clip_on(False)
 plt.text(0.01,-0.13,'energy of\nlargest atomic\noperation',multialignment='center',fontsize=10)
@@ -90,7 +90,7 @@ plt.text(0.1,0.38,'Checkpointing\nrequired',multialignment='center',zorder=2000)
 #hysterysis management
 plt.plot([0.0, 1],[0.2,0.2],color='black',linewidth=0.5, linestyle='--')
 plt.fill([0.05,0.0452,1,1],[0.1,0.2,0.2,0.1],color=t10[purple],alpha=0.5,linewidth=0)
-plt.text(-0.105,0.185,'deep sleep',multialignment='right')
+plt.text(-0.105,0.185,'deep sleep',multialignment='right',fontsize=12)
 art = plt.plot([-0.007, 0.007],[0.2,0.2],color='black',linewidth=1)
 art[0].set_clip_on(False)
 t = plt.text(0.55,0.13,'Hysteresis management helpful',multialignment='left', zorder=2000)
