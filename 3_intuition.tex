@@ -1,178 +1,357 @@
-\chapter{Design Intuition for Low Power Energy-harvesting Systems}
+\chapter{Design Intuition for Wireless Sensor Power Supplies}
 \label{chap:intuition}
 
 %There is a rift between industry and research in the way that indoor wireless sensors are powered. Industry has largely eschewed energy harvesting methods, opting instead for the reliability offered by high-density non-rechargeable batteries. 
 %Conversely, energy-harvesting is extremely popular for research systems, which have largely abandoned the use of non-rechargeable cells in the pursuit of building systems with indefinite lifetimes. 
 %Given this disparity, it is obvious that there is a lack of clarity regarding how wireless sensors should be powered to enable various applications. 
-This chapter explores the design space of wireless sensor power supplies. 
-The goal of this chapter is to provide high-level guidance for when/if energy harvesting is a beneficial technique instead of, or in addition to, a non-rechargeable storage, how prospective workloads drive component sizing, and if energy-harvesting is utilized, what techniques are required to ensure a minimum useful operation or what is required to maximize energy capture and system reliability. 
-This chapter, along with the following chapters, focus on photovoltaic energy harvesting because in indoor conditions, it offers an order of magnitude more energy than other methods.
+Wireless power supplies are the result of a multi-dimensional design space exploration.
+While certain design decisions are straightforward, like the choice to use a certain type of harvester to suit an application environment, some design points are more difficult to determine. 
+Harvesting and storage technologies are often difficult to directly compare, and it is sometimes difficult to determine the sizing of these elements in order to satisfy the constraints of an application. 
+Many times, the type and size of harvesters, batteries, or capacitors are chosen arbitrarily~\cite{hamiltoniot}, or are chosen to make the design minimally feasible~\cite{yervaGrafting12,debruin2013monjolo,hesterFlicker17,afanasov2020battery}.
 
-\section{Formalizing Design Constraints}
+The goal of this chapter is to provide high-level guidance for navigating the design space of wireless sensor power supplies. 
+This chapter seeks to formalize the the application requirements that were discussed in 
+\cref{sec:background:background_reqs}.
+Using these requirements, this chapter provides guidance to designers for when energy harvesting is a beneficial technique for energy income instead of, or in addition to, a non-rechargeable storage, how prospective income and workloads drive component types and sizing, and if energy-harvesting is utilized, what techniques are required to ensure a minimum useful operation or what is required to capture sufficient energy to maximize system availability. 
+To limit scope to a manageable size, 
+this chapter, along with the those following, focus exclusively on indoor photovoltaic energy harvesting.
+This is because in the conditions of the majority of human-occupied indoor locations, photovoltaic harvesting offers an order of magnitude more energy than other methods.
+Despite this focus, similar explorations can be made with other harvesting methods.
 
-The application space for wireless sensors is broad, and very difficult or impossible to enumerate fully. However, there are common application constraints that drive design. By asking a few questions to determine an application requirements, one can begin to describe the design constraints. These questions, in order of their impact on the answers to the other questions, are:
-These constraints can be described and parameterized.
-In particular, the size, operational lifetime, and harvesting viability 
-There are \textit{many} applications that are untenable to enumerate fully. However, they can be described and parameterized by their requirements. An envisioned application can provide constraints on a wireless sensor's size, component selection and sizing, 
+\section{Energy Income}
+A wireless sensor must source energy from somewhere. 
+Energy-harvesting has the potential to supply energy indefinitely. However, harvested energy is often unreliable and unpredictable, and instantaneous power delivery is limited. 
+Conversely, primary-only systems have a limited amount of energy, but can use that energy at any rate they please, within the power limits of the battery. 
+Because of these differences, it can be difficult to directly compare their performance and determine at what scale and in which conditions harvesting, energy preallocation, or a hybrid of the two, is the preferable power source strategy for any given application.
+This section begins with a description of constraints for properly sizing components to ensure a sufficient lifetime and energy income. 
+Next, it provides a method of comparison of energy capture potential between harvesting and preallocation methods.
+The constraints and relations defined and explored in the following section can be used to estimate proper harvester and battery selection to achieve application requirements.
+
+\subsection{Sizing}
+Regardless of how a sensor is powered, it must receive sufficient energy at the right times to continuously and reliably operate.
+Assuming that the average power required to drive an application is known at design time, it is relatively straightforward to determine the correct size of a battery to achieve an expected lifetime, or a photovoltaic panel to achieve an average power income.
+%The improvement in energy density of batteries and the efficiency of energy harvesting sources has not improved at the same rate as the energy efficiency of CMOS and low power radio technology.
+%Barring any transformative improvements in energy storage, energy income is primarily dependent on the volume or area available for a battery or harvester, respectively. 
+Usually battery capacity is expressed as accumulated charge in terms of \si{\milli\Ah}.
+If the nominal voltage of the battery is known, it can be used to estimate lifetime given a battery's capacity and intended workload.
+
+\begin{equation} \label{eqn:intuition:energy_battery_estimation}
+   E_b = U C
+\end{equation}
+\begin{equation} \label{eqn:intuition:power_battery_estimation}
+   P_b = \frac{U C}{T} 
+\end{equation}
+%\begin{equation}
+%   T \approx \frac{U*C}{P_{w}}
+%\end{equation}
+
+\noindent 
+\Cref{eqn:intuition:energy_battery_estimation} describes the energy contained in a battery of capacity $C$ and a nominal voltage $U$. 
+Assuming a desired lifetime $T$, \cref{eqn:intuition:power_battery_estimation} describes the maximum achievable average power supplied by such a battery. 
+Likewise, the average power provided by a photovoltaic of area $A$ is described by \cref{eqn:intuition:p_power}. 
+
+\begin{equation} \label{eqn:intuition:p_power}
+P_h = \eta E_e A 
+\end{equation}
+
+\noindent 
+Where 
+$\eta$ denotes the efficiency of the photovoltaic, and is often between 18 and 20\%. 
+The average energetic spectrial irradiance, $E_e$, is generally between 10 and 100\si{\micro\watt\per\centi\meter\squared} for photovoltaics in indoor conditions~\cite{yervaGrafting12,gorlatova2013networking}. 
+Given an average workload power ($P_w$) and a desired lifetime $T$, 
+\cref{eqn:intuition:battery_capacity,eqn:intuition:panel_size}
+describe the necessary battery capacity and solar cell size.
+
+\begin{equation} \label{eqn:intuition:battery_capacity}
+    C \geq \frac{P_w T}{U}
+\end{equation}
+\begin{equation} \label{eqn:intuition:panel_size}
+    A \geq \frac{\eta E_e}{P_w}
+\end{equation}
+
+For some applications, it is obvious when utilizing energy harvesting is a better design choice over a battery. 
+Such is the case with Zebranet collars~\cite{juang2002energy}. Powering the collar would require a large and heavy battery, beyond the weight constraints of application, and would only power the system for 5 days, far below the lifetime goal of a year or more of operation.
+In other cases, it is much more difficult to determine which method is appropriate.
+This is especially apparent in environments where available harvestable energy is limited, like indoor environments. 
+
+
+\subsection{Preallocation versus Harvesting}
+In many cases where potential harvestable energy is limited, it is difficult to determine whether energy preallocation or harvesting is the most suitable technique.
+It is very difficult to directly compare these methods, as the power and energy supplied by either option is dependent on many factors, including the availability, variance, and magnitude of available harvestable energy, the size of the battery or harvester, and the expected sensor workload. 
+%The most important metrics for consideration are the power and energy supplied by battery preallocation or energy harvesting.
+%Energy income defines both the lifetime of a sensor, as well as a maximum supportable power available for a workload.
+Prior work has attempted to approach a comparison of non-rechargeable energy storage and energy harvesting by comparing the expected average power supplied by either option. 
+They simplify the problem by considering a theoretical cubic sensor of volume $V = L^3$, 
+with the assumption that the entire cubic sensor volume is dominated by a lithium primary battery, or the entire area of one $A = L^2$ face is dominated by a photovoltaic panel~\cite{yervaGrafting12}.
+The authors compare the power provided by the battery cube, with that of the photovoltaic square, over the shelf-life of the battery. 
+%concluding that as sensors continue to reduce in size, they will derive more benefit from harvesting over battery preallocation. 
+
+For this analysis, \cref{eqn:intuition:energy_battery_estimation} is not as useful for direct comparisons. 
+%for comparing battery energy capacity with photovoltaic energy capture.
+A more appropriate method utilizes volumetric energy density.
+Battery energy capacity ($E_b$) can be estimated based on the volume of the battery ($V$) and its volumetric energy density ($\rho$).
+While $\rho$ varies depending on the specific battery chemistry, size, and packaging, lithium primary batteries usually provide on the order of 800\si[per-mode=symbol]{\milli\Wh\per\cm\cubed}~\cite{tuna2016energy}. The maximum average power ($P_b$) provided by the battery can be calculated with a desired lifetime ($T$). 
+
+\begin{equation} \label{eqn:intuition:b_energy}
+E_b = \rho V 
+\end{equation}
+\begin{equation} \label{eqn:intuition:b_power}
+P_b = \frac{\rho V}{T}
+\end{equation}
+%The volume of a sensor occupying a rectangular prism of dimensions $L$ length, $W$ width, and $H$ height is given by the following equation.
+%
+%\begin{equation}
+%    V = L * W * H
+%\end{equation}
+%
+%\noindent For an energy harvesting sensor, the side with the largest surface area represents the area available for harvesting with a photovoltaic. This area is represented by the following equation.
+%
+%\begin{equation}
+%   A = L * W 
+%\end{equation}
+%
+%Assuming that an application's power requirements are known before design, the the proper sizing of a battery and photovoltaic can be determined. 
+%The energy and power stored in a battery of volume $V$ are described by the following relations:
+%
+%
+%\noindent Where the energy density of the battery is $\rho$ 
+%and $T$ is the lifetime of the battery.
+
+\placefigure{fig:intuition:eh_worth_it}
+
+\noindent When considering \cref{eqn:intuition:b_energy,eqn:intuition:b_power}, the authors use a more conservative 653\si[per-mode=symbol]{\milli\Wh\per\cm\cubed} for $\rho$, 
+and assume a 7 year lifetime based on shelf-life. They use this lifetime in order to calculate the maximum power that a primary cell can provide over this period~\cite{yervaGrafting12}.
+This assumption for battery lifetime is very conservative, as it considers a primary battery entirely empty or unusable after its reported shelf-life.
+Assuming a static lifetime also ignores the impact of a sensor's workload power requirements on battery longevity.
+Primary battery shelf-life is often poorly defined and understood. While some take shelf-life to mean a battery is expired and not usable after this time, shelf-life actually represents a manufacturer guarantee that a cell will retain a majority of its capacity over the shelf-life period. 
+A 10 year shelf-life is common for lithium metal primary batteries~\cite{primary2032,primarycr123a,energizerAppMan}.
+Energizer claims that their lithium metal primary batteries experience a self-discharge rate of 1\% per year at room temperature and humidity. This corresponds to 90\% remaining capacity at the end of their listed shelf-life period~\cite{energizerAppMan}.
+A lithium battery can hardly be considered empty after its shelf-life has expired.
+A more accurate estimation for battery lifetime is:
+
+\begin{equation}
+\label{eq:intuition:battery_life}
+T = \frac{\rho L^3}{P_w + P_l}
+\end{equation}
+
+\noindent Where $P_w$ is the average power required to drive a sensor workload, and $P_l$ is the self-discharge power of the battery. 
+Any aging effects other than self-discharge are unpredictable and not considered here. 
+With this new definition of battery lifetime, the comparison of power is not as useful a metric, as workload power provided by the battery ($P_w$) is independent of the battery capacity. 
+The power provided by a battery \textit{is} technically limited by its maximum rated load current, which is often related to its capacity. 
+However, this limit is not usually relevant when considering low power operation.
+Conversely, the power provided by an energy harvester is unrelated to the requisite workload power at all, and is incomparable with that of an on-demand preallocated power source.
+Instead of power, the energy provided to a workload by a primary cell and the energy captured by a similarly sized photovoltaic over the course of the lifetime of the primary cell are directly comparable.
+The energy captured by a photovoltaic over a time period $T$ is represented by \cref{eqn:intuition:p_energy}.
+The authors of \cite{yervaGrafting12} assume the lower end of irradiance to provide a conservative estimate, but ignore photovoltaic efficiency $\eta$. This results in an overestimation of harvestable power and energy.
+This analysis assumes a conservative photovoltaic efficiency of 17\%.
+\Cref{eqn:intuition:p_power,eqn:intuition:p_energy} are more realistic representations of photovoltaic power and energy. 
+
+\begin{equation} \label{eqn:intuition:p_energy}
+E_h = \eta E_e A T 
+\end{equation}
+
+
+\placefigure{fig:intuition:eh_worth_it_nano}
+
+With these relations, it is possible to calculate the energy contained in a battery of size $L^3$, the lifetime of that battery given a workload power $P_w$, and the energy captured by a photovoltaic panel of size $L^2$ over the lifetime of the similarly sized battery.
+This is visually presented in \cref{fig:intuition:eh_worth_it}, 
+an updated energy-harvesting reality check~\cite{yervaGrafting12}. 
+This figure compares the preallocated energy provided by a battery with that of the potential harvestable solar energy over the same time period. 
+Both battery and harvester energy are driven by the same dimension $L$. 
+The energy offered by a battery is represented by the blue line, and increases with $L^3$.
+This energy, coupled with power requirements of different workloads, define the lifetime of of the battery ($T$).
+The other lines correspond to the energy captured over $T$ via a photovoltaic panel of area $L^2$ in different average lighting and workload conditions.
+The two different workloads are represented by the orange (average 25\si{\micro\watt}) and red (100\si{\micro\watt}) lines.
+The extents of average indoor photovoltaic harvesting are represented by dashed 
+(10\si[per-mode=symbol]{\micro\watt\per\centi\meter\squared}) and solid 
+(100\si[per-mode=symbol]{\micro\watt\per\centi\meter\squared}) lines. 
+The point at which the harvesting lines (orange, red) cross the battery line (blue) indicate the size at which a solar panel of size $L^2$ will harvest the same amount of energy provided by a battery of size $L^3$ over the lifetime ($T$) of the battery. 
+These crossing points also indicate the size at which harvesting collects sufficient average power to drive its intended workload, approaching energy neutral operation.
+For appropriate workloads and lighting conditions, the crossing points suggest that a sensor with a driving dimension larger than 4\si{\centi\meter} will be able to harvest more energy than is contained in a similarly sized battery over its lifetime.
+
+
+The same analysis can be done for designs that scale down in both size and power. Millimeter-scale systems like the Michigan Micro Mote occupies 1\si{\milli\meter\squared} and requires on the order of 100s of \si{\nano\watt} to power its workload~\cite{lee2013modular}.
+\Cref{fig:intuition:eh_worth_it_nano} is a reconfigured analysis, tuned for \si{\nano\watt} workloads and millimeter-scale systems. The same dark blue line represents the energy preallocated with a lithium battery of size $L^2$. The green lines represent a 100\si{\nano\watt} average workload, and the teal lines represent 25\si{\nano\watt} workload. This figure considers the same lighting conditions as the previous figure.
+Likewise, there are sensor sizes where workloads and lighting conditions result in a sensor that will be able to collect more energy over time with energy harvesting than can be preallocated with a battery.
+This reaffirms the design decisions made by the designers of many of the millimeter-scale systems, who chose to utilize energy harvesting to prolong the lifetime beyond that of a non-rechargeable battery. 
+
+\placefigure{fig:intuition:compound}
+
+\subsection{Hybrid}
+At the crossing points in \cref{fig:intuition:eh_worth_it,fig:intuition:eh_worth_it_nano}, the benefits of energy harvesting are compounded when considering that energy capture will continue indefinitely, beyond that of the lifetime of a battery.
+However, this energy is not guaranteed to be supplied at times when the system requires it, even when harvesting supplies enough on average to match that of workload. This reality has the potential to result in unexpected system outages and system resets.
+To ensure that a system always has sufficient energy available, a hybrid system can utilize energy harvesting with a backup preallocated energy storage. 
+This section considers an cubic sensor with length $L$, with a non-rechargeable battery comprising a volume of $L^3$, and a harvester taking up one $L^2$ side of the cube face.
+A hybrid system can operate even in the absence any ambient or accumulated harvestable energy. A hybrid system will possess a finite lifetime, but will have guaranteed reliability during its lifetime. 
+This lifetime primarily depends on the disparity between its intended workload and the availability of harvestable energy.
+This disparity can be expressed by \cref{eqn:intuition:p_total}. 
+If the average power supplied by a photovoltaic harvester is sufficient to drive the intended workload, the total drain, $P_t$, on the battery is equal to its self-discharge power, $P_l$. 
+If the photovoltaic does not harvest sufficient power for the workload, the battery is drained at an average rate of the difference, plus the battery self-discharge.
+Given this new definition of battery drain power, the lifetime of its battery now resembles \cref{eqn:intuition:compound}.
+\begin{equation} \label{eqn:intuition:p_total}
+    P_t = 
+    \begin{cases}
+        P_l & \text{if $P_w < P_h$} \\
+        P_w - P_h + P_l & \text{if $P_w \geq P_h$}
+    \end{cases}
+\end{equation}
+\begin{equation} \label{eqn:intuition:compound}
+T = \frac{\rho L^3}{P_t}
+\end{equation}
+If the amount of average harvestable power is greater than required for a sensor workload, the lifetime of a hybrid system is compounded. 
+The additional energy captured lengthens the lifetime of the system, and the longer lifetime allows for additional energy capture. 
+\Cref{fig:intuition:compound} explores this relationship visually, using the same workloads, lighting conditions, and visual scale and line types as \cref{fig:intuition:eh_worth_it}. The additional energy capture results in the battery line crossing points shifting to the left, meaning that in a hybrid system a smaller harvester and battery are required to capture the same amount of energy as that provided by a battery when compared to a harvester-only system.
+For a hybrid system, these crossing points represent a design point that is able to harvest the same amount of energy as it has preallocated, in effect providing twice the energy as a battery-only system of the same dimensions.
+As the size of the system increases beyond the size at which the harvesting lines and battery line cross, the energy supplied by harvesting begins to approach a vertical line. 
+This represents the size at which the average income from harvesting is sufficient to power the workload. 
+When harvesting can sustain the system indefinitely, the backup primary battery is infrequently or never utilized, and its lifetime is only limited by its self discharge.
+These locations where the harvesting energy lines approach verticality represent the ideal sizing for a hybrid system given an intended workload and lighting conditions.
+This ideal sizing results in a harvester large enough to capture enough average power to results in energy neutrality, where the system harvests enough energy to sustain its operation.
+
+\subsection{Limitations}
+
+The above analysis is a simplified view of a complex reality.
+The analysis assumes that a sensors workload and income can be treated as static averages.
+While a case can be made that on a timescale of hours to days, for many applications a sensor's workload power can be consolidated into an average. 
+The same assumption can not easily be made for energy income.
+For example, lighting conditions are often both diurnal and seasonal, meaning that a daily or even weekly average income from a photovoltaic will vary significantly over the course of a day or year depending on the angle and intensity of sunlight, or the occupancy and activation of artificial lighting.
+It is a common challenge for energy harvesting systems to continue operating when there is insufficient harvestable energy.
+For this problem, the reliability and uptime benefits of adding non-rechargeable backup energy storage in a hybrid sensor are not highlighted in this analysis.
+
+For simplicity's sake, the analysis of this section also assumes the whole sensor volume is available for energy storage, and a whole face is available for energy harvesting.
+This assumption breaks down when considering sensors and PCB elements that require substantial volume, such as a PIR sensor, or a sensor that can not be covered by a harvesting element, such as an image sensor or light sensor.
+However, the relationship to energy capacity and harvesting capability are directly and linearly related to volume and area respectively. The general conclusions should hold, even if some percentage of the volume and area of a sensor are occupied by elements other than energy storage or harvesting. 
+
+The above analysis also does not consider the effect of rechargeable energy capacity on energy income from harvesting. 
+The analysis assumes an ideal rechargeable energy storage with limitless storage.
+In reality, energy storage elements are far from limitless or ideal.
+A small energy capacity will fill up often, requiring shunting of any additional harvested energy. 
+By shunting, or wasting this energy, a system with insufficient capacity will effectively reduce the average energy income power available to it. \Cref{chap:intuition:feasibility,chap:intuition:capacity} explore the effect of capacity in further detail.
+
+The analysis of this section also does not consider the effects of miniaturization, especially as components approach the scale of millimeters and their packaging begins to dominate their volume. As batteries reduce in size, the proportion of volume available for energy storage versus the volume taken by packaging decreases, resulting in less energy density. This analysis assumes a static energy density for lithium primary cells, when in reality the density would also decrease as the size of the battery decreases. Similarly, harvesting elements experience less surface area for the actual harvester versus area required to hold and provide electrical connections at smaller scales.
+System designers seeking to build extremely small devices will have to consider additional factors when considering element sizing.
+Despite these limitations, the analysis of this chapter has enough basis to serve as a guiding rule-of-thumb when considering methods for energy income as well as component sizing requirements for various applications. 
+
 
 
 %data type quanta vs rate
 %reporting rate periodic, reactive
 
-Given a set of application requirements, what are the constraints on the power supply?
-\begin{enumerate}
-%\item Mobile or static?
-\item What size does it have to be?
+%Given a set of application requirements, what are the constraints on the power supply?
+%\begin{enumerate}
+%%\item Mobile or static?
+%\item What size does it have to be?
+%
+%    
+%    $V_{primary} + V_{secondary} < V_{max}$
+%    
+%\item What are the average power requirements, and what is the largest atomic energy quanta?
+%    
+%    $P_{avg, period} = \frac{P_{sleep} * (T_{period} - T_{work}) + P_{work} * T_{work}}{T_{period}}$
+%    
+%    Assuming a Poisson distribution over a period $T$:
+%    
+%    $P_{avg, reactive} = \frac{P_{sleep} * (T - \lambda * T_{work}) + \lambda * P_{work} * T_{work}}{T}$ 
+%   
+%    $P_{avg, intermittent} = P_{harvest}$
+%    
+%    $E_{work} = \sum\limits_{e_i\in E} e_i$
+%    
+%    $E_{atomic} = \max{E}$
+%    
+%    $E_{comms} \in E$
+%    
+%    
+%\item What are the energy storage and lifetime requirements?
+%    
+%    $E_{primary} < \rho_{primary} * V_{primary}$
+%    
+%    $E_{secondary} < \rho_{secondary} * V_{secondary}$
+%    
+%    $E_{secondary} > E_{atomic}$
+%    
+%    How to express size of secondary mathematically?
+%    Energy capacity represents a moving capped sum, is this like a moving average? What is the smallest window that gives us the most return on energy capture?
+%    At some point, a large enough window allows us to consider the average of harvestable energy, instead of the actual distribution. What is that size?
+%    
+%    Given a time series vectors of harvestable and consumed energy of length $N$ seconds:
+%    
+%    $P_{trace} = [e_1, e_2, \dots, e_N]$
+%    
+%    $P_{work} =  [w_1, w_2, \dots, w_N]$
+%     
+%    at any time $i$, the cumulative energy will be
+%    
+%    $ y_0 = \begin{cases} 
+%        0         & \text{if $e_i - w_i < 0$} \\
+%        e_i - w_i & \text{if $e_i - w_i > 0$} \\
+%        E_{secondary} & \text{if $e_i - w_i > E_{secondary}$}
+%    \end{cases}$
+%    
+%    $ y_i = \begin{cases} 
+%        0             & \text{if $y_{i-1} + e_i - w_i < 0$} \\
+%        y_{i-1} + e_i - w_i     & \text{if $y_{i-1} + e_i - w_i > 0$} \\
+%        E_{secondary} & \text{if $y_{i-1} + e_i - w_i > E_{secondary}$}
+%    \end{cases}$
+%    
+%    usable workload energy:
+%     
+%    $ z_i = \begin{cases} 
+%        0             & \text{if $y_{i} \leq 0$} \\
+%        w_i           & \text{if $y_{i} \geq w_{i}$} \\
+%    \end{cases}$
+%    
+%     
+%    %for an ideal limitless storage:
+%    % 
+%    %$ x_0 = \begin{cases} 
+%    %    0         & \text{if $e_i - w_i < 0$} \\
+%    %    e_i - w_i & \text{if $e_i - w_i > 0$} \\
+%    %\end{cases}$
+%    %
+%    %$ x_i = \begin{cases} 
+%    %    0             & \text{if $x_{i-1} + e_i - w_i < 0$} \\
+%    %    x_{i-1} + e_i - w_i     & \text{if $x_{i-1} + e_i - w_i > 0$} \\
+%    %\end{cases}$
+%    %
+%    %Unused energy:
+%    %
+%    %$ w_i = x_i - y_i$
+%    %
+%    %$ E_{unused} = \sum_{i=0}^N w_i$
+%    
+%    Assuming all energy can be harvested:    
+%
+%    $E_{h, total} = P_{harvest} * T_{life}$
+%  
+%    actual:
+%   
+%    $E_{h, actual} = \sum\limits_{z_i\in E} z_i$
+%    
+%    $P_{h, actual} = E_{h, actual} / T_{life}$
+%    
+%    
+%   
+%    $E_{total} = E_{primary} + E_{h} $
+%    
+%    $E_{total} \ge P_{avg} * T_{life}$
+%    
+%    $T_{life} = \frac{E_{total}}{P_{avg}}$
+%    
+%    
+%\item How does the average power requirements compare to available harvestable power? 
+%    
+%    Energy neutrality:
+%    
+%    $P_{h} \ge P_{avg}$ 
+%    
+%\item What are the reliability requirements?
+%\item What are the latency requirements?
+%\end{enumerate}
 
-    $V_{max} = L_{max} * W_{max} * H_{max}$
-    
-    $V_{primary} + V_{secondary} < V_{max}$
-    
-\item What are the average power requirements, and what is the largest atomic energy quanta?
-    
-    $P_{avg, period} = \frac{P_{sleep} * (T_{period} - T_{work}) + P_{work} * T_{work}}{T_{period}}$
-    
-    Assuming a Poisson distribution over a period $T$:
-    
-    $P_{avg, reactive} = \frac{P_{sleep} * (T - \lambda * T_{work}) + \lambda * P_{work} * T_{work}}{T}$ 
-   
-    $P_{avg, intermittent} = P_{harvest}$
-    
-    $E_{work} = \sum\limits_{e_i\in E} e_i$
-    
-    $E_{atomic} = \max{E}$
-    
-    $E_{comms} \in E$
-    
-    
-\item What are the energy storage and lifetime requirements?
-    
-    $E_{primary} < \rho_{primary} * V_{primary}$
-    
-    $E_{secondary} < \rho_{secondary} * V_{secondary}$
-    
-    $E_{secondary} > E_{atomic}$
-    
-    How to express size of secondary mathematically?
-    Energy capacity represents a moving capped sum, is this like a moving average? What is the smallest window that gives us the most return on energy capture?
-    At some point, a large enough window allows us to consider the average of harvestable energy, instead of the actual distribution. What is that size?
-    
-    Given a time series vectors of harvestable and consumed energy of length $N$ 
-    
-    $E_{trace} = [e_1, e_2, \dots, e_N]$
-    $E_{work} =  [w_1, w_2, \dots, w_N]$
-    
-    at every time, the cumulative energy will be
-    
-    $ y_0 = \begin{cases} 
-        0         & \text{if $e_i - w_i < 0$} \\
-        e_i - w_i & \text{if $e_i - w_i > 0$} \\
-        E_{secondary} & \text{if $e_i - w_i > E_{secondary}$}
-    \end{cases}$
-    
-    $ y_i = \begin{cases} 
-        0             & \text{if $y_{i-1} + e_i - w_i < 0$} \\
-        y_{i-1} + e_i - w_i     & \text{if $y_{i-1} + e_i - w_i > 0$} \\
-        E_{secondary} & \text{if $y_{i-1} + e_i - w_i > E_{secondary}$}
-    \end{cases}$
-    
-    for an ideal limitless storage:
-     
-    $ x_0 = \begin{cases} 
-        0         & \text{if $e_i - w_i < 0$} \\
-        e_i - w_i & \text{if $e_i - w_i > 0$} \\
-    \end{cases}$
-    
-    $ x_i = \begin{cases} 
-        0             & \text{if $x_{i-1} + e_i - w_i < 0$} \\
-        x_{i-1} + e_i - w_i     & \text{if $x_{i-1} + e_i - w_i > 0$} \\
-    \end{cases}$
-    
-    Unused energy:
-    
-    $ w_i = x_i - y_i$
-    
-    $ E_{unused} = \sum_{i=0}^N w_i$
-    
-    Assuming all energy can be harvested:    
 
-    $E_{h, total} = P_{harvest} * T_{life}$
-  
-    actual:
-   
-    $E_{h, actual} = E_{h, total} - E_{unused}$ 
-    
-    $P_{h, actual} = E_{h, actual} / T_{life}$
-    
-    
-   
-    $E_{total} = E_{primary} + E_{h} $
-    
-    $E_{total} \ge P_{avg} * T_{life}$
-    
-    $T_{life} = \frac{E_{total}}{P_{avg}}$
-    
-    
-\item How does the average power requirements compare to available harvestable power? 
-    
-    Energy neutrality:
-    
-    $P_{h} \ge P_{avg}$ 
-    
-\item What are the reliability requirements?
-\item What are the latency requirements?
-\end{enumerate}
-
-\placefigure{fig:intuition:eh_worth_it}
-\section{When is Energy-harvesting Worth It?}
-This is a question that is often glossed over by energy-harvesting system designers. Many platforms are built under the assumption that energy-harvesting is strictly superior to a primary-only system. 
-However, it is important to revisit this question, especially in the context of indoor, low power energy-harvesting. 
-
-\subsection{Power and Energy}
-Energy-harvesting is an attractive option for low power designs, as has the potential to supply energy indefinitely. However, that energy is unreliable, and power delivery is limited. Conversely, primary-only systems have a limited amount of energy, but can use that energy at any rate they please, within the power limits of the battery. 
-Because of these differences, it can be difficult to directly compare their performance and determine at what scale and in which conditions harvesting is a preferable power source than a primary cell.
-Prior work has attempted to approach this comparison with a theoretical cubic sensor of volume $L^3$, with the assumption that the entire sensor volume is dominated by a lithium primary, or the entirety of one $L^2$ face is dominated by a photovoltaic panel.
-The authors compare the power provided by the battery cube, with that of the photovoltaic square. 
-The energy and power, respectively, provided by a cube of length $L$ is: 
-
-\begin{equation} \label{eqn:intuition:b_energy}
-E_b = \rho L^3
-\end{equation}
-\begin{equation} \label{eqn:intuition:b_power}
-P_b = \frac{\rho L^3}{T}
-\end{equation}
-
-\noindent Where the energy density $\rho$ is assumed to be 653\si{\milli\Wh\per\cm\cubed}, and $T$ is the lifetime of the battery.
-The authors of \cite{yervaGrafting12} assume a 7 year lifetime based on shelf-life in order to calculate the power provided by a primary cell. This assumption very conservative and ignores the impact of sensor workload. 
-A more fair estimation for battery lifetime is:
-
-\begin{equation}
-T = \frac{\rho L^3}{P_w + P_l}
-\end{equation}
-
-\noindent Where $P_w$ is the average power required to drive a sensor workload, and $P_l$ is the self-discharge power of the battery, generally about 1\% a year for a lithium primary battery. Shelf-life effects are not considered, as they are not measurable, and only a manufacturer guarantee. Any aging effects beyond self-discharge are unpredictable. 
-With this new definition of battery lifetime, the comparison of power is not as useful a metric, as power provided by the battery is now independent of the battery capacity. 
-The power provided by a battery \textit{is} technically limited by its maximum rated load current, which is often related to its capacity. However, this limit is not relevant with low power operation. 
-Instead of power, the energy provided to a workload by a primary cell and the energy captured by a similarly sized photovoltaic over the course of the lifetime of the primary cell are directly comparable.
-
-The power provided by a photovoltaic of area $L^2$ is:
-\begin{equation}
-P_p = \eta E_e L^2
-\end{equation}
-
-\noindent 
-Where 
-$\eta$ denotes the efficiency of the photovoltaic, and is often between 15 and 18\%. 
-The spectrial irradiance, $E_e$, is generally between 10 and 100\si{\micro\watt\per\centi\meter\squared} in indoor conditions~\cite{yervaGrafting12,gorlatova2013networking}. 
-The authors of \cite{yervaGrafting12} assume the lower end of irradiance, but ignore photovoltaic efficiency.
-The amount of energy collected by a photovoltaic over time $T$ is:
-
-\begin{equation}
-E_p = \eta E_e L^2 T
-\end{equation}
-
-\section{A Framework for Power Supply Design}
-\label{sec:framework}
+\section{Harvesting Feasibility and Reliability}
+\label{chap:intuition:feasibility}
 We seek to illustrate the design space for energy-harvesting sensors in two
 ways. The first defines an energy-harvesting sensor framework to examine
 when designs are feasible and when they require intermittent techniques to make meaningful forward progress.
@@ -320,6 +499,7 @@ quantify the impact of capacity
 on key metrics including energy utilization, availability and reactivity.
 
 \section{An Intuitive Case for Capacity}
+\label{chap:intuition:capacity}
 
 \begin{definetable}{tab:related}
   \scriptsize
@@ -397,17 +577,36 @@ on key metrics including energy utilization, availability and reactivity.
 
 \begin{definefigure}{fig:intuition:eh_worth_it}
   \centering
-  \includegraphics[width=\columnwidth]{figs/is_eh_worth_it.pdf}
+  \includegraphics[width=\columnwidth]{figs/is_eh_worth_it_micro.pdf}
   \caption{
-  An updated energy-harvesting reality check~\cite{yervaGrafting12}. This figure compares the energy offered by a battery with that of potential harvestable energy over the lifetime of the same battery. Assuming a cubic sensor, driven by a  principal dimension $L$, a battery of size $L^3$ provides a lifetime of $T$, under different average workloads, here represented by the orange (average 25\si{\micro\watt}) and red (100\si{\micro\watt}). 
-  A solar cell of size $L^2$ accumulates energy over that same lifetime $T$, and if large enough and in sufficient harvesting conditions, will exceed that of a similar sized battery, albeit only in 2 dimensions.  The point at which the harvesting lines (orange, red) cross the battery line (blue) indicate the size at which a solar panel of size $L^2$ will harvest the same amount of energy provided by a battery of size $L^3$ over its lifetime. At a sufficient size and in sufficient harvesting conditions, while powering an appropriate workload, solar energy-harvesting can provide more energy over the same time frame as a lithium battery.
+  A comparison of preallocated energy and captured energy. Note the logarithmic y-axis scale.
+  This figure compares the energy offered by a cubic battery with that of potential harvestable energy captured by a square photovoltaic over the lifetime of the battery. 
+  %The lifetime of the battery depends on different workloads, 
+  %here represented by the orange (average 25\si{\micro\watt}) and red (100\si{\micro\watt}) lines. 
+  %A solar cell accumulates energy over that same lifetime under different harvesting conditions, represented by a solid line 
+  %(100\si[per-mode=symbol]{\micro\watt\per\centi\meter\squared}) or dashed line
+  %(10\si[per-mode=symbol]{\micro\watt\per\centi\meter\squared}).
+  %The point at which the harvesting lines (orange, red) cross the battery line (blue) indicate the size at which a similarly sized photovoltaic will harvest the same amount of energy provided by a similar sized battery over its lifetime. 
+  At a sufficient size and in sufficient harvesting conditions, while powering an appropriate workload, solar energy-harvesting can provide more energy over the same time frame as a lithium battery.
   }
 \end{definefigure}
 
-\begin{definefigure}{fig:intuition:primary+harvesting}
+\begin{definefigure}{fig:intuition:eh_worth_it_nano}
   \centering
-  \includegraphics[width=\columnwidth]{figs/primary+harvesting.pdf}
+  \includegraphics[width=\columnwidth]{figs/is_eh_worth_it_nano.pdf}
   \caption{
-  blah
+  A comparison of preallocated energy and captured energy for \si{\nano\watt} applications. 
+  This figure is identical to \cref{fig:intuition:eh_worth_it} except that it considers the \si{\nano\watt} workloads that characterize millimeter-scale systems.
+  A principle node dimension on the order of 1-2\si{\milli\meter} is generally sufficient for energy harvesting to collect more energy over a battery, in all but the worst case: a heavier workload with low harvesting potential.
+  }
+\end{definefigure}
+
+
+\begin{definefigure}{fig:intuition:compound}
+  \centering
+  \includegraphics[width=\columnwidth]{figs/is_eh_worth_it_micro_compound.pdf}
+  \caption{
+    The energy captured by a hybrid system utilizing both harvesting and backup preallocated energy. This figure uses the same scale and line types as \cref{fig:intuition:eh_worth_it}. The addition of energy harvesting to a primary cell system has a compounding effect on lifetime and harvested energy. More harvested energy results in a prolongation of the lifetime of the primary cell. Subsequently, this lifetime extension results in an increase in harvested energy. 
+    Because of the increased energy and battery lifetime, the crossing points now shift to the left in the figure, allowing a reduction in volume and area required for a battery and harvester, respectively. 
   }
 \end{definefigure}
