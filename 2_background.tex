@@ -280,7 +280,7 @@ There is a valid argument that the batteryless design archetype is suitable for 
 Despite this, many proponents of the batteryless design point do argue that the approach is general purpose. They argue that with sufficient technology improvements, batteryless sensors will eventually be able to support a majority of wireless sensor network applications~\cite{hester2017future}.
 This claim ignores the significant downsides to batteryless design, all stemming from an insufficient energy capacity that is unable to support sensor operation beyond a single duty cycle, and only when external energy is available.
 This limitation is \textit{fundamental and inescapable}, regardless of the myriad of software or hardware micro-optimizations performed.
-No matter what software framework is used, however the resizable capacitor bank is configured, or how many sensors are deployed within a coalesced sensor, a batteryless system is an unresponsive hunk of FR4 and silicon whenever energy is unavailable: at nighttime, when stationary, without a nearby RFID transmitter, or exposed to an insufficient temperature gradient.
+No matter what software framework is used, however the resizable capacitor bank is configured, or how many sensors are deployed within a coalesced sensor, a batteryless system is dead and unresponsive whenever there is insufficient energy: at nighttime, when stationary, without a nearby RFID transmitter, or exposed to an insufficient temperature gradient.
 To truly address this problem, batteryless systems builders are left waiting for dramatic and transformative technology improvements. Either capacitor energy density must increase by 100-1000x, or system-wide power efficiency must similarly improve~\cite{curtiss2021facebit} to render capacitor-based storage appropriate for many applications.
 This has resulted in industry continuing to build reliable and predictable battery-based sensors.
 With the efficiency of current processor and radio technology, many applications can persist for a decade or more on just battery power~\cite{emersonRosemount,GEInsightMesh,honeywellOneWireless}.
@@ -334,6 +334,7 @@ The next section explores several example applications from the literature and i
 %Instead, this section seeks to identify common wireless sensor application requirements and identify their impact on power supply design.
 
 \subsection{Requirements}
+\label{sec:background:background_reqs}
 While the popularity and excitement around energy harvesting and batteryless sensing has led to progressively better batteryless systems, the focus on batteryless design has ignored the requirements of real world applications, and the limitations of the batteryless archetype.
 Constraints like sensor size, lifetime, the availability of harvestable energy, and the reliability and consistency of an application should all contribute to the end design of a wireless sensor, and many applications will have requirements that make a batteryless design an unsuitable choice.
 Instead of starting with the assumption that a design must be batteryless, a design should start from application requirements. Given an application, a set of questions should be asked to define its requirements and better define design parameters.
@@ -355,14 +356,14 @@ While not an exhaustive list, an appropriate set of questions to help define the
     For opportunistic batteryless sensors, average power has a different meaning, as such sensors use any energy that is instantaneously available, and the average power they utilize varies with supply.
     There is still a limitation, as there is a minimum power required for a batteryless system to turn on and successfully activate.
 
-    \item \textbf{What are the limits of area, volume, weight, and cost for each unit in the application?}
+    \item \textbf{What are the limits of area, volume, weight, and cost for each sensor?}
 
     The limits of size, weight, and cost of a sensor directly affects the amount of energy storage that can be allocated, or the available surface area for an energy harvester. Many applications have various limitations on the size of individual sensors as to not be burdensome, difficult to deploy, or unaesthetic.
-
-    \item \textbf{What is the maximum atomic energy quanta required by the application?}
-
-    This requirement is primarily related to batteryless systems, which are severely limited by energy capacity. Assuming a perfect mechanism for ensuring forward progress, the energy storage of any wireless sensor must be large enough to support the most energy intensive operation of an application. In most cases, this is the amount of energy to send a single radio transmission.
-
+    
+%    \item \textbf{What are the constraints on energy storage to  
+%
+%    This requirement is primarily related to batteryless systems, which are severely limited by energy capacity. Assuming a perfect mechanism for ensuring forward progress, the energy storage of any wireless sensor must be large enough to support the most energy intensive operation of an application. In most cases, this is the amount of energy to send a single radio transmission.
+%
 \end{enumerate}
 
 \noindent In the following subsections, several example applications from prior work are presented and their requirements placed within the context of the above questions. While this is by no means an exhaustive list, the examples discussed form a subset that provides broad coverage of applications that can and can not be supported by a batteryless design.
@@ -380,7 +381,7 @@ The goal of the study is to measure burrow conditions and usage patterns consist
 It is acceptable to measure general environmental conditions within and outside the burrows every hour.
 Thus, the in-burrow sensor must be able to sense occupancy and environmental conditions at regular intervals, without interruption.
 
-To perform this task, based on technology available when this work was published, the burrow sensors required on average ~300\si{\micro\watt}. This power requirement is low enough to be powered by various energy harvesting methods, however there are not many options for harvesting within a sea bird burrow. Solar and thermal differential harvesting are both not an option unless a harvester is placed externally. This is not feasible without potentially making the burrows unappealing to sea birds, not to mention substantially increasing the deployment effort.
+To perform this task, based on technology available when this work was published, the burrow sensors required on average ~300\si{\micro\watt}. This power requirement is low enough to be powered by various energy harvesting methods, however there are not many options for harvesting within a sea bird burrow. Solar and thermal differential harvesting are not ideal. The inclusion of these harvesting methods would potentially make the burrows unappealing to sea birds, not to mention substantially increasing the deployment effort and cost.
 External to the burrows, the gateway infrastructure for the deployment has plentiful solar energy to harvest from.
 
 Given the application requirement of reliable and periodic measurement, as well as the unavailability of harvestable energy for in-burrow motes, this application is poorly suited for a batteryless solution.
@@ -422,7 +423,7 @@ The Williot IoT Pixel is a peel and stick tag with an ARM Cortex M0+ and RFID ha
 The Williot system relies on RFID transmitter infrastructure to supply wireless power, and tags report their existence via BLE (Bluetooth Low Energy) which can be received by any consumer handheld device.
 For applications where RFID infrastructure is sparse or inadequate, Williot also offers a battery-assisted tag with a battery lifetime of 4 years.
 Jeeva Wireless is also developing low power RF-harvesting solutions for asset tracking. However, instead of active BLE transmissions, they rely on bidirectional backscatter communication with a wireless router~\cite{jeevawireless}.
-When online and transmitting, a BLE advertiser like the Williot pixel will require on the order of 10s of \si{\micro\ampere} when advertising every 500\si{\milli\second}. A tag that utilizes backscatter will require much less to transmit data, on the order of single \si{\micro\ampere} or less depending on sleep state efficiency. This average power is well below the capabilities for directed RF harvesting from a device similar to an RFID reader, which can typically supply hundreds of \si{\micro\watt} at a minimum~\cite{sample2008design}.
+When online and transmitting, a BLE advertiser like the Williot pixel will require on the order of 10s of \si{\micro\ampere} when advertising a full payload every 500\si{\milli\second}~\cite{nrf52Power}. A tag that utilizes backscatter will require much less to transmit data, on the order of single \si{\micro\ampere} or less depending on sleep state efficiency~\cite{jeevawireless}. This average power is well below the capabilities for directed RF harvesting from a device similar to an RFID reader, which can typically supply hundreds of \si{\micro\watt} at a minimum~\cite{sample2008design}.
 
 Along with low power operation, asset tags must also be physically small and lightweight.
 Arguably, the most convenient form factor resembles that of a traditional ``dumb'' tracking label: a peel and stick tracker with an integrated harvester and radio.
@@ -443,20 +444,94 @@ In situations where infrastructure is insufficient to power batteryless tags, no
 %facebit? skinnypower?
 %fitbit
 
-Many aspects of the human body are useful to measure for wellness, activity, and augmentation applications.
-For many of these applications, the best and sometimes only way to accurately measure or interact with the body is to collocate a sensor on the body.
-These wearable sensors are uniquely situated.
+Many human-centric applications are only possible when a sensor is co-located on the human body.
+Often, wearables are the 
+best and sometimes only way to accurately measure or interact with humans. 
+These wearable sensors are uniquely situated when considering their power supply design.
 For a wearable, a human is naturally always present and able to provide light maintenance or a recharge.
-This allows wearables to have shorter one-charge lifetimes.
+This allows wearables to have shorter one-charge lifetimes. 
+Wearable maintenance is less costly when humans are always present and are already conditioned to maintain their devices.
 Humans have generally accepted the cost of nightly smartphone recharging, making daily or weekly wearable charging also acceptable.
-%Assuming the wearable provides similar utility or satisfaction to a smartphone, users should be willing to frequently recharge it.
+However, not all populations are as diligent or willing to utilize wearable sensors if they have repeatedly remove and charge them. Particularly, elderly populations have usability issues with discomfort and difficulties with taking wearables off to charge them and putting them back on~\cite{valk2018designing}.
+For these populations, a wearable that does not need to be charged would provide significant utility. 
 A batteryless wearable would not have a charging constraint, however
 the expectation of constant and immediate wearable interactivity demands a baseline of availability that may not be sustainable with a batteryless design.
 It is hard to imagine a user being willing to adapt their behavior to accommodate an infrequently available and sporadically operating device.
+Several batteryless wearable applications have been proposed in the literature.
 
-Wearables must also be small and unobtrusive, similar to other wearable objects like jewelry, glasses, and watches.
-They must support a lifetime of at least as long as a human user is awake, but a few days or a week is even better.
+%Rechargeable wearables have less constraints on power compared to a similar sized sensor that must persist for years or decades. A batteryless wearable must still optimize for extreme low power operation.
+%
+%Wearables must also be as small and lightweight as possible.
+%Batteryless systems that utilize ceramic and tantalum capacitors are often small, however any energy harvesting method requires significant surface area, such as solar panels, TEGs, and RF harvesting antennas.
+%Even though capacitors themselves are tiny, no capacitor or supercapacitor can match the energy density of Lithium-based rechargeable batteries often used in consumer electronics.
 
+\subsubsection{Gesture Recognition}
+CapBand is a batteryless gesture recognition wearable that measures capacitive changes in skin deformations to identify hand gestures~\cite{truong2018capband}.
+While the main contribution of this work is the sensing and processing of wrist capacitance measurements, the authors also claim that the low power nature of the measurement technique makes this appropriate for a batteryless design.
+Capband utilizes a small solar panel for power, and a supercapacitor for energy storage.
+Gesture recognition is an application that requires high availability to accurately capture hand gestures.
+CapBand's capacitive measurement needs to run continuously to capture enough data to predict gestures, on the order of 20 measurements per second for its neural network inference.
+At this rate, CapBand requires 260\si{\micro\watt}. This does not include the energy required to transmit the measurements.
+The measurement power alone allows operation only outdoors during the daytime, and indoors with very bright lighting. 
+This significantly limits the utility of the device, and would likely result in user frustration in insufficient lighting.
+
+Wearables must optimize for size and weight. While CapBand fits within a wrist form factor, the sensing and energy management circuitry is quite large compared to a normal wristwatch or smartwatch. While there is some room for miniaturization by using different IC packages and combining modules into one PCB,  
+the majority of volume and surface area of CapBand is actually devoted to the solar panel and supercapacitor. 
+A small rechargeable 40\si{\milli\ampere\hour} could power the aforementioned 20\si{\hertz} measurement for 27 days, and would take less than half of the volume of CapBand's designed energy harvesting frontend.
+
+CapBand's supercapacitor is sized to support an amount of sensing and data transmission while also minimizing the amount of time it takes to charge to a usable voltage. It is not designed to support a single atomic operation. CapBand is not designed to power off frequently. Instead, it sleeps when it does not have sufficient power.
+A more energy dense storage, as well as one that has a more stable voltage, like a rechargeable battery, would also allow for continuous operation. A battery would also allow CapBand to operate overnight and in low light environments. 
+The authors do not give consideration to a battery-based design, beyond claiming one would need frequent recharging.
+It appears the decision to use a batteryless design was informed more by the popularity and excitement for battery-free technology, rather than a careful design exploration that considered all options. 
+
+\subsubsection{Smart Face Mask}
+Beyond traditional wrist-worn wearables, researchers are also developing ways to measure the efficacy of face masks and the health of the user.
+The FaceBit platform is a smart mask platform that is affixed to normal masks and measures non-contact heart rate, respiratory rate, and mask fit quality and wear time.
+FaceBit features a hybrid batteryless energy harvesting design with a backup primary battery. This hybrid design is intended to extend the lifetime beyond that of a primary-only design.
+The authors explore multiple energy harvesting methods, including a photovoltaic cell, a thermoelectric generator (TEG), as well as a triboelectric nanogenerator (TENG).
+The photovoltaic cell must be placed external to the mask, with power leads running into the mask, potentially degrading the mask fit.
+The authors also test the use of a TEG placed against the inside mask surface, with the goal of harvesting from the temperature gradient from inside the mask to the surface of the mask. 
+The TENG converts the small kinetic forces caused by breath into electricity, and is placed within the mask.
+Regardless of energy harvesting modality, the current FaceBit design cannot operate in a fully batteryless fashion, as the reporting frequency and computational demands of the application requires more power and availability than possible with energy harvesting alone.
+
+The FaceBit prototype can persist for 11 days before exhausting its small primary battery.
+Its workload consists of periodically sampling a barometer sensor once a second to detect if it is being worn. If it is being worn, it measures  heart rate and respiratory rate every minute, and reports results every 2 minutes.
+This workload requires high availability and consistent periodicity, which is difficult to achieve with a batteryless design. 
+However, the authors identify several methods for energy harvesting that can provide consistent power while the mask is being worn.
+
+The FaceBit lifetime and workload corresponds to an average power of 286\si{\micro\watt}.
+While the current version relies mostly on a primary battery, it is also designed for energy harvesting.
+Among the energy harvesting methods tested, only the photovoltaic in outdoor light can provide sufficient power to power the device.
+In worst-case indoor conditions, where dim artificial lighting only provides on the order of 10\si{\micro\watt\per\centi\meter\squared}~\cite{yervaGrafting12}
+the selected photovoltaic panel for FaceBit can only provide 71\si{\micro\watt}, assuming a 17\% efficiency.
+The authors also explore the use of TEG and TENG generation.
+Thermoelectric harvesting provides a temporary burst of energy on the order of 50\si{\micro\watt}, but quickly dissipates as the inside of the mask and the inside mask surface reach a temperature equilibrium. 
+The TENG can provide consistent power if the mask is worn, but generally less than 2\si{\micro\watt} when the mask wearer is talking. No power data is provided for when the wearer is just breathing.
+The authors believe that breath-based harvesting (Either TEG or TENG) are the most promising avenues for future development, despite their low power output.
+They also claim that a 10x improvement in power efficiency of the SoC (including the processor and radio) would enable a batteryless version of the FaceBit.
+This is not possible given the capability of the TEG and TENG methods explored. It would require closer to a 100x system-wide power improvement to enable a continuously operating batteryless FaceBit.
+
+FaceBit must be sufficiently small and unobtrusive as to fit in an N95 or surgical mask without bothering the wearer.
+It must also be lightweight enough to be held securely with a magnet affixed to the outside of the mask.
+The authors claim that FaceBit is low-cost, but do not quantify it. 
+A wearable that is affixed to disposable masks must be low cost enough to justify its use and periodic battery replacement.
+The choice of non-rechargeable and rechargeable energy storage, as well as the harvesting method is the largest driver for the size, weight, and cost of a device like FaceBit.
+The choice to use any energy harvesting, including the tested solar panel, TEG, or TENG requires significant surface area and added cost. 
+The use of tantalum capacitors as energy storage is also one of the least energy dense options. 
+
+The authors do not give a rationale for the decision to utilize capacitors as energy harvesting storage.
+While each capacitor is individually small, FaceBit requires multiple capacitors to build up enough energy storage to successfully complete its most energy intensive operations.
+Since the capacitor bank has very limited energy storage, the utility of having energy harvesting at all is severely limited.
+FaceBit can only capture enough energy to perform a few operations before depleting its storage. Even in cases of sufficient harvesting, FaceBit can only use a small percentage of any available energy.
+The authors do not examine how their energy storage capacity and chosen energy harvesting methods affect energy capture and the lifetime of FaceBit's primary cell.
+
+The three capacitors that comprise FaceBit's energy storage require nearly 1.5x the volume of the primary battery itself, at significantly lower energy density.
+An alternate design could more than double its lifetime by replacing energy harvesting and the capacitor bank with additional battery. 
+Alternatively, the primary battery and energy harvesting components could be replaced by a single rechargeable battery and a charging connection.
+A rechargeable battery is less energy dense than a primary cell and be unable to offer a similar lifetime. However, a rechargeable would reduce battery waste. 
+Both options would result in a smaller, less cumbersome design. The removal of energy harvesting and related circuitry would also reduce the cost of the unit.
+
+%\subsubsection{Intra-Body Power Transfer}
 
 \subsection{Amalgamated Harvesting and Sensing}
 There is a niche of applications where sensed phenomena is correlated with a method of harvesting.
@@ -498,7 +573,7 @@ This would potentially support continuous operation and more advanced active sen
 
 In fact,
 the Monjolo harvesting method and split-coil form factor has directly influenced further work and industry solutions.
-The Triumvi system is a direct improvement over the Monjolo design, directly measuring voltage through capacitive coupling, and the current transformer to harvest energy and measure current to a load~\cite{campbell2018energy}.
+The Triumvi system is a direct improvement over the Monjolo design, directly measuring voltage through capacitive coupling, and the current transformer to harvest energy and measure current~\cite{campbell2018energy}.
 Like Monjolo, Triumvi is designed with a batteryless power supply, but supports an optional rechargeable battery for reliable, short term instrumentation.
 Triumvi also supports charge sharing between devices, allowing a sensor harvesting and measuring a high load to share its harvesting energy with a sensor measuring a smaller load.
 This increases the overall reliability and uptime of the entire deployment.
@@ -506,7 +581,7 @@ This increases the overall reliability and uptime of the entire deployment.
 Vizi metering is commercializing the Monjolo and Triumvi designs with some improvements.
 %and developing the first non-contact voltage and current meter based on the Monjolo harvesting design~\cite{vizimetering}.
 Instead of utilizing the one-shot activation and packet rate counting method of the Monjolo, the Vizi meter directly measures and reports current and voltage like Triumvi. This direct measurement is much higher accuracy than estimation through packet counting, with no phase information or voltage measurement.
-Unlike both Monjolo and Triumvi, the Vizi meter is not batteryless. I uses a small rechargeable battery as its primary energy storage.
+Unlike both Monjolo and Triumvi, the Vizi meter is not batteryless. It uses a small rechargeable battery as its primary energy storage.
 The Triumvi design has an option for a rechargeable battery, but it is considered secondary to the batteryless capacitor bank, and rechargeable batteries were only used for short investigative deployments.
 Because of the onboard rechargeable battery, the Vizi meter can run continuously.
 Continuous operation allows the meter to utilize reliable transport mechanisms to ensure all measurements are received successfully.
@@ -552,7 +627,7 @@ The original battery-based deployment utilizes 6 C cell alkaline batteries for e
 The authors do not note if the cells are configured in series or parallel.
 These 6 cells can be configured 2x3 or 3x2 to achieve a nominal 3\si{\volt} or 4.5\si{\volt} supply respectively.
 Both configurations supply voltage levels outside the acceptable range of the Waspmote (3.3-4.2\si{\volt})~\cite{waspmote_block}.
-Alkaline batteries quickly drop to 1.4\si{\V} when under load~\cite{alkaline_c}, providing an acceptable voltage in a 3x2 configuration.
+However, alkaline batteries quickly drop to 1.4\si{\V} when under load~\cite{alkaline_c}, providing an acceptable voltage in a 3x2 configuration.
 The Waspmote only includes a 3.3\si{\volt} step down regulator (either a DC/DC converter or an LDO, the design diagrams do not specify) for the 3.3\si{\volt} supply to its MCU and other subsystems.
 It does have a 5\si{\volt} DC/DC boost converter, however it is only provided to external modules.
 This configuration of 6 C-type batteries provides a maximum of 16\si{\ampere\hour} at 4.5V.
@@ -590,7 +665,7 @@ mitigate
 humidity with waterproof enclosures, humidity absorbers, or conformal
 coatings and epoxy.
 It is my opinion that the authors were searching for a reason to make a
-batteryless design, and found a reason when they encountered initial difficulties with
+batteryless design for this application, and found a reason when they encountered initial difficulties with
 batteries in humid environments.
 Despite this, this work presents an interesting, if incomplete, side-by-side
 comparison of a battery-powered deployment and a batteryless deployment.
@@ -647,9 +722,45 @@ These trade-offs between capacitors, supercapacitors, and batteries are further 
 
 \subsection{Smart Dust and the Future}
 Beyond applications that were possible ten years ago, as well as ones that are possible today, it is important to look forward to the requirements of future applications.
-The continuing trend in electronics and computers is to continue to push the boundaries on size, and this trend holds for wireless sensor design.
-Integrated circuits and MEMs sensors continue to adopt smaller processes, quickly outpacing energy storage and harvesting technology.
+The continuing trend in computing and wireless sensors is pushing the boundaries on size and power.
+Researchers have begun prototyping a new class of  
+millimeter-scale computers and sensors, known colloquially as ``smart dust''~\cite{warneke2001smart}.
 
+While some developed millimeter-scale systems are one-off demonstrations of the feasibility of the device class, some have been developed for specific applications.
+In particular, millimeter-scale sensors are uniquely appropriate for injectible or implantible medical applications.
+Millimeter-scale devices have been proposed as syringe-implantable medical sensors to to measure and monitor 
+intraocular pressure for glaucoma diagnosis and management~\cite{ghaed2013circuits},
+heart arrhythmia~\cite{chen2014injectable},
+glucose levels for diabetes treatment~\cite{nazari2019novel}, and cellular temperature to monitor the metabolism of cancer cells~\cite{wu20180}.
+Beyond health applications, general purpose, modular, millimeter-scale sensing platforms have been proposed for traditional sensing applications~\cite{lee2013modular, kim2014millimeter}
+
+The lifetime goals for many of these applications are to operate perpetually based on available energy~\cite{kim2014millimeter, lee2013modular}. For many of the medical applications, lifetimes of a few years to decades are appropriate to avoid frequent sensor re-injection and re-implantation~\cite{chen2014injectable}.
+Typically, these applications require high availability to support reliable and periodic measurements.
+High quality, consistent measurements are necessary to establish reliable trends for the basis of diagnoses or treatments.
+Likewise, non-medical smart dust applications also require high availability.
+A millimeter-scale image sensor application utilizes always-on motion detection as opposed to opportunistic or periodic image sensing~\cite{kim2014millimeter}.
+This approach attempts to maximize the value of captured images and minimize wasted energy on capturing multiple identical images.
+
+Despite the high energy density of primary lithium batteries, at the scale of a \si{\milli\meter}, the energy provided is insufficient to offer an adequate lifetime for these systems~\cite{lee2013modular}.
+To achieve perpetual lifetimes, these systems utilize harvesting methods including photovoltaic, active RF, intra-body transfer, or optical harvesting~\cite{wu20180, lee2013modular, nazari2019novel}.
+Due to their size, these systems have limited volume for energy storage, and likewise limited surface area available for energy harvesting.
+This results in aggressive system-wide power limitations to achieve adequate lifetimes with high availability.
+Unlike the previously mentioned devices and platforms, most of which require on the order of hundreds of \si{\micro\watt} to \si{\milli\watt} of average power to drive their application, smart dust devices operate with an average of tens or hundreds of \si{\nano\watt}~\cite{lee2013modular,kim2014millimeter,chen2014injectable,wu20180}.
+
+Given the low energy density of capacitors and supercapacitors, they would provide insufficient energy storage to allow continuous and perpetual operation, making batteryless approaches unsuitable for many smart dust applications.
+Instead, to achieve high availability, most of the aforementioned systems utilize small rechargeable thin-film lithium batteries to allow operation between periods of harvestable energy. These batteries are sized to provide a few days of operation without any income, corresponding to capacities on the order of 1-5 \si{\micro\ampere\hour}. 
+
+Not all applications require the extreme size constraints of smart dust, however, they can benefit from the advancements in power efficiency developed by smart dust researchers.
+Within the next decade it is conceivable that microcontrollers, sensors, and radio technologies will be developed with the power improvements originally meant to enable millimeter-scale computing.
+These sensors can remain at the scale of traditional sensor motes with relatively vast energy storage and energy harvesting capability, but with one or two orders of magnitude improvement in active and idle power.
+This will result in sensors that can easily achieve lifetimes of multiple decades, even with small primary batteries. 
+With average system power on the order of \si{\nano\watt}, batteries will be limited more by self-discharge than the actual system load.
+For energy harvesting systems with sufficient surface area, an average income power on the order of tens or hundreds of \si{\nano\watt} to support perpetual operation is an easy task even in dim environments. 
+Beyond lifetime extension, these sensors will be capable of doing more with the energy they have. Future systems will perform advanced sensing and processing that are currently infeasible due to energy constraints. 
+Some of the advancements that have led to the power efficiency of millimeter-scale systems are starting to be commercialized.
+In particular, the development of high performance subthreshold near-threshold computing has resulted in an order of magnitude improvement in active power over traditional CMOS supply voltage techniques~\cite{zhai2009energy, dreslinski2010near}.
+Ambiq Micro has led the commercialization of this technology, starting with ultra low power real time clocks, and more recently developing microcontrollers like the Apollo4 that requires only 5\si[per-mode=symbol]{\micro\ampere\per\mega\hertz}.
+This represents an order of magnitude improvement over similar offerings, like the Nordic nRF5340, which requires 56\si[per-mode=symbol]{\micro\ampere\per\mega\hertz}~\cite{nrf5340}.
 
 
 %\subsection{Example Applications}
