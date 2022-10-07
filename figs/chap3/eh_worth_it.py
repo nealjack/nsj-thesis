@@ -2,16 +2,18 @@
 
 import numpy as np
 import pandas as pd
+import matplotlib as mpl
+mpl.rcParams.update(mpl.rcParamsDefault)
 import matplotlib.pyplot as plt
 from matplotlib.legend import Legend
 from matplotlib.lines import Line2D
 plt.rcParams["font.family"] = "Arial"
 plt.rcParams["font.size"] = "14"
-plt.rcParams["xtick.major.width"] = "1"
+plt.rcParams["xtick.major.width"] = "0.8"
 plt.rcParams["xtick.major.size"]  = "6"
 plt.rcParams["xtick.minor.width"] = "0.8"
 plt.rcParams["xtick.minor.size"] = "4"
-plt.rcParams["ytick.major.width"] = "1"
+plt.rcParams["ytick.major.width"] = "0.8"
 plt.rcParams["ytick.major.size"] = "6"
 plt.rcParams["ytick.minor.width"] = "0.8"
 plt.rcParams["ytick.minor.size"] = "4"
@@ -19,14 +21,14 @@ plt.rcParams["grid.linewidth"] = "1"
 
 colors = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#edc948', '#b07aa1', 'ff9da7', '#9c755f', '#bab0ac']
 
-compound = False
+compound = True
 battery_density = 653E-3 #W/cm3
 solar_efficiency = .17
 seconds_in_year = 3600*24*365
 
 workloadss = [
         np.array([25E-6, 100E-6]),
-        np.array([20E-9, 100E-9])]
+        np.array([25E-9, 100E-9])]
 labels = ['micro', 'nano']
 c_i = 1
 
@@ -40,8 +42,8 @@ for label, workloads in zip(labels, workloadss):
     fig = plt.figure(figsize=(10.7, 5), dpi=300)
     ax = plt.gca()
     b_line = plt.plot(lengths, b_energy/3600*1E3, label='battery', linewidth=3)
-    solid_line = Line2D([0],[0], color='k', label='high light solar')
-    dotted_line = Line2D([0], [0], color='k', linestyle='--', label='low light solar')
+    solid_line = Line2D([0],[0], color='k', label='100μW/cm\u00b2 solar')
+    dotted_line = Line2D([0], [0], color='k', linestyle='--', label='10μW/cm\u00b2 solar')
     plt.yscale('log')
     if label == 'nano':
         plt.xlim(0,1)
@@ -81,10 +83,13 @@ for label, workloads in zip(labels, workloadss):
         #plt.fill_between(lengths, s_energy_min, s_energy_max, alpha=0.2, color=color)
         plt.plot(lengths, s_energy_min, '--', color=color)
         if label == 'nano':
-            lines += plt.plot(lengths, s_energy_max, label='{} nW workload'.format(str(int(1E9*w))), color=color)
+            lines += plt.plot(lengths, s_energy_max, label='{}nW workload'.format(str(int(1E9*w))), color=color)
         else:
             lines += plt.plot(lengths, s_energy_max, label='{} μW workload'.format(str(int(1E6*w))), color=color)
 
     ax.legend(handles = [b_line[0], solid_line, dotted_line] + lines, loc='lower right', frameon=False)
-    plt.savefig("is_eh_worth_it_"+label+".png", bbox_inches='tight')
+    f = ''
+    if compound:
+        f += "_compound"
+    plt.savefig("is_eh_worth_it_"+label+f+".pdf", bbox_inches='tight')
 
