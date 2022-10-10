@@ -60,7 +60,7 @@ plt.fill([0,0,1,1],[0.9,1,1,0.9],color=t10[green],alpha=0.5,linewidth=0)
 plt.text(-0.11,0.84,'max sensor\npower',multialignment='right', fontsize=12)
 art = plt.plot([-0.007, 0.007],[0.9,0.9],color='black',linewidth=1)
 art[0].set_clip_on(False)
-plt.text(0.50,0.94,'Always on',multialignment='center')
+plt.text(0.455,0.94,'Always on',multialignment='center')
 
 #infeasible
 plt.plot([0.05, 0.05],[0.9,0.1],color='black',linewidth=0.5)
