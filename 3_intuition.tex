@@ -595,15 +595,15 @@ on key metrics including energy utilization, availability and reactivity.
   %sensors have different capabilities and requirements
   \normalfont Design space for energy-harvesting sensors based on their energy
   income (which we assume is constant for this analysis), energy storage capacity, and workload.
-  Workload is represented by the largest atomic/non-atomic operations supported
-  by a design, as well as the deep sleep and leakage power.  The plot breaks
-  into four regions: \textbf{1)} always
-  on or effectively powered, \textbf{2)} Infeasible due to lack of energy storage or
-  leakage higher than harvesting rate \textbf{3)} Feasible but requires checkpointing
-  to make forward progress, and \textbf{4)} Enough energy storage to not require
-  or benefit from checkpointing. Additionally, sensors which have high
+  Workload is represented by the set of atomic operations required by an application, 
+  as well as the deep sleep and leakage power.  The plot breaks
+  into four regions: {\color{Green}\textit{Always On}} 
+  or effectively powered, {\color{BrickRed}\textit{Infeasible}} due to lack of energy storage or
+  leakage higher than harvesting rate, feasible but {\color{CornflowerBlue} \textit{Requires State Retention}} 
+  to make forward progress, and enough energy storage so that  
+  \textit{State Retention is Not Required}. Additionally, sensors which have high
   power when they enter deep sleep before depleting their
-  energy buffer may benefit from hysteresis management techniques.
+  energy buffer may benefit from {\color{Orchid}\textit{Hysteresis Management}} techniques.
   This benefit diminishes with lower sleep currents and higher harvesting potential.
   %With increased capacity, sensors can avoid the complexity of intermittent
   %programming techniques and specialized, reconfigurable power supplies in addition
