@@ -352,66 +352,104 @@ Despite these limitations, the analysis of this chapter has enough basis to serv
 
 \section{Harvesting Feasibility and Reliability}
 \label{chap:intuition:feasibility}
-We seek to illustrate the design space for energy-harvesting sensors in two
-ways. The first defines an energy-harvesting sensor framework to examine
-when designs are feasible and when they require intermittent techniques to make meaningful forward progress.
-The second examines dynamic income energy and device behavior through numerical
-modeling and simulation.  The framework is based on three key metrics:
-harvested energy income, workload, and capacity.
-\placefigure{fig:framework}
+From the previous section, it is obvious that the availability and magnitude of harvested energy directly impacts the energy income of an energy harvesting system. 
+What is perhaps not as obvious is that the energy capacity of the rechargeable storage element used to capture harvested energy also impacts the energy income of the system.
+The magnitude of available harvested power, an application workload, and the size of an energy buffer determine whether a design is minimally feasible, and where the design lies on a gradient of metrics like reliability and availability.
+This section seeks to illustrate this relationship and define operating regimes based on harvesting energy income and energy storage.
+This analysis will provide guidance regarding whether a design is feasible and whether it requires intermittent techniques to ensure operation and forward progress.
 
-\subsection{Sensor Regimes}
+%Depending on the design point, a design can offer minimal feasibility, 
+%We seek to illustrate the design space for energy-harvesting sensors in two
+%ways. The first defines an energy-harvesting sensor framework to examine
+%when designs are feasible and when they require intermittent techniques to make meaningful forward progress.
+%The second examines dynamic income energy and device behavior through numerical
+%modeling and simulation.  The framework is based on three key metrics:
+%harvested energy income, workload, and capacity.
+\placefigure{fig:intuition:framework}
+
+\subsection{Design Regimes}
 \label{sec:framework:regime}
-The framework splits the design space into four main regimes: always on,
+\Cref{fig:intuition:framework} splits the design space into four main regimes: always on,
 infeasible, checkpointing required, and no intermittent techniques required.
-These regimes and their constraints are illustrated in \cref{fig:framework},
-and explained in more detail below. \\
+These regimes and their constraints are explained in more detail below. 
 
-\vspace{-6pt}
-\noindent
-\textbf{Always On.} If the energy harvester supplies a sensor with
-more power than the max power it will ever draw, then the device needs
-no energy buffer capacity to remain operational. If this is not the case,
+\subsubsection{Always On} 
+If the energy harvester reliably supplies a sensor with
+more power than the maximum instantaneous power it will ever draw, then the power supply does not need significant
+energy capacity to remain operational. 
+This design point constraint is defined by \cref{eqn:intuition:always_on}.
+\begin{equation}
+    \label{eqn:intuition:always_on}
+    P_{w,max} \leq P_{h,avg}
+\end{equation}
+Where $P_{w,max}$ represents the maximum instantaneous power required by a sensor workload, and $P_{h_avg}$ is the average harvesting income. Additionally, $P_h$ must also have minimum variance (i.e. $Var(P_h) \approx 0$), on the order of normal power ripples handled by power supply bypass capacitors.
+If the harvesting power has significant variance or frequent outages, 
 then a sensor must have some ability to buffer energy to use when its
-operating power exceeds than the harvester input power.
-\\
+instantaneous operating power exceeds that of the harvester input power.
+This green region of \cref{fig:intuition:framework} represents design points that have sufficient income power to be \textbf{Always On}.
 
-\vspace{-6pt}
-\noindent
-\textbf{Infeasible.} If the energy harvester supplies less power than
-the system leakage, the energy buffer will never
-charge. If the energy buffer capacity is less than the
-energy required to perform a workload's largest atomic operation, with energy harvested
-during the operation itself, then that operation will not have enough energy to
-complete.  Neither of these designs will make forward progress and are
+\subsubsection{Infeasible} 
+If the energy harvester supplies less average power than
+the system self discharge and leakage, the system will never be able to charge its energy buffer.
+Leakage can exist in a system via component quiescent currents, battery or capacity self-discharge, and parasitic resistance that is not eliminated when the system is powered off. 
+The constraint on minimum harvesting income and system leakage is described by \cref{eqn:intuition:leakage}.
+\begin{equation}
+    \label{eqn:intuition:leakage}
+    P_{h,avg} > P_l
+\end{equation}
+Where $P_l$ is the total system leakage in a powered off state.
+Similarly, if the energy buffer capacity is less than the
+energy required to perform a workload's largest atomic operation, 
+%with energy harvested
+%during the operation itself, 
+then that operation will not have enough energy to
+complete.
+The total energy required for a single iteration of a sensor workload can be simplified to a finite set of $n$ operations. %that are executed periodically or in response to an event. 
+%The energy required to perform one iteration of a workload is the sum of the energy required for each of the $n$ individual atomic operations that make up the workload task.
+The set $E_a$ of energy required for each atomic operation in a workload is described by \cref{eqn:intuition:atomic_set}.
+%The sum of $E_{a}$ represents the amount of energy required for one iteration of a workload $E_w$, described by 
+%\cref{eqn:intuition:workload_sum}.
+\begin{equation} \label{eqn:intuition:atomic_set}
+    E_{a} = \{e_{i}\}_{i=0}^n
+\end{equation}
+Each individual $e_{i}$ represents the energy required for a single atomic operation such as sampling a sensor,
+sending a radio packet, a processor power on reset, and performing a checkpoint.
+The energy capacity ($E_{capacity}$) of a system must be equal to or greater than the largest atomic operation ($max E_a$). This constraint is described by  \cref{eqn:intuition:atomic}.
+\begin{equation}
+    \label{eqn:intuition:atomic}
+    E_{capacity} \geq \max E_a
+\end{equation}
+Designs that do not have sufficient income, or have insufficient energy capacity to perform a necessary operation will never make forward progress and are
 therefore infeasible.
-Common atomic operations on energy-harvesting sensors include sampling a sensor,
-sending a radio packet, booting the processor, and performing a checkpoint.
-\\
+The red regions of \cref{fig:intuition:framework} represent design points that are \textbf{Infeasible}.
 
-\vspace{-6pt}
-\noindent
-\textbf{Checkpointing Required.} If the energy buffer can
-hold enough energy to perform atomic operations, but
+\subsubsection{State Preservation Required}
+If the energy capacity of the energy buffer 
+is sufficient to perform the largest atomic operation as in \cref{eqn:intuition:atomic}, but
 not enough to complete
-workloads composed of multiple, chained
-atomic operations (such as sampling a sensor and then sending a radio packet), then
-a mechanism for saving state and continuing progress on the next reboot
-must be employed.
-\\
+the entire set of operations in the workload, $E_a$,
+then a mechanism for state preservation is required to ensure forward progress over power loss and reboots.
+A design requires state preservation techniques if \cref{eqn:intuition:checkpointing} is satisfied.
+\begin{equation}
+    \label{eqn:intuition:checkpointing}
+    \max E_a \leq E_{capacity} < \sum_{e \in E_a} e
+\end{equation}
+In \cref{fig:intuition:framework} this represents the blue region.  
+%composed of multiple, chained
+%atomic operations (such as sampling a sensor and then sending a radio packet), then
+%a mechanism for saving state and continuing progress on the next reboot
+%must be employed.
+%\begin{equation} \label{eqn:intuition:workload_sum}
+%    E_w = \sum_{i=0}^{n} e_{i} \in E_a
+%\end{equation}
 
-\vspace{-6pt}
-\noindent
-\textbf{No Intermittent Techniques.} A sensor that has enough harvester
+\subsubsection{No State Preservation Required} A sensor that has enough harvester
 potential and energy capacity to complete a workload's longest non-atomic
 operation can operate without checkpointing. Such systems also benefit as
 energy devoted to checkpointing can be used for a workload instead.
-\\
 
-\vspace{-6pt}
-\noindent
-\textbf{Hysteresis Management.}
-Finally, if a sensor's deep sleep power draw %willfully powers down
+\subsubsection{Hysteresis Management}
+Finally, if a sensor's deep sleep power draw 
 is a substantial fraction of the harvester power, as
 is the case with Capybara~\cite{colinReconfigurable18}, then it is
 beneficial to continue operating until the energy
@@ -438,7 +476,7 @@ have a higher energy capacity, however,
 a higher-capacity energy store also has a lower probability of
 needing to cold start. Therefore the benefits of hysteresis management for
 cold start with respect to storage capacity are in conflict with their necessity,
-and we do not attempt to quantify these subtle nuances in \cref{fig:framework}.
+and we do not attempt to quantify these subtle nuances in \cref{fig:intuition:framework}.
 
 \subsection{Framework Limitations}
 \label{sec:framework:limitations}
@@ -498,7 +536,7 @@ of the energy income and workload of the sensor, we also develop a numerical sim
 quantify the impact of capacity
 on key metrics including energy utilization, availability and reactivity.
 
-\section{An Intuitive Case for Capacity}
+\section{A Case for Capacity}
 \label{chap:intuition:capacity}
 
 \begin{definetable}{tab:related}
@@ -549,7 +587,7 @@ on key metrics including energy utilization, availability and reactivity.
     }
 \end{definetable}
 
-\begin{definefigure}{fig:framework}
+\begin{definefigure}{fig:intuition:framework}
   \centering
   \includegraphics[width=\columnwidth]{figs/capacity/harvesting_framework/framework}
   \caption{
