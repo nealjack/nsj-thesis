@@ -85,7 +85,7 @@ plt.fill([0.05,0.05,0.5,0.5],[0.1,0.9,0.9,0.1],color=t10[blue],alpha=0.5,linewid
 plt.text(0.455,-0.13,'energy of\nsum of atomic\noperations',multialignment='center',fontsize=10)
 art = plt.plot([0.5, 0.5],[-0.007,0.007],color='black',linewidth=1)
 art[0].set_clip_on(False)
-plt.text(0.18,0.45,'State preservation\nrequired',multialignment='center',zorder=2000)
+plt.text(0.18,0.45,'State retention\nrequired',multialignment='center',zorder=2000)
 
 #hysterysis management
 plt.plot([0.0, 1],[0.2,0.2],color='black',linewidth=0.5, linestyle='--')
@@ -98,7 +98,7 @@ t = plt.text(0.1,0.13,'Hysteresis management helpful',multialignment='center', z
 t= plt.text(0.1,0.23,'Hysteresis management less helpful',multialignment='center',zorder=2000)
 #t.set_bbox(dict(facecolor='#9f9f9f', alpha=0.5, edgecolor=None,linewidth=0,pad=0.1))
 #plt.text(0.33,0.6,'Checkpointing not required\nHysteresis management marginally helpful',multialignment='center',zorder=2000)
-plt.text(0.68,0.45,'State preservation\nnot required',multialignment='center',zorder=2000)
+plt.text(0.68,0.45,'State retention\nnot required',multialignment='center',zorder=2000)
 
 #hysterysis management 2
 #plt.plot([0.0476, 1],[0.1,0.1],color='black',linewidth=0.5)
@@ -119,6 +119,4 @@ im = plt.imshow(Z, interpolation='bilinear', origin='lower', cmap=my_cmap, clip_
 #im.set_clip_path(patch)
 
 #plt.fill([0.0476,0.0266,1,1],[0.1,0.4,0.4,0.1],color=t10[purple],alpha=0.5,linewidth=0)
-plt.show()
-exit()
 plt.savefig('framework.pdf',bbox_inches="tight")
