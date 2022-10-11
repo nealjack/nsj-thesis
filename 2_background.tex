@@ -176,6 +176,7 @@ Fundamentally, there will be periods of time where there is no available energy,
 %Unlike the relatively stable voltage provided by a battery, a capacitor's voltage is related to the square root of stored energy. This means that during a discharge cycle, an intermittent system will experience a pronounced voltage drop from a maximum $V_{max}$ to a minimum $V_{min}$.
 
 \subsubsection{Hardware Hysteresis Management}
+\label{sec:background:hhm}
 Beyond software techniques, researchers have also explored building specialized hardware solutions to increase system availability.
 Batteryless system operation is generally tied to a full swing capacitor charge/discharge hysteresis. Once enough energy is captured, a batteryless system will begin executing its workload until it has exhausted its stored energy.
 The general rule of thumb for batteryless system capacitor sizing is that it must hold enough energy to support the most energy intensive atomic task of the system, such as operating a sensor, performing some quanta of computation, or transmitting a single radio packet~\cite{nardello2019camaroptera,colinReconfigurable18, shukla2019skinnypower, hesterFlicker17}.

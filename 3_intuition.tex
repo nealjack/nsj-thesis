@@ -19,6 +19,7 @@ This is because in the conditions of the majority of human-occupied indoor locat
 Despite this focus, similar explorations can be made with other harvesting methods.
 
 \section{Energy Income}
+\label{sec:intuition:energy_income}
 A wireless sensor must source energy from somewhere. 
 Energy-harvesting has the potential to supply energy indefinitely. However, harvested energy is often unreliable and unpredictable, and instantaneous power delivery is limited. 
 Conversely, primary-only systems have a limited amount of energy, but can use that energy at any rate they please, within the power limits of the battery. 
@@ -350,13 +351,14 @@ Despite these limitations, the analysis of this chapter has enough basis to serv
 %\end{enumerate}
 
 
-\section{Harvesting Feasibility and Reliability}
+\section{Harvesting Feasibility and Intermittent Reliance}
 \label{chap:intuition:feasibility}
-From the previous section, it is obvious that the availability and magnitude of harvested energy directly impacts the energy income of an energy harvesting system. 
-What is perhaps not as obvious is that the energy capacity of the rechargeable storage element used to capture harvested energy also impacts the energy income of the system.
-The magnitude of available harvested power, an application workload, and the size of an energy buffer determine whether a design is minimally feasible, and where the design lies on a gradient of metrics like reliability and availability.
-This section seeks to illustrate this relationship and define operating regimes based on harvesting energy income and energy storage.
-This analysis will provide guidance regarding whether a design is feasible and whether it requires intermittent techniques to ensure operation and forward progress.
+From the previous section, it is obvious that the availability and magnitude of harvested energy directly impacts the energy income of an energy harvesting system.
+This energy income has a direct impact on the performance of an energy harvesting system.
+Income limits which and how many operations it can complete and how fast or frequently it can complete them. 
+What is perhaps not as obvious is that the rechargeable energy capacity used to capture harvested energy also impacts the overall energy income and ultimately the operation of the system.
+The availability and magnitude of harvested power, the size of an energy buffer, and the intended sensor workload determine whether a design is minimally feasible, and if so, whether the design will be reliant on additional software or hardware intermittent techniques to ensure proper operation. 
+This section seeks to illustrate the relationship of income and storage on the resultant sensor operating regimes.
 
 %Depending on the design point, a design can offer minimal feasibility, 
 %We seek to illustrate the design space for energy-harvesting sensors in two
@@ -370,8 +372,9 @@ This analysis will provide guidance regarding whether a design is feasible and w
 \subsection{Design Regimes}
 \label{sec:framework:regime}
 \Cref{fig:intuition:framework} splits the design space into four main regimes: always on,
-infeasible, checkpointing required, and no intermittent techniques required.
-These regimes and their constraints are explained in more detail below. 
+infeasible, state retention required, and no state retention required.
+Additionally, the figure illustrates in which conditions hysteresis management techniques are helpful or less helpful.
+The following sections describe these regimes and their constraints in more detail. 
 
 \subsubsection{Always On} 
 If the energy harvester reliably supplies a sensor with
@@ -391,7 +394,7 @@ This green region of \cref{fig:intuition:framework} represents design points tha
 \subsubsection{Infeasible} 
 If the energy harvester supplies less average power than
 the system self discharge and leakage, the system will never be able to charge its energy buffer.
-Leakage can exist in a system via component quiescent currents, battery or capacity self-discharge, and parasitic resistance that is not eliminated when the system is powered off. 
+Leakage can exist in a system via component quiescent currents, energy storage self-discharge, and parasitic current paths that are not eliminated when the system is powered off. 
 The constraint on minimum harvesting income and system leakage is described by \cref{eqn:intuition:leakage}.
 \begin{equation}
     \label{eqn:intuition:leakage}
@@ -419,11 +422,11 @@ The energy capacity ($E_{capacity}$) of a system must be equal to or greater tha
     \label{eqn:intuition:atomic}
     E_{capacity} \geq \max E_a
 \end{equation}
-Designs that do not have sufficient income, or have insufficient energy capacity to perform a necessary operation will never make forward progress and are
+Designs that do not satisfy this the constraints of \cref{eqn:intuition:leakage,eqn:intuition:atomic} have insufficient income to ever power on, or have insufficient energy capacity to perform a necessary operation and are  
 therefore infeasible.
-The red regions of \cref{fig:intuition:framework} represent design points that are \textbf{Infeasible}.
+The red regions of \cref{fig:intuition:framework} represent design points that are \textbf{Infeasible}. 
 
-\subsubsection{State Preservation Required}
+\subsubsection{State Retention Required}
 If the energy capacity of the energy buffer 
 is sufficient to perform the largest atomic operation as in \cref{eqn:intuition:atomic}, but
 not enough to complete
@@ -434,7 +437,7 @@ A design requires state preservation techniques if \cref{eqn:intuition:checkpoin
     \label{eqn:intuition:checkpointing}
     \max E_a \leq E_{capacity} < \sum_{e \in E_a} e
 \end{equation}
-In \cref{fig:intuition:framework} this represents the blue region.  
+In \cref{fig:intuition:framework} the blue region represents designs that satisfy \cref{eqn:intuition:checkpointing} and \textbf{Require State Retention} techniques to ensure proper operation.  
 %composed of multiple, chained
 %atomic operations (such as sampling a sensor and then sending a radio packet), then
 %a mechanism for saving state and continuing progress on the next reboot
@@ -443,40 +446,62 @@ In \cref{fig:intuition:framework} this represents the blue region.
 %    E_w = \sum_{i=0}^{n} e_{i} \in E_a
 %\end{equation}
 
-\subsubsection{No State Preservation Required} A sensor that has enough harvester
-potential and energy capacity to complete a workload's longest non-atomic
-operation can operate without checkpointing. Such systems also benefit as
-energy devoted to checkpointing can be used for a workload instead.
+\subsubsection{No State Retention Required} 
+A sensor that has a large enough energy buffer to support all of the atomic operations of its workload, and has sufficient harvesting capability to charge this buffer does not require state retention methods. All of its workload can be completed with a full energy storage element, without requiring a reboot and recharge.
+This constraint is defined by \cref{eqn:intuition:no_checkpoint}.
+\begin{equation}
+    \label{eqn:intuition:no_checkpoint}
+    E_{capacity} \geq \sum_{e \in E_a} e
+\end{equation}
+Systems satisfying \cref{eqn:intuition:no_checkpoint} exist in the white region of \cref{fig:intuition:framework}.
+In this region, systems can avoid the complexity of state retention software frameworks, and the energy that would previously be devoted to performing checkpoints or writing and restoring data to non-volatile memory can be used toward the workload instead. 
+However, a system that satisfies \cref{eqn:intuition:no_checkpoint} may still experience intermittent operation depending on the variability of its energy income and size of its storage.
 
 \subsubsection{Hysteresis Management}
-Finally, if a sensor's deep sleep power draw 
-is a substantial fraction of the harvester power, as
-is the case with Capybara~\cite{colinReconfigurable18}, then it is
-beneficial to continue operating until the energy
-buffer is depleted, power off, and recharge quickly
-rather than stop early and recharge slowly.
-Under this scenario, hysteresis management techniques,
-such as reconfigurable capacity and federated energy can increase sensor
-performance as discussed in \cref{sec:related}.
+Hysteresis management is useful for sensors that frequently reboot and must cold start, recharging their storage element from, or close to, empty. 
+These techniques are particularly beneficial for frequently restarting systems that have large energy buffers that require significant charge and time to provide a sufficient and stable system voltage. 
+Often, intermittent and batteryless systems are designed to turn off when there is no harvestable energy. Because of this, they have not optimized the power required to maintain a low power, state retaining mode. 
+Under these conditions, hysteresis management techniques,
+such as reconfigurable capacity~\cite{colinReconfigurable18} and federated energy~\cite{hesterFlicker17} can decrease the time and energy required to cold start, increasing sensor
+performance.
+These methods can decrease cold start time
+by reducing the capacity that must be charged to achieve a cold start and partial system restart.
+
+While a system's cold start length and frequency are not well represented within the metrics considered by \cref{fig:intuition:framework}, 
+the constraints between a design's deep sleep power, energy income, and energy capacity are. 
+A design with average harvestable income less than what it takes to sustain a low power sleep state is better off turning off instead of sleeping. This constraint is defined by \cref{eqn:intuition:hysteresis}. 
+\begin{equation}
+    \label{eqn:intuition:hysteresis}
+    P_{l} < P_{h,avg} \leq P_{s}
+\end{equation}
+Sensors within this regime will benefit from hysteresis techniques to reduce the amount of charge and time it takes for them to cold start.
+Sensors that are able to harvest more power than it takes to maintain a deep sleep state will benefit from hysteresis management if they frequently must cold start. 
 The utility of hysteresis management is diminished
-when the ratio of harvester power to deep sleep power increases.
-For sensors that can willfully power off or sleep,
-operating thresholds can be controlled, disentangling
-capacity and charging hysteresis.
-Their deep
-sleep power is equal to leakage, and such techniques
+when the ratio of harvester power to deep sleep power increases and when the energy capacity of a system increases.
+More energy and the capacity to hold it reduces the frequency of cold starts, and capacity has an averaging effect on energy income, providing power when income is insufficient, and storing in case of excess. 
+With sufficient energy income and capacity, sensors can willfully enter low power sleep states for long periods, avoiding powering off and subsequent cold starting.
+This point of sufficient capacity is denoted on \cref{fig:intuition:framework} by the
+These sleep states can be managed by the sensor itself, instead of being imposed by the variability of energy income.
+While it is relatively straightforward to determine component sizing to achieve proper energy income, as described in \cref{sec:intuition:energy_income}, it is more difficult to determine the proper energy capacity to avoid power loss and frequent cold starts.
+
+%Under these conditions, it is
+%beneficial to continue operating until the energy
+%buffer is depleted, power off, and wait to recharge 
+%without the overhead of sleep power.
+
+
+
+Therefore the benefits of hysteresis management for
+cold start with respect to storage capacity are in conflict with their necessity,
+and these subtle nuances are not quantified in \cref{fig:intuition:framework}.
+
+By managing sleeping states,
+operating thresholds can be automatically controlled instead of instigated when harvestable energy is unavailable.
+This disentangles the influence of capacity on charging hysteresis.
+For sensors that intermittenly sleep instead of powering off, deep
+sleep power becomes analogous to leakage power, and hysteresis management techniques
 will not improve recharge times.
 
-For all systems, these techniques can decrease cold start time
-by reducing the capacity that must be charged
-to achieve cold start.
-
-This is more beneficial for systems that cold start frequently and
-have a higher energy capacity, however,
-a higher-capacity energy store also has a lower probability of
-needing to cold start. Therefore the benefits of hysteresis management for
-cold start with respect to storage capacity are in conflict with their necessity,
-and we do not attempt to quantify these subtle nuances in \cref{fig:intuition:framework}.
 
 \subsection{Framework Limitations}
 \label{sec:framework:limitations}
