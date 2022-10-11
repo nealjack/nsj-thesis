@@ -99,11 +99,16 @@ t= plt.text(0.1,0.23,'Hysteresis management less helpful',multialignment='center
 #t.set_bbox(dict(facecolor='#9f9f9f', alpha=0.5, edgecolor=None,linewidth=0,pad=0.1))
 #plt.text(0.33,0.6,'Checkpointing not required\nHysteresis management marginally helpful',multialignment='center',zorder=2000)
 plt.text(0.68,0.45,'State retention\nnot required',multialignment='center',zorder=2000)
+art = plt.plot([-0.007, 0.007],[0.1,0.1],color='black',linewidth=1)
+art[0].set_clip_on(False)
+
+plt.plot([0.8, 0.8],[0.2,0],color='black',linewidth=0.5,linestyle='--')
+art = plt.plot([0.8, 0.8],[-0.007,0.007],color='black',linewidth=1)
+art[0].set_clip_on(False)
+plt.text(0.775,-0.13,'sufficient\ncapacity\nto sleep',multialignment='center',fontsize=10)
 
 #hysterysis management 2
-#plt.plot([0.0476, 1],[0.1,0.1],color='black',linewidth=0.5)
-#plt.plot([0, 0.0476],[0.1,0.1],color='black',linewidth=0.5,linestyle='--')
-path = Path([[0.05,0.2],[0.05,0.3],[1,0.3],[1,0.2]])
+path = Path([[0.05,0.2],[0.05,0.3],[.5,0.3],[0.8,0.2]])
 patch = PathPatch(path, facecolor='none',edgecolor='none')
 ax.add_patch(patch)
 Z = np.zeros((300,1000))
@@ -115,7 +120,7 @@ cm = LinearSegmentedColormap.from_list('cm',colors)
 my_cmap = cm(np.arange(cm.N))
 my_cmap[:,-1] = np.linspace(0, 0.5, cm.N)
 my_cmap = ListedColormap(my_cmap)
-im = plt.imshow(Z, interpolation='bilinear', origin='lower', cmap=my_cmap, clip_path=patch, clip_on=True, aspect='auto',extent=[0.026,1,0.2,0.3],zorder=1000)
+im = plt.imshow(Z, interpolation='bilinear', origin='lower', cmap=my_cmap, clip_path=patch, clip_on=True, aspect='auto',extent=[0.026,0.8,0.2,0.3],zorder=1000)
 #im.set_clip_path(patch)
 
 #plt.fill([0.0476,0.0266,1,1],[0.1,0.4,0.4,0.1],color=t10[purple],alpha=0.5,linewidth=0)
