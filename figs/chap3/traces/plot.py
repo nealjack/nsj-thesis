@@ -55,6 +55,6 @@ for fname, ax in zip(sorted(traces), [x for sl in axes for x in sl]):
     #ax.set_ylabel('µW/cm^2')
     #ax.set_xlabel('day')
 
-fig.supxlabel('day')
-fig.supylabel('irradiance', x=0.08)
+fig.supxlabel('time (days)')
+fig.supylabel('irradiance', x=0.09)
 fig.savefig('traces.pdf', bbox_inches="tight")
