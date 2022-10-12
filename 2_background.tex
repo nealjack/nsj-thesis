@@ -12,7 +12,7 @@
 %%This chapter defines common wireless sensor power supply design archetypes, and situates these archetypes within a deconstructed view of the application landscape.
 
 \section{Batteryless Sensing}
-
+\label{sec:background:batteryless}
 The batteryless, or intermittent, wireless sensor movement has abandoned batteries (both rechargeable and non-rechargeable) under the assumption that current battery technology has too many detracting qualities to be suitable for energy-harvesting wireless sensor storage.
 Most notably, they argue that batteries provide insufficient lifetimes to build long-lasting deployments~\cite{hesterTragedy15, hesterFlicker17, hesterTimely17, hester2017future, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, majid2020continuous}.
 Batteryless systems instead utilize capacitors, some types of which offer functionally infinite lifetimes~\cite{kemetLife}.
@@ -60,7 +60,7 @@ The next sections discuss various system designs, tools, and software and hardwa
 %Due to this reality, researchers have spent the past decade
 %designing more predictable and usable batteryless systems. This has resulted in several different hardware and software design methods and techniques for intermittent systems.
 
-\subsection{Forward Progress and State Preservation}
+\subsection{Forward Progress and State Retention}
 The type and amount of work that is possible within the energy envelope of a single discharge cycle of capacitor or supercapacitor buffer is extremely limited.
 %Applications and devices that employ a one-shot technique are
 Batteryless systems are generally only able to perform a few seconds or less of computation, or send a single packet before depleting their capacitor storage and powering off, even with modestly sized supercapacitors.
@@ -88,7 +88,7 @@ ensuring forward progress across system reboots to enable longer and more comple
 One method of enabling forward progress is checkpointing,
 where important volatile state is saved at predetermined and run time locations in code before a power outage, and restored upon rebooting. Many methods have been proposed, using both static and dynamic methods.
 Mementos~\cite{ransford2012mementos} utilizes a modified LLVM compiler, as well as a run-time library, to automatically place checkpointing triggers within a program. During run-time, at these trigger points, Mementos measures the system voltage, and if low enough, portions of volatile RAM state are written into non-volatile flash before turning off.
-The introduction of new non-volatile technologies like Ferroelectric RAM (FRAM) allows more energy and time efficient checkpointing, while simultaneously simplifying the state preservation logic.
+The introduction of new non-volatile technologies like Ferroelectric RAM (FRAM) allows more energy and time efficient checkpointing, while simultaneously simplifying the state retention logic.
 Hibernus~\cite{balsamo2014hibernus} does not use predefined trigger points, and instead utilizes a hardware interrupt to detect a low system voltage threshold, and immediately copies volatile state to FRAM. This state is subsequently restored on a rising voltage interrupt.
 Checkpointing is an effective method for enabling forward progress, however software development with checkpointing can be very difficult to develop and debug, and can become prohibitively expensive in non-volatile state, time, and energy as volatile state increases.
 %improving the programmming and debugging experience for batteryless programmers.
