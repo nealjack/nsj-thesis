@@ -615,6 +615,11 @@ This is a conservative assumption, as it is usually beneficial to tailor the wor
 This provides a margin to ensure performance even if energy income is worse than expected. However, for this analysis a conservative estimate is ideal.
 Thus, we are essentially sweeping two variables: average power and capacity.
 
+\placefigure{fig:intuition:capacity_sweep}
+
+
+\placefigure{fig:intuition:required_capacity}
+
 %    How to express size of secondary mathematically?
 %    Energy capacity represents a moving capped sum, is this like a moving average? What is the smallest window that gives us the most return on energy capture?
 %    At some point, a large enough window allows us to consider the average of harvestable energy, instead of the actual distribution. What is that size?
@@ -820,4 +825,12 @@ Thus, we are essentially sweeping two variables: average power and capacity.
 
 \begin{definefigure}{fig:intuition:capacity_sweep}
     \centering
+    \includegraphics[width=\columnwidth]{figs/chap3/percent_v_capacity_50uW.pdf}
+    \caption{blah}
+\end{definefigure}
+
+\begin{definefigure}{fig:intuition:required_capacity}
+    \centering
+    \includegraphics[width=\columnwidth]{figs/chap3/required_capacity.pdf}
+    \caption{blah2}
 \end{definefigure}
