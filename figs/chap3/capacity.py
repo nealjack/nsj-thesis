@@ -140,15 +140,20 @@ print(df)
 #ax.legend()
 #fig.savefig("percent_workload")
 
-fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
-dfi = df[df["income"] >= 1e-04]
-dfi = dfi.sort_values(["capacity", "type"])
-for typ in traces:
-    dfi_type_slice = dfi[dfi["type"] == typ]
-    ax.plot(dfi_type_slice["capacity"], dfi_type_slice["actual_avg_vs_work"], label=typ)
-ax.set_xscale("log")
-ax.legend()
-fig.savefig("percent_v_capacity_100uA.pdf", bbox_inches='tight')
+for ind in range(0, len(amplitudes)):
+    fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
+    dfi = df[df["income_index"] == ind]
+    dfi = dfi.sort_values(["capacity", "type"])
+    print(ind, dfi["income"].iloc[0])
+    for typ in traces:
+        dfi_type_slice = dfi[dfi["type"] == typ]
+        ax.plot(dfi_type_slice["capacity"] / 3600 * 1E3, dfi_type_slice["actual_avg_vs_work"], label=typ)
+    ax.set_xscale("log")
+    ax.set_xlabel("Capacity (mWh)")
+    ax.set_ylabel("Percent Energy Captured (%)")
+    ax.legend()
+    fig.savefig("percent_v_capacity_" + str(ind) + ".pdf", bbox_inches='tight')
+    plt.close()
 
 fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
 
@@ -161,30 +166,28 @@ for typ in traces:
     income_v_sufficient_capacity[typ] = []
 for ind in range(0, len(amplitudes)):
     dfd_slice = dfd[dfd["income_index"] == ind]
-    print(dfd_slice)
     income = dfd_slice.iloc[0]["income"]
-    print(ind, income)
 
-    print(traces)
     for typ in traces:
         dfd_slice_type = dfd_slice[dfd_slice["type"]==typ]
         first_sufficient = dfd_slice_type[dfd_slice_type["actual_avg_vs_work"] >= 1]
         first_sufficient = first_sufficient.iloc[0]["capacity"]
         income_v_sufficient_capacity[typ].append([amplitudes[ind], first_sufficient])
-
+ivsc = pd.DataFrame(income_v_sufficient_capacity)
+print(ivsc)
 for x in income_v_sufficient_capacity:
     income_v_sufficient_capacity[x] = np.array(income_v_sufficient_capacity[x])
-    ax.scatter(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1], label=x)
+    ax.plot(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1] / 3600 * 1E3, label=x)
 
     p = np.polyfit(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1], 1)
     print(x, p)
 
 ax.set_xlabel("Workload/Income Power (W)")
-ax.set_ylabel("Minimum Sufficient Capacity (J)")
-#ax.set_xscale("log")
-#ax.set_yscale("log")
-ax.legend()
-fig.savefig("required_capacity", bbox_inches='tight')
+ax.set_ylabel("Minimum Sufficient Capacity (mWh)")
+ax.set_xscale("log")
+ax.set_yscale("log")
+#ax.legend(loc="lower right")
+fig.savefig("required_capacity.pdf", bbox_inches='tight')
 
 
 exit()
