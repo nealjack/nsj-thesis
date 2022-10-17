@@ -5,80 +5,85 @@ import math
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from glob import glob
 from matplotlib.legend import Legend
 from matplotlib.lines import Line2D
 from multiprocessing import Pool
 
 plt.rcParams["font.family"] = "Arial"
 plt.rcParams["font.size"] = "14"
-plt.rcParams["xtick.major.width"] = "1"
-plt.rcParams["xtick.major.size"]  = "6"
-plt.rcParams["xtick.minor.width"] = "0.8"
-plt.rcParams["xtick.minor.size"] = "4"
-plt.rcParams["ytick.major.width"] = "1"
-plt.rcParams["ytick.major.size"] = "6"
-plt.rcParams["ytick.minor.width"] = "0.8"
-plt.rcParams["ytick.minor.size"] = "4"
+#plt.rcParams["xtick.major.width"] = "0.5"
+#plt.rcParams["xtick.major.size"]  = "6"
+#plt.rcParams["xtick.minor.width"] = "0.8"
+#plt.rcParams["xtick.minor.size"] = "4"
+#plt.rcParams["ytick.major.width"] = "1"
+#plt.rcParams["ytick.major.size"] = "6"
+#plt.rcParams["ytick.minor.width"] = "0.8"
+#plt.rcParams["ytick.minor.size"] = "4"
 plt.rcParams["grid.linewidth"] = "1"
 
 SECONDS_IN_DAY = 60*60*24
 SECONDS_IN_YEAR = 60*60*24*365
 DAYS_TO_MODEL = 365
 
-b = 2*math.pi / SECONDS_IN_DAY
-a = np.logspace(-6, -4, 10) #np.array([x * 1E-6 for x in range(10, 101, 10)])
-seconds = np.array(range(0, DAYS_TO_MODEL * SECONDS_IN_DAY))
-disparity = [1]#np.array([x/10 for x in range(2,12,2)])
-capacity = np.logspace(-3, 3, num=100)
-print(len(capacity), len(a), len(disparity))
+trace_fnames = glob('traces/*.npy')
+trace_fnames.sort()
+trace_fnames = trace_fnames[:-2]
+traces = {}
 
-sine = np.sin(b * seconds + 3/2 * math.pi)
-sine_funcs = np.dot(a.reshape((len(a), 1)), sine.reshape((1, len(sine))))
-for row, value in zip(sine_funcs, a):
-    row += value
-season_sine = np.sin(2*math.pi / SECONDS_IN_YEAR * seconds) + 1
-sine_funcs_season = sine_funcs * season_sine
+#b = 2*math.pi / SECONDS_IN_DAY
+amplitudes = np.logspace(-6, -4, 50) #np.array([x * 1E-6 for x in range(10, 101, 10)])
+print(amplitudes)
+#seconds = np.array(range(0, DAYS_TO_MODEL * SECONDS_IN_DAY))
+disparities = [1]#np.array([x/10 for x in range(2,12,2)])
+capacities = np.logspace(-3, 3, num=100)
 
-random_funcs = []
-np.random.seed(42)
-for value in a:
-    random_funcs.append(np.abs(np.random.normal(value, value/2, len(seconds))))
-random_funcs = np.array(random_funcs)
+#print(len(capacity), len(a), len(disparity))
+#
+#sine = np.sin(b * seconds + 3/2 * math.pi)
+#sine_funcs = np.dot(a.reshape((len(a), 1)), sine.reshape((1, len(sine))))
+#for row, value in zip(sine_funcs, a):
+#    row += value
+#season_sine = np.sin(2*math.pi / SECONDS_IN_YEAR * seconds) + 1
+#sine_funcs_season = sine_funcs * season_sine
 
-def run(a_i, a, d, c, typ):
-    e = np.zeros(seconds.shape)
+def load_trace(fname):
+    a = np.load(fname)[1:]
+    # scale mean to 1
+    a = a / np.mean(a)
+    times = [30*x for x in range(len(a))]
+    newtimes = [x for x in range(times[-1])]
+    b = np.interp(newtimes, times, a)
+    return (fname.split('.')[0].split('/')[-1], b)
+
+def run(a_i, amplitude, disparity, capacity, trace_name):
     # model income as sinusoid with day period and shifted to be positive
-    if typ == "season":
-        income = sine_funcs_season[a_i]
-    elif typ == "diurnal":
-        income = sine_funcs[a_i]
-    else:
-        print("No valid type")
-        exit()
-    actual_work = np.zeros(seconds.shape)
-    w = a * d
-    print("settings: ", w, a, c)
+    trace = traces[trace_name]
+    e = np.zeros(trace.shape)
+    income = trace * amplitude
+    actual_capture = np.zeros(trace.shape)
+    workload = amplitude * disparity
+    print("settings: ", workload, amplitude, capacity)
 
 
     for ind, i in enumerate(income):
         if ind == 0:
-            e[ind] = i - w
+            e[ind] = i - workload
         else:
-            e[ind] = e[ind-1] + i - w
+            e[ind] = e[ind-1] + i - workload
 
-        actual_work[ind] = w
+        actual_capture[ind] = i
 
-        if e[ind] > c:
-            e[ind] = c
+        if e[ind] >= capacity:
+            actual_capture[ind] = capacity - e[ind-1]
+            e[ind] = capacity
         elif e[ind] < 0:
             e[ind] = 0
-            actual_work[ind] = 0
 
     total = np.sum(income)
-    actual = np.sum(actual_work)
+    actual = np.sum(actual_capture)
 
-    result = {"income": a, "income_index": a_i, "disparity": d, "capacity": c, "workload": w, "total": total, "actual": actual, "actual_avg": actual/(DAYS_TO_MODEL*SECONDS_IN_DAY), "type": typ}
-
+    result = {"income": amplitude, "income_index": a_i, "disparity": disparity, "capacity": capacity, "workload": workload, "total": total, "actual": actual, "actual_avg": actual/(len(trace)), "type": trace_name}
     return result
 
 #amp = a[4]
@@ -88,36 +93,36 @@ def run(a_i, a, d, c, typ):
 #    print(r['actual_avg'] / r['workload'])
 #
 #exit()
-
-if not os.path.isfile("capacity_season.csv") and not os.path.isfile("capacity_diurnal.csv"):
-
+results = {}
+results_fnames = glob('*capacity.csv')
+results_fnames.sort()
+print(trace_fnames)
+print(results_fnames)
+if len(results_fnames) < len(trace_fnames):
     with Pool() as pool:
-        season_execute_list = [(i, a[i], y, z, "season") for i,_ in enumerate(a) for y in disparity for z in capacity]
-        diurnal_execute_list = [(i, a[i], y, z, "diurnal") for i,_ in enumerate(a) for y in disparity for z in capacity]
-        season_results = list(pool.starmap(run, season_execute_list))
-        diurnal_results = list(pool.starmap(run, diurnal_execute_list))
-        print("Done")
-    df_season = pd.DataFrame(season_results)
-    df_season.to_csv("capacity_season.csv")
-    df_diurnal = pd.DataFrame(diurnal_results)
-    df_diurnal.to_csv("capacity_diurnal.csv")
+        loaded_data = pool.map(load_trace, trace_fnames)
+        for d in loaded_data:
+            traces[d[0]] = d[1]
+
+    with Pool(processes=10) as pool:
+        for trace in traces:
+            print(trace)
+            execute_list = [(i, amplitudes[i], y, z, trace) for i,_ in enumerate(amplitudes) for y in disparities for z in capacities]
+            result = list(pool.starmap(run, execute_list))
+            print("Done")
+            df = pd.DataFrame(result)
+            df.to_csv(trace + "_capacity.csv")
+            results[trace] = df
 
 else:
-    df_season = pd.read_csv("capacity_season.csv")
-    df_diurnal = pd.read_csv("capacity_diurnal.csv")
+    for fname in results_fnames:
+        trace = fname.split('_')[0]
+        traces[trace] = []
+        results[trace] = pd.read_csv(fname)
 
-if "type" not in df_season:
-    df_season["type"] = ["season"] * len(df_season)
-    df_season.to_csv("capacity_season.csv")
-    print(df_season)
-if "type" not in df_diurnal:
-    df_diurnal["type"] = ["diurnal"] * len(df_diurnal)
-    df_diurnal.to_csv("capacity_diurnal.csv")
-    print(df_diurnal)
-
-frames = [df_season, df_diurnal]
-df = pd.concat(frames)
-
+df = pd.concat(results.values())
+df["actual_avg_vs_work"] = df["actual_avg"] / df["workload"]
+print(df)
 #fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
 #for i in df.income.unique():
 #    dfi = df[df["income"] == i]
@@ -136,30 +141,40 @@ df = pd.concat(frames)
 #fig.savefig("percent_workload")
 
 fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
+dfi = df[df["income"] >= 1e-04]
+dfi = dfi.sort_values(["capacity", "type"])
+for typ in traces:
+    dfi_type_slice = dfi[dfi["type"] == typ]
+    ax.plot(dfi_type_slice["capacity"], dfi_type_slice["actual_avg_vs_work"], label=typ)
+ax.set_xscale("log")
+ax.legend()
+fig.savefig("percent_v_capacity_100uA.pdf", bbox_inches='tight')
 
-df["actual_avg_vs_work"] = df["actual_avg"] / df["workload"]
+fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
+
 dfd = df[df["disparity"] == 1.0]
-dfd = dfd.sort_values(["capacity", "income_index"])
+dfd = dfd.sort_values(["capacity", "income_index", "type"])
 print(dfd)
+
 income_v_sufficient_capacity = {}
-for typ in ["diurnal", "season"]:
+for typ in traces:
     income_v_sufficient_capacity[typ] = []
-for ind in range(0, len(a)):
+for ind in range(0, len(amplitudes)):
     dfd_slice = dfd[dfd["income_index"] == ind]
+    print(dfd_slice)
     income = dfd_slice.iloc[0]["income"]
     print(ind, income)
 
-    for typ in ["diurnal", "season"]:
+    print(traces)
+    for typ in traces:
         dfd_slice_type = dfd_slice[dfd_slice["type"]==typ]
-        first_sufficient = dfd_slice_type[dfd_slice_type["actual_avg_vs_work"] > 0.9]
+        first_sufficient = dfd_slice_type[dfd_slice_type["actual_avg_vs_work"] >= 1]
         first_sufficient = first_sufficient.iloc[0]["capacity"]
-        income_v_sufficient_capacity[typ].append([a[ind], first_sufficient])
+        income_v_sufficient_capacity[typ].append([amplitudes[ind], first_sufficient])
 
 for x in income_v_sufficient_capacity:
-    print(x)
     income_v_sufficient_capacity[x] = np.array(income_v_sufficient_capacity[x])
-    print(income_v_sufficient_capacity[x])
-    ax.plot(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1], label=x)
+    ax.scatter(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1], label=x)
 
     p = np.polyfit(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1], 1)
     print(x, p)
@@ -168,6 +183,7 @@ ax.set_xlabel("Workload/Income Power (W)")
 ax.set_ylabel("Minimum Sufficient Capacity (J)")
 #ax.set_xscale("log")
 #ax.set_yscale("log")
+ax.legend()
 fig.savefig("required_capacity", bbox_inches='tight')
 
 
