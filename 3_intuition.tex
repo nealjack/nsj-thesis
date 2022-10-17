@@ -1,4 +1,4 @@
-\chapter{Design Intuition for Wireless Sensor Power Supplies}
+\chapter{Intuition for Wireless Sensor Power Supply Design}
 \label{chap:intuition}
 
 %There is a rift between industry and research in the way that indoor wireless sensors are powered. Industry has largely eschewed energy harvesting methods, opting instead for the reliability offered by high-density non-rechargeable batteries. 
@@ -15,8 +15,22 @@ This chapter seeks to formalize the the application requirements that were discu
 Using these requirements, this chapter provides guidance to designers for when energy harvesting is a beneficial technique for energy income instead of, or in addition to, a non-rechargeable storage, how prospective income and workloads drive component types and sizing, and if energy-harvesting is utilized, what techniques are required to ensure a minimum useful operation or what is required to capture sufficient energy to maximize system availability. 
 To limit scope to a manageable size, 
 this chapter, along with the those following, focus exclusively on indoor photovoltaic energy harvesting.
-This is because in the conditions of the majority of human-occupied indoor locations, photovoltaic harvesting offers an order of magnitude more energy than other methods.
-Despite this focus, similar explorations can be made with other harvesting methods.
+%This is because in the conditions of the majority of human-occupied indoor locations, photovoltaic harvesting offers an order of magnitude more energy than other methods.
+%Despite this focus, similar explorations can be made with other harvesting methods.
+Occupied indoor environments are the focus of a significant
+amount of
+prior work, 
+and for good reason: most
+applications aim to improve the lives of people and are necessarily present
+in the spaces they occupy~\cite{hesterTimely17,hesterFlicker17,colinReconfigurable18,campbellEnergy14} \hl{TODO better cites}.
+%Even the example applications of intermittent, energy harvesting systems are nearly all centered around monitoring
+%indoor and human-centric phenomena
+Indoor environments are lit by both natural and artificial light, 
+and may occasionally get direct or indirect sunlight. 
+Under these conditions, photovoltaic harvesting still offers an order of magnitude more energy than other methods.
+However, indoor environments still present a significantly more challenging and low power design space compared to the outdoor ones. 
+The decision to focus on indoor photovoltaic harvesting does not mean that the conclusions drawn are not applicable to other
+environments and harvesting methods, however design details may differ. 
 
 \section{Energy Income}
 \label{sec:intuition:energy_income}
@@ -41,7 +55,7 @@ If the nominal voltage of the battery is known, it can be used to estimate lifet
    E_b = U C
 \end{equation}
 \begin{equation} \label{eqn:intuition:power_battery_estimation}
-   P_b = \frac{U C}{T} 
+   \bar{P_b} = \frac{U C}{T} 
 \end{equation}
 %\begin{equation}
 %   T \approx \frac{U*C}{P_{w}}
@@ -53,22 +67,22 @@ Assuming a desired lifetime $T$, \cref{eqn:intuition:power_battery_estimation} d
 Likewise, the average power provided by a photovoltaic of area $A$ is described by \cref{eqn:intuition:p_power}. 
 
 \begin{equation} \label{eqn:intuition:p_power}
-P_h = \eta E_e A 
+\bar{P_h} = \eta \bar{E_e} A 
 \end{equation}
 
 \noindent 
 Where 
 $\eta$ denotes the efficiency of the photovoltaic, and is often between 18 and 20\%. 
-The average energetic spectrial irradiance, $E_e$, is generally between 10 and 100\si{\micro\watt\per\centi\meter\squared} for photovoltaics in indoor conditions~\cite{yervaGrafting12,gorlatova2013networking}. 
-Given an average workload power ($P_w$) and a desired lifetime $T$, 
+The average energetic spectral irradiance, $\bar{E_e}$, is generally between 10 and 100\si{\micro\watt\per\centi\meter\squared} for photovoltaics in indoor conditions~\cite{yervaGrafting12,gorlatova2013networking}. 
+Given an average workload power ($\bar{P_w}$) and a desired lifetime $T$, 
 \cref{eqn:intuition:battery_capacity,eqn:intuition:panel_size}
 describe the necessary battery capacity and solar cell size.
 
 \begin{equation} \label{eqn:intuition:battery_capacity}
-    C \geq \frac{P_w T}{U}
+    C \geq \frac{\bar{P_w} T}{U}
 \end{equation}
 \begin{equation} \label{eqn:intuition:panel_size}
-    A \geq \frac{\eta E_e}{P_w}
+    A \geq \frac{\eta \bar{E_e}}{\bar{P_w}}
 \end{equation}
 
 For some applications, it is obvious when utilizing energy harvesting is a better design choice over a battery. 
@@ -93,13 +107,13 @@ For this analysis, \cref{eqn:intuition:energy_battery_estimation} is not as usef
 %for comparing battery energy capacity with photovoltaic energy capture.
 A more appropriate method utilizes volumetric energy density.
 Battery energy capacity ($E_b$) can be estimated based on the volume of the battery ($V$) and its volumetric energy density ($\rho$).
-While $\rho$ varies depending on the specific battery chemistry, size, and packaging, lithium primary batteries usually provide on the order of 800\si[per-mode=symbol]{\milli\Wh\per\cm\cubed}~\cite{tuna2016energy}. The maximum average power ($P_b$) provided by the battery can be calculated with a desired lifetime ($T$). 
+While $\rho$ varies depending on the specific battery chemistry, size, and packaging, lithium primary batteries usually provide on the order of 800\si[per-mode=symbol]{\milli\Wh\per\cm\cubed}~\cite{tuna2016energy}. The maximum average power ($\bar{P_b}$) provided by the battery can be calculated with a desired lifetime ($T$). 
 
 \begin{equation} \label{eqn:intuition:b_energy}
 E_b = \rho V 
 \end{equation}
 \begin{equation} \label{eqn:intuition:b_power}
-P_b = \frac{\rho V}{T}
+\bar{P_b} = \frac{\rho V}{T}
 \end{equation}
 %The volume of a sensor occupying a rectangular prism of dimensions $L$ length, $W$ width, and $H$ height is given by the following equation.
 %
@@ -134,10 +148,10 @@ A more accurate estimation for battery lifetime is:
 
 \begin{equation}
 \label{eq:intuition:battery_life}
-T = \frac{\rho L^3}{P_w + P_l}
+T = \frac{\rho L^3}{\bar{P_w} + P_l}
 \end{equation}
 
-\noindent Where $P_w$ is the average power required to drive a sensor workload, and $P_l$ is the self-discharge power of the battery. 
+\noindent Where $\bar{P_w}$ is the average power required to drive a sensor workload, and $P_l$ is the self-discharge power of the battery. 
 Any aging effects other than self-discharge are unpredictable and not considered here. 
 With this new definition of battery lifetime, the comparison of power is not as useful a metric, as workload power provided by the battery ($P_w$) is independent of the battery capacity. 
 The power provided by a battery \textit{is} technically limited by its maximum rated load current, which is often related to its capacity. 
@@ -150,7 +164,7 @@ This analysis assumes a conservative photovoltaic efficiency of 17\%.
 \Cref{eqn:intuition:p_power,eqn:intuition:p_energy} are more realistic representations of photovoltaic power and energy. 
 
 \begin{equation} \label{eqn:intuition:p_energy}
-E_h = \eta E_e A T 
+E_h = \eta \bar{E_e} A T 
 \end{equation}
 
 
@@ -192,14 +206,14 @@ If the average power supplied by a photovoltaic harvester is sufficient to drive
 If the photovoltaic does not harvest sufficient power for the workload, the battery is drained at an average rate of the difference, plus the battery self-discharge.
 Given this new definition of battery drain power, the lifetime of its battery now resembles \cref{eqn:intuition:compound}.
 \begin{equation} \label{eqn:intuition:p_total}
-    P_t = 
+    \bar{P_t} = 
     \begin{cases}
-        P_l & \text{if $P_w < P_h$} \\
-        P_w - P_h + P_l & \text{if $P_w \geq P_h$}
+        P_l & \text{if $\bar{P_w} < \bar{P_h}$} \\
+        \bar{P_w} - \bar{P_h} + P_l & \text{if $\bar{P_w} \geq \bar{P_h}$}
     \end{cases}
 \end{equation}
 \begin{equation} \label{eqn:intuition:compound}
-T = \frac{\rho L^3}{P_t}
+T = \frac{\rho L^3}{\bar{P_t}}
 \end{equation}
 If the amount of average harvestable power is greater than required for a sensor workload, the lifetime of a hybrid system is compounded. 
 The additional energy captured lengthens the lifetime of the system, and the longer lifetime allows for additional energy capture. 
@@ -214,7 +228,7 @@ This ideal sizing results in a harvester large enough to capture enough average 
 \subsection{Limitations}
 
 The above analysis is a simplified view of a complex reality.
-The analysis assumes that a sensors workload and income can be treated as static averages.
+The analysis assumes that a sensor's workload and income can be treated as static averages.
 While a case can be made that on a timescale of hours to days, for many applications a sensor's workload power can be consolidated into an average. 
 The same assumption can not easily be made for energy income.
 For example, lighting conditions are often both diurnal and seasonal, meaning that a daily or even weekly average income from a photovoltaic will vary significantly over the course of a day or year depending on the angle and intensity of sunlight, or the occupancy and activation of artificial lighting.
@@ -273,6 +287,334 @@ Despite these limitations, the analysis of this chapter has enough basis to serv
 %    
 %    $E_{secondary} > E_{atomic}$
 %    
+%    
+%\item How does the average power requirements compare to available harvestable power? 
+%    
+%    Energy neutrality:
+%    
+%    $P_{h} \ge P_{avg}$ 
+%    
+%\item What are the reliability requirements?
+%\item What are the latency requirements?
+%\end{enumerate}
+
+
+\section{Harvesting Feasibility and Intermittent Reliance}
+\label{sec:intuition:feasibility}
+From the previous section, it is obvious that the availability and magnitude of harvestable energy directly impacts the energy income of an energy harvesting system.
+%This energy income has a direct impact on the performance of an energy harvesting system.
+Income limits which and how many operations it can complete and how fast or frequently it can complete them. 
+What is perhaps not as obvious is that the rechargeable energy capacity used to capture harvested energy also impacts the overall energy income and ultimately the operation of the system.
+The availability and magnitude of harvested power, the size of an energy buffer, and the intended sensor workload determine whether a design is minimally feasible, and if so, whether the design will be reliant on software or hardware intermittent techniques to ensure proper operation.
+The necessity of the techniques mentioned in \cref{sec:background:batteryless} depend solely on the energy income of a system and how it relates to the design's efficiency when idle as well as its energy capacity. 
+This section seeks to illustrate the relationship of income and storage on the resultant sensor operating regimes.
+
+%Depending on the design point, a design can offer minimal feasibility, 
+%We seek to illustrate the design space for energy-harvesting sensors in two
+%ways. The first defines an energy-harvesting sensor framework to examine
+%when designs are feasible and when they require intermittent techniques to make meaningful forward progress.
+%The second examines dynamic income energy and device behavior through numerical
+%modeling and simulation.  The framework is based on three key metrics:
+%harvested energy income, workload, and capacity.
+\placefigure{fig:intuition:framework}
+
+\subsection{Design Regimes}
+\label{sec:framework:regime}
+\Cref{fig:intuition:framework} represents an illustration of a wireless sensor design framework.
+This framework splits the design space into four main regimes: \textbf{Always on},
+\textbf{Infeasible}, \textbf{State retention required}, and \textbf{State retention not required}.
+Additionally, the figure illustrates the conditions in which hysteresis management techniques are helpful or less helpful.
+The following sections describe these regimes and their constraints in more detail. 
+
+\subsubsection{Always On} 
+If the energy harvester reliably supplies a sensor with
+more power than the maximum instantaneous power it will ever draw, then the power supply does not need significant
+energy capacity to remain operational. 
+This design point constraint is defined by \cref{eqn:intuition:always_on}.
+\begin{equation}
+    \label{eqn:intuition:always_on}
+    \max P_w \leq \bar{P_h}
+\end{equation}
+Where $\max P_w$ represents the maximum instantaneous power required by a sensor workload, and $\bar{P_h}$ is the average harvesting income. Additionally, $P_h$ must also have minimum variance ($\mathrm{Var}(P_h) \approx 0$), on the order of normal power ripples handled by power supply bypass capacitors.
+If the harvesting power has significant variance or frequent outages, 
+then a sensor must have some ability to buffer energy to use when its
+instantaneous operating power exceeds that of the harvester input power.
+This green region of \cref{fig:intuition:framework} represents design points that have sufficient income power to be \textbf{Always on}.
+
+\subsubsection{Infeasible} 
+If the energy harvester supplies less average power than
+the system self discharge and leakage, the system will very infrequently be able to charge its energy buffer.
+Leakage can exist in a system via component quiescent currents, energy storage self-discharge, and parasitic current paths that are not eliminated when the system is powered off. 
+The constraint on minimum harvesting income and system leakage is described by \cref{eqn:intuition:leakage}.
+\begin{equation}
+    \label{eqn:intuition:leakage}
+    \bar{P_h} > P_l
+\end{equation}
+Where $\P_l$ is the total average system leakage in a powered off state.
+Similarly, if the energy buffer capacity is less than the
+energy required to perform a workload's largest atomic operation, 
+%with energy harvested
+%during the operation itself, 
+then that operation will not have enough energy to
+complete.
+The total energy required for a sensor to complete an iteration of its workload can be represented by a the finite multiset of the energy required for $n$ atomic operations. This multiset is described by $X$ in \cref{eqn:intuition:atomic_set}%that are executed periodically or in response to an event. 
+%The energy required to perform one iteration of a workload is the sum of the energy required for each of the $n$ individual atomic operations that make up the workload task.
+%The sum of $E_{a}$ represents the amount of energy required for one iteration of a workload $E_w$, described by 
+%\cref{eqn:intuition:workload_sum}.
+\begin{equation} \label{eqn:intuition:atomic_set}
+    X = \{e_i\}_{i=0}^n 
+\end{equation}
+Each individual $e_{i}$ represents the energy required for a single atomic operation such as sampling a sensor,
+sending a radio packet, a processor power on reset, and performing a checkpoint.
+The energy capacity ($E_{capacity}$) of a system must be equal to or greater than the largest atomic operation ($\max X$). 
+This constraint is described by  \cref{eqn:intuition:atomic}.
+\begin{equation}
+    \label{eqn:intuition:atomic}
+    E_{capacity} \geq \max X
+\end{equation}
+Designs that do not satisfy this the constraints of \cref{eqn:intuition:leakage,eqn:intuition:atomic} have insufficient income to ever power on, or have insufficient energy capacity to perform a necessary operation and are  
+therefore infeasible.
+The red regions of \cref{fig:intuition:framework} represent design points that are \textbf{Infeasible}. 
+
+\subsubsection{State Retention Required}
+If the energy capacity of the energy buffer 
+is sufficient to perform the largest atomic operation as in \cref{eqn:intuition:atomic}, but
+not enough to complete
+the entire multiset of atomic operations in the workload, $E$,
+then a mechanism for state preservation is required to ensure forward progress over power loss and reboots.
+A design requires state preservation techniques if \cref{eqn:intuition:checkpointing} is satisfied.
+\begin{equation}
+    \label{eqn:intuition:checkpointing}
+    \max X \leq E_{capacity} < \sum_{e \in X} e
+\end{equation}
+In \cref{fig:intuition:framework} the blue region labelled \textbf{State retention required} encompasses designs that satisfy \cref{eqn:intuition:checkpointing} and require state retention techniques to ensure proper operation.  
+%composed of multiple, chained
+%atomic operations (such as sampling a sensor and then sending a radio packet), then
+%a mechanism for saving state and continuing progress on the next reboot
+%must be employed.
+%\begin{equation} \label{eqn:intuition:workload_sum}
+%    E_w = \sum_{i=0}^{n} e_{i} \in E_a
+%\end{equation}
+
+\subsubsection{No State Retention Required} 
+A sensor that has a large enough energy buffer to support all of the atomic operations of its workload, and has sufficient harvesting capability to charge this buffer does not require state retention methods. All of its workload can be completed with a full energy storage element, without requiring a reboot and recharge.
+This constraint is defined by \cref{eqn:intuition:no_checkpoint}.
+\begin{equation}
+    \label{eqn:intuition:no_checkpoint}
+    E_{capacity} \geq \sum_{e \in X} e 
+\end{equation}
+Systems satisfying \cref{eqn:intuition:no_checkpoint} exist in the white region of \cref{fig:intuition:framework}.
+In this region, systems can avoid the complexity of state retention software frameworks, and the energy that would previously be devoted to performing checkpoints or writing and restoring data to non-volatile memory can be used toward the workload instead. 
+However, a system that satisfies \cref{eqn:intuition:no_checkpoint} may still experience intermittent operation depending on the variability of its energy income and size of its storage. Such systems would occupy the white region of \cref{fig:intuition:framework} labeled \textbf{State retention not required}.
+
+\subsubsection{Hysteresis Management}
+Hysteresis management is useful for sensors that frequently reboot and must cold start, recharging their storage element from, or close to, empty. 
+These techniques are particularly beneficial for frequently restarting systems that have large energy buffers that require significant charge and time to provide a sufficient and stable system voltage. 
+Often, intermittent and batteryless systems are designed to turn off when there is no harvestable energy. Because of this, they have not optimized the power required to maintain a low power, state retaining mode. 
+Under these conditions, hysteresis management techniques,
+such as reconfigurable capacity~\cite{colinReconfigurable18} and federated energy~\cite{hesterFlicker17} can decrease the time and energy required to cold start, increasing sensor
+performance.
+These methods can decrease cold start time
+by reducing the capacity that must be charged to achieve a cold start and partial system restart.
+
+While a system's cold start length and frequency are not well represented within the metrics considered by \cref{fig:intuition:framework}, 
+the constraints between a design's deep sleep power, energy income, and energy capacity are. 
+A design with average harvestable income ($\bar{P_h}$) less than what it takes to sustain a low power sleep state ($P_s$) is better off turning off instead of sleeping. This constraint is defined by \cref{eqn:intuition:hysteresis}. 
+\begin{equation}
+    \label{eqn:intuition:hysteresis}
+    \P_l < \bar{P_h} \leq P_s
+\end{equation}
+Sensors within this regime will benefit from hysteresis techniques to reduce the amount of charge and time it takes for them to cold start. They will occupy the purple region in \cref{fig:intuition:framework} labelled \textbf{Hysteresis management helpful}. 
+
+Sensors that are able to harvest more power than it takes to maintain a deep sleep state will still benefit from hysteresis management if they frequently must cold start, or they have a lengthy and energy intensive cold start.
+The utility of hysteresis management is diminished
+when the ratio of harvester power to deep sleep power increases and when the energy capacity of a system increases.
+More energy and the capacity to hold it reduces the frequency of cold starts, and capacity has an averaging effect on energy income, providing power when income is insufficient, and storing in situations of excess. 
+Sensor designs within this region represent a gradient of diminishing returns on the utility of hysteresis techniques.
+These designs occupy the space in \cref{fig:intuition:framework} above the horizontal line for deep sleep power, extending to the point of sufficient energy capacity for sleeping.
+This region is represented by a gradient, as the regime is not as clearly delineated as others as it depends on factors other than harvesting input power and energy capacity.
+
+Designs that would not benefit from hysteresis management represent designs with sufficient energy income and capacity.
+With enough income and capacity, sensors can willfully enter low power sleep states for long periods, avoiding powering off and subsequent cold starting.
+These sleep states can be managed by the sensor itself, instead of being imposed by the variability of energy income.
+When sleeping, deep sleep power becomes analogous to leakage power, and hysteresis management techniques will not improve recharge times.
+While it is relatively straightforward to determine component sizing to achieve proper energy income, as described in \cref{sec:intuition:energy_income_sizing}, it is more difficult to determine the proper energy capacity to avoid power loss and frequent cold starts even with sufficient income. \Cref{sec:intuition:capacity} attempts to identify and quantify the proper energy capacity that maximizes energy capture and minimizes cold starts.
+
+%Under these conditions, it is
+%beneficial to continue operating until the energy
+%buffer is depleted, power off, and wait to recharge 
+%without the overhead of sleep power.
+%Therefore the benefits of hysteresis management for
+%cold start with respect to storage capacity are in conflict with their necessity,
+%and these subtle nuances are not quantified in \cref{fig:intuition:framework}.
+
+%By managing sleeping states,
+%operating thresholds can be automatically controlled instead of instigated when harvestable energy is unavailable.
+%This disentangles the influence of capacity on charging hysteresis.
+
+
+\subsection{Limitations}
+\label{sec:intuition:framework_limitations}
+This framework on feasibility and design regimes makes a few simplifying assumptions to describe a complex design space.
+Similar to \cref{sec:intuition:energy_income_pvh}, The framework assumes a constant average energy
+harvesting income, when in reality income is often highly variable. 
+In practice, a sensor
+platform defines the regions and limits of the plot, such as the leakage and deep sleep boundaries.
+The platform then occupies a
+vertical line which represents the 
+the range of harvester input powers it might experience fixed at its designed capacity. 
+By ignoring variability, the plot also fails to illustrate key benefits
+of increased capacity under varying energy incomes and workloads. 
+Intuitively,
+a large capacity can store energy in times of excess and supply
+that energy in times of drought. This balancing out of energy income
+effectively increases the average power supplied by the energy harvester, up to the theoretical maximum available to be harvested.
+The extent of this impact is completely dependent on the variability
+of the energy income and workload of the sensor. 
+In the following \cref{sec:intuition:capacity}, the performance impact as related to capacity is examined more closely. 
+%we also develop a numerical simulation to quantify the impact of capacity
+%on key metrics including energy utilization, availability and reactivity.
+
+This framework also does not consider the impact of a backup energy store.
+A backup energy store can be viewed as the ability to inject additional energy
+to the system at arbitrary times,
+eliminating the need for state retention when there is very low
+harvesting potential.
+A backup energy store could also contribute in more subtle ways. It could
+allow a system to avoid the energy and complexity of state retention by
+providing just enough energy for a deep sleep mode with state retention rather
+than a full power down when the system depletes its stored energy. It could also
+cold start energy buffer charging to eliminate the need for reconfigurable
+or federated power supplies, or to increase the efficiency of
+the energy-harvesting front-end at low voltages.
+While the use of a backup energy store
+does constrain the sensor to a finite lifetime,
+as discussed in \cref{sec:intuition:energy_income}, energy-harvesting can substantially extend these lifetimes under certain harvesting
+conditions.
+%We explore the lifetime of energy-harvesting
+%designs with backup energy stores in \cref{sec:primary}.
+
+\section{A Case for Capacity}
+\label{sec:intuition:capacity}
+There are currently many approaches to determining the energy capacity for energy harvesting sensor designs. 
+%However, all of these approaches are arbitrary. 
+Many batteryless systems that expect frequent restarts size their energy storage to meet minimum design feasibility and to minimize charging hysteresis.
+They size their energy storage to support the largest atomic operation required by their application, as described by 
+\cref{eqn:intuition:atomic}. 
+For example, the sensors developed for the aforementioned deployment at Mithræum of Circus Maximus have energy storage sized to provide enough instantaneous energy to ensure the completion of a few atomic operations and subsequent forward progress~\cite{afanasov2020battery}. Other platforms also adopt this approach for sizing: Both the previously mentioned cathodic protection system and Camaroptera size their supercapacitor bank to support sending a single atomic LoRa radio packet~\cite{nardello2019camaroptera,jagtap2021repurposing},  SkinnyPower sizes its capacitor to provide enough energy for the boot cycle of its SoC~\cite{shukla2019skinnypower}, and the Flicker platform's federated capacitors are all sized to support predefined atomic operations for its peripherals~\cite{hesterFlicker17}.
+Similarly, one-shot batteryless platforms size their energy storage to support the entirety of their small workload~\cite{yervaGrafting12,debruin2013monjolo,campbellEnergy14,campbellThermes14}.
+
+Other more traditional energy harvesting systems size their energy storage to support an arbitrary amount of runtime without harvestable energy. 
+The Pible platform uses a supercapacitor that allows 2 hours of BLE advertizing at a 100ms period, but employs a dynamic power management technique to scale back advertising frequency when available energy is low~\cite{fraternali2018pible}.
+The ZebraNet collar has enough battery energy capacity to support five days of operation without harvestable energy~\cite{juang2002energy}. 
+This approach is also taken by millimeter-scale systems. The M\textsuperscript{3} platform has allocated enough energy storage to persist for just over two days in sleep mode~\cite{lee2013modular}.
+The energy capacity allocated by all of these examples is arbitrarily chosen. 
+In cases like the ZebraNet collar and the M\textsuperscript{3} platform, physical size constraints likely drive the limits of energy capacity.
+However, no consideration or analysis is given regarding the consequence of the chosen energy capacity.
+
+Like energy income or the size of preallocated energy, the quantity of energy capacity must similarly be considered in a principled manner.
+By making arbitrary choices regarding income, system designers may be impacting the efficiency of their energy harvesting and ultimately the performance of their system. 
+This section seeks to identify the relationships between energy capacity and sensor workload and potential energy income.
+By understanding these relationships, future system designers can determine suitable energy capacity analytically
+instead of making arbitrary design decisions. 
+
+\subsection{Defining Workload}
+A sensor workload can be represented as the time series of instantaneous powers over a time period $T$, as in \cref{eqn:intuition:work_sequence}. 
+\begin{equation} \label{eqn:intuition:work_sequence}
+    P_w = (w_{t})^{T}_{t=0} 
+\end{equation}
+The time series of required power for a system can be measured or it can be estimated if the sensor behavior is predictable and the power and duration of operations is known.
+A simplifying assumption is to reduce the workload trace to an average workload power, $\bar{W} = \frac{1}{T}\sum_{t=0}^T w_t$.
+For many workloads, a time scale of a few hours to a day is sufficient to calculate an average workload power assuming periodic behavior occurring within the time period, or for an application that reacts to events, the probability distribution of those events is well described by that time period.
+
+
+\subsection{Defining Income}
+\placefigure{tab:intuition:enhants}
+\placefigure{fig:intuition:traces}
+Conversely, photovoltaic energy harvesting can differ significantly over the course of a day, a week, or even a year. 
+To accurately consider the effects of capacity on energy capture, the full trace of income power must be considered, not simply an average.
+For a photovoltaic, this potential income power is dependent on the time series of energetic spectral irradiance, $E_e$, the photovoltaic efficiency $\eta$, and panel area $A$.
+The irradiance trace $E_e$ is described by \cref{eqn:intuition:irradiance}, and the resultant power available to a harvesting system based on this irradiance is given by \cref{eqn:intuition:harvest_sequence}.
+\begin{equation}
+    \label{eqn:intuition:irradiance}
+    E_e = (e_t) ^ {T}_{t=0}
+\end{equation}
+\begin{align} 
+    \begin{split}
+    p_t & = (\eta e_{t} A)_{e_t \in E_e}\\
+    P_{h} &= (p_t) ^T _{t=0}
+    \end{split}
+    \label{eqn:intuition:harvest_sequence}
+\end{align}
+The temporal variance of energy income directly impacts the amount of capacity required. 
+For example, natural light varies significantly both diurnally as well as seasonally over the course of a year.
+Energy capacity must be large enough to capture energy during daytime and summer, so that it can supply it during nighttime and winter, respectively. 
+It is important to utilize a realistic energy income trace for $P_h$ to properly capture the effect of temporal variance.
+This section utilizes the irradiance traces from the EnHANTS indoor irradiance dataset~\cite{gorlatova2013networking}.
+The EnHANTs dataset remains the most complete and extensive dataset for indoor light
+irradiance traces, capturing over a year of data in several environments.
+The four longest running traces are summarized in \cref{tab:intuition:enhants,fig:intuition:traces}.
+In \cref{fig:intuition:traces} all irradiance traces have been min-max normalized to show the characteristics of each trace.
+Artificial light accounts for the majority of income for Setup A and B.
+The irradiance for Setup B is very clearly almost all artificial light, as it consists of a pattern of five days with irradiance from artificial lighting followed by two days where humans are not rarely present during the weekend to turn the lights on. 
+Conversely, C and D have significant income from sunlight that follows a seasonal pattern throughout the year.
+This indicates that A and B mostly follow a diurnal pattern, while C and D are simultaneously diurnal and seasonal.
+These traces exhibit different variances, which will impact the necessary capacity required to support a given workload.
+To isolate the impact of the variance of energy income, as well as the magnitude of the income, we can utilize the normalized traces to synthesize incomes with arbitrary average power.
+This allows us to sweep average power while maintaining the characteristics of each trace, resulting in a higher granularity analysis.
+
+
+\subsection{Determining Capacity}
+To determine the ideal amount of energy capacity for a given sensor application, the relationship between energy capacity and energy income must be understood.
+As mentioned previously, energy capacity acts similar to a moving average over energy income. With sufficient capacity, energy is stored in times of excess harvestable energy, and provided in times of insufficient energy.
+At some point, a design can allocate enough capacity to consider its energy income as an average, even if it is highly variable.
+While the operation is \textit{similar} to a moving average, it is not exactly, as real energy storage has limits when full or empty.
+This section seeks to explore this relationship with the goal of developing guidance and methods for making design decisions regarding energy capacity. 
+
+The ideal energy capacity for a given application depends on the 
+expected harvesting environment for the application,
+as well as the 
+intended sensor workload of the application. 
+Energy harvesting income and a sensor's workload can both be represented by a time sequence of instantaneous power across a period $T$.
+These sequences for and energy income are defined by \cref{eqn:intuition:work_sequence,eqn:intuition:harvest_sequence}, respectively.
+Given these traces of income and workload power, the trace of cumulative energy stored by an energy buffer is defined by \cref{eqn:intuition:iterative_capacity}. The initial condition $y_0$ assumes the buffer starts empty, which is realistic for capacitor-sized energy buffers, but a very conservative assumption for larger buffers. 
+\begin{align}
+\begin{split}
+        y_0 &= \begin{cases} 
+        0                       & \text{if $p_t - w_t < 0$} \\
+        (p_t - w_t) \Delta t    & \text{if $p_t - w_t > 0$} \\
+        E_{capacity}            & \text{if $(p_t - w_t) \Delta t > E_{capacity}$}
+    \end{cases} \\
+    y_t &= \begin{cases} 
+        0                               & \text{if $y_{t-1} + (p_t - w_t) \Delta t < 0$} \\
+        y_{t-1} + (p_t - w_t) \Delta t  & \text{if $y_{t-1} + (p_t - w_t) \Delta t > 0$} \\
+        E_{capacity}                    & \text{if $y_{t-1} + (p_t - w_t) \Delta t > E_{capacity}$}
+    \end{cases}
+    \end{split} \label{eqn:intuition:iterative_capacity} 
+\end{align}
+This relation is essentially a capped sum over the difference of instantaneous income and workload powers. The amount of energy stored in the buffer is limited to values between zero and the maximum capacity of the buffer. 
+For simplicity, the $\Delta t$ between each element of $P_h$ and $P_w$ can be assumed to be one second. This simplifies future calculations for energy.
+
+The key metric of interest given the trace of energy storage, $Y = (y_t)_{t=0}^T$, is  
+the amount of available energy income that was captured by the energy buffer.
+Insufficient capacity will fill up prematurely, be unable to capture more energy, limiting the total energy captured.
+The ideal capacity is one that allows enough energy capacity over the time period $T$ that represents greater than or equal average power compared to what is required by the workload. 
+Given that the average income power is equal to the average workload power for this analysis, the ideal capacity is one that provides sufficient energy storage to capture all of the harvestable energy. 
+The trace of energy captured by the buffer is represented by the sequence $Z = (z_t)^T_{t=0}$, and each element $z_t$ is defined by \cref{eqn:intuition:captured}.
+
+\begin{equation} \label{eqn:intuition:captured}
+    z_t = \begin{cases}
+        p_t \Delta t & \text{if $e_t + (p_t - w_t) \Delta t \leq E_{capacity}$} \\
+        E_{capacity} - e_t & \text{if $e_t + (p_t - w_t) \Delta t > E_{capacity}$} 
+    \end{cases}
+\end{equation}
+Due to the conditional and iterative nature of the elements of the capacity sequence ($Y$) and captured sequence ($Z$), there is no way to directly solve for $E_{capacity}$.
+Instead, we can use \cref{eqn:intuition:iterative_capacity,eqn:intuition:captured} to perform a parameter sweep of average workload power, income power, and capacity.
+To simplify the sweep, we assume that the sensor workload has been tailored to match the expected income, such that the average workload power is equivalent to the average energy income ($\bar{P_w} = \bar{P_h}$). 
+This is a conservative assumption, as it is usually beneficial to tailor the workload to require less average power than its income. 
+This provides a margin to ensure performance even if energy income is worse than expected. However, for this analysis a conservative estimate is ideal.
+Thus, we are essentially sweeping two variables: average power and capacity.
+
 %    How to express size of secondary mathematically?
 %    Energy capacity represents a moving capped sum, is this like a moving average? What is the smallest window that gives us the most return on energy capture?
 %    At some point, a large enough window allows us to consider the average of harvestable energy, instead of the actual distribution. What is that size?
@@ -285,11 +627,6 @@ Despite these limitations, the analysis of this chapter has enough basis to serv
 %     
 %    at any time $i$, the cumulative energy will be
 %    
-%    $ y_0 = \begin{cases} 
-%        0         & \text{if $e_i - w_i < 0$} \\
-%        e_i - w_i & \text{if $e_i - w_i > 0$} \\
-%        E_{secondary} & \text{if $e_i - w_i > E_{secondary}$}
-%    \end{cases}$
 %    
 %    $ y_i = \begin{cases} 
 %        0             & \text{if $y_{i-1} + e_i - w_i < 0$} \\
@@ -341,218 +678,6 @@ Despite these limitations, the analysis of this chapter has enough basis to serv
 %    
 %    $T_{life} = \frac{E_{total}}{P_{avg}}$
 %    
-%    
-%\item How does the average power requirements compare to available harvestable power? 
-%    
-%    Energy neutrality:
-%    
-%    $P_{h} \ge P_{avg}$ 
-%    
-%\item What are the reliability requirements?
-%\item What are the latency requirements?
-%\end{enumerate}
-
-
-\section{Harvesting Feasibility and Intermittent Reliance}
-\label{sec:intuition:feasibility}
-From the previous section, it is obvious that the availability and magnitude of harvestable energy directly impacts the energy income of an energy harvesting system.
-%This energy income has a direct impact on the performance of an energy harvesting system.
-Income limits which and how many operations it can complete and how fast or frequently it can complete them. 
-What is perhaps not as obvious is that the rechargeable energy capacity used to capture harvested energy also impacts the overall energy income and ultimately the operation of the system.
-The availability and magnitude of harvested power, the size of an energy buffer, and the intended sensor workload determine whether a design is minimally feasible, and if so, whether the design will be reliant on software or hardware intermittent techniques to ensure proper operation.
-The necessity of the techniques mentioned in \cref{sec:background:batteryless} depend solely on the energy income of a system and how it relates to the design's efficiency when idle as well as its energy capacity. 
-This section seeks to illustrate the relationship of income and storage on the resultant sensor operating regimes.
-
-%Depending on the design point, a design can offer minimal feasibility, 
-%We seek to illustrate the design space for energy-harvesting sensors in two
-%ways. The first defines an energy-harvesting sensor framework to examine
-%when designs are feasible and when they require intermittent techniques to make meaningful forward progress.
-%The second examines dynamic income energy and device behavior through numerical
-%modeling and simulation.  The framework is based on three key metrics:
-%harvested energy income, workload, and capacity.
-\placefigure{fig:intuition:framework}
-
-\subsection{Design Regimes}
-\label{sec:framework:regime}
-\Cref{fig:intuition:framework} represents an illustration of a wireless sensor design framework.
-This framework splits the design space into four main regimes: \textbf{Always on},
-\textbf{Infeasible}, \textbf{State retention required}, and \textbf{State retention not required}.
-Additionally, the figure illustrates the conditions in which hysteresis management techniques are helpful or less helpful.
-The following sections describe these regimes and their constraints in more detail. 
-
-\subsubsection{Always On} 
-If the energy harvester reliably supplies a sensor with
-more power than the maximum instantaneous power it will ever draw, then the power supply does not need significant
-energy capacity to remain operational. 
-This design point constraint is defined by \cref{eqn:intuition:always_on}.
-\begin{equation}
-    \label{eqn:intuition:always_on}
-    P_{w,max} \leq P_{h,avg}
-\end{equation}
-Where $P_{w,max}$ represents the maximum instantaneous power required by a sensor workload, and $P_{h_avg}$ is the average harvesting income. Additionally, $P_h$ must also have minimum variance ($Var(P_h) \approx 0$), on the order of normal power ripples handled by power supply bypass capacitors.
-If the harvesting power has significant variance or frequent outages, 
-then a sensor must have some ability to buffer energy to use when its
-instantaneous operating power exceeds that of the harvester input power.
-This green region of \cref{fig:intuition:framework} represents design points that have sufficient income power to be \textbf{Always on}.
-
-\subsubsection{Infeasible} 
-If the energy harvester supplies less average power than
-the system self discharge and leakage, the system will never be able to charge its energy buffer.
-Leakage can exist in a system via component quiescent currents, energy storage self-discharge, and parasitic current paths that are not eliminated when the system is powered off. 
-The constraint on minimum harvesting income and system leakage is described by \cref{eqn:intuition:leakage}.
-\begin{equation}
-    \label{eqn:intuition:leakage}
-    P_{h,avg} > P_l
-\end{equation}
-Where $P_l$ is the total system leakage in a powered off state.
-Similarly, if the energy buffer capacity is less than the
-energy required to perform a workload's largest atomic operation, 
-%with energy harvested
-%during the operation itself, 
-then that operation will not have enough energy to
-complete.
-The total energy required for a single iteration of a sensor workload can be simplified to a finite set of $n$ operations. %that are executed periodically or in response to an event. 
-%The energy required to perform one iteration of a workload is the sum of the energy required for each of the $n$ individual atomic operations that make up the workload task.
-The set $E_a$ of energy required for each atomic operation in a workload is described by \cref{eqn:intuition:atomic_set}.
-%The sum of $E_{a}$ represents the amount of energy required for one iteration of a workload $E_w$, described by 
-%\cref{eqn:intuition:workload_sum}.
-\begin{equation} \label{eqn:intuition:atomic_set}
-    E_{a} = \{e_{i}\}_{i=0}^n
-\end{equation}
-Each individual $e_{i}$ represents the energy required for a single atomic operation such as sampling a sensor,
-sending a radio packet, a processor power on reset, and performing a checkpoint.
-The energy capacity ($E_{capacity}$) of a system must be equal to or greater than the largest atomic operation ($max E_a$). This constraint is described by  \cref{eqn:intuition:atomic}.
-\begin{equation}
-    \label{eqn:intuition:atomic}
-    E_{capacity} \geq \max E_a
-\end{equation}
-Designs that do not satisfy this the constraints of \cref{eqn:intuition:leakage,eqn:intuition:atomic} have insufficient income to ever power on, or have insufficient energy capacity to perform a necessary operation and are  
-therefore infeasible.
-The red regions of \cref{fig:intuition:framework} represent design points that are \textbf{Infeasible}. 
-
-\subsubsection{State Retention Required}
-If the energy capacity of the energy buffer 
-is sufficient to perform the largest atomic operation as in \cref{eqn:intuition:atomic}, but
-not enough to complete
-the entire set of operations in the workload, $E_a$,
-then a mechanism for state preservation is required to ensure forward progress over power loss and reboots.
-A design requires state preservation techniques if \cref{eqn:intuition:checkpointing} is satisfied.
-\begin{equation}
-    \label{eqn:intuition:checkpointing}
-    \max E_a \leq E_{capacity} < \sum_{e \in E_a} e
-\end{equation}
-In \cref{fig:intuition:framework} the blue region labelled \textbf{State retention required} encompasses designs that satisfy \cref{eqn:intuition:checkpointing} and require state retention techniques to ensure proper operation.  
-%composed of multiple, chained
-%atomic operations (such as sampling a sensor and then sending a radio packet), then
-%a mechanism for saving state and continuing progress on the next reboot
-%must be employed.
-%\begin{equation} \label{eqn:intuition:workload_sum}
-%    E_w = \sum_{i=0}^{n} e_{i} \in E_a
-%\end{equation}
-
-\subsubsection{No State Retention Required} 
-A sensor that has a large enough energy buffer to support all of the atomic operations of its workload, and has sufficient harvesting capability to charge this buffer does not require state retention methods. All of its workload can be completed with a full energy storage element, without requiring a reboot and recharge.
-This constraint is defined by \cref{eqn:intuition:no_checkpoint}.
-\begin{equation}
-    \label{eqn:intuition:no_checkpoint}
-    E_{capacity} \geq \sum_{e \in E_a} e
-\end{equation}
-Systems satisfying \cref{eqn:intuition:no_checkpoint} exist in the white region of \cref{fig:intuition:framework}.
-In this region, systems can avoid the complexity of state retention software frameworks, and the energy that would previously be devoted to performing checkpoints or writing and restoring data to non-volatile memory can be used toward the workload instead. 
-However, a system that satisfies \cref{eqn:intuition:no_checkpoint} may still experience intermittent operation depending on the variability of its energy income and size of its storage. Such systems would occupy the white region of \cref{fig:intuition:framework} labeled \textbf{State retention not required}.
-
-\subsubsection{Hysteresis Management}
-Hysteresis management is useful for sensors that frequently reboot and must cold start, recharging their storage element from, or close to, empty. 
-These techniques are particularly beneficial for frequently restarting systems that have large energy buffers that require significant charge and time to provide a sufficient and stable system voltage. 
-Often, intermittent and batteryless systems are designed to turn off when there is no harvestable energy. Because of this, they have not optimized the power required to maintain a low power, state retaining mode. 
-Under these conditions, hysteresis management techniques,
-such as reconfigurable capacity~\cite{colinReconfigurable18} and federated energy~\cite{hesterFlicker17} can decrease the time and energy required to cold start, increasing sensor
-performance.
-These methods can decrease cold start time
-by reducing the capacity that must be charged to achieve a cold start and partial system restart.
-
-While a system's cold start length and frequency are not well represented within the metrics considered by \cref{fig:intuition:framework}, 
-the constraints between a design's deep sleep power, energy income, and energy capacity are. 
-A design with average harvestable income ($P_{h,avg}$) less than what it takes to sustain a low power sleep state ($P_s$) is better off turning off instead of sleeping. This constraint is defined by \cref{eqn:intuition:hysteresis}. 
-\begin{equation}
-    \label{eqn:intuition:hysteresis}
-    P_{l} < P_{h,avg} \leq P_{s}
-\end{equation}
-Sensors within this regime will benefit from hysteresis techniques to reduce the amount of charge and time it takes for them to cold start. They will occupy the purple region in \cref{fig:intuition:framework} labelled \textbf{Hysteresis management helpful}. 
-
-Sensors that are able to harvest more power than it takes to maintain a deep sleep state will still benefit from hysteresis management if they frequently must cold start, or they have a lengthy and energy intensive cold start.
-The utility of hysteresis management is diminished
-when the ratio of harvester power to deep sleep power increases and when the energy capacity of a system increases.
-More energy and the capacity to hold it reduces the frequency of cold starts, and capacity has an averaging effect on energy income, providing power when income is insufficient, and storing in situations of excess. 
-Sensor designs within this region represent a gradient of diminishing returns on the utility of hysteresis techniques.
-These designs occupy the space in \cref{fig:intuition:framework} above the horizontal line for deep sleep power, extending to the point of sufficient energy capacity for sleeping.
-This region is represented by a gradient, as the regime is not as clearly delineated as others as it depends on factors other than harvesting input power and energy capacity.
-
-Designs that are very clearly outside of design regime that would benefit from hysteresis management represent designs with sufficient energy income and capacity.
-With enough income and capacity, sensors can willfully enter low power sleep states for long periods, avoiding powering off and subsequent cold starting.
-These sleep states can be managed by the sensor itself, instead of being imposed by the variability of energy income.
-When sleeping, deep sleep power becomes analogous to leakage power, and hysteresis management techniques will not improve recharge times.
-While it is relatively straightforward to determine component sizing to achieve proper energy income, as described in \cref{sec:intuition:energy_income_sizing}, it is more difficult to determine the proper income and energy capacity to avoid power loss and frequent cold starts. \Cref{sec:intuition:capacity} explores the impact of energy capacity, attempting to determine the correct energy capacity to maximize energy capture and minimize cold starts.
-
-
-
-%Under these conditions, it is
-%beneficial to continue operating until the energy
-%buffer is depleted, power off, and wait to recharge 
-%without the overhead of sleep power.
-%Therefore the benefits of hysteresis management for
-%cold start with respect to storage capacity are in conflict with their necessity,
-%and these subtle nuances are not quantified in \cref{fig:intuition:framework}.
-
-%By managing sleeping states,
-%operating thresholds can be automatically controlled instead of instigated when harvestable energy is unavailable.
-%This disentangles the influence of capacity on charging hysteresis.
-
-
-\subsection{Limitations}
-\label{sec:intuition:framework_limitations}
-This framework on feasibility and design regimes makes a few simplifying assumptions to describe a complex design space.
-Similar to \cref{sec:intuition:energy_income_pvh}, The framework assumes a constant average energy
-harvesting income, when in reality income is often highly variable. 
-In practice, a sensor
-platform defines the regions and limits of the plot, such as the leakage and deep sleep boundaries.
-The platform then occupies a
-vertical line which represents the 
-the range of harvester input powers it might experience fixed at its designed capacity. 
-By ignoring variability, the plot also fails to illustrate key benefits
-of increased capacity under varying energy incomes and workloads. 
-Intuitively,
-a large capacity can store energy in times of excess and supply
-that energy in times of drought. This balancing out of energy income
-effectively increases the average power supplied by the energy harvester, up to the theoretical maximum available to be harvested.
-The extent of this impact is completely dependent on the variability
-of the energy income and workload of the sensor. 
-In the following section, the performance impact as related to capacity is examined more closely. 
-%we also develop a numerical simulation to quantify the impact of capacity
-%on key metrics including energy utilization, availability and reactivity.
-
-This framework also does not consider the impact of a backup energy store.
-A backup energy store can be viewed as the ability to inject additional energy
-to the system at arbitrary times,
-eliminating the need for state retention when there is very low
-harvesting potential.
-A backup energy store could also contribute in more subtle ways. It could
-allow a system to avoid the energy and complexity of state retention by
-providing just enough energy for a deep sleep mode with state retention rather
-than a full power down when the system depletes its stored energy. It could also
-cold start energy buffer charging to eliminate the need for reconfigurable
-or federated power supplies, or to increase the efficiency of
-the energy-harvesting front-end at low voltages.
-While the use of a backup energy store
-does constrain the sensor to a finite lifetime,
-as discussed in \cref{sec:intuition:energy_income}, energy-harvesting can substantially extend these lifetimes under certain harvesting
-conditions.
-%We explore the lifetime of energy-harvesting
-%designs with backup energy stores in \cref{sec:primary}.
-
-
-\section{A Case for Capacity}
-\label{sec:intuition:capacity}
 
 \begin{definetable}{tab:related}
   \scriptsize
@@ -604,12 +729,12 @@ conditions.
 
 \begin{definefigure}{fig:intuition:framework}
   \centering
-  \includegraphics[width=\columnwidth]{figs/capacity/harvesting_framework/framework}
+  \includegraphics[width=\columnwidth]{figs/chap3/framework/framework}
   \caption{
   %energy-harvesting
   %sensors have different capabilities and requirements
   \normalfont Design space for energy-harvesting sensors based on their energy
-  income (which we assume is constant for this analysis), energy storage capacity, and workload.
+  income (assumed constantant for this analysis), energy storage capacity, and workload.
   Workload is represented by the set of atomic operations required by an application, 
   as well as the deep sleep and leakage power.  The plot breaks
   into four regions: {\color{Green}\textit{Always On}} 
@@ -662,4 +787,37 @@ conditions.
     The energy captured by a hybrid system utilizing both harvesting and backup preallocated energy. This figure uses the same scale and line types as \cref{fig:intuition:eh_worth_it}. The addition of energy harvesting to a primary cell system has a compounding effect on lifetime and harvested energy. More harvested energy results in a prolongation of the lifetime of the primary cell. Subsequently, this lifetime extension results in an increase in harvested energy. 
     Because of the increased energy and battery lifetime, the crossing points now shift to the left in the figure, allowing a reduction in volume and area required for a battery and harvester, respectively. 
   }
+\end{definefigure}
+
+\begin{definetable*}{tab:intuition:enhants}
+            \small
+            \begin{tabularx}{\columnwidth}{l | S[table-format=3] | S[table-format=3.1] | S[table-format=4.1] | S[table-format=3.1] }
+               % \parbox{1cm}{\raggedleft Irradiance\\Trace} & Total Days & \parbox{1cm}{\centering Average\\Power\\(\textmu W/cm\textsuperscript{2})} & \parbox{1.6cm}{\centering 90\textsuperscript{th} Percentile\\Daily Power (\textmu W/cm\textsuperscript{2})} & \parbox{1.6cm}{\centering 10\textsuperscript{th} Percentile\\Daily Power (\textmu W/cm\textsuperscript{2})} \\\hline
+                Irradiance Trace & {Total Days} & {Average Irradiance} & {90\textsuperscript{th} Percentile Daily} & {10\textsuperscript{th} Percentile Daily} \\ 
+                \hline
+                EnHANTS A   & 393  & 15.1     & 25.0      & 5.2\\
+                EnHANTS B   & 375  & 14.9     & 26.0      & 0.80\\
+                EnHANTS C   & 310  & 746      & 1610      & 176\\
+                EnHANTS D   & 326  & 97.5     & 256.5     & 24.8\\
+            \end{tabularx}
+            \caption{Summary statistics for the indoor photovoltaic irradiance traces from the EnHANTs dataset~\cite{gorlatova2013networking}.
+            Irradiance is expressed in units of \si[per-mode=symbol]{\micro\watt\per\centi\meter\squared.}
+            }
+\end{definetable*}
+
+\begin{definefigure}{fig:intuition:traces}
+    \centering
+    \includegraphics[width=\columnwidth]{figs/chap3/traces/traces.pdf}
+    \caption{Each of the four irradiance traces from the EnHANTs dataset represent different lighting and environmental conditions. Here, each trace is min-max normalized to illustrate their individual temporal variance.
+    Setup A, B, and D measure irradiance in a students office. Setup A is located near a south facing window and receives some sunlight. Setup B is located at a bookshelf, and is largely occluded from sunlight. 
+    Setup D is located near a west facing window and receives significant sunlight during part of the year. 
+    Setup C measures irradiance in a conference room and gets significant sunlight from a north facing window.
+    The blue line is the raw irradiance for each trace, while the orange line is a moving average of the irradiance with a day-length window.
+    }
+
+\end{definefigure}
+
+
+\begin{definefigure}{fig:intuition:capacity_sweep}
+    \centering
 \end{definefigure}
