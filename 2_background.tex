@@ -222,8 +222,8 @@ For example, Capybara is by design an inefficient sleeper. Its power supply has 
 any low power state besides being completely off~\cite{colinReconfigurable18}.
 The decision to design around constant reboots incurs significant cost in energy and time. Without significant software optimization, the initialization of a processor, radio, and other peripherals is an expensive operation. If capacitor storage is allowed to leak (over the course of hours without any harvestable energy) the voltage may drop to a point that a boost converter must cold start.
 Cold start is also very expensive, as harvesting ICs and boost converters are optimized for steady state operation and not cold start efficiency.
-For example, the TI BQ25505 boost charger~\cite{bq25505} is capable of operating at \textgreater90\% efficiency at voltages higher than 1.5\si{\volt}.
-However, its worst case cold start efficiency is 5\%, and requires at least 600\si{\milli\volt} input and 400\si{\milli\watt} instantaneous power to exit cold start.
+For example, the TI BQ25505 boost charger~\cite{bq25505} is capable of operating at \textgreater90\% efficiency at voltages higher than 1.5\ssi{\volt}.
+However, its worst case cold start efficiency is 5\%, and requires at least 600\ssi{\milli\volt} input and 400\ssi{\milli\watt} instantaneous power to exit cold start.
 Over the course of operation, a batteryless system will experience many repeated cold starts, resulting in wasted energy and time on charging a capacitor to a working, steady state voltage.
 
 %While the design decisions to manage and fine-tune hysteresis make sense in the intermittent context, the importance placed on cold start optimization is specific to the power efficiency and limited energy capacity of a batteryless design.
@@ -382,7 +382,7 @@ The goal of the study is to measure burrow conditions and usage patterns consist
 It is acceptable to measure general environmental conditions within and outside the burrows every hour.
 Thus, the in-burrow sensor must be able to sense occupancy and environmental conditions at regular intervals, without interruption.
 
-To perform this task, based on technology available when this work was published, the burrow sensors required on average ~300\si{\micro\watt}. This power requirement is low enough to be powered by various energy harvesting methods, however there are not many options for harvesting within a sea bird burrow. Solar and thermal differential harvesting are not ideal. The inclusion of these harvesting methods would potentially make the burrows unappealing to sea birds, not to mention substantially increasing the deployment effort and cost.
+To perform this task, based on technology available when this work was published, the burrow sensors required on average ~300\ssi{\micro\watt}. This power requirement is low enough to be powered by various energy harvesting methods, however there are not many options for harvesting within a sea bird burrow. Solar and thermal differential harvesting are not ideal. The inclusion of these harvesting methods would potentially make the burrows unappealing to sea birds, not to mention substantially increasing the deployment effort and cost.
 External to the burrows, the gateway infrastructure for the deployment has plentiful solar energy to harvest from.
 
 Given the application requirement of reliable and periodic measurement, as well as the unavailability of harvestable energy for in-burrow motes, this application is poorly suited for a batteryless solution.
@@ -395,9 +395,9 @@ Zebranet also represents a seminal work in wireless sensor design, involving the
 
 The wildlife biologists working with the system designers were interested in capturing GPS position every 3 minutes for at least 1 year of operation with no human maintenance or intervention. The biologists understandably want to limit the amount of tranquilizing and re-collaring of the zebras as much as possible. Like the habitat monitoring application, Zebranet also requires continuous and reliable operation to collect periodic GPS updates. Due to the lack of options for long range networking, the ZebraNet collars utilize peer-to-peer networking and mobile base stations to provide eventual data collection from the monitored zebras.
 
-Conservatively, ZebraNet collars require an average of 405\si{\milli\watt} to perform GPS sampling and occasional peer-to-peer and base station networking. ZebraNet collars are relatively high power, even compared to its contemporaries like the Great Duck Island burrow sensors.
+Conservatively, ZebraNet collars require an average of 405\ssi{\milli\watt} to perform GPS sampling and occasional peer-to-peer and base station networking. ZebraNet collars are relatively high power, even compared to its contemporaries like the Great Duck Island burrow sensors.
 GPS and long range radio technology were fairly power hungry at the time the collars were designed.
-The authors note that to power a collar for just 5 days would require a 13.5 \si{\ampere\hour} non-rechargeable battery, weighing 4 pounds. Not only would a non-rechargeable battery be unable to provide sufficient energy, it would also be too large and heavy to put on a zebra's neck.
+The authors note that to power a collar for just 5 days would require a 13.5 \ssi{\ampere\hour} non-rechargeable battery, weighing 4 pounds. Not only would a non-rechargeable battery be unable to provide sufficient energy, it would also be too large and heavy to put on a zebra's neck.
 Instead, the collar designers opted to use solar energy harvesting with a lithium polymer battery, resulting in a significantly smaller collar, weighing only 2.54~lbs total.
 This allows the collar to harvest the copious amounts of sunlight during the day, and power the zebra localization workload all day and night.
 With a batteryless design, the collars would be unable to function overnight or in the early morning, producing significant holes in zebra localization and behavior data.
@@ -424,7 +424,7 @@ The Williot IoT Pixel is a peel and stick tag with an ARM Cortex M0+ and RFID ha
 The Williot system relies on RFID transmitter infrastructure to supply wireless power, and tags report their existence via BLE (Bluetooth Low Energy) which can be received by any consumer handheld device.
 For applications where RFID infrastructure is sparse or inadequate, Williot also offers a battery-assisted tag with a battery lifetime of 4 years.
 Jeeva Wireless is also developing low power RF-harvesting solutions for asset tracking. However, instead of active BLE transmissions, they rely on bidirectional backscatter communication with a wireless router~\cite{jeevawireless}.
-When online and transmitting, a BLE advertiser like the Williot pixel will require on the order of 10s of \si{\micro\ampere} when advertising a full payload every 500\si{\milli\second}~\cite{nrf52Power}. A tag that utilizes backscatter will require much less to transmit data, on the order of single \si{\micro\ampere} or less depending on sleep state efficiency~\cite{jeevawireless}. This average power is well below the capabilities for directed RF harvesting from a device similar to an RFID reader, which can typically supply hundreds of \si{\micro\watt} at a minimum~\cite{sample2008design}.
+When online and transmitting, a BLE advertiser like the Williot pixel will require on the order of 10s of \ssi{\micro\ampere} when advertising a full payload every 500\ssi{\milli\second}~\cite{nrf52Power}. A tag that utilizes backscatter will require much less to transmit data, on the order of single \ssi{\micro\ampere} or less depending on sleep state efficiency~\cite{jeevawireless}. This average power is well below the capabilities for directed RF harvesting from a device similar to an RFID reader, which can typically supply hundreds of \ssi{\micro\watt} at a minimum~\cite{sample2008design}.
 
 Along with low power operation, asset tags must also be physically small and lightweight.
 Arguably, the most convenient form factor resembles that of a traditional ``dumb'' tracking label: a peel and stick tracker with an integrated harvester and radio.
@@ -472,13 +472,13 @@ While the main contribution of this work is the sensing and processing of wrist 
 Capband utilizes a small solar panel for power, and a supercapacitor for energy storage.
 Gesture recognition is an application that requires high availability to accurately capture hand gestures.
 CapBand's capacitive measurement needs to run continuously to capture enough data to predict gestures, on the order of 20 measurements per second for its neural network inference.
-At this rate, CapBand requires 260\si{\micro\watt}. This does not include the energy required to transmit the measurements.
+At this rate, CapBand requires 260\ssi{\micro\watt}. This does not include the energy required to transmit the measurements.
 The measurement power alone allows operation only outdoors during the daytime, and indoors with very bright lighting. 
 This significantly limits the utility of the device, and would likely result in user frustration in insufficient lighting.
 
 Wearables must optimize for size and weight. While CapBand fits within a wrist form factor, the sensing and energy management circuitry is quite large compared to a normal wristwatch or smartwatch. While there is some room for miniaturization by using different IC packages and combining modules into one PCB,  
 the majority of volume and surface area of CapBand is actually devoted to the solar panel and supercapacitor. 
-A small rechargeable 40\si{\milli\ampere\hour} could power the aforementioned 20\si{\hertz} measurement for 27 days, and would take less than half of the volume of CapBand's designed energy harvesting frontend.
+A small rechargeable 40\ssi{\milli\ampere\hour} could power the aforementioned 20\ssi{\hertz} measurement for 27 days, and would take less than half of the volume of CapBand's designed energy harvesting frontend.
 
 CapBand's supercapacitor is sized to support an amount of sensing and data transmission while also minimizing the amount of time it takes to charge to a usable voltage. It is not designed to support a single atomic operation. CapBand is not designed to power off frequently. Instead, it sleeps when it does not have sufficient power.
 A more energy dense storage, as well as one that has a more stable voltage, like a rechargeable battery, would also allow for continuous operation. A battery would also allow CapBand to operate overnight and in low light environments. 
@@ -500,14 +500,14 @@ Its workload consists of periodically sampling a barometer sensor once a second 
 This workload requires high availability and consistent periodicity, which is difficult to achieve with a batteryless design. 
 However, the authors identify several methods for energy harvesting that can provide consistent power while the mask is being worn.
 
-The FaceBit lifetime and workload corresponds to an average power of 286\si{\micro\watt}.
+The FaceBit lifetime and workload corresponds to an average power of 286\ssi{\micro\watt}.
 While the current version relies mostly on a primary battery, it is also designed for energy harvesting.
 Among the energy harvesting methods tested, only the photovoltaic in outdoor light can provide sufficient power to power the device.
-In worst-case indoor conditions, where dim artificial lighting only provides on the order of 10\si{\micro\watt\per\centi\meter\squared}~\cite{yervaGrafting12}
-the selected photovoltaic panel for FaceBit can only provide 71\si{\micro\watt}, assuming a 17\% efficiency.
+In worst-case indoor conditions, where dim artificial lighting only provides on the order of 10\ssi{\micro\watt\per\centi\meter\squared}~\cite{yervaGrafting12}
+the selected photovoltaic panel for FaceBit can only provide 71\ssi{\micro\watt}, assuming a 17\% efficiency.
 The authors also explore the use of TEG and TENG generation.
-Thermoelectric harvesting provides a temporary burst of energy on the order of 50\si{\micro\watt}, but quickly dissipates as the inside of the mask and the inside mask surface reach a temperature equilibrium. 
-The TENG can provide consistent power if the mask is worn, but generally less than 2\si{\micro\watt} when the mask wearer is talking. No power data is provided for when the wearer is just breathing.
+Thermoelectric harvesting provides a temporary burst of energy on the order of 50\ssi{\micro\watt}, but quickly dissipates as the inside of the mask and the inside mask surface reach a temperature equilibrium. 
+The TENG can provide consistent power if the mask is worn, but generally less than 2\ssi{\micro\watt} when the mask wearer is talking. No power data is provided for when the wearer is just breathing.
 The authors believe that breath-based harvesting (Either TEG or TENG) are the most promising avenues for future development, despite their low power output.
 They also claim that a 10x improvement in power efficiency of the SoC (including the processor and radio) would enable a batteryless version of the FaceBit.
 This is not possible given the capability of the TEG and TENG methods explored. It would require closer to a 100x system-wide power improvement to enable a continuously operating batteryless FaceBit.
@@ -563,10 +563,10 @@ Additionally, any missed packets has an impact on the reconstructed power rate e
 To account for this, Monjolo employs a monotonically increasing counter sent with each packet such that high level energy aggregation remains accurate.
 However, this technique does not correct the loss in temporal power resolution from lost packets.
 
-Because the Monjolo sensor operation is directly tied to its energy income, its power requirements vary depending on the measured load. At a minimum, it requires a load of at least 17\si{\watt} to harvest enough power to turn on and send a packet. This corresponds to a coil output power of less than 1\si{\milli\watt}. At some point the induced power from the magnetically coupled load is enough to power the Monjolo indefinitely. This point represents a maximum possible measurement, as the rate of packets is limited by how fast the sensor's software and hardware can queue and send packets when running continuously. For the Monjolo, this maximum corresponds to a measured load of 480\si{\watt}, and a packet frequency of 8.5\si{\hertz}.
+Because the Monjolo sensor operation is directly tied to its energy income, its power requirements vary depending on the measured load. At a minimum, it requires a load of at least 17\ssi{\watt} to harvest enough power to turn on and send a packet. This corresponds to a coil output power of less than 1\ssi{\milli\watt}. At some point the induced power from the magnetically coupled load is enough to power the Monjolo indefinitely. This point represents a maximum possible measurement, as the rate of packets is limited by how fast the sensor's software and hardware can queue and send packets when running continuously. For the Monjolo, this maximum corresponds to a measured load of 480\ssi{\watt}, and a packet frequency of 8.5\ssi{\hertz}.
 
 Regarding size, the Monjolo platform must fit easily within a circuit breaker panel. Most of the volume of the Monjolo is dedicated to its coil harvester.
-The 500\si{\micro\watt} storage capacitance and circuitry is small and amortized in comparison.
+The 500\ssi{\micro\watt} storage capacitance and circuitry is small and amortized in comparison.
 This capacitance is tuned to support a single Monjolo activation, allowing the sensor to wake up and transmit a packet.
 However, with consistently powered or high current loads, the Monjolo harvester can provide significant energy, and a larger or more dense energy storage option could allow for better energy capture.
 This would potentially support continuous operation and more advanced active sensing to directly measure current and voltage of the load without the need for power estimation from packet rate, and the limitations of upper and lower bounds of measurement.
@@ -612,12 +612,12 @@ Due to these outages, the authors turn to batteryless designs for their environm
 
 The authors do not explicitly mention many quantitative details of their designs including power and energy requirements for different operations, making it difficult to gleam the average application power requirements.
 However, the off the shelf components used for the first deployment, along with the described workload provide some insight, enough to make an educated guess.
-The first deployment utilized a Libelium Waspmote and an XBee 868LP sub-\si{\giga\hertz} radio~\cite{waspmote,xbeeradio}.
-Combined, these two components require a sleep current of 34.7\si{\micro\ampere} at 3.3\si{\volt}.
-The Waspmote is powered by an ATmega1281 and has an active current of 17\si{\milli\ampere} and frequency of 14.7456\si{\mega\hertz}.
-%The ATmega1281 itself has an efficiency of 625\si[per-mode=symbol]{\micro\ampere\per\mega\hertz}.
-The Xbee sub-\si{\giga\hertz} radio requires 45\si{\milli\ampere} when active and can transmit at 80\si[per-mode=symbol]{\kilo\bit\per\second}.
-The temperature and humidity sensor only requires 600\si{\micro\ampere} when measuring, while the accelerometer requires 18\si{\milli\ampere} when active.
+The first deployment utilized a Libelium Waspmote and an XBee 868LP sub-\ssi{\giga\hertz} radio~\cite{waspmote,xbeeradio}.
+Combined, these two components require a sleep current of 34.7\ssi{\micro\ampere} at 3.3\ssi{\volt}.
+The Waspmote is powered by an ATmega1281 and has an active current of 17\ssi{\milli\ampere} and frequency of 14.7456\ssi{\mega\hertz}.
+%The ATmega1281 itself has an efficiency of 625\ssi[per-mode=symbol]{\micro\ampere\per\mega\hertz}.
+The Xbee sub-\ssi{\giga\hertz} radio requires 45\ssi{\milli\ampere} when active and can transmit at 80\ssi[per-mode=symbol]{\kilo\bit\per\second}.
+The temperature and humidity sensor only requires 600\ssi{\micro\ampere} when measuring, while the accelerometer requires 18\ssi{\milli\ampere} when active.
 The temperature sensor workload consists of measuring temperature and humidity every 20 minutes, and transmitting an average and standard deviation every hour.
 Similarly, the vibration sensors capture a one minute burst of accelerometer data every 20 minutes.
 Every hour the acceleration data is summarized via an FFT, the fundamental frequency and spectral density is computed, and the results are compressed and sent.
@@ -626,13 +626,13 @@ We assume every packet consists of a 32 byte combined header and overhead, indiv
 
 The original battery-based deployment utilizes 6 C cell alkaline batteries for each sensor.
 The authors do not note if the cells are configured in series or parallel.
-These 6 cells can be configured 2x3 or 3x2 to achieve a nominal 3\si{\volt} or 4.5\si{\volt} supply respectively.
-Both configurations supply voltage levels outside the acceptable range of the Waspmote (3.3-4.2\si{\volt})~\cite{waspmote_block}.
-However, alkaline batteries quickly drop to 1.4\si{\V} when under load~\cite{alkaline_c}, providing an acceptable voltage in a 3x2 configuration.
-The Waspmote only includes a 3.3\si{\volt} step down regulator (either a DC/DC converter or an LDO, the design diagrams do not specify) for the 3.3\si{\volt} supply to its MCU and other subsystems.
-It does have a 5\si{\volt} DC/DC boost converter, however it is only provided to external modules.
-This configuration of 6 C-type batteries provides a maximum of 16\si{\ampere\hour} at 4.5V.
-However, the voltage curve of alkaline cells is fairly linear, and without regulation this configuration will drop below the minimum voltage requirement of 3.3\si{\volt}(1.1\si{V} per cell) at about one half of its full capacity~\cite{alkaline_c}.
+These 6 cells can be configured 2x3 or 3x2 to achieve a nominal 3\ssi{\volt} or 4.5\ssi{\volt} supply respectively.
+Both configurations supply voltage levels outside the acceptable range of the Waspmote (3.3-4.2\ssi{\volt})~\cite{waspmote_block}.
+However, alkaline batteries quickly drop to 1.4\ssi{\V} when under load~\cite{alkaline_c}, providing an acceptable voltage in a 3x2 configuration.
+The Waspmote only includes a 3.3\ssi{\volt} step down regulator (either a DC/DC converter or an LDO, the design diagrams do not specify) for the 3.3\ssi{\volt} supply to its MCU and other subsystems.
+It does have a 5\ssi{\volt} DC/DC boost converter, however it is only provided to external modules.
+This configuration of 6 C-type batteries provides a maximum of 16\ssi{\ampere\hour} at 4.5V.
+However, the voltage curve of alkaline cells is fairly linear, and without regulation this configuration will drop below the minimum voltage requirement of 3.3\ssi{\volt}(1.1\ssi{V} per cell) at about one half of its full capacity~\cite{alkaline_c}.
 When considering the requirements of the vibration sensor, this battery configuration should provide around a year of continuous operation.
 The temperature and humidity sensor is lower power, and should last much longer.
 
@@ -698,7 +698,7 @@ Once a day is sufficient to track the health of the sacrificial anode and predic
 %The authors do note that harvesting energy from a cathodic protection system can accelerate its degradation, however an ultra-low power system is unlikely to have a noticeable effect.
 
 The authors propose a fully energy harvesting solution, meaning that the average power of their application must be energy neutral, and fully dependent on income from the weak corrosive battery.
-Via multiple experiments with a small corrosion cell consisting of a steel bucket and a magnesium rod, the researchers have discovered a maximum power point at around 300\si{\milli\volt} and 1.6\si{\milli\ampere} for a peak power of 480\si{\micro\watt}.
+Via multiple experiments with a small corrosion cell consisting of a steel bucket and a magnesium rod, the researchers have discovered a maximum power point at around 300\ssi{\milli\volt} and 1.6\ssi{\milli\ampere} for a peak power of 480\ssi{\micro\watt}.
 Even from a small example corrosion cell based on a water heater, this amount of average power is more than enough to power a low duty-cycle sensor system.
 In many cases, the infrastructure being monitored will be much larger, with more surface area resulting in more harvestable power.
 The size of the designed system is not of particular concern, as it connects to potentially huge infrastructure.
@@ -707,7 +707,7 @@ Any sensor built will be easily dwarfed by a water heater or a bridge.
 Since the energy income from a cathodic protection system is stable and reliable up until the point where it fails, a batteryless design is an attractive choice.
 The constant minute income power allows a system to preserve volatile state over long sleep periods without the need for intermittent techniques to ensure forward progress.
 The left over energy is banked and eventually used to monitor and report the health of the sacrificial anode.
-The authors decide to use a parallel array of three 1\si{\farad} supercapacitors to store harvested energy from corrosion.
+The authors decide to use a parallel array of three 1\ssi{\farad} supercapacitors to store harvested energy from corrosion.
 This bank of supercapacitors is sized such that it provides enough energy storage for the system to run continuously and measure the voltage between the anode and cathode every 4 hours on average.
 The system then transmits the results via a LoRa radio, which has relatively high power and energy costs.
 The authors avoid tantalum and ceramic capacitors used in past designs, as their energy density is insufficient to support LoRa operations within a reasonable form factor.
@@ -742,26 +742,26 @@ Likewise, non-medical smart dust applications also require high availability.
 A millimeter-scale image sensor application utilizes always-on motion detection as opposed to opportunistic or periodic image sensing~\cite{kim2014millimeter}.
 This approach attempts to maximize the value of captured images and minimize wasted energy on capturing multiple identical images.
 
-Despite the high energy density of primary lithium batteries, at the scale of a \si{\milli\meter}, the energy provided is insufficient to offer an adequate lifetime for these systems~\cite{lee2013modular}.
+Despite the high energy density of primary lithium batteries, at the scale of a \ssi{\milli\meter}, the energy provided is insufficient to offer an adequate lifetime for these systems~\cite{lee2013modular}.
 To achieve perpetual lifetimes, these systems utilize harvesting methods including photovoltaic, active RF, intra-body transfer, or optical harvesting~\cite{wu20180, lee2013modular, nazari2019novel}.
 Due to their size, these systems have limited volume for energy storage, and likewise limited surface area available for energy harvesting.
 This results in aggressive system-wide power limitations to achieve adequate lifetimes with high availability.
-Unlike the previously mentioned devices and platforms, most of which require on the order of hundreds of \si{\micro\watt} to \si{\milli\watt} of average power to drive their application, smart dust devices operate with an average of tens or hundreds of \si{\nano\watt}~\cite{lee2013modular,kim2014millimeter,chen2014injectable,wu20180}.
+Unlike the previously mentioned devices and platforms, most of which require on the order of hundreds of \ssi{\micro\watt} to \ssi{\milli\watt} of average power to drive their application, smart dust devices operate with an average of tens or hundreds of \ssi{\nano\watt}~\cite{lee2013modular,kim2014millimeter,chen2014injectable,wu20180}.
 
 Given the low energy density of capacitors and supercapacitors, they would provide insufficient energy storage to allow continuous and perpetual operation, making batteryless approaches unsuitable for many smart dust applications.
-Instead, to achieve high availability, most of the aforementioned systems utilize small rechargeable thin-film lithium batteries to allow operation between periods of harvestable energy. These batteries are sized to provide a few days of operation without any income, corresponding to capacities on the order of 1-5 \si{\micro\ampere\hour}. 
+Instead, to achieve high availability, most of the aforementioned systems utilize small rechargeable thin-film lithium batteries to allow operation between periods of harvestable energy. These batteries are sized to provide a few days of operation without any income, corresponding to capacities on the order of 1-5 \ssi{\micro\ampere\hour}. 
 
 Not all applications require the extreme size constraints of smart dust, however, they can benefit from the advancements in power efficiency developed by smart dust researchers.
 Within the next decade it is conceivable that microcontrollers, sensors, and radio technologies will be developed with the power improvements originally meant to enable millimeter-scale computing.
 These sensors can remain at the scale of traditional sensor motes with relatively vast energy storage and energy harvesting capability, but with one or two orders of magnitude improvement in active and idle power.
 This will result in sensors that can easily achieve lifetimes of multiple decades, even with small primary batteries. 
-With average system power on the order of \si{\nano\watt}, batteries will be limited more by self-discharge than the actual system load.
-For energy harvesting systems with sufficient surface area, an average income power on the order of tens or hundreds of \si{\nano\watt} to support perpetual operation is an easy task even in dim environments. 
+With average system power on the order of \ssi{\nano\watt}, batteries will be limited more by self-discharge than the actual system load.
+For energy harvesting systems with sufficient surface area, an average income power on the order of tens or hundreds of \ssi{\nano\watt} to support perpetual operation is an easy task even in dim environments. 
 Beyond lifetime extension, these sensors will be capable of doing more with the energy they have. Future systems will perform advanced sensing and processing that are currently infeasible due to energy constraints. 
 Some of the advancements that have led to the power efficiency of millimeter-scale systems are starting to be commercialized.
 In particular, the development of high performance subthreshold near-threshold computing has resulted in an order of magnitude improvement in active power over traditional CMOS supply voltage techniques~\cite{zhai2009energy, dreslinski2010near}.
-Ambiq Micro has led the commercialization of this technology, starting with ultra low power real time clocks, and more recently developing microcontrollers like the Apollo4 that requires only 5\si[per-mode=symbol]{\micro\ampere\per\mega\hertz}.
-This represents an order of magnitude improvement over similar offerings, like the Nordic nRF5340, which requires 56\si[per-mode=symbol]{\micro\ampere\per\mega\hertz}~\cite{nrf5340}.
+Ambiq Micro has led the commercialization of this technology, starting with ultra low power real time clocks, and more recently developing microcontrollers like the Apollo4 that requires only 5\ssi[per-mode=symbol]{\micro\ampere\per\mega\hertz}.
+This represents an order of magnitude improvement over similar offerings, like the Nordic nRF5340, which requires 56\ssi[per-mode=symbol]{\micro\ampere\per\mega\hertz}~\cite{nrf5340}.
 
 
 %\subsection{Example Applications}

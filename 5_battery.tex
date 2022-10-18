@@ -56,7 +56,7 @@ Lithium polymer (Lipo) batteries, most commonly used in consumer electronics, ut
 
 There are many different types of li-ion batteries, utilizing different anode, cathode, and electrolyte materials. Most modern Li-ion cells primarily utilize graphite as an anode material, and lithium nickel manganese cobalt oxide
 (LiNi\textsubscript{0.33}Mn\textsubscript{0.33}Co\textsubscript{0.33}O\textsubscript{2} or NMC for short) as a cathode material~\cite{nitta2015li}.
-These cells offer a nominal voltage of 3.7\si{\volt}, high energy density, and long lifetimes. 
+These cells offer a nominal voltage of 3.7\ssi{\volt}, high energy density, and long lifetimes. 
 The choice of NMC provides several benefits over earlier designs that utilize 
 LiCoO\textsubscript{2} (LCO) or LiMn\textsubscript{2}O\textsubscript{4} (LMO) for cathode materials.
 LCO lithium batteries are notorious for their thermal instability and fast capacity fade at high current rates or deep cycling~\cite{nitta2015li}. 
@@ -69,12 +69,12 @@ Batteries with LMO cathodes are safer than both LCO and NMC, but have poor cycle
 
 \subsection{Lithium Iron Phosphate}
 Lithium iron phosphate  (LiFePO\textsubscript{4}, or LFP), is a more recently commercialized cathode material and stands to offer similar safety and power capability to LMO while offering long lifetimes similar to NMC~\cite{preger2020degradation, nitta2015li}.
-Batteries that utilize LFP as a cathode material possess a lower nominal voltage (3.2\si{\volt}), and lower energy density than LCO and NMC batteries. However, LFP 
+Batteries that utilize LFP as a cathode material possess a lower nominal voltage (3.2\ssi{\volt}), and lower energy density than LCO and NMC batteries. However, LFP 
 cathodes offer higher cycle stability and lifetime, have lower thermal sensitivity, and are cheaper to produce than cobalt and manganese-based cathodes~\cite{doughty2012general,nitta2015li,preger2020degradation}. LFP cells are also very safe compared to NMC and LCO cells. The only thermal runaway experienced by LFP batteries is dominated by reactions between the electrolyte and graphite anode, which decomposes at high temperatures~\cite{doughty2012general}. 
 
 \subsection{Lithium Titanate Oxide}
 Perhaps the most promising replacement for graphite anodes is lithium titanate oxide (Li\textsubscript{4}Ti\textsubscript{5}O\textsubscript{4}).
-Lithium titanate oxide, abbreviated LTO, is usually paired with an LMO cathode, and sometimes an NMC cathode~\cite{nitta2015li, belharouakElectrochemistry11, sandhya2014lithium}. LTO offers superior thermal stability, high discharge/charge rates, and longer lifetimes compared to graphite. These improvements come at a cost of the more expensive titanium compound, and a lower energy density and nominal voltage (2.4\si{\volt})~\cite{nitta2015li,sandhya2014lithium}. Cells that incorporate LTO anodes are also extremely safe compared to those that use graphite~\cite{nitta2015li, belharouakElectrochemistry11, sandhya2014lithium}. Unlike graphite, LTO anodes do not produce Li dendrites after considerable cycling~\cite{nitta2015li}. This reduces the risk of inadvertent internal shorts and thermal runaway. LTO anodes also remain stable and do not break down at high temperatures~\cite{belharouakElectrochemistry11}.
+Lithium titanate oxide, abbreviated LTO, is usually paired with an LMO cathode, and sometimes an NMC cathode~\cite{nitta2015li, belharouakElectrochemistry11, sandhya2014lithium}. LTO offers superior thermal stability, high discharge/charge rates, and longer lifetimes compared to graphite. These improvements come at a cost of the more expensive titanium compound, and a lower energy density and nominal voltage (2.4\ssi{\volt})~\cite{nitta2015li,sandhya2014lithium}. Cells that incorporate LTO anodes are also extremely safe compared to those that use graphite~\cite{nitta2015li, belharouakElectrochemistry11, sandhya2014lithium}. Unlike graphite, LTO anodes do not produce Li dendrites after considerable cycling~\cite{nitta2015li}. This reduces the risk of inadvertent internal shorts and thermal runaway. LTO anodes also remain stable and do not break down at high temperatures~\cite{belharouakElectrochemistry11}.
 
 \subsection{Solid-state}
 All cylindrical or pouch Li-ion batteries employ a liquid or gel electrolyte of lithium salts dissolved in an organic, non-aqueous solvent~\cite{doughty2012general}. Liquid electrolyte requires specific packaging to prevent leakage, and an internal separator to prevent shorts between the electrodes. This limits the miniaturization of Li-ion batteries, as this packaging is increasingly difficult to manufacture at smaller sizes. This results in smaller batteries that have uncharacteristically high internal resistance and lower energy density compared to larger cells with the same chemistry.
@@ -88,7 +88,7 @@ In the rest of this chapter, I seek to compare these technologies in more depth.
 
 \section{Volume and Density}
 \label{sec:battery:density}
-Arguments that deride batteries as bulky are likely directly comparing the size of a small battery to that of single tantalum or ceramic capacitor, without considering energy and power density. Modern, commercially available miniature batteries are comparable in volume to many supercapacitors, and even a banked combination of ceramic and tantalum capacitors, while offering substantially more energy density and an acceptable power density. In this section, I explore the "bulkiness" of capacitors, supercapacitors, and batteries in the context of energy and power density. Here, I am considering volumetric density (\si[per-mode=symbol]{\Wh\per\liter}  and  \si[per-mode=symbol]{\watt\per\liter}) instead of specific energy and power (\si[per-mode=symbol]{\Wh\per\kilo\gram} and  \si[per-mode=symbol]{\watt\per\kilo\gram}, respectively) to better compare the volume of these energy storage options. The energy density and power density of various capacitors, supercapacitors, and batteries are directly compared in \cref{fig:battery:ragone}.
+Arguments that deride batteries as bulky are likely directly comparing the size of a small battery to that of single tantalum or ceramic capacitor, without considering energy and power density. Modern, commercially available miniature batteries are comparable in volume to many supercapacitors, and even a banked combination of ceramic and tantalum capacitors, while offering substantially more energy density and an acceptable power density. In this section, I explore the "bulkiness" of capacitors, supercapacitors, and batteries in the context of energy and power density. Here, I am considering volumetric density (\ssi[per-mode=symbol]{\Wh\per\liter}  and  \ssi[per-mode=symbol]{\watt\per\liter}) instead of specific energy and power (\ssi[per-mode=symbol]{\Wh\per\kilo\gram} and  \ssi[per-mode=symbol]{\watt\per\kilo\gram}, respectively) to better compare the volume of these energy storage options. The energy density and power density of various capacitors, supercapacitors, and batteries are directly compared in \cref{fig:battery:ragone}.
 
 \placefigure{fig:battery:ragone}
 
@@ -99,19 +99,19 @@ The energy stored in a capacitor is calculated in one of two ways:
 $$E_{eff_{cap}} = \frac{1}{2} C (V^2 - V_{min}^2)$$
 $$E_{total_{cap}} = \frac{1}{2} C V^2$$
 
-\noindent Where $E_{eff}$ and $E_{total}$ is the effective and total energy stored in a capacitor, respectively. These amounts are defined by the capacitor's capacitance $C$, and the applied voltage $V$, and the minimum voltage $V_{min}$. Usually $V_{min}$ represents the minimum to do something useful. Often this is the minimum open circuit voltage to cold start a boost regulator, between 400\si{\milli\volt} to 600\si{\milli\volt}~\cite{adp5091,bq25505,max17222}. 
+\noindent Where $E_{eff}$ and $E_{total}$ is the effective and total energy stored in a capacitor, respectively. These amounts are defined by the capacitor's capacitance $C$, and the applied voltage $V$, and the minimum voltage $V_{min}$. Usually $V_{min}$ represents the minimum to do something useful. Often this is the minimum open circuit voltage to cold start a boost regulator, between 400\ssi{\milli\volt} to 600\ssi{\milli\volt}~\cite{adp5091,bq25505,max17222}. 
 For simplicity, I use $E_{total}$ to determine energy capacity and density. For most capacitors, the unusable energy represented by $E_{eff_{cap}}$ is negligible compared to the total energy. Likewise, energy stored in a battery is estimated as follows:
 
 $$E_{bat} \approx Q V_{nom}$$
 
-\noindent Where $Q$ is the charge capacity (often denoted in terms of \si{\Ah}) and $V_{nom}$ is the battery's nominal voltage. Nominal voltage represents an average of the battery's voltage curve over the course of a charge/discharge cycle. The nominal voltage and capacity of a battery are provided by the manufacturer and are almost always included in a datasheet.
+\noindent Where $Q$ is the charge capacity (often denoted in terms of \ssi{\Ah}) and $V_{nom}$ is the battery's nominal voltage. Nominal voltage represents an average of the battery's voltage curve over the course of a charge/discharge cycle. The nominal voltage and capacity of a battery are provided by the manufacturer and are almost always included in a datasheet.
 
 A selection of capacitor, supercapacitor, and battery energy capacities and densities are summarized in \cref{tab:battery:cost}, and their energy density is compared in \cref{fig:battery:ragone}. Among this selection, small batteries are 50-1000x more energy dense than supercapacitors and three to five orders of magnitude more dense than ceramic and tantalum capacitors. Li-ion and LiPo batteries are the most energy dense among all options. Solid-state batteries are an order of magnitude less energy dense than those with aqueous electrolytes, but still an order of magnitude more dense than supercapacitors. 
 
 Several of these capacitors, supercapacitors and batteries are shown visually in \cref{fig:battery:sizes}.
 The capacitor and supercapacitor configurations are based on examples from batteryless platform designs described in the literature~\cite{hesterFlicker17, campbellEnergy14,colinReconfigurable18}.
 The batteries shown in \cref{fig:battery:sizes} are
-as small as 88\si{\milli\meter\cubed}, and resemble small through-hole
+as small as 88\ssi{\milli\meter\cubed}, and resemble small through-hole
 capacitors and coin cells. Battery \textbf{(b)} is smaller in volume than many of the capacitor
 configurations presented in the literature, only outdone by systems like Flicker \textbf{(a)} which utilize only a few ceramic capacitors~\cite{hesterFlicker17}.
 This small LTO battery offers 3.7x 
@@ -125,7 +125,7 @@ When one considers energy density instead of purely volume, capacitors and super
 In addition to energy density, power density is also an important metric to consider for a design. 
 Common wireless sensor workloads are characterized by very low sleep currents punctuated by infrequent pulses of high current, usually a radio transmission. Energy storage must provide sufficient peak power to drive these short pulses, but largely, these applications require low continuous power. The maximum peak power is largely dependent on equivalent series resistance (ESR) of the storage device, represented by an internal series resistance to the capacitor or battery cell. 
 Internal resistance for both supercapacitors and batteries is temperature and age dependent. Both storage elements experience increased ESR at temperature extremes, and experience increased ESR as they age.
-The internal resistance of capacitors and supercapacitors is also frequency dependent, and usually reported for 1\si{\kilo\hertz}. This value is generally related inversely with frequency for frequencies below the capacitor's self-resonance~\cite{murataESRArticle}. For the relatively low frequency of charge/discharge cycles characteristic of energy harvesting devices, actual ESR is likely higher than reported for supercapacitors.
+The internal resistance of capacitors and supercapacitors is also frequency dependent, and usually reported for 1\ssi{\kilo\hertz}. This value is generally related inversely with frequency for frequencies below the capacitor's self-resonance~\cite{murataESRArticle}. For the relatively low frequency of charge/discharge cycles characteristic of energy harvesting devices, actual ESR is likely higher than reported for supercapacitors.
 
 Internal capacitor, supercapacitor, and battery resistance incurs a voltage drop over this resistance which is especially noticeable and detrimental during high  current loads.
 Ceramic and tantalum capacitors have negligible ESR and incomparably high power density, so I focus on comparing the power density of supercapacitors and batteries.
@@ -139,18 +139,18 @@ $$P_{max_{sc}} = \frac{1}{4} \frac{V^2}{R_i}$$
 $$P_{eff_{bat}} = I_{cont} V_{nom}$$
 $$P_{max_{bat}} = I_{max} V_{nom}$$
 
-\noindent Where $I_{cont}$ and $I_{max}$ are the battery's rated continuous and peak pulsed current respectively. These metrics are provided by the battery manufacturer and often included in the battery datasheet. The continuous and peak currents are often defined in terms of the C-rate, or a proportion of the rated capacity (in units of \si{\Ah}). For example, the 1C rate of a 100\si{\milli\Ah} battery is 100\si{\milli\ampere}, and the 2C rate is 200\si{\milli\ampere}. 
+\noindent Where $I_{cont}$ and $I_{max}$ are the battery's rated continuous and peak pulsed current respectively. These metrics are provided by the battery manufacturer and often included in the battery datasheet. The continuous and peak currents are often defined in terms of the C-rate, or a proportion of the rated capacity (in units of \ssi{\Ah}). For example, the 1C rate of a 100\ssi{\milli\Ah} battery is 100\ssi{\milli\ampere}, and the 2C rate is 200\ssi{\milli\ampere}. 
 Continuously charging and discharging a battery beyond its normal rate will result in cycles that deliver less energy than rated, and eventually damage to the cell resulting in capacity fading. 
 For sake of comparison, I use $P_{eff}$ in \cref{tab:battery:cost} for batteries and supercapacitors, as it is a more conservative measure of the energy storage power capability. 
 
 Among the supercapacitors and batteries featured in \cref{tab:battery:cost}, supercapacitors provide 10-400x higher power density over batteries. 
 However, one supercapacitor outlier provides the least power density of all options. Like energy density, power density is also directly compared in \cref{fig:battery:ragone}.
 Despite their superior power density, most applications do not require the higher power density afforded by supercapacitors. 
-It is hard to imagine a \textit{low power} energy harvesting application that must source more than a few to a few hundred \si{\milli\ampere} at 3\si{\volt} infrequently, never mind continuously. 
-Solid-state batteries are more power limited than other battery types. Despite their low energy capacity they are able to supply high C-rates, between 15-50C. This corresponds to currents on the order of 10\si{\milli\ampere}.
-Conventional Li-ion and LiPo cells can generally source 1C continuously. The smallest Li-ion cell listed in \cref{tab:battery:cost} can provide 11\si{\milli\ampere} continuously, and the largest can provide 80\si{\milli\ampere}. The LiPo cell presented can supply 40\si{\milli\ampere} continuously. 
+It is hard to imagine a \textit{low power} energy harvesting application that must source more than a few to a few hundred \ssi{\milli\ampere} at 3\ssi{\volt} infrequently, never mind continuously. 
+Solid-state batteries are more power limited than other battery types. Despite their low energy capacity they are able to supply high C-rates, between 15-50C. This corresponds to currents on the order of 10\ssi{\milli\ampere}.
+Conventional Li-ion and LiPo cells can generally source 1C continuously. The smallest Li-ion cell listed in \cref{tab:battery:cost} can provide 11\ssi{\milli\ampere} continuously, and the largest can provide 80\ssi{\milli\ampere}. The LiPo cell presented can supply 40\ssi{\milli\ampere} continuously. 
 Small LTO and LFP cells are capable of very high C-rates, often between 20-40C for LTOs, and 10-20C for LFP~\cite{lifepo4Datasheet,LTODatasheet,LTODatasheet2}.
-The smaller LTO battery listed in \cref{tab:battery:cost} is able to source 18\si{\milli\ampere}, while the larger LTO and LFP cells can source between 400-700\si{\milli\ampere} continuously. 
+The smaller LTO battery listed in \cref{tab:battery:cost} is able to source 18\ssi{\milli\ampere}, while the larger LTO and LFP cells can source between 400-700\ssi{\milli\ampere} continuously. 
 This power capability is more than sufficient for the majority of applications, either indoors with PANs, or outdoors, with cellular or LPWANs~\cite{nrf52840,ghena2019challenge}.
 
 Another consideration for power capability and ESR is the effect of voltage drops during high power loads. If a voltage drop is sufficiently large, it can drop the supply to a level unusable by a voltage regulator or CMOS logic. This could effectively render part of the power storage unusable in an unpredictable manner. This effect is particularly detrimental for supercapacitors. While ESR is comparable between batteries and supercapacitors, the stability of provided voltage is not. Batteries provide a stable voltage curve centered around their nominal voltage, and voltage drops due to ESR can still result in a usable voltage even when almost empty. Supercapacitors, on the other hand, experience a (approximately) linear decrease in voltage with current until empty. This means that, depending on the load (in intensity and frequency), a large load and subsequent voltage drop could occur that causes a system brown-out, potentially corrupting state, or an unexpected reset. 
@@ -175,13 +175,13 @@ $$P_{total} =  I V + R_{i} I^2$$
 
 \noindent Where $P_l$, $I$ and $V$ are the power, current, and voltage required to drive an intended load. Power inefficiency due to ESR can be very costly when considering high current loads.
 
-With a subset of the capacitors and batteries mentioned in \cref{tab:battery:cost}, an 8\si{\milli\ampere} BLE
+With a subset of the capacitors and batteries mentioned in \cref{tab:battery:cost}, an 8\ssi{\milli\ampere} BLE
 transmission from a steady 3\,V would incur less
-than 0.03\% in resistive loss from a tantalum capacitor, a 2.1\% loss from the 1.8\si{\milli\Ah} LTO battery, and 6.3\% loss from the 7.5\si{\milli\farad} supercapacitor. A 130\si{\milli\ampere} LoRa transmission would incur a 0.43\%, 25\%, and 52\% overhead, respectively~\cite{ghena2019challenge}. These selections represent some of the worst performing examples in terms of ESR. 
+than 0.03\% in resistive loss from a tantalum capacitor, a 2.1\% loss from the 1.8\ssi{\milli\Ah} LTO battery, and 6.3\% loss from the 7.5\ssi{\milli\farad} supercapacitor. A 130\ssi{\milli\ampere} LoRa transmission would incur a 0.43\%, 25\%, and 52\% overhead, respectively~\cite{ghena2019challenge}. These selections represent some of the worst performing examples in terms of ESR. 
 For most supercapacitor and battery product lines, as they get smaller, capacitance and capacity decreases while ESR increases. When the surface area between cell electrodes decreases, this limits the flux of ions traveling between electrodes. This is manifested as an increased internal resistance.
-This has traditionally been an issue for small Li-ion batteries. However, the recent commercialization of new manufacturing processes and new cathode and anode materials that increase electrode surface area has led to small form factors with lower ESR, on the order of 1-2\si{\ohm}~\cite{millibatNimbus}. Current solid-state battery technology still struggles with ESR, with values at or above 100\si{\ohm}~\cite{stEnfilm,tdkCeraCharge}.
-In \cref{tab:battery:cost}, there are several batteries and supercapacitors that exhibit much lower ESR, on the order of 1\si{\ohm} or less, and are thus more efficient with high current loads. 
-The 20\si{\milli\Ah} LTO battery is in the same product line as the 1.8\si{\milli\Ah} cell, but has 15x less ESR. This cell would only incur a 0.15\% and 2.3\% loss on the respective BLE and LoRa transmissions.
+This has traditionally been an issue for small Li-ion batteries. However, the recent commercialization of new manufacturing processes and new cathode and anode materials that increase electrode surface area has led to small form factors with lower ESR, on the order of 1-2\ssi{\ohm}~\cite{millibatNimbus}. Current solid-state battery technology still struggles with ESR, with values at or above 100\ssi{\ohm}~\cite{stEnfilm,tdkCeraCharge}.
+In \cref{tab:battery:cost}, there are several batteries and supercapacitors that exhibit much lower ESR, on the order of 1\ssi{\ohm} or less, and are thus more efficient with high current loads. 
+The 20\ssi{\milli\Ah} LTO battery is in the same product line as the 1.8\ssi{\milli\Ah} cell, but has 15x less ESR. This cell would only incur a 0.15\% and 2.3\% loss on the respective BLE and LoRa transmissions.
 %For high current loads, it is very important to not only pick a storage element that can support the load, but one that also has a low internal resistance to energy wasted over the internal resistance. 
 Generally, there are options for both supercapacitors and batteries that offer comparable ESR efficiency. %In this respect, batteries \textit{are not} inefficient.
 
@@ -190,13 +190,13 @@ Generally, there are options for both supercapacitors and batteries that offer c
 In addition to an internal series resistance, capacitors and batteries both feature a non-ideal parallel resistance that causes a continuous self-discharge.
 The self-discharge of supercapacitors and batteries is generally dependent on their size and temperature. Larger capacity/capacitance batteries and capacitors from the same product line will exhibit more self discharge than smaller ones. 
 
-The batteries selected in \cref{tab:battery:cost} typically exhibit less than 500\si{\nano\ampere} self-discharge in standard environmental conditions. Solid-state batteries exhibit even less self discharge, at similar rates to capacitors. Notably, many types of Li-ion and LiPo batteries also require additional protection circuitry to prevent deep discharges and overcurrent charging/discharging. This additional circuitry incurs additional self-discharge. However, extremely efficient options exist to manage small batteries~\cite{ltc4071Datasheet,bq25505,adp5091}. The LTC4017 requires only 550\si{\nano\ampere} when in operation, and features a very low disconnect current (<1\si{\nano\ampere}) to extend shelf-life~\cite{ltc4071Datasheet}.
-This amount of self-discharge is negligible when considering the average sleep currents of common sensors and MCU options. Generally, sleep currents will still be dominated by memory retention and low frequency clock operation, on the order of a few \si{\micro\ampere}. 
+The batteries selected in \cref{tab:battery:cost} typically exhibit less than 500\ssi{\nano\ampere} self-discharge in standard environmental conditions. Solid-state batteries exhibit even less self discharge, at similar rates to capacitors. Notably, many types of Li-ion and LiPo batteries also require additional protection circuitry to prevent deep discharges and overcurrent charging/discharging. This additional circuitry incurs additional self-discharge. However, extremely efficient options exist to manage small batteries~\cite{ltc4071Datasheet,bq25505,adp5091}. The LTC4017 requires only 550\ssi{\nano\ampere} when in operation, and features a very low disconnect current (<1\ssi{\nano\ampere}) to extend shelf-life~\cite{ltc4071Datasheet}.
+This amount of self-discharge is negligible when considering the average sleep currents of common sensors and MCU options. Generally, sleep currents will still be dominated by memory retention and low frequency clock operation, on the order of a few \ssi{\micro\ampere}. 
 
 While the self discharge of capacitors and supercapacitors appears lower than batteries, this is partially due to how it is measured and rated. However, the self discharge of supercapacitors is actually is comparable to that of batteries when considering short term post-charge behavior.
 Supercapacitors exhibit a pronounced, non-ideal phenomena known as dielectric absorption~\cite{kundert2008modeling}. Dielectric absorption represents a decreasing exponential decay of the supercapacitor voltage immediately after charging. After hours or days, self-discharge is dominated by a linear leakage current. The magnitude of the decay depends on the initial voltage, temperature, and duration of the charge~\cite{kowal2011detailed}. Datasheets generally specify supercapacitor leakage after a subsequent 24 hour constant voltage charge and 1 hour open circuit period. This is sufficient time for the contribution of dielectric absorption to be rendered negligible. After this time, only the internal parallel leakage resistance is a factor.
 
-In the short term, however, the discharge due to dialectric absorption dominates. For example, after an hour of constant voltage charging, the 33\si{\milli\farad} BestCap supercapacitor listed in \cref{tab:battery:cost} experiences an average of 300\si{\nano\ampere} self-discharge over a 3 hour window. Considering the common use case of supercapacitors in batteryless systems, where any captured energy is immediately used whenever it is available. This short term cycle use case means that energy is never stored for an extended period of time, and dialectric absorption is a primary factor in self-discharge for batteryless systems. While I have not characterized the self-discharge of each individual supercapacitor listed in \cref{tab:battery:cost}, this phenomena is inherent to electrochemical capacitor technology.
+In the short term, however, the discharge due to dialectric absorption dominates. For example, after an hour of constant voltage charging, the 33\ssi{\milli\farad} BestCap supercapacitor listed in \cref{tab:battery:cost} experiences an average of 300\ssi{\nano\ampere} self-discharge over a 3 hour window. Considering the common use case of supercapacitors in batteryless systems, where any captured energy is immediately used whenever it is available. This short term cycle use case means that energy is never stored for an extended period of time, and dialectric absorption is a primary factor in self-discharge for batteryless systems. While I have not characterized the self-discharge of each individual supercapacitor listed in \cref{tab:battery:cost}, this phenomena is inherent to electrochemical capacitor technology.
 
 %In addition to additional leakage due to absorption effects, some batteryless sensor designs employ a bank of multiple parallel capacitors and supercapacitors to build up enough energy storage to support their workload~\cite{colinReconfigurable18}. Since these capacitors are in parallel, their internal resistances are summed. 
 
@@ -215,8 +215,8 @@ Solid-state batteries are still costly, as they are a newly commercialized techn
 Despite this, solid-state batteries offer a similar magnitude of energy capacity per dollar to supercapacitors.
 Other battery types offer several orders of magnitude more energy capacity per dollar than capacitors and supercapacitors.
 
-The expensiveness of capacitors is accentuated when considering that some designs require multiple parallel capacitors or supecapacitors to build up enough energy capacity to enable required atomic operations. For example, the Capybara design is configured with 14 of the 7.5\si{\milli\farad} Seiko supercapacitors, each costing ~\$2.42 USD, for a total of \$33.88~\cite{colinReconfigurable18}. The small 1.8 \si{\milli\Ah} battery offers 4.4x the energy capacity of the combined 14 parallel supercapacitors, for only \$1.25.
-It would require 61 of the Seiko supercapacitors to provide the same amount of energy capacity as the 1.8\si{\milli\Ah} battery. Those 61 supercapacitors would cost \$148.
+The expensiveness of capacitors is accentuated when considering that some designs require multiple parallel capacitors or supecapacitors to build up enough energy capacity to enable required atomic operations. For example, the Capybara design is configured with 14 of the 7.5\ssi{\milli\farad} Seiko supercapacitors, each costing ~\$2.42 USD, for a total of \$33.88~\cite{colinReconfigurable18}. The small 1.8 \ssi{\milli\Ah} battery offers 4.4x the energy capacity of the combined 14 parallel supercapacitors, for only \$1.25.
+It would require 61 of the Seiko supercapacitors to provide the same amount of energy capacity as the 1.8\ssi{\milli\Ah} battery. Those 61 supercapacitors would cost \$148.
 
 Besides the Seiko supercapacitor, several of the selected supercapacitors in \cref{tab:battery:cost} are as expensive or more expensive than the selected batteries~\cite{murataCap,kemetCap,seikoCap,bestCap}.
 Small, 2-50~mAh LTO batteries can be purchased for
@@ -227,7 +227,7 @@ Small, 2-50~mAh LTO batteries can be purchased for
 Also, when considering the cost of other components in a wireless energy harvesting system, like
 an SoC~\cite{nrf52840}, harvester~\cite{sanyoSolarCell} and sensors~\cite{si7021},
 which each cost around \$5 USD each in low quantities, a battery will not constitute
-the driving cost. Batteries are by far the most cost effective option for providing energy capacity. The argument that they are too expensive for a sensor design says nothing to the comparable cost of supercapacitors, and entirely ignores the benefits of the superior energy density of batteries. 
+the driving cost. Batteries are by far the most cost effective option for providing energy capacity. The argument that they are too expensive for a sensor design does not consider the comparable cost of supercapacitors, and entirely ignores the benefits of the superior energy density of batteries. 
 
 
 \section{Lifetime}
@@ -238,7 +238,7 @@ This section serves as an effort to quantify and compare battery lifetime with c
 While modern battery technology will never compete with the longevity of capacitors, for low power energy harvesting, cycle lifetime is unlikely to be the limiting factor on the lifetime of a battery, never mind the system as a whole. 
 
 %Perhaps the primary reason for the excitement around batteryless platform is the claim of infinite lifetimes of their power supplies. And this claim has merit when considering ceramic and tantalum capacitors, 
-While ceramic and tantalum capacitors can potentially last a million years, these lifetime estimates do not hold for supercapacitors, which are often rated in thousands of hours at a specified voltage and temperature (often 65-85\si{\celsius})~\cite{bestCap,murataCap}. This lifetime is further influenced by the cycling characteristic and intensity of the workload~\cite{kreczanik2013study}. For low power wireless sensors in room temperatures, with the sporadic cycling rate of an intermittent system, one can still expect lifetimes of a hundred thousand to one million hours~\cite{kreczanik2013study}. While this is a long lifetime, it is by no means infinite.
+While ceramic and tantalum capacitors can potentially last a million years, these lifetime estimates do not hold for supercapacitors, which are often rated in thousands of hours at a specified voltage and temperature (often 65-85\ssi{\celsius})~\cite{bestCap,murataCap}. This lifetime is further influenced by the cycling characteristic and intensity of the workload~\cite{kreczanik2013study}. For low power wireless sensors in room temperatures, with the sporadic cycling rate of an intermittent system, one can still expect lifetimes of a hundred thousand to one million hours~\cite{kreczanik2013study}. While this is a long lifetime, it is by no means infinite.
 
 Conversely, the cycle lifetime of a battery is generally the number of full cycles at a rated continuous discharge/charge current (usually 0.5C or 1C) before the battery's capacity diminishes to 80\% of its original rated capacity.
 Generally, NMC lithium batteries offer a cycle lifetime between 3000 and 5000 cycles~\cite{richter2017measurements,preger2020degradation}, compared to 300-700 cycles for LCO and LMO batteries.
@@ -258,7 +258,7 @@ expectations for both 100\% and 10\% DoD are summarized in
 \cref{tab:battery:cost}.
 
 On its face, several thousand cycles does not seem like a lot compared to the lifetime estimates of capacitors and supercapacitors. However, for batteries, this cycle lifetime amounts to a significant amount energy. This energy also represents a significant amount of time when considering the energy capacity of batteries, and the expected charge/discharge behavior of energy harvesting wireless sensors.
-The comparatively vast energy capacity of batteries means that each cycle represents a significant amount of energy. This amount of energy can drive a low power workload for an extended period of time. For example, the representative periodic workload described in \cref{tab:capacity:rep} requires an average power of 58.6\si{\micro\watt}. For the smallest 1.8\si{\milli\Ah} battery, a single discharge cycle represents just over 3 days of continuous operation. The rated 7000 cycle lifetime of this cell represents 117 years, assuming an identical charge/discharge cycle. 
+The comparatively vast energy capacity of batteries means that each cycle represents a significant amount of energy. This amount of energy can drive a low power workload for an extended period of time. For example, the representative periodic workload described in \cref{tab:capacity:rep} requires an average power of 58.6\ssi{\micro\watt}. For the smallest 1.8\ssi{\milli\Ah} battery, a single discharge cycle represents just over 3 days of continuous operation. The rated 7000 cycle lifetime of this cell represents 117 years, assuming an identical charge/discharge cycle. 
 
 For wireless sensor workloads, battery cycle lifetime is not going to constitute the main source of failure in designs that incorporate them. Instead, limited shelf-life and poor battery management are likely to be the driving forces behind usable battery lifetimes. 
 Shelf-life represents the amount of time a battery can sit uncharged before depleting itself and experiencing capacity degradation. Batteries must also be properly charged and discharged within rated current limits, and should not be overvolted or undervolted. 
@@ -281,19 +281,19 @@ When considering this reality, only systems that employ ceramic and tantalum cap
 \section{Temperature Sensitivity}
 In addition to lifetime considerations, batteries are also notorious for their temperature sensitivity. As mentioned previously, in temperature extremes, batteries exhibit higher ESR, self discharge, and have accelerated capacity degradation. Out of the many arguments against batteries, temperature sensitivity is the most coherent. This section seeks to quantify and compare the temperature sensitivity of capacitors, supercapacitors, and batteries and identify the applications for which it has a significant impact.
 
-Ceramic and tantalum capacitors are very temperature resistant. Of the few selected in \cref{tab:battery:cost}, both types are rated for -55 to +125\si{\celsius}~\cite{ceramicDatasheet,ceramicDatasheet2,tantalumDatasheet}. The ceramic and tantalum capacitors both exhibit approximately 10\% capacitance difference at -55 and 85\si{\celsius}. Extreme temperatures can reduce operational lifetimes, however. High temperatures can reduce expected lifetimes from 4000 years at 45\si{\celsius} to just 14 years at 85\si{\celsius} for tantalum capacitors~\cite{kemetLife}.
+Ceramic and tantalum capacitors are very temperature resistant. Of the few selected in \cref{tab:battery:cost}, both types are rated for -55 to +125\ssi{\celsius}~\cite{ceramicDatasheet,ceramicDatasheet2,tantalumDatasheet}. The ceramic and tantalum capacitors both exhibit approximately 10\% capacitance difference at -55 and 85\ssi{\celsius}. Extreme temperatures can reduce operational lifetimes, however. High temperatures can reduce expected lifetimes from 4000 years at 45\ssi{\celsius} to just 14 years at 85\ssi{\celsius} for tantalum capacitors~\cite{kemetLife}.
 
-Supercapacitors are also rated for extreme temperatures, and those listed in \cref{tab:battery:cost} can withstand temperatures between -40 to -20\si{\celsius} on the low end to up to 70\si{\celsius}. Supercapacitors generally experience increased ESR with lower temperatures, and lifetime limits with higher temperatures~\cite{murataCap,bestCap,kreczanik2013study,murataTech}. Capacitance is generally affected by low and high temperatures. For the 33\si{\milli\farad} BestCap, at -40\si{\celsius}, ESR can increase to 20x its rated value. Similarly for the 470\si{\milli\farad} Murata capacitor, it can experience 8x its rated ESR at the same temperature. All supercapacitors have a rated lifetime in terms of hours at a specific temperature. The BestCap can withstand 1000 hours at 70\si{\celsius}, and the Murata cell is rated for 1000 hours at 85\si{\celsius} before experiencing a capacitance degradation of 20\%. For supercapacitors, the effects of extreme temperatures is actually quite severe. At cold temperatures, supercapacitors will be unable to supply current at a sufficient voltage, and at high temperatures their rated lifetime can decrease from hundreds of thousands of hours to just 1000, or from approximately 11 years to 40 days. Even a moderately high temperature of 45\si{\celsius} can reduce some supercapacitor operational lifetimes to 3 years from 14 years at room temperature~\cite{kreczanik2013study}.
+Supercapacitors are also rated for extreme temperatures, and those listed in \cref{tab:battery:cost} can withstand temperatures between -40 to -20\ssi{\celsius} on the low end to up to 70\ssi{\celsius}. Supercapacitors generally experience increased ESR with lower temperatures, and lifetime limits with higher temperatures~\cite{murataCap,bestCap,kreczanik2013study,murataTech}. Capacitance is generally affected by low and high temperatures. For the 33\ssi{\milli\farad} BestCap, at -40\ssi{\celsius}, ESR can increase to 20x its rated value. Similarly for the 470\ssi{\milli\farad} Murata capacitor, it can experience 8x its rated ESR at the same temperature. All supercapacitors have a rated lifetime in terms of hours at a specific temperature. The BestCap can withstand 1000 hours at 70\ssi{\celsius}, and the Murata cell is rated for 1000 hours at 85\ssi{\celsius} before experiencing a capacitance degradation of 20\%. For supercapacitors, the effects of extreme temperatures is actually quite severe. At cold temperatures, supercapacitors will be unable to supply current at a sufficient voltage, and at high temperatures their rated lifetime can decrease from hundreds of thousands of hours to just 1000, or from approximately 11 years to 40 days. Even a moderately high temperature of 45\ssi{\celsius} can reduce some supercapacitor operational lifetimes to 3 years from 14 years at room temperature~\cite{kreczanik2013study}.
 
-Like supercapacitors, batteries experience adverse effects at extreme temperatures. At low temperatures, lithium-based batteries exhibit a reduced energy capacity, support lower charge and discharge rates, exhibit higher ESR, and can experience accelerated shelf-life and cycle aging~\cite{jaguemont2015lithium}. For a LFP battery at -20\si{\celsius}, its capacity is reduced to approximately 60\% of its original value. When this battery is stored at -20\si{\celsius} for 17 days, it experiences a further 10\% capacity degradation to 50\%, and a 16x increase in ESR to 8\si{\milli\ohm} from 0.5\si{\milli\ohm}~\cite{jaguemont2015lithium}.
-If charging rates are exceeded at cold temperatures, or the battery is simply cycled at low temperatures, additional battery capacity degradation can occur. The same LFP battery as above experiences a 12\% degradation after only 12 cycles at -20\si{\celsius}~\cite{jaguemont2015lithium}.
+Like supercapacitors, batteries experience adverse effects at extreme temperatures. At low temperatures, lithium-based batteries exhibit a reduced energy capacity, support lower charge and discharge rates, exhibit higher ESR, and can experience accelerated shelf-life and cycle aging~\cite{jaguemont2015lithium}. For a LFP battery at -20\ssi{\celsius}, its capacity is reduced to approximately 60\% of its original value. When this battery is stored at -20\ssi{\celsius} for 17 days, it experiences a further 10\% capacity degradation to 50\%, and a 16x increase in ESR to 8\ssi{\milli\ohm} from 0.5\ssi{\milli\ohm}~\cite{jaguemont2015lithium}.
+If charging rates are exceeded at cold temperatures, or the battery is simply cycled at low temperatures, additional battery capacity degradation can occur. The same LFP battery as above experiences a 12\% degradation after only 12 cycles at -20\ssi{\celsius}~\cite{jaguemont2015lithium}.
 Likewise, at higher temperatures, lithium batteries also experience accelerated aging and increased internal resistance~\cite{leng2015effect}. At extreme temperatures, some types of lithium batteries can experience thermal runaway and cause explosions or fires. These effects are rarely described and quantified in battery datasheets. Instead, manufacturers simply provide a range of operational temperatures.
 
-Li-ion and LiPo batteries are particularly sensitive to temperature. Of those listed in \cref{tab:battery:cost}, they are generally only rated for 0-40\si{\celsius} for charging, and -20-60\si{\celsius} for discharging. I would expect them to perform worse than the metrics listed previously for the LiFeMnPO\textsubscript{4} battery.
+Li-ion and LiPo batteries are particularly sensitive to temperature. Of those listed in \cref{tab:battery:cost}, they are generally only rated for 0-40\ssi{\celsius} for charging, and -20-60\ssi{\celsius} for discharging. I would expect them to perform worse than the metrics listed previously for the LiFeMnPO\textsubscript{4} battery.
 Generally, LTO and LFP batteries perform better in extreme temperatures than traditional Li-ion and LiPo cells.
 Some 
 datasheets and authors report operating LTO batteries successfully as low as -30\,\textdegree C
-and as high as 75\,\textdegree C~\cite{LTODatasheet2, lifepo4Datasheet, chenEvaluation15}. From their datasheet, the selected LTO cells in \cref{tab:battery:cost} exhibit a 10\% capacity degradation at -20\si{\celsius}, and a 20\% degradation at -30\si{\celsius}. At high temperatures, these cells only experience a 2\% degradation at 75\si{\celsius}, and less than 1\% at 60\si{\celsius}. LFP cells perform worse than LTO cells at lower temperatures. According to the datasheet of the cells in \cref{tab:battery:cost}, they experience 40\% capacity degradation at -20\si{\celsius}, which is in agreement with the previous section~\cite{lifepo4Datasheet, jaguemont2015lithium}. Solid-state batteries also perform relatively well in extreme temperatures due to their solid electrolyte, and there are commercial options rated for -20 to 80\si{\celsius}. However, at -20\si{\celsius}, effective capacity is reduced to just 20\% of original. For this solid-state battery, effective capacity actually increases at 80\si{\celsius} to 120\%~\cite{tdkCeraCharge}.
+and as high as 75\,\textdegree C~\cite{LTODatasheet2, lifepo4Datasheet, chenEvaluation15}. From their datasheet, the selected LTO cells in \cref{tab:battery:cost} exhibit a 10\% capacity degradation at -20\ssi{\celsius}, and a 20\% degradation at -30\ssi{\celsius}. At high temperatures, these cells only experience a 2\% degradation at 75\ssi{\celsius}, and less than 1\% at 60\ssi{\celsius}. LFP cells perform worse than LTO cells at lower temperatures. According to the datasheet of the cells in \cref{tab:battery:cost}, they experience 40\% capacity degradation at -20\ssi{\celsius}, which is in agreement with the previous section~\cite{lifepo4Datasheet, jaguemont2015lithium}. Solid-state batteries also perform relatively well in extreme temperatures due to their solid electrolyte, and there are commercial options rated for -20 to 80\ssi{\celsius}. However, at -20\ssi{\celsius}, effective capacity is reduced to just 20\% of original. For this solid-state battery, effective capacity actually increases at 80\ssi{\celsius} to 120\%~\cite{tdkCeraCharge}.
 No information is given on temperature's effect on ESR and long-term cycle lifetime for these cells, but related work indicates these metrics would still be severely impacted by extreme temperatures.
 ~\cite{wangCycle11, swierczynskiInvestigation14}.
 
@@ -314,7 +314,7 @@ The LFP cathode material has been shown to not release oxygen during thermal run
 The P-O bond within the PO\textsubscript{4}\textsuperscript{3-} ion is stronger than that of the Co-O bond in the CoO\textsubscript{2}\textsuperscript{-}, so that when abused, oxygen is released slowly or not at all~\cite{nitta2015li}.
 This results in a significantly safer cell, where any thermal runaway is dominated by anode and electrolyte reactions at extreme temperatures~\cite{doughty2012general}.
 
-Like LFP cathodes, LTO anodes provide similar benefits over graphite anodes. Graphite is prone to expansion and contraction during charging and discharging, respectively, which causes internal damage to the cell, resulting in capacity fading and in rare cases, short circuit conditions~\cite{sandhya2014lithium}. This effect is further exacerbated at extreme temperatures. 
+LTO anodes provide similar benefits over graphite anodes. Graphite is prone to expansion and contraction during charging and discharging, respectively, which causes internal damage to the cell, resulting in capacity fading and in rare cases, short circuit conditions~\cite{sandhya2014lithium}. This effect is further exacerbated at extreme temperatures. 
 LTO is considered a zero-strain material, meaning it experiences very little change in its chemical structure during charging, discharging, or temperature changes, unlike graphite. When heated to high temperatures, graphite can break down and react exothermically with the electrolyte, releasing flammable hydrocarbons. By contrast, at the same high temperatures, LTO anodes do not produce heat or release any gasses~\cite{belharouakElectrochemistry11}. Beyond the anode chemical stability, the high potential of LTO anodes prevents lithium dendrites from forming upon deep cycling or after many cycles~\cite{nitta2015li}. Lithium dendrites are the main cause for internal shorts in batteries with graphite anodes. These features of LTO anodes greatly lower the risk of internal short circuits, thermal runaway, and explosions.
 The solid electrolyte in solid-state batteries also substantially improves safety. A solid electrolyte is not flammable, and since it is solid, it is chemically unable to interact explosively with a decaying cathode or anode~\cite{kim2015review}.
 
@@ -339,11 +339,11 @@ The choice to use a (super)capacitor has become the default, often selected to p
     \begin{tabular}{l | l | S[table-format=1.9,table-align-text-post = false] | c | S[table-format=3.3,table-align-text-post = false] | S[table-format=7.3,table-align-text-post = false] | S[table-format=3.3,table-align-text-post = false] | c | r | c | c | c | c | c}
      \multirow{2}{*}{Technology}  & {Capacitance / } &  {Energy Capacity} & {Voltage} & {Volume} & {Energy Density} & {Power Density\tnote{b}} & Temperature & ESR &  Self-Discharge &  \multicolumn{2}{c|}{Cycle Life (Cycles)\,\tnote{j}} & \multicolumn{2}{c}{Cost (USD)}\\\cline{11-14}
 
-     & {Capacity} & {(\si{\Wh})} & {(\si{\volt})} &  {(\si{\mm\cubed})} & {(\si[per-mode=symbol]{\Wh\per\liter})} & {(\si[per-mode=symbol]{\watt\per\liter})} & (Charge/Discharge\,\textdegree C) & (\si{\ohm}) & (\si{\nano\ampere}) &  100\% DoD & 10\% DoD & US\,\tnote{m}  & China  \\
+     & {Capacity} & {(\ssi{\Wh})} & {(\ssi{\volt})} &  {(\ssi{\mm\cubed})} & {(\ssi[per-mode=symbol]{\Wh\per\liter})} & {(\ssi[per-mode=symbol]{\watt\per\liter})} & (Charge/Discharge\,\textdegree C) & (\ssi{\ohm}) & (\ssi{\nano\ampere}) &  100\% DoD & 10\% DoD & US\,\tnote{m}  & China  \\
       \hline
       
 \multirow{2}{*}[0.6em]{MLCC}
-    & 47\si{\micro\farad}~\cite{ceramicDatasheet2}  
+    & 47\ssi{\micro\farad}~\cite{ceramicDatasheet2}  
     & 0.000000259\,\tnote{a}
     & 6.3
     & 8.19 
@@ -357,7 +357,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 0.16
     & 0.03  \\
     
-    & 100\si{\micro\farad}~\cite{ceramicDatasheet}
+    & 100\ssi{\micro\farad}~\cite{ceramicDatasheet}
     & 0.00000139\,\tnote{a}
     & 10
     & 20.0
@@ -372,7 +372,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 0.04  \\
                                 
 \multirow{2}{*}[0.6em]{Tantalum}    
-    & 100\si{\micro\farad}~\cite{tantalumDatasheet}
+    & 100\ssi{\micro\farad}~\cite{tantalumDatasheet}
     & 0.000000551\,\tnote{a}
     & 6.3
     & 18.6
@@ -386,7 +386,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 0.28          
     & 0.17  \\
                                     
-    & 220\si{\micro\farad}~\cite{tantalumDatasheet}
+    & 220\ssi{\micro\farad}~\cite{tantalumDatasheet}
     &0.00000306\,\tnote{a}
     & 10
     & 91.0
@@ -401,7 +401,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 0.16  \\\hline
 
 \multirow{2}{*}[0.6em]{Supercapacitor}        
-    & 7.5\si{\milli\farad}~\cite{seikoCap}   
+    & 7.5\ssi{\milli\farad}~\cite{seikoCap}   
     & 0.0000704\,\tnote{a}
     & 2.6
     & 7.2               
@@ -415,7 +415,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 2.42
     & {\textemdash}     \\
                                     
-    & 33\si{\milli\farad}~\cite{bestCap}
+    & 33\ssi{\milli\farad}~\cite{bestCap}
     & 0.000139\,\tnote{a}
     & 5.5
     & 870
@@ -429,7 +429,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 8.65
     & {\textemdash} \\
                                     
-    & 100\si{\milli\farad}~\cite{kemetCap}
+    & 100\ssi{\milli\farad}~\cite{kemetCap}
     & 0.000420\,\tnote{a}
     & 5.5 
     & 1130
@@ -443,7 +443,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 1.10
     & {\textemdash}     \\
                                    
-    & 470\si{\milli\farad}~\cite{murataCap}  
+    & 470\ssi{\milli\farad}~\cite{murataCap}  
     & 0.00115\,\tnote{a}
     & 4.2
     & 1029 
@@ -459,7 +459,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     
 \multirow{2}{*}[0.6em]{Li-ion}        
 
-    & 11\si{\milli\Ah}~\cite{millibatNimbus}
+    & 11\ssi{\milli\Ah}~\cite{millibatNimbus}
     & 0.0407
     & 3.7
     & 191
@@ -473,7 +473,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 4.00
     & \textemdash \\
     
-    & 40\si{\milli\Ah}~\cite{40mahliion}
+    & 40\ssi{\milli\Ah}~\cite{40mahliion}
     & 0.148
     & 3.7
     & 1010
@@ -487,7 +487,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 1.62
     & \textemdash \\
     
-    & 80\si{\milli\Ah}~\cite{millibatNimbus}
+    & 80\ssi{\milli\Ah}~\cite{millibatNimbus}
     & 0.296
     & 3.7
     & 1010
@@ -502,7 +502,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & \textemdash \\\hline
     
 \multirow{2}{*}[0.6em]{LiPo}        
-    & 40\si{\milli\Ah}~\cite{lipoDatasheet}
+    & 40\ssi{\milli\Ah}~\cite{lipoDatasheet}
     & 0.148
     & 3.7
     & 660
@@ -518,7 +518,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     
 \multirow{2}{*}[0.6em]{LTO}
 
-    & 1.8\si{\milli\Ah}~\cite{LTODatasheet2}
+    & 1.8\ssi{\milli\Ah}~\cite{LTODatasheet2}
     & 0.0043
     & 2.4
     & 88.0
@@ -531,7 +531,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 10000+~\cite{hallExperimental18}
     &  {\textemdash}& 1.58  \\
     
-    & 5\si{\milli\Ah}~\cite{LTODatasheet2}
+    & 5\ssi{\milli\Ah}~\cite{LTODatasheet2}
     & 0.012
     & 2.4
     & 200
@@ -544,7 +544,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 10000+~\cite{hallExperimental18}
     &  {\textemdash}& 1.58  \\
     
-    & 15\si{\milli\Ah}~\cite{LTODatasheet2}
+    & 15\ssi{\milli\Ah}~\cite{LTODatasheet2}
     & 0.036
     & 2.4
     & 496
@@ -557,7 +557,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 10000+~\cite{hallExperimental18}
     &  {\textemdash}& 1.58  \\
     
-    & 20\si{\milli\Ah}~\cite{LTODatasheet,LTODatasheet2}
+    & 20\ssi{\milli\Ah}~\cite{LTODatasheet,LTODatasheet2}
     & 0.0480
     & 2.4
     & 682
@@ -571,7 +571,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     & 6.75
     & 1.38  \\
     
-    & 125\si{\milli\Ah}~\cite{LTODatasheet2}
+    & 125\ssi{\milli\Ah}~\cite{LTODatasheet2}
     & 0.300
     & 2.4
     & 2360
@@ -585,7 +585,7 @@ The choice to use a (super)capacitor has become the default, often selected to p
     &  {\textemdash}& 1.58 \\\hline
     
 LFP
-    & 70\si{\milli\Ah}~\cite{lifepo4Datasheet}
+    & 70\ssi{\milli\Ah}~\cite{lifepo4Datasheet}
     & 0.224
     & 3.2
     & 1570 
@@ -599,7 +599,7 @@ LFP
     &  {\textemdash}
     & 1.38 \\
     
-    & 100\si{\milli\Ah}~\cite{lifepo4Datasheet}
+    & 100\ssi{\milli\Ah}~\cite{lifepo4Datasheet}
     & 0.320
     & 3.2
     & 1960
@@ -614,7 +614,7 @@ LFP
     & 1.38 \\\hline
 
 Solid State
-    & 0.7\si{\milli\Ah}~\cite{stEnfilm}
+    & 0.7\ssi{\milli\Ah}~\cite{stEnfilm}
     & 0.00273
     & 3.9
     & 145
@@ -628,7 +628,7 @@ Solid State
     & 30.00 
     & {\textemdash} \\
     
-    & 0.1\si{\milli\Ah}~\cite{tdkCeraCharge}
+    & 0.1\ssi{\milli\Ah}~\cite{tdkCeraCharge}
     & 0.000150
     & 1.50
     & 14.5
@@ -653,7 +653,7 @@ Solid State
         \item[c] Effective power for capacitors is slightly nebulous. Here the higher end of ESR is assumed.
         \item[d] Supercapacitors experience higher ESR at lower temperatures and higher leakage at higher temperatures~\cite{murataTech}.\\
         \item[e] Lithium batteries experience higher ESR, higher leakage, lower capacity and shorter lifetimes at temperature extremes.
-        \item[f] ESR is frequency dependent, supercapacitors are usually rated at 1\si{\kilo\hertz}. \\
+        \item[f] ESR is frequency dependent, supercapacitors are usually rated at 1\ssi{\kilo\hertz}. \\
         \item[g] Empirically tested.
         \item[h] Both tested and calculated from insulation resistance after absorption period.
         \item[i] Specification after 24\,h of charging.
@@ -689,14 +689,14 @@ Solid State
     \textbf{(a)}, \textbf{(c)} and \textbf{(f)} represent the energy storage configurations used
     in the Flicker platfrom with BLE and several sensors~\cite{hesterFlicker17}, the Solar Monjolo~\cite{campbellEnergy14} and the Capybara temperature
     monitor and alarm~\cite{colinReconfigurable18}, which have total
-    capacitances and energy capacities of 119\si{\micro\farad} (0.41\si{\micro\Wh} at 5~V), 500\si{\micro\farad} (1.7\si{\micro\Wh} at 5~V)
-    and 8.8\si{\milli\farad} (8.3\si{\micro\Wh} at 2.6~V), respectively. Capacitors
+    capacitances and energy capacities of 119\ssi{\micro\farad} (0.41\ssi{\micro\Wh} at 5~V), 500\ssi{\micro\farad} (1.7\ssi{\micro\Wh} at 5~V)
+    and 8.8\ssi{\milli\farad} (8.3\ssi{\micro\Wh} at 2.6~V), respectively. Capacitors
     \textbf{(d)}~\cite{illinoisCap} and \textbf{(h)}~\cite{murataCap} are large
     supercapacitors available on the Capybara platform and have the
-    capacitances and energy capacities of 300\si{\milli\farad} (300\si{\micro\Wh} at 2.7\si{\volt}) and 220\si{\milli\farad}
-    (540\si{\micro\Wh} at 4.2\si{\volt}) respectively.  Devices \textbf{(b)} and \textbf{(i)} are 
-    small LTO battery cells with 1.8\si{\milli\Ah} (4.3\si{\milli\Wh} at 2.4~V) and 20\si{\milli\Ah} (48\si{\milli\Wh}
-    at 2.4\si{\volt}) capacity respectively~\cite{LTODatasheet2}. Devices \textbf{(e)} and \textbf{(j)} are small prototype Li-ion coin cells with 11\si{\milli\Ah} (41\si{\milli\Wh} at 3.7~V) and 80\si{\milli\Ah} (296\si{\milli\Wh} at 3.7~V) respectively~\cite{millibatNimbus}. Device \textbf{g} is a traditional Lithium Polymer pouch cell with 40\si{\milli\Ah} (148\si{\milli\Wh} at 3.7~V)~\cite{sparkfunPouch}.
+    capacitances and energy capacities of 300\ssi{\milli\farad} (300\ssi{\micro\Wh} at 2.7\ssi{\volt}) and 220\ssi{\milli\farad}
+    (540\ssi{\micro\Wh} at 4.2\ssi{\volt}) respectively.  Devices \textbf{(b)} and \textbf{(i)} are 
+    small LTO battery cells with 1.8\ssi{\milli\Ah} (4.3\ssi{\milli\Wh} at 2.4~V) and 20\ssi{\milli\Ah} (48\ssi{\milli\Wh}
+    at 2.4\ssi{\volt}) capacity respectively~\cite{LTODatasheet2}. Devices \textbf{(e)} and \textbf{(j)} are small prototype Li-ion coin cells with 11\ssi{\milli\Ah} (41\ssi{\milli\Wh} at 3.7~V) and 80\ssi{\milli\Ah} (296\ssi{\milli\Wh} at 3.7~V) respectively~\cite{millibatNimbus}. Device \textbf{g} is a traditional Lithium Polymer pouch cell with 40\ssi{\milli\Ah} (148\ssi{\milli\Wh} at 3.7~V)~\cite{sparkfunPouch}.
     The LTO battery \textbf{(b)} and the Li-ion coin cell \textbf{(e)} are among the smallest of all configurations of energy storage
     presented here and also provide one to two orders of magnitude more energy capacity
     compared to \textbf{(f)}, the largest supercapacitor presented.
