@@ -347,7 +347,7 @@ Where $\max P_w$ represents the maximum instantaneous power required by a sensor
 If the harvesting power has significant variance or frequent outages, 
 then a sensor must have some ability to buffer energy to use when its
 instantaneous operating power exceeds that of the harvester input power.
-This green region of \cref{fig:intuition:framework} represents design points that have sufficient income power to be \textbf{Always on}.
+This green region of \cref{fig:intuition:framework} represents design points that have sufficient income power to be \textsf{Always on}.
 
 \subsubsection{Infeasible} 
 If the energy harvester supplies less average power than
@@ -382,7 +382,7 @@ This constraint is described by  \cref{eqn:intuition:atomic}.
 \end{equation}
 Designs that do not satisfy this the constraints of \cref{eqn:intuition:leakage,eqn:intuition:atomic} have insufficient income to ever power on, or have insufficient energy capacity to perform a necessary operation and are  
 therefore infeasible.
-The red regions of \cref{fig:intuition:framework} represent design points that are \textbf{Infeasible}. 
+The red regions of \cref{fig:intuition:framework} represent design points that are \textsf{Infeasible}. 
 
 \subsubsection{State Retention Required}
 If the energy capacity of the energy buffer 
@@ -395,7 +395,7 @@ A design requires state preservation techniques if \cref{eqn:intuition:checkpoin
     \label{eqn:intuition:checkpointing}
     \max X \leq E_{capacity} < \sum_{e \in X} e
 \end{equation}
-In \cref{fig:intuition:framework} the blue region labelled \textbf{State retention required} encompasses designs that satisfy \cref{eqn:intuition:checkpointing} and require state retention techniques to ensure proper operation.  
+In \cref{fig:intuition:framework} the blue region labelled \textsf{State retention required} encompasses designs that satisfy \cref{eqn:intuition:checkpointing} and require state retention techniques to ensure proper operation.  
 %composed of multiple, chained
 %atomic operations (such as sampling a sensor and then sending a radio packet), then
 %a mechanism for saving state and continuing progress on the next reboot
@@ -413,7 +413,7 @@ This constraint is defined by \cref{eqn:intuition:no_checkpoint}.
 \end{equation}
 Systems satisfying \cref{eqn:intuition:no_checkpoint} exist in the white region of \cref{fig:intuition:framework}.
 In this region, systems can avoid the complexity of state retention software frameworks, and the energy that would previously be devoted to performing checkpoints or writing and restoring data to non-volatile memory can be used toward the workload instead. 
-However, a system that satisfies \cref{eqn:intuition:no_checkpoint} may still experience intermittent operation depending on the variability of its energy income and size of its storage. Such systems would occupy the white region of \cref{fig:intuition:framework} labeled \textbf{State retention not required}.
+However, a system that satisfies \cref{eqn:intuition:no_checkpoint} may still experience intermittent operation depending on the variability of its energy income and size of its storage. Such systems would occupy the white region of \cref{fig:intuition:framework} labeled \textsf{State retention not required}.
 
 \subsubsection{Hysteresis Management}
 Hysteresis management is useful for sensors that frequently reboot and must cold start, recharging their storage element from, or close to, empty. 
@@ -432,7 +432,7 @@ A design with average harvestable income ($\bar{P_h}$) less than what it takes t
     \label{eqn:intuition:hysteresis}
     P_l < \bar{P_h} \leq P_s
 \end{equation}
-Sensors within this regime will benefit from hysteresis techniques to reduce the amount of charge and time it takes for them to cold start. They will occupy the purple region in \cref{fig:intuition:framework} labelled \textbf{Hysteresis management helpful}. 
+Sensors within this regime will benefit from hysteresis techniques to reduce the amount of charge and time it takes for them to cold start. They will occupy the purple region in \cref{fig:intuition:framework} labelled \textsf{Hysteresis management helpful}. 
 
 Sensors that are able to harvest more power than it takes to maintain a deep sleep state will still benefit from hysteresis management if they frequently must cold start, or they have a lengthy and energy intensive cold start.
 The utility of hysteresis management is diminished
@@ -573,6 +573,7 @@ This allows us to sweep average power while maintaining the characteristics of e
 
 
 \subsection{Determining Capacity}
+\label{sec:capacity:determining_cap}
 To determine the ideal amount of energy capacity for a given sensor application, the relationship between energy capacity and energy income must be understood.
 As mentioned previously, energy capacity acts similar to a moving average over energy income. With sufficient capacity, energy is stored in times of excess harvestable energy, and provided in times of insufficient energy.
 At some point, a design can allocate enough capacity to effectively treat its energy income as an average, even if it is highly variable.
@@ -795,13 +796,13 @@ It will seek to address the three previously mentioned limitations by modelling 
   income (assumed constantant for this analysis), energy storage capacity, and workload.
   Workload is represented by the set of atomic operations required by an application, 
   as well as the deep sleep and leakage power.  The plot breaks
-  into four regions: {\color{Green}\textit{Always On}} 
-  or effectively powered, {\color{BrickRed}\textit{Infeasible}} due to lack of energy storage or
-  leakage higher than harvesting rate, feasible but {\color{CornflowerBlue} \textit{Requires State Retention}} 
+  into four regions: \textsf{\color{Green} Always On} 
+  or effectively powered, \textsf{\color{BrickRed} Infeasible} due to lack of energy storage or
+  leakage higher than harvesting rate, feasible but \textsf{\color{CornflowerBlue} Requires State Retention} 
   to make forward progress, and enough energy storage so that  
-  \textit{State Retention is Not Required}. Additionally, sensors which have high
+  \textsf{State Retention is Not Required}. Additionally, sensors which have high
   power when they enter deep sleep before depleting their
-  energy buffer may benefit from {\color{DarkOrchid}\textit{Hysteresis Management}} techniques.
+  energy buffer may benefit from \textsf{\color{DarkOrchid} Hysteresis Management} techniques.
   This benefit diminishes with lower sleep currents and higher harvesting potential.
   %With increased capacity, sensors can avoid the complexity of intermittent
   %programming techniques and specialized, reconfigurable power supplies in addition

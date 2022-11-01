@@ -1,35 +1,39 @@
 \chapter{A Simulation-based Exploration of Capacity}
 \label{cha:capacity}
+In the previous chapter, we presented a simple model for energy capacity and explored the effect of capacity on the amount of energy captured by a system. 
+We utilized synthesized energy harvesting traces from an existing irradiance trace dataset, however we simplified the analysis by assuming a static average workload power.
+This chapter will explore expanding our model to utilize several different dynamic workloads based off of benchmarks of real hardware, as well as considering a wireless sensor state machine that better captures the behavior of a real sensor.
+The rest of the chapter is an analysis of the performance of these simulated wireless sensor workloads under real harvesting conditions.
 
-Intro to chapter
-
-\section{Modelling Wireless Sensor Energy State}
+\section{Upgrading Our Model}
 \label{sec:capacity:modelling}
-The framework we have presented does not consider
-harvesting and workload
-variability.
-To explore the dynamic effects that energy
-capacity and backup storage have on sensor performance in the face
-of variability, we develop a simple numerical model.
-We use representative environmental conditions, measurements of real hardware,
-and synthesized workloads to determine the common case for our model and simulate
-the behavior of energy harvesting sensors. From these data, our model
-produces estimates of energy utilization, availability, responsiveness, and
-lifetime.
+%The model and analysis we presented in \cref{sec:intuition:capacity} does not consider
+%workload variability, and simplifies workload to an average.
+In \cref{sec:intuition:capacity}, we argued that a sensor workload, which is often periodic or event driven, does not vary significantly beyond a few hours to a day of operation when compared to the variability of energy harvesting income. Photovoltaic harvesting can vary significantly over the course of a day and throughout a year. 
+To verify this assumption and expand our analysis of capacity, we seek to to explore the dynamic effects that energy
+capacity and backup storage have on sensor performance in the face of workload variability.
+We use representative energy harvesting traces, measurements of real hardware,
+and synthesized dynamic workloads in a new model based on a simple wireless sensor state machine.
+We use this model to simulate
+the behavior of energy harvesting sensors. 
+From the input traces of workload and energy harvesting income, our model produces estimates of sensor energy utilization, availability, responsiveness, and lifetime.
 
-\subsection{Environmental Conditions.}
-We assume an indoor environment
-that is built for and used
-by people.
+\placefigure{tab:capacity:rep}
 
+\subsection{Energy Harvesting Income}
+As in \cref{sec:intuition:capacity}, we utilize the EnHANTs irradiance trace dataset as energy income for our simulation.
+Unlike our previous analysis, we do not use synthesized traces, and instead utilize the traces directly.
+We choose to narrow our focus to two of the traces that we think most accurately represent indoor lighting conditions: Setup A and Setup D.
+As shown in \cref{fig:intuition:traces}, Setup A represents a location that receives some sunlight but is mostly lit by artificial sources while Setup D represents a location near a window that receives significant light during part of the year.
+Beyond \cref{fig:intuition:traces}, these traces are summarized in \cref{tab:capacity:rep}.
+On average, Setup A provides an average of 15.1\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared} which is on the lower end of expected irradiance in indoor environments. Setup D represents the higher end of indoor irradiance with an average 97.4\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}.
 
-\subsection{Representative Hardware.}
+\subsection{Representative Hardware}
 We limit our analysis to the effects of capacity,
 independent of the differences of energy intensity or efficiency in device
-component selection. To do so, we define an example solar energy harvesting
-sensor platform that utilizes available, state-of-the-art, commercial
+component selection. To do so, we define an example photovoltaic energy harvesting
+sensor platform that utilizes currently available commercial
 components.
-\placefigure[t]{tab:capacity:rep}
 We choose new
 components in an attempt to better represent prior energy storage designs and
 give them the benefit of the improvements that have occurred in recent years.
@@ -42,12 +46,12 @@ The physical size of the solar panel used by this sensor
 is assumed to be
 10.9~cm\textsuperscript{2} and the volume of the sensor node is similar to prior
 work like the Hamilton sensor~\cite{kim2018system}.
-We implement this design and describe it further in \cref{sec:impl:permamote}.
+%We implement this design and describe it further in \cref{sec:impl:permamote}.
 
-\subsection{Representative Workloads.}
+\subsection{Representative Workloads}
 We find that sensing workloads generally fall into three
-categories: (i) periodic sense-and-send~\cite{mainwaring2002wireless}, (ii) reactive event detection~\cite{campbellEnergy14}, and (iii) infrequent,
-long-running, high-power events~\cite{levis2004trickle}. We choose a representative workload for each
+categories: (i) periodic sense-and-send~\cite{mainwaring2002wireless}, (ii) reactive event detection~\cite{campbellEnergy14,afanasov2020battery}, and (iii) infrequent,
+long-running, high-energy events~\cite{levis2004trickle}. We choose a representative workload for each
 of these categories to use in our model.
 We characterize our ``periodic sense-and-send''
 workload as periodically sampling a light and color sensor and sending a
@@ -57,48 +61,54 @@ Our ``reactive workload'' is
 represented by sending a BLE advertisement upon motion detection of the main
 entrance of a university building, and we linearly scale the frequency
 of these events to create synthetic traces with varying amounts of usage. 
-We treat these workloads as atomic.  
+We treat these workloads as atomic. 
+When a packet is sent in response to a periodic schedule or a detected event, the energy spent on sending that packet must be spent instantaneously and atomically.  
 Finally, our ``infrequent expensive'' workload is a
 contiguous
 task that is representative of an
 over-the-air firmware update, which is randomly executed with an average occurrence rate
 of once every two weeks.
-We conservatively assume these long running tasks can be interrupted
+We optimistically assume these long running tasks can be interrupted
 and resumed at any point during execution and that any checkpointing does not incur any overhead.
+
+\placefigure[t]{tab:parameters}
 
 \section{An Energy Model for Wireless Sensors}
 We use the previously discussed indoor irradiance traces, generalized
 workloads, and hardware characterizations to model the behavior of sensors
 using different types and sizes of energy storage. We develop an open
 source\footnote{\url{https://github.com/lab11/permamote/tree/master/simulator}}
-numerical model that allows parameterization of various system
+iterative simulator that allows parameterization of various system
 characteristics, including regulator efficiency, solar harvester size
 and efficiency, energy storage capacity, leakage, ESR, and charge-discharge
 efficiency. These parameters are summarized in \cref{tab:parameters}.
 
 The simulation of our model operates as a second-by-second calculation of the
-amount of energy entering and exiting a device.
+amount of energy entering and exiting a device, similar to the model presented in \cref{sec:intuition:capacity}.
 At every step, the simulation calculates the net energy gain or loss of the
 system based on its current state and available stored energy.  Occasionally,
 the model performs a workload event based on either a periodic schedule (in the
 case of a sense-and-send workload) or from a random distribution (reactive
-event detection or a high-power event). For our modeling, workload schedules
+event detection or a high-energy event). For our modeling, workload schedules
 are generated from values listed in \cref{tab:capacity:rep}.
 This simulation is performed for the entirety of an
 input irradiance trace, which constitutes about a year of data. During
 a simulation, metrics such as energy utilization, the fraction of completed
 events versus expected events, and events' time to completion are collected,
-and if applicable, the primary-cell lifetime is estimated from a trace of its
+and if applicable, the primary-cell lifetime is estimated from a trace of its capacity over time.
+
+\placefigure{fig:capacity:statemachine}
 
 During simulation, modeled devices can be online or offline and idle or performing
-work. These states are shown in \cref{fig:statemachine}.  A device's state
+work. These states are shown in \cref{fig:capacity:statemachine}.  A device's state
 transitions from top to bottom of this figure and vice versa depending on the
 energy state of the secondary storage.
 If the secondary-cell energy state drops below \texttt{min\_hyst},
 the state of the system moves to the upper
-half (offline) of this diagram. The state of the system moves downward (online)
+half (\textsf{offline}) of this diagram. The state of the system moves downward (\textsf{online})
 if the state of charge of the secondary reaches the \texttt{max\_hyst}
-limit. Secondary charging hysteresis limits are defined by parameters described in \cref{tab:parameters}.
+limit. 
+Secondary charging hysteresis limits are defined by parameters described in \cref{tab:parameters}.
 A device's state can also move
 to the right or left of the state machine depending on whether a workload event
 is scheduled, or the prescribed workload has been completed. A new
@@ -110,11 +120,11 @@ to perform an expected workload event if it has
 enough energy to perform the event in entirety. If the workload is not atomic,
 the device will only begin scheduled work if it has enough energy to make the
 configured minimum amount of progress. We
-make the assumption that the duration of atomic events are less than the one
+make an assumption that the duration of atomic events are less than the one
 second simulation step.
-We assume that a modeled sensor has perfect, zero-energy progress
-latching and can go to sleep at any point after an active event. If
-there is energy remaining after performing a task, the modeled sensor will
+We also assume that a modeled sensor has perfect, zero-energy progress
+latching and can go to sleep at any point after an active event. 
+If there is energy remaining after performing a task, the modeled sensor will
 attempt to spend the rest of the simulation period in the \textsf{Online Idle} state.
 
 If the simulated device is configured with a backup primary-cell, offline
@@ -125,12 +135,10 @@ from harvested energy. Upon reaching the upper charging hysteresis
 limit, the device returns to an online state, using energy stored in the
 secondary.  If the primary storage is depleted, the simulation ends early.
 
-\placefigure[t]{tab:parameters}
-\placefigure[t]{fig:statemachine}
-\placefigure[t]{fig:usage}
+\placefigure{fig:usage}
 
 \section{Capacity Increases Energy Capture}
-\label{sec:store}
+\label{sec:capacity:capture}
 
 In addition to relaxing the need for intermittent techniques, we find that
 an increase in sensor energy capacity
@@ -140,28 +148,29 @@ energy capacity allows higher energy capture during periods of abundant
 harvestable energy.
 
 \subsection{Ambient Energy Utilization}
-\label{sec:store:utilization}
+\label{sec:capacity:utilization}
 
 Ambient energy is underutilized when it is not used to support the specified
-sensing application. This may happen for two reasons: 1) the secondary
-energy store is full but energy is still available for harvesting, and 2) the
+sensing application. This may happen for two reasons: 1) 
+the secondary
+energy storage is full but energy is still available for harvesting, and 2) the
 sensor performs work based on its energy state rather than its application
 goals. The first scenario is common for energy harvesting systems
-presented in prior work, which charge up a capacitor and wait for an event
+presented in prior work that charge up a capacitor and wait for an event
 before sensing and sending, failing to capture all energy that may
-have been harvested while their capacitor was full~\cite{campbellEnergy14}.
+have been harvested while their capacitor was full~\cite{campbellEnergy14, afanasov2020battery}.
 For an example of the second scenario, consider
 systems that transmit a packet every time their energy storage capacitor
 is full rather than saving this energy for use during periods of lower harvesting
 potential~\cite{hesterFlicker17, colinReconfigurable18}. Another example of this are sensors in which the harvesting
 rate is proportional to the sensed phenomena~\cite{debruin2013monjolo}.
 While compelling for their simplicity, these sensors use
-energy that could be saved and used
-later for more useful and relevant tasks.
+energy that could alternatively be saved and used
+later for event detection or tasks like data summarising or analysis.
 
 To explore ambient energy utilization as a function of storage size, we
 model the charge-discharge patterns of idealized energy stores under
-the harvesting conditions and workloads described in \cref{sec:overview}.
+the harvesting conditions and workloads described in \cref{sec:capacity:modelling}.
 This modeling is primarily accounting for our first classification of
 wasted energy, since our workload definitions \textit{do not} perform
 tasks in response to available energy; instead they attempt to maximize the success
@@ -169,7 +178,7 @@ rates for the specified sensing tasks.
 The results of this modeling are shown in \cref{fig:usage}. No matter
 the amount of available energy, utilization increases as
 storage capacity increases. For scenarios with low harvesting potential and high
-power workloads, a sensor with at least 1\,mWh of storage can accomplish 100\% utilization.
+power workloads, a sensor with at least 1\ssi{\milli\Wh} of storage can accomplish 100\% utilization.
 In cases of
 high harvesting potential and low power workloads, utilization often
 stops increasing before reaching 100\%. This
@@ -177,7 +186,7 @@ can be attributed to a small fraction of the available energy being sufficient
 to fully support the sensing task.
 Small increases in utilization
 have significant impact on reliability and system lifetime.
-\placefigure[t]{fig:reliability}
+\placefigure{fig:reliability}
 
 \subsection{Application Reliability}
 \label{sec:store:reliability}
@@ -468,23 +477,19 @@ due to energy harvesting.
 \begin{definetable}{tab:capacity:rep}
     \begin{threeparttable}
     \centering
-    \scriptsize
     \begin{subtable}{\columnwidth}
-            \centering
-            \scriptsize
-            \begin{tabular}{r | c | c | c | c }
-                \parbox{1cm}{\raggedleft Irradiance\\Trace} & Total Days & \parbox{1cm}{\centering Average\\Power\\(\textmu W/cm\textsuperscript{2})} & \parbox{1.6cm}{\centering 90\textsuperscript{th} Percentile\\Daily Power (\textmu W/cm\textsuperscript{2})} & \parbox{1.6cm}{\centering 10\textsuperscript{th} Percentile\\Daily Power (\textmu W/cm\textsuperscript{2})} \\\hline
-                EnHANTS A   & 394  & 15.1     & 25.0      & 5.2\\
-                EnHANTS D   & 311  & 97.4     & 256.5     & 24.8\\
+            \begin{tabular}{l | c | c | c | c }
+                \thead[l]{\\Irradiance \\Trace} & \thead{\\ \\ Total Days} & \thead{Average\\Power\\(\textmu W/cm\textsuperscript{2})} & \thead{90\textsuperscript{th} Percentile\\Daily Power \\(\textmu W/cm\textsuperscript{2})} & \thead{10\textsuperscript{th} Percentile\\Daily Power \\(\textmu W/cm\textsuperscript{2})} \\\hline
+                EnHANTs A   & 394  & 15.1     & 25.0      & 5.2\\
+                EnHANTs D   & 311  & 97.4     & 256.5     & 24.8\\
                 %Enhants C   & 327  & 745.4    & 1610.0    & 176.1\\
             \end{tabular}
             \caption{Indoor photovoltaic irradiance traces}
+            \label{tab:capacity:rep_trace}
         \end{subtable}\\
-        \vspace{-6pt}
         \begin{subtable}{\columnwidth}
             \centering
-            \scriptsize
-            \begin{tabular}{r | c | c | c}
+            \begin{tabular}{l | c | c | c}
                 Workload Class & Energy per Event (uJ) & Average Period & Average Power (\textmu W)\,\tnote{a}\\\hline
             \multirow{4}{*}{Periodic}   & \multirow{4}{*}{586}  & 10\,s                 &  58.6     \\
                                         &                       & 30\,s                 &  24.5     \\
@@ -496,22 +501,25 @@ due to energy harvesting.
                  Long-Running           & 93,300                 & 2\,weeks\,\tnote{c}  &  5.1      \\
             \end{tabular}
             \caption{Representative workloads}
+            \label{tab:capacity:rep_work}
         \end{subtable}
     \end{threeparttable}
-    \vspace{-4pt}
+    \small
     \begin{tablenotes}[para]
-    \scriptsize
     \item[a] Average power includes an average 5\,\textmu W idle power, measured in \cref{sec:impl:permamote}.\\
     \item[b] Event times are based on a Poisson distribution for each hour of the day and drawn every second. The distribution is parameterized by collected entryway data then scaled.\\
     \item[c] Event time is based on a uniform distribution and drawn every second.
     \end{tablenotes}
     \caption{\normalfont Representative harvesting conditions and workloads.
-    To evaluate different energy storage architectures, we define a set of energy harvesting
+    To evaluate different energy harvesting storage techniques, we define a set of energy harvesting
     conditions and workloads that are representative of common sensing applications. We choose two
-    real, 1\,Hz, irradiance traces with different magnitudes of available energy. We define three
+    real irradiance traces with different magnitudes and distributions of available energy.
+    These traces are summarized in \cref{tab:capacity:rep_trace}.
+    We define three
     workloads: periodic, reactive, and long-running, and we characterize those workloads
     for different event frequencies. The energy used for each event is measured
     on our reference hardware described in \cref{sec:impl:permamote}.
+    Statistics for the three workloads are described in \cref{tab:capacity:rep_work}.
     }
 \end{definetable}
 
@@ -560,7 +568,7 @@ due to energy harvesting.
       %of events picked from a random distribution.
       }
 \end{definetable}
-\begin{definefigure}{fig:statemachine}
+\begin{definefigure}{fig:capacity:statemachine}
     \centering
     \includegraphics[width=\columnwidth]{figs/capacity/model_state_machine}
     \caption{\normalfont Model state machine.
