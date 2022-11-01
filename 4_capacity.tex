@@ -1,8 +1,10 @@
 \chapter{A Simulation-based Exploration of Capacity}
 \label{cha:capacity}
 
-\section{Modeling the Common Case}
-\label{sec:overview}
+Intro to chapter
+
+\section{Modelling Wireless Sensor Energy State}
+\label{sec:capacity:modelling}
 The framework we have presented does not consider
 harvesting and workload
 variability.
@@ -14,19 +16,14 @@ and synthesized workloads to determine the common case for our model and simulat
 the behavior of energy harvesting sensors. From these data, our model
 produces estimates of energy utilization, availability, responsiveness, and
 lifetime.
-\\
 
-\vspace{-6pt}
-\noindent
-\textbf{Environmental Conditions.}
+\subsection{Environmental Conditions.}
 We assume an indoor environment
 that is built for and used
 by people.
 
 
-\vspace{-6pt}
-\noindent
-\textbf{Representative Hardware.}
+\subsection{Representative Hardware.}
 We limit our analysis to the effects of capacity,
 independent of the differences of energy intensity or efficiency in device
 component selection. To do so, we define an example solar energy harvesting
@@ -46,11 +43,8 @@ is assumed to be
 10.9~cm\textsuperscript{2} and the volume of the sensor node is similar to prior
 work like the Hamilton sensor~\cite{kim2018system}.
 We implement this design and describe it further in \cref{sec:impl:permamote}.
-\\
 
-\vspace{-6pt}
-\noindent
-\textbf{Representative Workloads.}
+\subsection{Representative Workloads.}
 We find that sensing workloads generally fall into three
 categories: (i) periodic sense-and-send~\cite{mainwaring2002wireless}, (ii) reactive event detection~\cite{campbellEnergy14}, and (iii) infrequent,
 long-running, high-power events~\cite{levis2004trickle}. We choose a representative workload for each
@@ -62,19 +56,17 @@ advertisement containing the data.
 Our ``reactive workload'' is
 represented by sending a BLE advertisement upon motion detection of the main
 entrance of a university building, and we linearly scale the frequency
-of these events to represent varying amounts of usage. We treat these
-workloads as atomic.  Finally, our ``infrequent expensive'' workload is a
+of these events to create synthetic traces with varying amounts of usage. 
+We treat these workloads as atomic.  
+Finally, our ``infrequent expensive'' workload is a
 contiguous
 task that is representative of an
 over-the-air firmware update, which is randomly executed with an average occurrence rate
 of once every two weeks.
 We conservatively assume these long running tasks can be interrupted
-and resumed at any point during execution and that any checkpointing is free.
-\\
+and resumed at any point during execution and that any checkpointing does not incur any overhead.
 
-\vspace{-6pt}
-\noindent
-\textbf{A Predictive Model.}
+\section{An Energy Model for Wireless Sensors}
 We use the previously discussed indoor irradiance traces, generalized
 workloads, and hardware characterizations to model the behavior of sensors
 using different types and sizes of energy storage. We develop an open

@@ -1,4 +1,11 @@
-\chapter{Intuition for Wireless Sensor Power Supply Design}
+\chapter{
+Heuristics for Designing Wireless Sensor Power Supplies
+}
+%Intuition for Wireless Sensor Power Supply Design
+%Navigating design space
+%Guidelines
+%Entanglements
+% more active titles
 \label{chap:intuition}
 
 %There is a rift between industry and research in the way that indoor wireless sensors are powered. Industry has largely eschewed energy harvesting methods, opting instead for the reliability offered by high-density non-rechargeable batteries. 
@@ -7,7 +14,7 @@
 Wireless power supplies are the result of a multi-dimensional design space exploration.
 While certain design decisions are straightforward, like the choice to use a certain type of harvester to suit an application environment, some design points are more difficult to determine. 
 Harvesting and storage technologies are often difficult to directly compare, and it is sometimes difficult to determine the sizing of these elements in order to satisfy the constraints of an application. 
-Many times, the type and size of harvesters, batteries, or capacitors are chosen arbitrarily~\cite{hamiltoniot}, or are chosen to make the design minimally feasible~\cite{yervaGrafting12,debruin2013monjolo,hesterFlicker17,afanasov2020battery}.
+Many times, the type and size of harvesters, batteries, or capacitors are chosen arbitrarily~\cite{hamiltoniot,lee2013modular,juang2002energy}, or are chosen to make the design minimally feasible~\cite{yervaGrafting12,debruin2013monjolo,hesterFlicker17,afanasov2020battery}.
 
 The goal of this chapter is to provide high-level guidance for navigating the design space of wireless sensor power supplies. 
 This chapter seeks to formalize the the application requirements that were discussed in 
@@ -91,7 +98,7 @@ In other cases, it is much more difficult to determine which method is appropria
 This is especially apparent in environments where available harvestable energy is limited, like indoor environments. 
 
 
-\subsection{Preallocation versus Harvesting}
+\subsection{Harvesting can Provide More Energy than Preallocation}
 \label{sec:intuition:energy_income_pvh}
 In many cases where potential harvestable energy is limited, it is difficult to determine whether energy preallocation or harvesting is the most suitable technique.
 It is very difficult to directly compare these methods, as the power and energy supplied by either option is dependent on many factors, including the availability, variance, and magnitude of available harvestable energy, the size of the battery or harvester, and the expected sensor workload. 
@@ -194,7 +201,7 @@ This reaffirms the design decisions made by the designers of many of the millime
 
 \placefigure{fig:intuition:compound}
 
-\subsection{Hybrid}
+\subsection{A Hybrid System Maximizes Energy and Reliability}
 \label{sec:intuition:hybrid}
 At the crossing points in \cref{fig:intuition:eh_worth_it,fig:intuition:eh_worth_it_nano}, the benefits of energy harvesting are compounded when considering that energy capture will continue indefinitely, beyond that of the lifetime of a battery.
 However, this energy is not guaranteed to be supplied at times when the system requires it, even when harvesting supplies enough on average to match that of workload. This reality has the potential to result in unexpected system outages and system resets.
@@ -519,7 +526,7 @@ This section seeks to identify the relationships between energy capacity and sen
 By understanding these relationships, future system designers can determine suitable energy capacity analytically
 instead of making arbitrary design decisions. 
 
-\subsection{Defining Workload}
+\subsection{Defining a Workload}
 A sensor workload can be represented as the time series of instantaneous powers over a time period $T$, as described by \cref{eqn:intuition:work_sequence}. 
 \begin{equation} \label{eqn:intuition:work_sequence}
     P_w = (w_{t})^{T}_{t=0} 
@@ -529,7 +536,7 @@ A simplifying assumption is to reduce the workload trace to an average workload 
 For many workloads, a time scale of a few hours to a day is sufficient to calculate an average workload power assuming periodic behavior occurring within the time period, or for an application that reacts to events, the probability distribution of those events is well described by that time period.
 
 
-\subsection{Defining Income}
+\subsection{Defining an Income}
 \placefigure{tab:intuition:enhants}
 \placefigure{fig:intuition:traces}
 Conversely, photovoltaic energy harvesting can differ significantly over the course of a day, a week, or even a year. 
@@ -601,13 +608,16 @@ the amount of available energy income that was captured by the energy buffer.
 Given that the average income power is equal to the average workload power for this analysis, capturing all of the available energy also indicates enough energy was captured to run the workload continuously. 
 Insufficient capacity will fill up prematurely and be unable to capture any additional energy. 
 Capacity, if too small, can severely limit the total energy captured by an energy harvesting system.
-The trace of energy captured by an energy buffer is represented by the sequence $Z = (z_t)^T_{t=0}$, and each element $z_t$ is defined by \cref{eqn:intuition:captured}.
+The trace of instantaneous energy captured by an energy buffer is represented by the sequence $Z = (z_t)^T_{t=0}$, and each element $z_t$ is defined by \cref{eqn:intuition:captured}. The total energy captured by an energy harvesting system is represented by the sum of the elements in $Z$, defined in \cref{eqn:intuition:captured_total}.
 
 \begin{equation} \label{eqn:intuition:captured}
     z_t = \begin{cases}
         p_t \Delta t & \text{if $e_t + (p_t - w_t) \Delta t \leq E_{capacity}$} \\
         E_{capacity} - e_t & \text{if $e_t + (p_t - w_t) \Delta t > E_{capacity}$} 
     \end{cases}
+\end{equation}
+\begin{equation} \label{eqn:intuition:captured_total}
+    E_{captured} = \sum^T_{t=0} z_t
 \end{equation}
 Due to the conditional and iterative nature of the elements of the capacity sequence ($Y$) and captured sequence ($Z$), there is no way to directly solve for $E_{capacity}$.
 Instead, we can use \cref{eqn:intuition:iterative_capacity,eqn:intuition:captured} to perform a parameter sweep of average workload power, income power, and capacity.
@@ -637,6 +647,10 @@ The result from \cref{fig:intuition:required_capacity} is a more reasoned method
 Capacity sizing depends on the temporal behavior of energy income in addition to the magnitude of income and workload power. 
 \placefigure{fig:intuition:required_capacity}
 
+\subsection{The Impact of a Harvesting Margin}
+Throughout this section, we assumed that the average workload power was equivalent to the average income power. This is a very conservative assumption, and engineers rarely design systems without considering additional margins\dots
+\hl{todo}
+
 \subsection{Limitations}
 The analytical model presented in \cref{eqn:intuition:iterative_capacity} is a simple model that assumes a perfect energy buffer. In reality, energy storage technologies are imperfect. They feature less than perfect efficiency; they leak and have parasitic resistance. 
 The efficiency of an energy harvesting front end is also more complex than presented in this section.
@@ -653,11 +667,11 @@ This section presented analytical methods for considering the design space of an
 It presents methods for determining the proper sizing of non-rechargeable battery storage and photovoltaic harvesters, and provides a framework for considering the use of either option for powering sensors, or a hybrid solution of both preallocation and harvesting.
 For energy harvesting sensors, they may require batteryless and intermittent techniques to ensure feasibility and forward progress. 
 The requirement for intermittent techniques is solely dependent on energy income and rechargeable energy storage, and they are avoidable by properly sizing a harvester and energy storage.
-This chapter also presented a simple model for energy capacity and presented analysis that indicates that the size of rechargeable capacity in energy harvesting systems is directly related to the amount of energy that is actually captured by a system.
+This chapter also presented a simple model for energy capacity and presented analysis that indicates that the size of rechargeable capacity in energy harvesting systems directly impacts the amount of energy that is actually captured by a system.
 We present a reasoned method for determining appropriate capacity for a system based on its income and workload that is superior to previous arbitrary methods.
 
 The next chapter seeks to expand upon the iterative model of capacity presented in \cref{sec:intuition:capacity} by developing an energy simulation for wireless sensors. 
-It will seek to address the three previously mentioned limitations by modelling energy income and storage more realistically, modelling sensor workload more dynamically, and considering the impact of non-rechargeable backup energy. 
+It will seek to address the three previously mentioned limitations by modelling energy income and storage more realistically, modelling sensor workload more dynamically, and considers the impact of non-rechargeable backup energy. 
 
 %    How to express size of secondary mathematically?
 %    Energy capacity represents a moving capped sum, is this like a moving average? What is the smallest window that gives us the most return on energy capture?
