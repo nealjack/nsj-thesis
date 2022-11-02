@@ -394,7 +394,7 @@ due to energy harvesting.
     \caption{Periodic application}
     \label{fig:usage:sensesec}
   \end{subfigure}
-  \begin{subfigure}{0.49\textwidth}
+  \begin{subfigure}{\columnwidth}
     \centering
     \includegraphics[width=\linewidth]{figs/capacity/door_occupancy/usage_vs_secondary_size}
     \caption{Reactive application}
@@ -403,17 +403,24 @@ due to energy harvesting.
   \caption{\normalfont Ambient energy utilization
     as a function of idealized secondary storage capacity for different
     harvesting scenarios and workloads. The harvesting scenarios and workloads
-    are described in \cref{sec:overview} and \cref{tab:capacity:rep}.  The x-axis is
+    are described in \cref{tab:capacity:rep}.
+    \Cref{fig:usage:sensesec} represents the energy utilized by a periodic sense and send application, while \cref{fig:usage:eventsec} is the energy utilized by a event-driven application.
+    The x-axis is
     split by energy capacities possible with capacitors, supercapacitors, and
-    batteries. The upper extents of capacity for (super)capacitors represent
-    ten 100\,\si{\micro\farad} tantalum capacitors~\cite{tantalumDatasheet}, and one
-    large 220\,mF supercapacitor~\cite{murataCap}. Larger capacitors exist, but
-    are not appropriate for use on a small sensor node.  As energy storage increases, the harvestable energy used in
-    the application also increases, implying
-    increased application performance.  Some scenarios, such as the periodic
+    batteries. The upper extents of capacity for capacitors represents
+    ten 100\,\si{\micro\farad} tantalum capacitors~\cite{tantalumDatasheet}. 
+    For supercapacitors, the extent is represented by one
+    large 220\,mF supercapacitor~\cite{murataCap}. 
+    These delineations are not hard partitions, as capacitors and supercapacitors have a wide range of capacities. 
+    %Larger (super)capacitors exist, but
+    %are not appropriate for use on a small sensor node.  
+    As energy storage increases, the harvestable energy used in
+    the application also increases. %implying
+    %increased application performance.  
+    Some scenarios, such as the periodic
     30\,s, 15.1\,\uW/cm\textsuperscript{2} case, reach 100\% utilization at
-    high secondary capacities indicating that available energy is not
-    sufficient to meet the application's requirements.
+    sufficient secondary capacities indicating that all of the available energy is captured and may not
+    be enough to meet the application's requirements.
     Generally, for both workloads and irradiance traces, from
     the smallest to largest capacity simulated, we see a 1.4-2.3x increase in
     utilized energy.
@@ -422,57 +429,58 @@ due to energy harvesting.
 
 \begin{definefigure*}{fig:reliability}
   \centering
-  \begin{subfigure}{\textwidth}
-    \begin{subfigure}{0.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{figs/capacity/sense_and_send/usage_reliability_v_secondary_capacity/events_vs_secondary_size.pdf}
-        \caption{Periodic application}
-      \label{fig:reliability:sensesec}
-    \end{subfigure}
-    \begin{subfigure}{0.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{figs/capacity/door_occupancy/events_vs_secondary_size}
-      \caption{Reactive application}
-      \label{fig:reliability:eventsec}
-    \end{subfigure}
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/capacity/sense_and_send/usage_reliability_v_secondary_capacity/events_vs_secondary_size.pdf}
+      \caption{Periodic application}
+    \label{fig:reliability:sensesec}
   \end{subfigure}
-  \begin{subfigure}{\textwidth}
-    \begin{subfigure}{0.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{figs/capacity/sense_and_send/events_vs_period}
-      \caption{Periodic\textemdash varying period}
-      \label{fig:reliability:senseper}
-    \end{subfigure}
-    \begin{subfigure}{0.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{figs/capacity/ota_update/ttc_ota}
-      \caption{Long-running, high energy event}
-      \label{fig:reliability:otattc}
-    \end{subfigure}
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/capacity/door_occupancy/events_vs_secondary_size}
+    \caption{Reactive application}
+    \label{fig:reliability:eventsec}
   \end{subfigure}
+  %\begin{subfigure}{\textwidth}
+  %  \begin{subfigure}{0.5\textwidth}
+  %    \centering
+  %    \includegraphics[width=0.9\linewidth]{figs/capacity/sense_and_send/events_vs_period}
+  %    \caption{Periodic\textemdash varying period}
+  %    \label{fig:reliability:senseper}
+  %  \end{subfigure}
+  %  \begin{subfigure}{0.5\textwidth}
+  %    \centering
+  %    \includegraphics[width=0.9\linewidth]{figs/capacity/ota_update/ttc_ota}
+  %    \caption{Long-running, high energy event}
+  %    \label{fig:reliability:otattc}
+  %  \end{subfigure}
+  %\end{subfigure}
   \caption{
     \normalfont
     Workload reliability
     for different harvesting scenarios, workloads, and idealized secondary storage sizes.
-    We define reliability as the percentage of successfully completed events.
-    As expected,
-    workload reliability follows the same
+    We define reliability as the percentage of successfully completed completed events.
+    As expected, workload reliability follows a similar 
     trend as energy utilization, improving with increased secondary energy
     storage. For both periodic and reactive workloads, from the smallest to
     largest capacity simulated, we see a 1.4-2.7x improvement in availability.
-    In (c) we investigate the period at which different secondary storage sizes
-    meet a specific reliability, showing that even with infrequent periodic
-    workloads, small amounts of secondary storage have low reliability while
-    larger secondary stores reach near 100\% reliability. (d) shows a CDF of
-    time to completion for events in the long-running workload. In this
-    workload, events are not atomic, and can be paused and resumed based on
-    available energy. With secondary capacities that are large relative to the
-    workload (which takes 93\,mJ) we see immediate completion.
-    However, performing the event on smaller secondary capacities can take
-    between three hours and a day to complete even for scenarios with large
-    amounts of harvestable ambient energy.
     }
 \end{definefigure*}
+
+\begin{definefigure}
+    %In (c) we investigate the period at which different secondary storage sizes
+    %meet a specific reliability, showing that even with infrequent periodic
+    %workloads, small amounts of secondary storage have low reliability while
+    %larger secondary stores reach near 100\% reliability. (d) shows a CDF of
+    %time to completion for events in the long-running workload. In this
+    %workload, events are not atomic, and can be paused and resumed based on
+    %available energy. With secondary capacities that are large relative to the
+    %workload (which takes 93\,mJ) we see immediate completion.
+    %However, performing the event on smaller secondary capacities can take
+    %between three hours and a day to complete even for scenarios with large
+    %amounts of harvestable ambient energy.
+    
+\end{definefigure}
 
 \begin{definetable}{tab:capacity:rep}
     \begin{threeparttable}
