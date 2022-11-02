@@ -7,7 +7,6 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 import matplotlib.patches as mpatches
-import matplotlib.lines as lines
 from matplotlib.lines import Line2D
 from matplotlib.collections import PatchCollection
 from matplotlib.ticker import MaxNLocator
@@ -44,9 +43,9 @@ def plot_lines(plt):
     ax = plt.gca()
     ls = []
     text = plt.text(1E-3, 106, 'Capacitor',horizontalalignment='center')
-    ls.append(lines.Line2D([5E-3, 5E-3], [-2, 108], lw=2, color = 'black', clip_on=False))
+    ls.append(Line2D([5E-3, 5E-3], [-2, 108], lw=2, color = 'black', clip_on=False))
     plt.text(6E-2, 106, 'Supercap',horizontalalignment='center')
-    ls.append(lines.Line2D([.5, .5], [-2, 108], lw=2, color = 'black', clip_on=False))
+    ls.append(Line2D([.5, .5], [-2, 108], lw=2, color = 'black', clip_on=False))
     plt.text(10, 106, 'Battery', horizontalalignment='center')
     for l in ls:
         ax.add_line(l)
@@ -134,5 +133,6 @@ for i, data in enumerate(sorted(secondary_size_data, key=lambda x: (float(x[0].s
 #plt.title('Reliability vs Secondary Capacity')
 plt.xlabel('Energy Capacity (mWh)')
 plt.ylabel('Successful Events (%)')
-lgd = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+#lgd = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+lgd = plt.legend(custom_lines, lines_names, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 plt.savefig('events_vs_secondary_size.pdf', bbox_extra_artists=(lgd,text), bbox_inches='tight', format='pdf')
