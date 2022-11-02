@@ -76,18 +76,18 @@ for fname in fnames:
 
 colors = [x for x in ['C0', 'C1', 'C2'] for _ in range(0, 3)]
 #colors = [x for x in [cmap(0.3), cmap(0.4), cmap(0.9)] for _ in range(0, 3)]
-markers = ['o', 's', '^'] * (4)
+markers = ['^', 's', 'o'] * (4)
 
 custom_lines = [Line2D([0],[0], color = 'C0', lw=2),
                 Line2D([0],[0], color = 'C1', lw=2),
-                Line2D([0],[0], marker = markers[0], color='black', lw=2, markersize=8),
+                Line2D([0],[0], marker = markers[2], color='black', lw=2, markersize=8),
                 Line2D([0],[0], marker = markers[1], color='black', lw=2, markersize=8),
-                Line2D([0],[0], marker = markers[2], color='black', lw=2, markersize=8)]
+                Line2D([0],[0], marker = markers[0], color='black', lw=2, markersize=8)]
 lines_names = [setup_name_to_irradiance["SetupA"],
                setup_name_to_irradiance["SetupD"],
-               "30s",
-               "60s",
-               "120s"]
+               "3.4 s",
+               "6.8 s",
+               "13.6 s"]
 
 # plot usage vs secondary:
 #w, h = matplotlib.figure.figaspect(0.5)
@@ -101,7 +101,7 @@ plt.ylim(0, 100)
 text = plot_lines(plt)
 for i, data in enumerate(sorted(secondary_size_data, key=lambda x: (float(x[0].split(' ')[0]), int(x[1])))):
     print(data[1])
-    print(data[2][-1,2] / data[2][0,2])
+    #print(data[2][-1,2] / data[2][0,2])
     plt.plot(data[2][:,0]/3600*1E3, 100*data[2][:,2], color=colors[i], lw=2, markersize=8, marker=markers[i], label=data[1] + ', ' + data[0])
 #plt.title('Energy Utilized vs Secondary Capacity')
 plt.xlabel('Energy Capacity (mWh)')
