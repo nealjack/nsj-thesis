@@ -199,6 +199,7 @@ to fully support the sensing task.
 Small increases in utilization
 have significant impact on reliability and system lifetime.
 \placefigure{fig:capacity:reliability}
+\placefigure{fig:capacity:period}
 
 \subsection{Application Reliability}
 \label{sec:store:reliability}
@@ -218,7 +219,6 @@ reliability.
 This is because they
 do not have enough storage to keep sensing throughout the night.
 
-\placefigure{fig:capacity:period}
 \placefigure{fig:capacity:cdf}
 
 Finally, we analyze the ability of different storage configurations to perform a
@@ -294,9 +294,6 @@ idle overnight waiting for solar power.
     physical degradation that would be experienced over decades of use.
     }
 \end{definefigure*}
-
-\subsection{Necessary Reliability}
-this section will be about achieving .99, .999, and 100\% reliability, assuming sufficient \textit{average} energy. What is the cost in energy capacity?
 
 \section{Reliability Requires Backup}
 \label{sec:primary}
@@ -462,12 +459,13 @@ due to energy harvesting.
 
 \begin{definefigure}{fig:capacity:period}
       \centering
-      \includegraphics[width=\linewidth]{figs/capacity/sense_and_send/events_vs_period}
+      \includegraphics[width=\linewidth]{figs/capacity/sense_and_send/usage_reliability_v_period/events_vs_period.pdf}
     \caption{
-    In we investigate the period at which different secondary storage sizes
+    The performance of workloads with different periodicity with four decades of energy capacity.
+    We investigate the period at which different secondary storage sizes
     meet a specific reliability, showing that even with infrequent periodic
     workloads, small amounts of secondary storage have low reliability while
-    larger secondary stores reach near 100\% reliability. 
+    larger secondary stores approach 100\% reliability. 
     } 
 \end{definefigure}
     
@@ -537,7 +535,7 @@ due to energy harvesting.
 
 \begin{definetable}{tab:parameters}
     \centering
-    \begin{adjustbox}{width=\columnwidth}
+    \small
     \begin{tabular}{lll}
 \hline
 \textbf{Config Type}& \multicolumn{1}{l}{\textbf{Parameter}}                   & \multicolumn{1}{l}{\textbf{Description}} \\ \hline
@@ -562,10 +560,10 @@ due to energy harvesting.
 %                    & \texttt{event\_period\_min}                              & If not atomic, minimum splitable period  \\ \hline
 
     \end{tabular}
-    \end{adjustbox}
     \caption{\normalfont Simulation configuration parameters.
-      A representative set of available configuration options for our
-      simulation of a sensor with secondary storage and energy harvester, a
+      A subset of available configuration options for the sensor energy simulation. 
+      Simulated sensors can be configured to use 
+      secondary storage and an energy harvester, a
       primary-cell, or both. A secondary-cell can be configured with a
       hysteresis, with a lower bound set to \texttt{min\_hyst}
       and an upper bound of \texttt{max\_hyst}.
