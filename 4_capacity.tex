@@ -261,15 +261,15 @@ idle overnight waiting for power from daytime to continue and eventually complet
 % - 1 10uF ?? $0.05 @ 100
 \begin{definefigure*}{fig:primary}
   \centering
-  \begin{subfigure}{\textwidth}
+  \begin{subfigure}{\columnwidth}
     \centering
-    \includegraphics[\linewidth]{figs/capacity/primary/sense_and_send_life_vs_sec_size}
+    \includegraphics[width=\linewidth]{figs/capacity/primary/sense_and_send_life_vs_sec_size}
     \caption{Periodic Application}
     \label{fig:primary:sensesec}
   \end{subfigure}
-  \begin{subfigure}{\textwidth}
+  \begin{subfigure}{\columnwidth}
     \centering
-    \includegraphics[\linewidth]{figs/capacity/primary/door_occu_life_vs_sec_size}
+    \includegraphics[width=\linewidth]{figs/capacity/primary/door_occu_life_vs_sec_size}
       \caption{Reactive Application}
     \label{fig:primary:eventsec}
   \end{subfigure}
@@ -277,9 +277,10 @@ idle overnight waiting for power from daytime to continue and eventually complet
     \normalfont
     Estimated lifetime
     when varying secondary energy capacity for different harvesting scenarios
-    and backup energy storage sizes. The periodic application's period
+    and backup energy storage sizes. 
+    The periodic application's period
     is 30\,s and the reactive application events are scaled to
-    represent a maximum of 2000 events per hour.
+    represent a maximum of 2000 events per hour during the peak hour.
     %Harvesting scenarios and workloads
     %are described in \cref{sec:overview} and \cref{tab:capacity:rep}, and
     The backup
