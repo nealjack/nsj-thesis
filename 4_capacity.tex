@@ -293,13 +293,6 @@ idle overnight waiting for power from daytime to continue and eventually complet
     energy.
     %All scenarios experience substantial
     %increases in lifetime from increased secondary storage size.
-    We see a 2-4x increase in lifetime estimates from the smallest to largest
-    capacity simulated, if we only consider bounded results.
-    We emphasize that
-    these lifetime estimations are
-    just estimations, and while we do model the 1\,\%/year leakage
-    typical of coin cells, we do not consider the unknown
-    physical degradation that would be experienced over decades of use.
     }
 \end{definefigure*}
 
@@ -312,17 +305,19 @@ availability across all workloads.
 However, some environmental
 conditions and workloads do not reach 100\% availability regardless of the size
 of the secondary store.
-These workloads simply require more energy
-than is available to harvest.
+Some workloads simply require more energy
+than is available to harvest, and can not achieve high availability because they already capture all the energy they can.
 %reactive workloads with large secondary
 %capacities, some of the
-Some results in \cref{fig:capacity:availability}
-appear to achieve perfect availability, but still miss 0.1-2\% of events.
+For systems that can theoretically capture enough energy on average, they still may experience periods where they run out of stored energy.
+Some of the results in \cref{fig:capacity:availability}
+that appear to achieve near 100\% availability actually miss between 0.1 and 2\% of events because they did not initially start with enough energy stored.
 %with
 %diminishing returns for increased secondary capacity.
 %Additionally, some workloads
-A backup energy store can increase availability of a system
-to 100\%, at the cost of a finite lifetime.
+In both of these cases, a backup energy store can increase availability 
+to 100\%.
+However, the introduction of a non-rechargeable backup means a system now has a finite lifetime.
 %In both of these case, further increasing secondary
 %capacity does not improve availability.
 %and the desired application cannot rely soly on harvested power.
@@ -330,10 +325,10 @@ to 100\%, at the cost of a finite lifetime.
 %workloads which achieve slightly less than perfect availability are experiencing
 %a combination of brief harvesting droughts and high amounts of temporally local activity
 %that push the local average power well above that of the average harvested power.
-%While the second case may be solved with a sufficiently large secondary-cell, the
-%diminishing returns of increasing secondary size and
-%unpredictability of some reactive applications
-%makes it difficult to rely solely on harvested power.
+While the second case may be solved with a sufficiently large secondary-cell that is deployed fully charged, the
+diminishing returns of increasing secondary size and
+unpredictability of some reactive applications
+makes it difficult to rely solely on harvested power.
 
 We argue that 100\% availability is a significant improvement over
 even low failure rates with respect to availability
@@ -348,42 +343,44 @@ For applications that are human facing, research suggests that any unavailabilit
 results in frustration and %lack of
 unwillingness to adopt automated solutions~\cite{brushHome11, edwardsHome01, shehanHome07}.
 To use energy harvesting sensors for human-facing applications, ones that control safety-critical systems, or applications that simply require consistent and periodic sensing, inherent unavailability is intolerable.
-
-Worse, batteryless system failures are difficult to detect %and mitigate
-because there is no method for distinguishing between lack of energy
+Beyond the availability of the normal sensor workload, it is also important to be able to detect and identify the failures in a sensor deployment.
+Batteryless system failures are difficult to detect %and mitigate
+because there is no method for differentiating between lack of energy
 and an actual fault. While scheduled communication of current energy state
 may help, this would be difficult for systems that only store enough
 energy to perform a single operation~\cite{hesterFlicker17, yervaGrafting12, colinReconfigurable18,campbell2018energy}.
+The only way to ensure there is \textit{always} energy available to issue a heartbeat message or report issues, a backup non-rechargeable source of energy is required.
 
-Finally, it is more difficult
-to program intermittent systems because programmers or the underlying
-programming model must monitor and adapt to available energy with fine
-granularity, both of which are non-trivial tasks.
-These systems have little ability to correct for failures
-even when they are detected.
+%Finally, it is more difficult
+%to program intermittent systems because programmers or the underlying
+%programming model must monitor and adapt to available energy with fine
+%granularity, both of which are non-trivial tasks.
+%These systems have little ability to correct for failures
+%even when they are detected.
 %A reliable system has the ability to spend more short-term
 %energy to correct for detected failures.
 
 \subsection{Lifetime of a Backup Energy Store}
 \label{sec:primary:lifetime}
 
-To achieve 100\% availability and avoid intermittency,
+To achieve 100\% availability and avoid frequent power and state loss,
 designs can utilize a backup energy store.
-%that is pre-charged at the start of the
-%node's life.
+In this section we simulate the workloads of energy harvesting sensors with backup non-rechargeable energy storage.
 In instances where the rechargeable source is depleted, the system
 can operate from the backup, masking the effects of variable energy income.
-When the backup energy store is depleted, we consider the node's lifetime
-to be complete, although it could continue
-operating intermittently and with lower availability. This energy store should
-be a primary-cell, as they offer very low self-discharge, long shelf life, and
-substantial energy density.
+We estimate the lifetime of the backup based on the discharge rate resulting from the simulated workload. 
+We consider a sensor's lifetime to be completed when its backup energy store is depleted.
+We assume the backup energy store is  
+a primary battery, as they offer very low self-discharge, long shelf life, and
+superior energy density.
+
+%that is pre-charged at the start of the
+%node's life.
 %This pre-charged energy store could be accomplished
 %by either a large secondary-cell or a primary-cell, but to avoid increasing
 %volume significantly this energy store will almost certainly manifest itself
 %as a non-rechargeable battery.
-
-An analysis of the reliable lifetime of a node with both energy
+An analysis of the reliable lifetime of sensors configured with energy
 harvesting and a backup energy store is shown in \cref{fig:primary}.
 %for
 %both periodic and event based workloads.
@@ -399,6 +396,15 @@ to ensure availability in uncharacteristically adverse conditions.
 Even for conditions with
 limited energy availability we still observe significant lifetime improvements
 due to energy harvesting.
+We see a 2-4x increase in lifetime estimates from the smallest to largest
+capacity simulated, if we only consider bounded results.
+In some cases, lifetime estimates grow exponentially as rechargeable energy capacity is increased, indicating that with sufficient capacity and income, a workload almost never needs to utilize the energy in its non-rechargeable backup.
+We emphasize that
+these lifetime estimations are
+just estimations, and while we do model the 1\,\%/year leakage
+typical of coin cells, we do not consider the unknown
+physical degradation that would be experienced over decades of use or in adverse environments.
+
 \placefigure[t]{fig:primary}
 
 \begin{definefigure*}{fig:usage}
