@@ -51,24 +51,26 @@ work like the Hamilton sensor~\cite{kim2018system}.
 \subsection{Representative Workloads}
 We find that sensing workloads generally fall into three
 categories: (i) periodic sense-and-send~\cite{mainwaring2002wireless}, (ii) reactive event detection~\cite{campbellEnergy14,afanasov2020battery}, and (iii) infrequent,
-long-running, high-energy events~\cite{levis2004trickle}. We choose a representative workload for each
-of these categories to use in our model.
+long-running, high-energy events~\cite{levis2004trickle}. 
+All of these workloads are characterized by long periods in which a sensor is inactive, punctuated by active events, which may be periodic or drawn from a distribution.
+These active events may correspond to collecting a measurement from a sensor, performing some computation, and transmitting the results.
+We choose a representative workload for each
+of the three categories to use in our model.
 We characterize our ``periodic sense-and-send''
-workload as periodically sampling a light and color sensor and sending a
-BLE
-advertisement containing the data.
-Our ``reactive workload'' is
-represented by sending a BLE advertisement upon motion detection of the main
+workload as periodically sampling a light and three channel color sensor and sending a
+BLE advertisement containing the data.
+Our ``reactive workload'' consists of sending a BLE advertisement upon motion detection of the main
 entrance of a university building, and we linearly scale the frequency
 of these events to create synthetic traces with varying amounts of usage. 
 We treat these workloads as atomic. 
-When a packet is sent in response to a periodic schedule or a detected event, the energy spent on sending that packet must be spent instantaneously and atomically.  
+When a measurement is taken or a packet is sent in response to a periodic schedule or a detected event, the energy spent on those operations must be spent instantaneously and atomically. 
+This means a sensor must currently have sufficient energy stored to complete the operation, otherwise the event is considered ``missed'' and counted against the availability of the system.
 Finally, our ``infrequent expensive'' workload is a
 contiguous
 task that is representative of an
 over-the-air firmware update, which is randomly executed with an average occurrence rate
 of once every two weeks.
-We optimistically assume these long running tasks can be interrupted
+We optimistically assume this long running task can be interrupted
 and resumed at any point during execution and that any checkpointing does not incur any overhead.
 
 \placefigure[t]{tab:parameters}
@@ -86,7 +88,8 @@ efficiency. These parameters are summarized in \cref{tab:parameters}.
 The simulation of our model operates as a second-by-second calculation of the
 amount of energy entering and exiting a device, similar to the model presented in \cref{sec:intuition:capacity}.
 At every step, the simulation calculates the net energy gain or loss of the
-system based on its current state and available stored energy.  Occasionally,
+system based on its current state, the instantaneous harvestable energy, and available stored energy.  
+Occasionally,
 the model performs a workload event based on either a periodic schedule (in the
 case of a sense-and-send workload) or from a random distribution (reactive
 event detection or a high-energy event). For our modeling, workload schedules
@@ -94,7 +97,7 @@ are generated from values listed in \cref{tab:capacity:rep}.
 This simulation is performed for the entirety of an
 input irradiance trace, which constitutes about a year of data. During
 a simulation, metrics such as energy utilization, the fraction of completed
-events versus expected events, and events' time to completion are collected,
+events versus expected events, and event time to completion are collected,
 and if applicable, the primary-cell lifetime is estimated from a trace of its capacity over time.
 
 \placefigure{fig:capacity:statemachine}
@@ -128,7 +131,7 @@ If there is energy remaining after performing a task, the modeled sensor will
 attempt to spend the rest of the simulation period in the \textsf{Online Idle} state.
 
 If the simulated device is configured with a backup primary-cell, offline
-states transform to "primary" states in which the device remains on and
+states transform to ``primary'' states in which the device remains on and
 able to perform work, but charges energy usage to the primary storage instead
 of the secondary. During these periods, the secondary cell continues charging
 from harvested energy. Upon reaching the upper charging hysteresis
@@ -140,12 +143,13 @@ secondary.  If the primary storage is depleted, the simulation ends early.
 \section{Capacity Increases Energy Capture}
 \label{sec:capacity:capture}
 
-In addition to relaxing the need for intermittent techniques, we find that
-an increase in sensor energy capacity
-achieves a significant return on sensor
-reliability and capability in the face of variable energy income.  Higher
-energy capacity allows higher energy capture during periods of abundant
-harvestable energy.
+Using our simulator, we can confirm that the conclusions 
+from \cref{sec:intuition:capacity}
+regarding the relationship between energy capacity and energy capture. 
+An increase in sensor energy capacity results in an increase in the capture of energy during periods of abundant harvestable energy.
+This additional energy has the effect of increasing the availability of the sensor, as the buffer serves to average out times of energy insufficiency and excess.
+Higher
+The next few subsections explore the effect of capacity on energy utilization and sensor availability.
 
 \subsection{Ambient Energy Utilization}
 \label{sec:capacity:utilization}
@@ -164,31 +168,22 @@ systems that transmit a packet every time their energy storage capacitor
 is full rather than saving this energy for use during periods of lower harvesting
 potential~\cite{hesterFlicker17, colinReconfigurable18}. Another example of this are sensors in which the harvesting
 rate is proportional to the sensed phenomena~\cite{debruin2013monjolo}.
-While compelling for their simplicity, these sensors use
-energy that could alternatively be saved and used
-later for event detection or tasks like data summarising or analysis.
 
 To explore ambient energy utilization as a function of storage size, we
-model the charge-discharge patterns of idealized energy stores under
+use our simulation of the charge-discharge patterns of idealized energy stores under
 the harvesting conditions and workloads described in \cref{sec:capacity:modelling}.
-We desire to separate capacity from the type of storage, so the
-idealized energy storage is assumed to have no leakage or ESR, which often depend if the storage is a capacitor, supercapacitor or battery. 
+We perform multiple simulation runs while sweeping energy storage capacity and measuring the amount of harvestable energy captured and used by the intended workload.
+We desire to isolate the effect of capacity from the type of storage, so the
+idealized energy storage is assumed to have no leakage or ESR. 
+%Our simulator is capable of considering these sources of inefficiency. 
+%However, leakage and ESR are more dependent on the type of energy storage than the capacity, 
+%making a sweep through capacity more complex than necessary when considering them.
 This modeling is primarily accounting for our first classification of
 wasted energy, since our workload definitions \textit{do not} perform
 tasks in response to available energy; instead they attempt to maximize the success
 rates for the specified sensing tasks.
-The results of this modeling are shown in \cref{fig:usage}. 
-    %The x-axis is
-    %split by energy capacities possible with capacitors, supercapacitors, and
-    %batteries. The upper extents of capacity for capacitors represents
-    %ten 100\,\si{\micro\farad} tantalum capacitors~\cite{tantalumDatasheet}. 
-    %For supercapacitors, the extent is represented by one
-    %large 220\,mF supercapacitor~\cite{murataCap}. 
-    %These delineations are not hard partitions, as capacitors and supercapacitors have a wide range of capacities. 
-    %Larger (super)capacitors exist, but
-    %are not appropriate for use on a small sensor node.  
-No matter
-the amount of available energy, utilization increases as
+The results of this modeling are shown in \cref{fig:usage}.
+No matter the amount of available energy or the workload considered, energy utilization increases as
 storage capacity increases. For scenarios with low harvesting potential and high
 power workloads, a sensor with at least 1\ssi{\milli\Wh} of storage can accomplish 100\% utilization.
 In cases of
@@ -196,43 +191,55 @@ high harvesting potential and low power workloads, utilization often
 stops increasing before reaching 100\%. This
 can be attributed to a small fraction of the available energy being sufficient
 to fully support the sensing task.
-Small increases in utilization
-have significant impact on reliability and system lifetime.
-\placefigure{fig:capacity:reliability}
+The x-axis of \cref{fig:usage} is split by energy capacities possible with capacitors, supercapacitors, and
+batteries. 
+The upper extents of capacity for capacitors represents ten 100\,\si{\micro\farad} tantalum capacitors~\cite{tantalumDatasheet}. 
+For supercapacitors, the extent is represented by one
+large 220\,mF supercapacitor~\cite{murataCap}. 
+These delineations are not hard partitions, as capacitors and supercapacitors have a wide range of capacities and the capacities offered can overlap in some configurations.
+In most cases, energy utilization is maximized with energy capacity characteristic of small batteries or large supercapacitors.
+For the low light, 15\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}, environment, a few of the workloads are eventually able to harvest 100\% of the available light as capacity increases. This indicates that the sensor performance is bounded by available harvestable energy, which is not enough to sustain the workload.
+Conversely, in the high light 97\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared} environment, regardless of the workload, the simulated sensors are not harvesting all or even the majority of the available energy. 
+This indicates they are harvesting as much as needed to power their workload. 
+
+\placefigure{fig:capacity:availability}
 \placefigure{fig:capacity:period}
 
-\subsection{Application Reliability}
-\label{sec:store:reliability}
+\subsection{Workload Availability}
+\label{sec:capacity:availability}
 
-We also model the ability of varying energy stores to meet our defined
-sensing tasks and intensities. Our results are
-shown in \cref{fig:capacity:reliability}. 
-Similar to the results of \cref{sec:store:utilization}, we see marked
-increases in performance when energy stores reach 1-10\,mWh
+In addition to energy utilization we also measure the ability of varying energy stores to meet the chosen 
+sensing tasks and intensities. 
+The results are
+shown in \cref{fig:capacity:availability}. 
+Similar to the results of \cref{fig:capacity:availability}, we see marked
+increases in performance when the amount of energy capacity reaches 1-10\,mWh
 of capacity.
-Simulations experience 100\% reliability for all but
+Simulations experience 100\% availability for all but
 the most energy constrained scenarios with high power workloads and
 $\geq$2\,mWh of energy storage.
-We also see that even when low capacity sensors
-have large energy harvesting potentials and infrequent workloads, they experience low
-reliability.
+\Cref{fig:capacity:period} is another view of availability, and examines sweeping the period of the periodic workload with four decades of energy capacity.
+This figure shows that even 
+with gratuitous energy harvesting potentials and infrequent workloads, sensors with low energy capacity experience low
+availability.
 This is because they
-do not have enough storage to keep sensing throughout the night.
+unable to capture enough energy to allow continuous sensing through periods with little to no harvestable energy, like nighttime or winter. 
 
-\placefigure{fig:capacity:cdf}
-
-Finally, we analyze the ability of different storage configurations to perform a
-random, contiguous, higher energy task. We use a 100\,mJ (30\,\textmu Wh) event that is representative of a
-50\,KB over-the-air code update. While this is larger than a code update would be
-for simple programs,
-we see in \cref{fig:capacity:reliability:otattc} that nearly all of the configurations with
-0.28\,mWh of energy storage complete the task in the minimum time (5\,s). In comparison,
+\subsection{Workload Timeliness}
+\placefigure{fig:capacity:ttc}
+Finally, we analyze the ability of different storage configurations to perform a 
+long-running, contiguous, higher energy task. 
+The characteristics of the long-running task are presented in \cref{tab:capacity:rep_work}. We 
+This long-running task is an example of a medium-sized, 50\ssi{\kilo\byte} over-the-air code update.
+\Cref{fig:capacity:ttc} is a CDF of the time-to-completion for this update with different configurations of energy capacity, workload, and harvesting conditions.
+Nearly all of the configurations with
+0.28\,mWh of energy storage can complete the task in the minimum amount of time (5\,s). In comparison,
 even reducing the amount of energy storage to match the amount of energy
-required for the code updates causes significant latency. It is clear that
-many of the updates for smaller energy storage configurations
+required for an update causes significant latency. 
+Many of the updates for smaller energy storage configurations
 do not complete for 1000-10,000\,s.
 This aligns with the amount of time a sensor may sit
-idle overnight waiting for solar power.
+idle overnight waiting for power from daytime to continue and eventually complete its update.
 
 % Mayfly/Flicker
 % - Timekeeper: 1 10uF 0805YD106KAT2A 0.09 @ 100 (equiv 0.03 @ 100) (0.023)
@@ -295,31 +302,31 @@ idle overnight waiting for solar power.
     }
 \end{definefigure*}
 
-\section{Reliability Requires Backup}
-\label{sec:primary}
+\section{Availability Requires Backup}
+\label{sec:primary:availability}
 
 Increasing secondary capacity greatly improves
-reliability.
+availability across all workloads.
 %for both periodic and reactive workloads.
 However, some environmental
-conditions and workloads do not reach 100\% reliability regardless of the size
+conditions and workloads do not reach 100\% availability regardless of the size
 of the secondary store.
+These workloads simply require more energy
+than is available to harvest.
 %reactive workloads with large secondary
 %capacities, some of the
-Some results in \cref{fig:capacity:reliability}
-appear to achieve perfect reliability, but still miss 0.1-2\% of events.
+Some results in \cref{fig:capacity:availability}
+appear to achieve perfect availability, but still miss 0.1-2\% of events.
 %with
 %diminishing returns for increased secondary capacity.
 %Additionally, some workloads
-Others achieve well below 100\% reliability, %at the upper extents of storage capacity,
-and simply require much more energy
-than is harvestable. A backup energy store can increase reliability of a system
+A backup energy store can increase availability of a system
 to 100\%, at the cost of a finite lifetime.
 %In both of these case, further increasing secondary
-%capacity does not improve reliability.
+%capacity does not improve availability.
 %and the desired application cannot rely soly on harvested power.
 %and we expect that
-%workloads which achieve slightly less than perfect reliability are experiencing
+%workloads which achieve slightly less than perfect availability are experiencing
 %a combination of brief harvesting droughts and high amounts of temporally local activity
 %that push the local average power well above that of the average harvested power.
 %While the second case may be solved with a sufficiently large secondary-cell, the
@@ -327,30 +334,25 @@ to 100\%, at the cost of a finite lifetime.
 %unpredictability of some reactive applications
 %makes it difficult to rely solely on harvested power.
 
-\subsection{Reliability Required}
-\label{sec:primary:reliability}
-
-We argue that 100\% reliability is a significant improvement over
-even low failure rates with respect to reliability
+We argue that 100\% availability is a significant improvement over
+even low failure rates with respect to availability
 %information
 %for many applications
 and simplicity due to the lack of intermittency.
 %that is a consequence
-%of reliability.
-Many applications, especially human facing ones,
-must be reliable to function, and research shows that unreliability
-leads to frustration and %lack of
+%of availability.
+As we discuss in \cref{sec:background:app}, many types of applications 
+must provide high availability to be successful.
+For applications that are human facing, research suggests that any unavailability
+results in frustration and %lack of
 unwillingness to adopt automated solutions~\cite{brushHome11, edwardsHome01, shehanHome07}.
-To use energy harvesting sensors for control or feedback of systems with potential
-safety issues, inherent unreliability is intolerable.
+To use energy harvesting sensors for human-facing applications, ones that control safety-critical systems, or applications that simply require consistent and periodic sensing, inherent unavailability is intolerable.
 
-Worse, intermittent system failures are difficult to detect %and mitigate
+Worse, batteryless system failures are difficult to detect %and mitigate
 because there is no method for distinguishing between lack of energy
 and an actual fault. While scheduled communication of current energy state
 may help, this would be difficult for systems that only store enough
-energy to perform a single operation such as Flicker~\cite{hesterFlicker17},
-Gecko~\cite{yervaGrafting12}, and some configurations of
-Capybara~\cite{colinReconfigurable18}.
+energy to perform a single operation~\cite{hesterFlicker17, yervaGrafting12, colinReconfigurable18,campbell2018energy}.
 
 Finally, it is more difficult
 to program intermittent systems because programmers or the underlying
@@ -364,7 +366,7 @@ even when they are detected.
 \subsection{Lifetime of a Backup Energy Store}
 \label{sec:primary:lifetime}
 
-To achieve 100\% reliability and avoid intermittency,
+To achieve 100\% availability and avoid intermittency,
 designs can utilize a backup energy store.
 %that is pre-charged at the start of the
 %node's life.
@@ -372,7 +374,7 @@ In instances where the rechargeable source is depleted, the system
 can operate from the backup, masking the effects of variable energy income.
 When the backup energy store is depleted, we consider the node's lifetime
 to be complete, although it could continue
-operating intermittently and with lower reliability. This energy store should
+operating intermittently and with lower availability. This energy store should
 be a primary-cell, as they offer very low self-discharge, long shelf life, and
 substantial energy density.
 %This pre-charged energy store could be accomplished
@@ -392,7 +394,7 @@ achieve 100\% reliable lifetimes that exceed
 what we can reasonably predict, especially for harvesting scenarios that
 exceed the average power of the application. In these scenarios, 
 the inclusion of a backup energy store is critical 
-to ensure reliability in uncharacteristically adverse conditions.
+to ensure availability in uncharacteristically adverse conditions.
 Even for conditions with
 limited energy availability we still observe significant lifetime improvements
 due to energy harvesting.
@@ -431,29 +433,31 @@ due to energy harvesting.
     }
 \end{definefigure*}
 
-\begin{definefigure*}{fig:capacity:reliability}
+\begin{definefigure*}{fig:capacity:availability}
   \centering
   \begin{subfigure}{\columnwidth}
     \centering
     \includegraphics[width=\linewidth]{figs/capacity/sense_and_send/usage_reliability_v_secondary_capacity/events_vs_secondary_size.pdf}
       \caption{Periodic application}
-    \label{fig:capacity:reliability:sensesec}
+    \label{fig:capacity:availability:sensesec}
   \end{subfigure}
   \begin{subfigure}{\columnwidth}
     \centering
     \includegraphics[width=\linewidth]{figs/capacity/door_occupancy/events_vs_secondary_size}
     \caption{Reactive application}
-    \label{fig:capacity:reliability:eventsec}
+    \label{fig:capacity:availability:eventsec}
   \end{subfigure}
   \caption{
     \normalfont
-    Workload reliability
+    Workload availability
     for different harvesting scenarios, workloads, and idealized secondary storage sizes.
-    We define reliability as the percentage of successfully completed completed events.
-    As expected, workload reliability follows a similar 
+    We define availability as the percentage of successfully completed events. If a periodic or random event occurs and the sensor does not have sufficient energy to complete the event, that event is not completed and is considered missed.
+    As expected, workload availability follows a similar 
     trend as energy utilization, improving with increased secondary energy
-    storage. For both periodic and reactive workloads, from the smallest to
+    storage and energy capture. 
+    For both periodic and reactive workloads, from the smallest to
     largest capacity simulated, we see a 1.4-2.7x improvement in availability.
+    In cases where average harvester power is sufficient to power the workload completely, the sensor achieves 100\% availability on the workload when configured with sufficient capacity.
     }
 \end{definefigure*}
 
@@ -463,13 +467,13 @@ due to energy harvesting.
     \caption{
     The performance of workloads with different periodicity with four decades of energy capacity.
     We investigate the period at which different secondary storage sizes
-    meet a specific reliability, showing that even with infrequent periodic
-    workloads, small amounts of secondary storage have low reliability while
-    larger secondary stores approach 100\% reliability. 
+    meet a specific availability, showing that even with infrequent periodic
+    workloads, small amounts of secondary storage have low availability while
+    larger secondary stores approach 100\% availability. 
     } 
 \end{definefigure}
     
-\begin{definefigure}{fig:capacity:cdf}
+\begin{definefigure}{fig:capacity:ttc}
       \centering
       \includegraphics[width=\linewidth]{figs/capacity/ota_update/ttc_ota}
       \caption{
@@ -603,9 +607,5 @@ due to energy harvesting.
     %parameters.
     }
 \end{definefigure}
-
-\input{Capacity/impl}
-
-\input{Capacity/eval}
 
 \section{Summary}
