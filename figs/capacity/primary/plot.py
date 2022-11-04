@@ -126,8 +126,8 @@ plt.xlabel('Rechargeable Energy Capacity (mWh)')
 plt.ylabel('Lifetime (years)')
 #lgd = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 #plt.savefig('sense_and_send_life_vs_sec_size.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight', format='pdf')
-lgd = plt.legend(custom_lines, lines_names)
-plt.savefig('sense_and_send_life_vs_sec_size.pdf', bbox_inches='tight', format='pdf')
+lgd = plt.legend(custom_lines, lines_names, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+plt.savefig('sense_and_send_life_vs_sec_size.pdf', bbox_extra_artists=(lgd,text), bbox_inches='tight', format='pdf')
 
 # plot lifetime vs secondary:
 plt.figure(dpi=300,figsize=(10.7,5))
@@ -145,7 +145,8 @@ for i, data in enumerate(sorted(dooroccu, key=lambda x: (float(x[0].split(' ')[0
 
 plt.xlabel('Rechargeable Energy Capacity (mWh)')
 plt.ylabel('Lifetime (years)')
-#lgd = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+lgd = plt.legend(custom_lines, lines_names, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+lgd.set_visible(False)
 #lgd = plt.legend(custom_lines, lines_names)
-plt.savefig('door_occu_life_vs_sec_size.pdf', bbox_inches='tight', format='pdf')
+plt.savefig('door_occu_life_vs_sec_size.pdf', bbox_extra_artists=(lgd,text), bbox_inches='tight', format='pdf')
 
