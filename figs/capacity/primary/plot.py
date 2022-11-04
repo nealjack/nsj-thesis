@@ -96,7 +96,7 @@ lines_names = [setup_name_to_irradiance["SetupA"],
                "CR123A"]
 
 # plot lifetime vs secondary:
-plt.figure(dpi=300,figsize=(11.3,5))
+plt.figure(dpi=300,figsize=(12.5,5))
 plt.grid(True, which='major')
 plt.xscale('log')
 plt.ylim(-2,50)
@@ -130,7 +130,8 @@ lgd = plt.legend(custom_lines, lines_names)
 plt.savefig('sense_and_send_life_vs_sec_size.pdf', bbox_extra_artists=(lgd,text), bbox_inches='tight', format='pdf')
 
 # plot lifetime vs secondary:
-plt.figure(dpi=300,figsize=(11.3,5))
+plt.figure(dpi=300,figsize=(12.5,5))
+plt.tight_layout()
 plt.grid(True, which='major')
 plt.xscale('log')
 plt.ylim(-2,50)
