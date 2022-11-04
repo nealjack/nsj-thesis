@@ -1,10 +1,9 @@
 \chapter{A Quantitative Evaluation of Energy Storage}
 \label{chap:battery}
 
-From the previous chapter, I have identified the value of properly sizing energy capacity in an energy harvesting design to increase energy capture and system reliability. 
-Many modern energy harvesting sensor designs have utilized capacitors in their designs, which severely limit energy capacity.
+From the previous two chapters, we have identified the value of properly sizing energy capacity in an energy harvesting design to increase energy capture and system availability. 
+Many batteryless sensor designs have utilized capacitors in their designs, which severely limit energy capacity and the performance of the resulting system.
 Many modern platforms are attempting to push the energy bounds of sensing, computation and networking, and have begun incorporating supercapacitors to provide the necessary energy to make certain applications feasible~\cite{nardello2019camaroptera}.
-These decisions are made despite the obvious option for energy capacity: batteries.
 %Due to an increased need for energy storage to enable more advanced sensing and processing, the majority of modern batteryless research energy harvesting platforms utilize supercapacitors instead of tantalum or ceramic capacitors due to their superior energy density.
 These designers have eschewed batteries as an option, despite their vastly superior energy density, dismissing them qualitatively as 
 bulky~\cite{yervaGrafting12, hester2017future, hesterTragedy15, luciaIntermittent17, hesterFlicker17, hesterTimely17, colinReconfigurable18, yildirim2018ink, nardello2019camaroptera, geissdoerfer2019shepherd, majid2020continuous, shukla2019skinnypower},
@@ -18,7 +17,7 @@ temperature-sensitive~\cite{hester2017future, hesterFlicker17, hesterTimely17, l
 and dangerous~\cite{hester2017future, hesterFlicker17, hesterTimely17,  yildirim2018ink, geissdoerfer2019shepherd, majid2020continuous}. 
 %These qualitative claims against batteries were valid when considering some of the first available rechargeable batteries. 
 
-In this chapter, I reexamine each of these arguments with respect to modern capacitor, supercapacitor, and battery technology. 
+In this chapter, we reexamine each of these arguments with respect to modern capacitor, supercapacitor, and battery technology. 
 While the early battery design of one or two decades ago were certainly guilty of many of the complaints against them, new 
 battery electrode materials and improved lithium-ion manufacturing processes have produced appealing options for miniature energy storage 
 that do not possess the same negative qualities as older battery technology. 
@@ -33,7 +32,7 @@ Despite improvements, batteries still underperform in some metrics compared to s
 \section{Energy Storage Technology}
 \label{sec:battery-new}
 
-I summarize the notable characteristics of various examples of capacitors, supercapacitors, and batteries in \cref{tab:battery:cost}. Many of the capacitors and supercapacitors in this table were chosen based on their inclusion in some contemporary batteryless platforms, including the Solar Monjolo~\cite{campbellEnergy14}, Flicker~\cite{hesterFlicker17}, Capybara~\cite{colinReconfigurable18}, and Camaroptera~\cite{nardello2019camaroptera}.
+We summarize the notable characteristics of various examples of capacitors, supercapacitors, and batteries in \cref{tab:battery:cost}. Many of the capacitors and supercapacitors in this table were chosen based on their inclusion in some contemporary batteryless platforms, including the Solar Monjolo~\cite{campbellEnergy14}, Flicker~\cite{hesterFlicker17}, Capybara~\cite{colinReconfigurable18}, and Camaroptera~\cite{nardello2019camaroptera}.
 The selected batteries represent some of the smallest lithium-based cells that are commercially available. 
 This section serves to explain the characteristics of various possible energy storage technologies for low power energy harvesting applications, as a prelude to deeper dives on particular aspects and comparisons.
 
@@ -83,12 +82,12 @@ The organic solvent used in liquid and gel electrolytes also can react exothermi
 \subsection{Summary}
 Capacitors possess superior power density and have functionally infinite lifetimes, but can only store minute amounts of energy. Supercapacitors provide one to two orders of magnitude more energy density than MLCC and tantalum capacitors, at the cost of reduced power density, and more limited lifetimes. By contrast, batteries offer one to two orders of magnitude more energy density than supercapacitors. However, batteries do have limited lifetimes based on cycle counts, are more temperature sensitive, and some can be dangerous if mishandled. 
 
-In the rest of this chapter, I seek to compare these technologies in more depth. The following sections directly analyze each of the high-level qualitative arguments that "batteryless" platform designers have leveled against batteries. Namely, that they are bulky, inefficient, expensive, short-lived, temperature-sensitive, and dangerous. 
+In the rest of this chapter, we seek to compare these technologies in more depth. The following sections directly analyze each of the high-level qualitative arguments that "batteryless" platform designers have leveled against batteries. Namely, that they are bulky, inefficient, expensive, short-lived, temperature-sensitive, and dangerous. 
 
 
 \section{Volume and Density}
 \label{sec:battery:density}
-Arguments that deride batteries as bulky are likely directly comparing the size of a small battery to that of single tantalum or ceramic capacitor, without considering energy and power density. Modern, commercially available miniature batteries are comparable in volume to many supercapacitors, and even a banked combination of ceramic and tantalum capacitors, while offering substantially more energy density and an acceptable power density. In this section, I explore the "bulkiness" of capacitors, supercapacitors, and batteries in the context of energy and power density. Here, I am considering volumetric density (\ssi[per-mode=symbol]{\Wh\per\liter}  and  \ssi[per-mode=symbol]{\watt\per\liter}) instead of specific energy and power (\ssi[per-mode=symbol]{\Wh\per\kilo\gram} and  \ssi[per-mode=symbol]{\watt\per\kilo\gram}, respectively) to better compare the volume of these energy storage options. The energy density and power density of various capacitors, supercapacitors, and batteries are directly compared in \cref{fig:battery:ragone}.
+Arguments that deride batteries as bulky are likely directly comparing the size of a small battery to that of single tantalum or ceramic capacitor, without considering energy and power density. Modern, commercially available miniature batteries are comparable in volume to many supercapacitors, and even a banked combination of ceramic and tantalum capacitors, while offering substantially more energy density and an acceptable power density. In this section, we explore the "bulkiness" of capacitors, supercapacitors, and batteries in the context of energy and power density. Here, we are considering volumetric density (\ssi[per-mode=symbol]{\Wh\per\liter}  and  \ssi[per-mode=symbol]{\watt\per\liter}) instead of specific energy and power (\ssi[per-mode=symbol]{\Wh\per\kilo\gram} and  \ssi[per-mode=symbol]{\watt\per\kilo\gram}, respectively) to better compare the volume of these energy storage options. The energy density and power density of various capacitors, supercapacitors, and batteries are directly compared in \cref{fig:battery:ragone}.
 
 \placefigure{fig:battery:ragone}
 
@@ -100,7 +99,7 @@ $$E_{eff_{cap}} = \frac{1}{2} C (V^2 - V_{min}^2)$$
 $$E_{total_{cap}} = \frac{1}{2} C V^2$$
 
 \noindent Where $E_{eff}$ and $E_{total}$ is the effective and total energy stored in a capacitor, respectively. These amounts are defined by the capacitor's capacitance $C$, and the applied voltage $V$, and the minimum voltage $V_{min}$. Usually $V_{min}$ represents the minimum to do something useful. Often this is the minimum open circuit voltage to cold start a boost regulator, between 400\ssi{\milli\volt} to 600\ssi{\milli\volt}~\cite{adp5091,bq25505,max17222}. 
-For simplicity, I use $E_{total}$ to determine energy capacity and density. For most capacitors, the unusable energy represented by $E_{eff_{cap}}$ is negligible compared to the total energy. Likewise, energy stored in a battery is estimated as follows:
+For simplicity, we use $E_{total}$ to determine energy capacity and density. For most capacitors, the unusable energy represented by $E_{eff_{cap}}$ is negligible compared to the total energy. Likewise, energy stored in a battery is estimated as follows:
 
 $$E_{bat} \approx Q V_{nom}$$
 
@@ -128,7 +127,7 @@ Internal resistance for both supercapacitors and batteries is temperature and ag
 The internal resistance of capacitors and supercapacitors is also frequency dependent, and usually reported for 1\ssi{\kilo\hertz}. This value is generally related inversely with frequency for frequencies below the capacitor's self-resonance~\cite{murataESRArticle}. For the relatively low frequency of charge/discharge cycles characteristic of energy harvesting devices, actual ESR is likely higher than reported for supercapacitors.
 
 Internal capacitor, supercapacitor, and battery resistance incurs a voltage drop over this resistance which is especially noticeable and detrimental during high  current loads.
-Ceramic and tantalum capacitors have negligible ESR and incomparably high power density, so I focus on comparing the power density of supercapacitors and batteries.
+Ceramic and tantalum capacitors have negligible ESR and incomparably high power density, so we focus on comparing the power density of supercapacitors and batteries.
 There are two different metrics for quantifying power output of supercapacitors and batteries. The first is effective power $P_{eff}$, and represents the maximum sustainable continuous power that can be provided. The second is peak power $P_{max}$ and represents the maximum possible current that can be provided in short pulses. These metrics are defined differently for supercapacitors and batteries. For a supercapacitor, power output is defined as follows~\cite{IEC62391}:
 
 $$P_{eff_{sc}} = \frac{1}{8} \frac{V^2}{R_i}$$
@@ -141,7 +140,7 @@ $$P_{max_{bat}} = I_{max} V_{nom}$$
 
 \noindent Where $I_{cont}$ and $I_{max}$ are the battery's rated continuous and peak pulsed current respectively. These metrics are provided by the battery manufacturer and often included in the battery datasheet. The continuous and peak currents are often defined in terms of the C-rate, or a proportion of the rated capacity (in units of \ssi{\Ah}). For example, the 1C rate of a 100\ssi{\milli\Ah} battery is 100\ssi{\milli\ampere}, and the 2C rate is 200\ssi{\milli\ampere}. 
 Continuously charging and discharging a battery beyond its normal rate will result in cycles that deliver less energy than rated, and eventually damage to the cell resulting in capacity fading. 
-For sake of comparison, I use $P_{eff}$ in \cref{tab:battery:cost} for batteries and supercapacitors, as it is a more conservative measure of the energy storage power capability. 
+For sake of comparison, we use $P_{eff}$ in \cref{tab:battery:cost} for batteries and supercapacitors, as it is a more conservative measure of the energy storage power capability. 
 
 Among the supercapacitors and batteries featured in \cref{tab:battery:cost}, supercapacitors provide 10-400x higher power density over batteries. 
 However, one supercapacitor outlier provides the least power density of all options. Like energy density, power density is also directly compared in \cref{fig:battery:ragone}.
@@ -196,7 +195,7 @@ This amount of self-discharge is negligible when considering the average sleep c
 While the self discharge of capacitors and supercapacitors appears lower than batteries, this is partially due to how it is measured and rated. However, the self discharge of supercapacitors is actually is comparable to that of batteries when considering short term post-charge behavior.
 Supercapacitors exhibit a pronounced, non-ideal phenomena known as dielectric absorption~\cite{kundert2008modeling}. Dielectric absorption represents a decreasing exponential decay of the supercapacitor voltage immediately after charging. After hours or days, self-discharge is dominated by a linear leakage current. The magnitude of the decay depends on the initial voltage, temperature, and duration of the charge~\cite{kowal2011detailed}. Datasheets generally specify supercapacitor leakage after a subsequent 24 hour constant voltage charge and 1 hour open circuit period. This is sufficient time for the contribution of dielectric absorption to be rendered negligible. After this time, only the internal parallel leakage resistance is a factor.
 
-In the short term, however, the discharge due to dialectric absorption dominates. For example, after an hour of constant voltage charging, the 33\ssi{\milli\farad} BestCap supercapacitor listed in \cref{tab:battery:cost} experiences an average of 300\ssi{\nano\ampere} self-discharge over a 3 hour window. Considering the common use case of supercapacitors in batteryless systems, where any captured energy is immediately used whenever it is available. This short term cycle use case means that energy is never stored for an extended period of time, and dialectric absorption is a primary factor in self-discharge for batteryless systems. While I have not characterized the self-discharge of each individual supercapacitor listed in \cref{tab:battery:cost}, this phenomena is inherent to electrochemical capacitor technology.
+In the short term, however, the discharge due to dialectric absorption dominates. For example, after an hour of constant voltage charging, the 33\ssi{\milli\farad} BestCap supercapacitor listed in \cref{tab:battery:cost} experiences an average of 300\ssi{\nano\ampere} self-discharge over a 3 hour window. Considering the common use case of supercapacitors in batteryless systems, where any captured energy is immediately used whenever it is available. This short term cycle use case means that energy is never stored for an extended period of time, and dialectric absorption is a primary factor in self-discharge for batteryless systems. While we have not characterized the self-discharge of each individual supercapacitor listed in \cref{tab:battery:cost}, this phenomena is inherent to electrochemical capacitor technology.
 
 %In addition to additional leakage due to absorption effects, some batteryless sensor designs employ a bank of multiple parallel capacitors and supercapacitors to build up enough energy storage to support their workload~\cite{colinReconfigurable18}. Since these capacitors are in parallel, their internal resistances are summed. 
 
@@ -289,7 +288,7 @@ Like supercapacitors, batteries experience adverse effects at extreme temperatur
 If charging rates are exceeded at cold temperatures, or the battery is simply cycled at low temperatures, additional battery capacity degradation can occur. The same LFP battery as above experiences a 12\% degradation after only 12 cycles at -20\ssi{\celsius}~\cite{jaguemont2015lithium}.
 Likewise, at higher temperatures, lithium batteries also experience accelerated aging and increased internal resistance~\cite{leng2015effect}. At extreme temperatures, some types of lithium batteries can experience thermal runaway and cause explosions or fires. These effects are rarely described and quantified in battery datasheets. Instead, manufacturers simply provide a range of operational temperatures.
 
-Li-ion and LiPo batteries are particularly sensitive to temperature. Of those listed in \cref{tab:battery:cost}, they are generally only rated for 0-40\ssi{\celsius} for charging, and -20-60\ssi{\celsius} for discharging. I would expect them to perform worse than the metrics listed previously for the LiFeMnPO\textsubscript{4} battery.
+Li-ion and LiPo batteries are particularly sensitive to temperature. Of those listed in \cref{tab:battery:cost}, they are generally only rated for 0-40\ssi{\celsius} for charging, and -20-60\ssi{\celsius} for discharging. We would expect them to perform worse than the metrics listed previously for the LiFeMnPO\textsubscript{4} battery.
 Generally, LTO and LFP batteries perform better in extreme temperatures than traditional Li-ion and LiPo cells.
 Some 
 datasheets and authors report operating LTO batteries successfully as low as -30\,\textdegree C
