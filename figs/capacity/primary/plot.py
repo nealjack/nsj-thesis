@@ -122,7 +122,7 @@ for i, data in enumerate(sorted(sensensend, key=lambda x: (float(x[0].split(' ')
     print(data[2][-1,1]/data[2][0,1])
     plt.plot(data[2][:,0]/3600*1E3, data[2][:,1], color=colors[i], lw=2, markersize=8, marker=markers[i], label=lab + ', ' + data[0])
 
-plt.xlabel('Energy Capacity (mWh)')
+plt.xlabel('Rechargeable Energy Capacity (mWh)')
 plt.ylabel('Lifetime (years)')
 #lgd = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 #plt.savefig('sense_and_send_life_vs_sec_size.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight', format='pdf')
@@ -143,7 +143,7 @@ for i, data in enumerate(sorted(dooroccu, key=lambda x: (float(x[0].split(' ')[0
     print(data[2][-1,1]/data[2][0,1])
     plt.plot(data[2][:,0]/3600*1E3, data[2][:,1], color=colors[i], lw=2, markersize=8, marker=markers[i], label=lab + ', ' + data[0])
 
-plt.xlabel('Energy Capacity (mWh)')
+plt.xlabel('Rechargeable Energy Capacity (mWh)')
 plt.ylabel('Lifetime (years)')
 #lgd = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 #lgd = plt.legend(custom_lines, lines_names)
