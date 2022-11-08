@@ -2,8 +2,8 @@
 \label{chap:battery}
 
 From the previous two chapters, we have identified the value of properly sizing energy capacity in an energy harvesting design to increase energy capture and system availability. 
-Many batteryless sensor designs have utilized capacitors in their designs, which severely limit energy capacity and the performance of the resulting system.
-Many modern platforms are attempting to push the energy bounds of sensing, computation and networking, and have begun incorporating supercapacitors to provide the necessary energy to make certain applications feasible~\cite{nardello2019camaroptera}.
+Many batteryless sensor designs have chosen to utilize capacitors in their designs, which severely limit energy capacity and the performance of the system. 
+Many modern applications are attempting to push the energy bounds of sensing, computation and networking, and batteryless systems have begun incorporating supercapacitors to provide the necessary energy capacity to make certain applications feasible~\cite{nardello2019camaroptera}.
 %Due to an increased need for energy storage to enable more advanced sensing and processing, the majority of modern batteryless research energy harvesting platforms utilize supercapacitors instead of tantalum or ceramic capacitors due to their superior energy density.
 These designers have eschewed batteries as an option, despite their vastly superior energy density, dismissing them qualitatively as 
 bulky~\cite{yervaGrafting12, hester2017future, hesterTragedy15, luciaIntermittent17, hesterFlicker17, hesterTimely17, colinReconfigurable18, yildirim2018ink, nardello2019camaroptera, geissdoerfer2019shepherd, majid2020continuous, shukla2019skinnypower},
@@ -93,17 +93,28 @@ Arguments that deride batteries as bulky are likely directly comparing the size 
 
 \subsection{Energy Density}
 Energy density should be the primary consideration for energy harvesting power supply design to maximize energy capacity while simultaneously minimizing volume. 
-The energy stored in a capacitor is calculated in one of two ways:
+The energy stored in a capacitor is calculated in one of two ways, illustrated by \cref{eqn:battery:cap_total,eqn:battery:cap_eff}.
 
-$$E_{eff_{cap}} = \frac{1}{2} C (V^2 - V_{min}^2)$$
-$$E_{total_{cap}} = \frac{1}{2} C V^2$$
+\begin{equation}\label{eqn:battery:cap_total}
+E_{total_{cap}} = \frac{1}{2} C V^2
+\end{equation}
+\begin{equation}\label{eqn:battery:cap_eff}
+E_{eff_{cap}} = \frac{1}{2} C (V^2 - V_{min}^2)
+\end{equation}
 
-\noindent Where $E_{eff}$ and $E_{total}$ is the effective and total energy stored in a capacitor, respectively. These amounts are defined by the capacitor's capacitance $C$, and the applied voltage $V$, and the minimum voltage $V_{min}$. Usually $V_{min}$ represents the minimum to do something useful. Often this is the minimum open circuit voltage to cold start a boost regulator, between 400\ssi{\milli\volt} to 600\ssi{\milli\volt}~\cite{adp5091,bq25505,max17222}. 
-For simplicity, we use $E_{total}$ to determine energy capacity and density. For most capacitors, the unusable energy represented by $E_{eff_{cap}}$ is negligible compared to the total energy. Likewise, energy stored in a battery is estimated as follows:
+\noindent Where $E_{total}$ and $E_{eff}$ are the total and effective energy stored in a capacitor, respectively. These amounts are defined by the capacitor's capacitance $C$, and the applied voltage $V$, and the minimum voltage $V_{min}$. Usually $V_{min}$ represents the minimum supply voltage for a system. 
+Often this is the minimum open circuit voltage to cold start a boost regulator, between 400\ssi{\milli\volt} to 600\ssi{\milli\volt}~\cite{adp5091,bq25505,max17222}. 
+For simplicity, we use $E_{total}$ to determine energy capacity and density. For most capacitors, the unusable energy represented by $E_{eff_{cap}}$ is negligible compared to the total energy. 
 
-$$E_{bat} \approx Q V_{nom}$$
+The energy stored in a battery can not be directly calculated, and depends on many variables. It can be estimated by considering the charge capacity $Q$, often denoted in terms of \si{\Ah}, and the nominal voltage of the cell $V_{nom}$
+This estimation is described by \cref{eqn:battery:bat_energy}.
 
-\noindent Where $Q$ is the charge capacity (often denoted in terms of \ssi{\Ah}) and $V_{nom}$ is the battery's nominal voltage. Nominal voltage represents an average of the battery's voltage curve over the course of a charge/discharge cycle. The nominal voltage and capacity of a battery are provided by the manufacturer and are almost always included in a datasheet.
+\begin{equation} \label{eqn:battery:bat_energy}
+E_{bat} \approx Q V_{nom}
+\end{equation}
+
+\noindent Nominal voltage represents an average of the battery's voltage curve over the course of a charge/discharge cycle. The nominal voltage and capacity of a battery are provided by the manufacturer and are commonly included in a datasheet.
+
 
 A selection of capacitor, supercapacitor, and battery energy capacities and densities are summarized in \cref{tab:battery:cost}, and their energy density is compared in \cref{fig:battery:ragone}. Among this selection, small batteries are 50-1000x more energy dense than supercapacitors and three to five orders of magnitude more dense than ceramic and tantalum capacitors. Li-ion and LiPo batteries are the most energy dense among all options. Solid-state batteries are an order of magnitude less energy dense than those with aqueous electrolytes, but still an order of magnitude more dense than supercapacitors. 
 
@@ -112,7 +123,7 @@ The capacitor and supercapacitor configurations are based on examples from batte
 The batteries shown in \cref{fig:battery:sizes} are
 as small as 88\ssi{\milli\meter\cubed}, and resemble small through-hole
 capacitors and coin cells. Battery \textbf{(b)} is smaller in volume than many of the capacitor
-configurations presented in the literature, only outdone by systems like Flicker \textbf{(a)} which utilize only a few ceramic capacitors~\cite{hesterFlicker17}.
+configurations presented in the literature, only outdone by systems like Flicker \textbf{(a)} which utilizes only a few ceramic capacitors~\cite{hesterFlicker17}.
 This small LTO battery offers 3.7x 
 more energy storage and 50x more energy density than the largest supercapacitor presented (\textbf{h}). When considering the size of other components in the system, most notably the harvester (solar panel, thermocouple, or piezoelectric device), the combination of ICs, and large sensors like a PIR motion sensor, the size of small rechargeable batteries is inconsequential. 
 To my knowledge, the Michigan Micro Mote is the smallest energy harvesting system, occupying a volume on the order of a single ceramic capacitor~\cite{lee2013modular}. Despite its small size, it utilizes a thin film solid-state lithium battery for energy storage due to its superior energy density over any capacitor or supercapacitor option.
@@ -304,7 +315,7 @@ supercapacitors also require active temperature management to maintain long life
 \section{Safety} 
 Besides temperature sensitivity, many types of lithium metal batteries are also notorious for their propensity to burn and explode under mechanical, electrical, and thermal stress.
 Capacitors and supercapacitors do not exhibit same caliber of danger, and at most will "pop" if exposed to electrical stress like overcharge or a large inverted charge. 
-For both batteries and supercapacitors, electrical stress is exceedingly rare for low power energy harvesting applications, especially if using a battery protection and voltage management circuit. However, in some extreme environments, mechanical and thermal stress can be an issue. 
+For both batteries and supercapacitors, electrical stress is rare for low power energy harvesting applications, especially if using a battery protection and voltage management circuit. However, in some extreme environments, mechanical and thermal stress can be an issue. If left uncharged for a long period, battery undervoltage will occur. 
 
 Batteries with LCO and NMC cathodes and graphite anodes are prone to fiery explosions if mishandled. However, 
 batteries that use other electrode materials, like LFP cathodes or LTO anodes, are considered much safer~\cite{doughty2012general,nitta2015li,belharouakElectrochemistry11,larssonAbuse14}.
@@ -323,14 +334,18 @@ These cells also feature a capacitor-like notched cap that fails first in the ca
 Despite their safety, battery management is still important to limit damage to any battery and maintain capacity and performance. 
 Not all lithium batteries are equivalent, and the claim that \textit{all} batteries are dangerous disregards the many safety improvements made with newer electrode and electrolyte materials.
 
+\section{Environmental Impact}
+\hl{todo}
+
 \section{Summary}
 Among the various arguments that "batteryless" platforms have levied against batteries, very few are relevant in the face of improved battery technology. Out of all addressed here, temperature sensitivity is the only real limitation of batteries. This complicates their usage in extreme environments, but by no means discounts them. Batteries can not compete against some supercapacitors in terms of power density and cycling performance, but for low power applications, these metrics are inconsequential. 
 In reality, batteries are by far the most energy dense rechargeable storage device available and they provide many orders of magnitude more energy capacity per dollar than any capacitor or supercapacitor. New battery technology provides comparable efficiency, lifetime, and safety to many modern supercapacitors. 
 
-These qualitative arguments are the same made in the early 2000s, when battery technology was admittedly not well suited for long-lived, low power applications. Two decades later, these arguments have not been revisited, and are instead used ad nauseam to further justify design decisions made to enable theoretically indefinite lifetimes. 
+The qualitative arguments made by batteryless proponents are the same made in the early 2000s, when miniature battery technology was poorly suited for long-lived, low power applications. Two decades later, these arguments have not been revisited, and are instead used ad nauseam to further justify batteryless design decisions.
+%made to enable theoretically indefinite lifetimes. 
 %It has resulted in a lazy or intentionally obtuse view of energy harvesting system design research, where no thought is given to properly sizing components to optimally enable an application. 
 %Instead, the decision to use a supercapacitor is the default, chosen to make an application work, but not work well. Research in this area has pivoted from trying to solve interesting and hard problems with wireless sensor networks, to creating complex and overbearing software solutions to shoehorn supercapacitors into applications they are poorly suited for. The real problem is in reality a hardware one: these platforms do not have enough energy capacity. There is also very simple hardware solution: \textbf{use a battery}. 
-The choice to use a (super)capacitor has become the default, often selected to provide just enough energy storage to allow an application to function, but nowhere near enough to function well. This lack of energy capacity in the name of immortality has forced researchers to develop complex software and hardware solutions and shoehorn capacitors and supercapacitors into applications they are poorly suited for. There is a far simpler solution: \textbf{use a battery}.
+The choice to use a (super)capacitor has become the default, often selected to provide just enough energy storage to allow an application to function, but nowhere near enough to function well, as we have illustrated in \cref{chap:intuition,chap:capacity}. This lack of energy capacity has forced researchers to develop complex software and hardware solutions and shoehorn capacitors and supercapacitors into applications they are poorly suited for. There is a far superior and simpler solution for the majority of energy-harvesting sensing applications: \textbf{use a battery}.
 
 \begin{definetable*}{tab:battery:cost}
     \begin{adjustbox}{width=1.3\textheight}

@@ -1,5 +1,5 @@
 \chapter{A Simulation-based Exploration of Capacity}
-\label{cha:capacity}
+\label{chap:capacity}
 In the previous chapter, we presented a simple model for energy capacity and explored the effect of capacity on the amount of energy captured by a system. 
 We utilized synthesized energy harvesting traces from an existing irradiance trace dataset, however we simplified the analysis by assuming a static average workload power.
 This chapter will explore expanding our model to utilize several different dynamic workloads based off of benchmarks of real hardware, as well as considering a wireless sensor state machine that better captures the behavior of a real sensor.
@@ -28,19 +28,22 @@ As shown in \cref{fig:intuition:traces}, Setup A represents a location that rece
 Beyond \cref{fig:intuition:traces}, these traces are summarized in \cref{tab:capacity:rep}.
 On average, Setup A provides an average of 15.1\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared} which is on the lower end of expected irradiance in indoor environments. Setup D represents the higher end of indoor irradiance with an average 97.4\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}.
 
+\placefigure{tab:capacity:components}
+
 \subsection{Representative Hardware}
 We limit our analysis to the effects of capacity,
 independent of the differences of energy intensity or efficiency in device
 component selection. To do so, we define an example photovoltaic energy harvesting
 sensor platform that utilizes currently available commercial
-components.
+components. These components are listed in \cref{tab:capacity:components}.
 We choose new
 components in an attempt to better represent prior energy storage designs and
 give them the benefit of the improvements that have occurred in recent years.
 We take benchmark
-measurements of various tasks performed by this platform, such as the
+measurements of various tasks performed by this representative platform, such as the
 amount of time and energy required to sample a sensor or send a Bluetooth Low
-Energy (BLE) packet. These benchmarks are used to generate energy utilization metrics
+Energy (BLE) packet. 
+These benchmarks are used to generate energy utilization metrics
 for our representative workloads shown in \cref{tab:capacity:rep}.
 The physical size of the solar panel used by this sensor
 is assumed to be
@@ -140,7 +143,7 @@ secondary.  If the primary storage is depleted, the simulation ends early.
 
 \placefigure{fig:usage}
 
-\section{Capacity Increases Energy Capture}
+\section{Capacity Increases Energy Capture and Availability}
 \label{sec:capacity:capture}
 
 Using our simulator, we can confirm that the conclusions 
@@ -227,6 +230,7 @@ unable to capture enough energy to allow continuous sensing through periods with
 
 \subsection{Workload Timeliness}
 \placefigure{fig:capacity:ttc}
+\placefigure{fig:primary}
 Finally, we analyze the ability of different storage configurations to perform a 
 long-running, contiguous, higher energy task. 
 The characteristics of the long-running task are presented in \cref{tab:capacity:rep_work}. We 
@@ -240,6 +244,8 @@ Many of the updates for smaller energy storage configurations
 do not complete for 1000-10,000\,s.
 This aligns with the amount of time a sensor may sit
 idle overnight waiting for power from daytime to continue and eventually complete its update.
+
+
 
 % Mayfly/Flicker
 % - Timekeeper: 1 10uF 0805YD106KAT2A 0.09 @ 100 (equiv 0.03 @ 100) (0.023)
@@ -259,7 +265,7 @@ idle overnight waiting for power from daytime to continue and eventually complet
 %
 % Wisp
 % - 1 10uF ?? $0.05 @ 100
-\begin{definefigure*}{fig:primary}
+\begin{definefigure}{fig:primary}
   \centering
   \begin{subfigure}{\columnwidth}
     \centering
@@ -294,7 +300,7 @@ idle overnight waiting for power from daytime to continue and eventually complet
     %All scenarios experience substantial
     %increases in lifetime from increased secondary storage size.
     }
-\end{definefigure*}
+\end{definefigure}
 
 \section{Availability Requires Backup}
 \label{sec:primary:availability}
@@ -396,16 +402,29 @@ to ensure availability in uncharacteristically adverse conditions.
 Even for conditions with
 limited energy availability we still observe significant lifetime improvements
 due to energy harvesting.
-We see a 2-4x increase in lifetime estimates from the smallest to largest
+We identify a 2-4x increase in lifetime estimates from the smallest to largest
 capacity simulated, if we only consider bounded results.
 In some cases, lifetime estimates grow exponentially as rechargeable energy capacity is increased, indicating that with sufficient capacity and income, a workload almost never needs to utilize the energy in its non-rechargeable backup.
+These results confirm the initial analysis performed in \cref{sec:intuition:hybrid}, which showed substantial lifetime improvements when considering hybrid energy harvesting systems with backup preallocated energy.
 We emphasize that
 these lifetime estimations are
 just estimations, and while we do model the 1\,\%/year leakage
 typical of coin cells, we do not consider the unknown
-physical degradation that would be experienced over decades of use or in adverse environments.
+physical or chemical degradation that would be experienced over decades of use or in adverse environments.
 
-\placefigure[t]{fig:primary}
+\section{Summary}
+In this chapter, we present an upgraded energy harvesting and storage model and use it to simulate the behavior and common workloads of wireless sensors.
+This simulation improves upon the simple analysis performed in \cref{sec:intuition:capacity} by considering a dynamic workload, more realistic energy income and energy storage characteristics, and the effects of preallocated backup energy storage.
+We use the results from multiple simulation runs to illustrate the impact of energy capacity on the performance of wireless sensors.
+Increasing energy capacity allows a system to increase its energy utilization. In turn, increased energy utilization allows a wireless sensor to more successfully complete its workload, regardless of the type or distribution of workload activity.
+Despite the improvements granted by increased capacity, a wireless energy harvesting sensor will still be limited by the magnitude of available harvestable energy.
+In cases where harvestable energy is insufficient to power an intended application workload, it can be beneficial to include a backup non-rechargeable source of energy to ensure high availability.
+While this inclusion results in a wireless sensor with a finite lifetime, the inclusion of energy harvesting with sufficient rechargeable energy capacity significantly increases the lifetime of the system.
+
+In the next chapter, we explore the options for rechargeable energy capacity for wireless sensors. We seek to identify options that provide sufficient energy capacity and density to achieve the amounts identified in \cref{sec:intuition:capacity,sec:capacity:capture} to maximize energy capture.
+
+
+
 
 \begin{definefigure*}{fig:usage}
   \centering
@@ -499,18 +518,19 @@ physical degradation that would be experienced over decades of use or in adverse
     \begin{threeparttable}
     \centering
     \begin{subtable}{\columnwidth}
-            \begin{tabular}{l | c | c | c | c }
-                \thead[l]{\\Irradiance \\Trace} & \thead{\\ \\ Total Days} & \thead{Average\\Power\\(\textmu W/cm\textsuperscript{2})} & \thead{90\textsuperscript{th} Percentile\\Daily Power \\(\textmu W/cm\textsuperscript{2})} & \thead{10\textsuperscript{th} Percentile\\Daily Power \\(\textmu W/cm\textsuperscript{2})} \\\hline
+            \begin{tabularx}{\columnwidth}{@{\extracolsep{\fill}} l | c | c | c | c }
+                Irradiance Trace  & Total Days & \thead{\\ Average Power\\(\textmu W/cm\textsuperscript{2})} & \thead{90\textsuperscript{th} Percentile\\Daily Power \\(\textmu W/cm\textsuperscript{2})} & \thead{10\textsuperscript{th} Percentile\\Daily Power \\(\textmu W/cm\textsuperscript{2})} \\\hline
                 EnHANTs A   & 394  & 15.1     & 25.0      & 5.2\\
                 EnHANTs D   & 311  & 97.4     & 256.5     & 24.8\\
                 %Enhants C   & 327  & 745.4    & 1610.0    & 176.1\\
-            \end{tabular}
+            \end{tabularx}
             \caption{Indoor photovoltaic irradiance traces}
             \label{tab:capacity:rep_trace}
         \end{subtable}\\
+        \vspace{1em}
         \begin{subtable}{\columnwidth}
             \centering
-            \begin{tabular}{l | c | c | c}
+            \begin{tabularx}{\columnwidth}{@{\extracolsep{\fill}} l | c | c | c }
                 Workload Class & Energy per Event (uJ) & Average Period & Average Power (\textmu W)\,\tnote{a}\\\hline
             \multirow{4}{*}{Periodic}   & \multirow{4}{*}{586}  & 10\,s                 &  58.6     \\
                                         &                       & 30\,s                 &  24.5     \\
@@ -520,10 +540,11 @@ physical degradation that would be experienced over decades of use or in adverse
                                         &                       & 6.8\,s\,\tnote{b}     &  17.6     \\
                                         &                       & 13.6\,s\,\tnote{b}    &  11.3     \\\hline
                  Long-Running           & 93,300                 & 2\,weeks\,\tnote{c}  &  5.1      \\
-            \end{tabular}
+            \end{tabularx}
             \caption{Representative workloads}
             \label{tab:capacity:rep_work}
         \end{subtable}
+        \vspace{1em}
     \end{threeparttable}
     \small
     \begin{tablenotes}[para]
@@ -546,8 +567,7 @@ physical degradation that would be experienced over decades of use or in adverse
 
 \begin{definetable}{tab:parameters}
     \centering
-    \small
-    \begin{tabular}{lll}
+    \begin{tabularx}{\columnwidth}{@{\extracolsep{\fill}} lll}
 \hline
 \textbf{Config Type}& \multicolumn{1}{l}{\textbf{Parameter}}                   & \multicolumn{1}{l}{\textbf{Description}} \\ \hline
 \textbf{Device}     & \texttt{operating\_voltage}                              & Output voltage of the power subsystem    \\
@@ -570,7 +590,7 @@ physical degradation that would be experienced over decades of use or in adverse
 %                    & \texttt{atomic}                                          & Workload is atomic, or intermittent      \\
 %                    & \texttt{event\_period\_min}                              & If not atomic, minimum splitable period  \\ \hline
 
-    \end{tabular}
+    \end{tabularx}
     \caption{\normalfont Simulation configuration parameters.
       A subset of available configuration options for the sensor energy simulation. 
       Simulated sensors can be configured to use 
@@ -615,4 +635,36 @@ physical degradation that would be experienced over decades of use or in adverse
     }
 \end{definefigure}
 
-\section{Summary}
+\begin{definetable}{tab:capacity:components}
+    \begin{threeparttable}
+    \centering
+        \begin{tabularx}{\columnwidth}{@{\extracolsep{\fill}} l | l | c | c}
+            Component                           &  Function                     & Active Power          & Idle Power \\\hline
+            \multirow{2}{*}{Nordic NRF52840}    & Processor                     & 56\,\uA/MHz           & 940\,nA\,\tnote{a}  \\
+                                                & Radio                         & 5.2\,mA @ 0\,dbm      & \textemdash\,\tnote{a}\\
+            Ambiq AB1815-T3                     & Real time clock               & 55\,nA                & N/A\,\tnote{b}  \\
+            ST Micro LIS2DW12                   & Accelerometer                 & 1\,uA @ 12.5\,Hz      & 50\,nA  \\
+            Maxim MAX44009                      & Light sensor                  & 650\,nA               & N/A\,\tnote{b}  \\
+            Intersil ISL29125                   & Color sensor                  & 56\,\uA               & 500\,nA  \\
+            Silicon Labs SI7021                 & Humidty sensor& 1.5\,\uA @ 1\,Hz      & 60\,nA  \\
+            TE Connectivity MS5637              & Pressure sensor               & 0.6 - 5\,\uA @ 1\,Hz  & 10\,nA  \\
+            Panasonic EKMB11011                 & PIR Occupancy                 & 100\,\uA              & 1\,uA  \\
+        \end{tabularx}
+    \end{threeparttable}
+    \begin{tablenotes}[para]
+    \item[a] Sleep current for both processor and radio.
+    \item[b] No shutdown or idle mode.
+    \end{tablenotes}
+    \caption{
+    The components used by our representative hardware. Benchmarks of the processor, radio, and sensors presented here are used to establish our representative workloads used by our wireless sensor energy simulation.
+    These components are among the lowest power options available, and
+    are even 2-4x lower power than those used on relatively recent
+    systems~\cite{hesterFlicker17,andersen2017hamilton,colinReconfigurable18}. 
+    }
+    %Technology
+    %scaling for embedded sensors, processors, and radios
+    %has driven down the average power of a sensor node much closer to the
+    %harvestable solar energy available in indoor lighting conditions. This allows
+    %more systems to subsist or achieve extended lifetimes through energy harvesting.
+\end{definetable}
+
