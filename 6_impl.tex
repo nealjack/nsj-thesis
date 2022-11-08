@@ -220,7 +220,7 @@ instead of irradiance, and must resort to a piecewise linear estimation, when
 in reality the relationship is not well defined and non-linear when considering
 different light sources. In the case of our estimation, results
 indicate that the model consistently underestimates high irradiance measurements.\\
-\placefigure{tab:components}
+
 \placefigure[t]{fig:evalcmp}
 
 \vspace{-6pt}
@@ -302,33 +302,36 @@ it was deployed for this evaluation, albeit configured with a less intense workl
 %exemplifies the increase in reliability afforded by including a primary-cell.
 
 
-\begin{definefigure}{fig:eval}
-  \centering
-  \begin{subfigure}{\columnwidth}
+\begin{definefigure}{fig:impl:eval_pkt}
     \centering
     \includegraphics[width=\linewidth]{figs/capacity/experiment_pkt/exp_vs_sim_pkt}
-    \caption{Intermittent Node}
     \label{fig:eval:pkt}
-  \end{subfigure}\\%\hspace{0.5cm}
-  \begin{subfigure}{\columnwidth}
+    \caption{Performance comparison of model expectation versus real batteryless system. 
+    Data from a three month deployment of two systems is used to verify our model.
+    We use three weeks of illuminance measurements %from a month-long deployment
+    to estimate irradiance and model the number of packets transmitted by an
+    intermittent node. Average daily error is 15\%, with a standard deviation
+    of 17\%. 
+    } 
+\end{definefigure}
+
+\begin{definefigure}{fig:impl:eval_soc}
     \centering
     \includegraphics[width=\linewidth]{figs/capacity/experiment_soc/exp_vs_sim_soc}
-    \caption{Permamote}
     \label{fig:eval:soc}
-  \end{subfigure}
     \caption{Model comparison to deployed hardware.
-    \normalfont
     Data from a three month deployment of two systems is used to verify our model.
-    (a) We use three weeks of lux measurements %from a month-long deployment
+    (a) We use three weeks of illuminance measurements %from a month-long deployment
     to estimate irradiance and model the number of packets transmitted by an
     intermittent node. Average daily error is 15\%, with a standard deviation
     of 17\%. (b) We model and measure a \name's state of charge while running a
     ``sense and send'' workload with a 1\,s period for a week, beginning at
-    midnight on the first day. Secondary charging hysteresis
-    limits of the devices are set at 51\% and 43\%. Shaded regions
-    represent periods of low harvestable potential
+    midnight on the first day. Charging hysteresis
+    limits of the devices are set at 51\% and 43\%. 
+    Shaded regions represent periods of low harvestable potential
     (<\,15\,\textmu W/cm\textsuperscript{2}),
-    i.e. nighttime. For the first two days, model predictions
+    i.e. nighttime. 
+    For the first two days, model predictions
     closely track the experimental measurements. Errors
     in hysteresis and irradiance estimation cause the model to reach its upper
     hysteresis sooner than the experiment does, annotated by the
