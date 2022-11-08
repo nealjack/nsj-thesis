@@ -7,44 +7,6 @@
 %\textbf{open source} for use by other researchers.
 
 
-\begin{definetable}{tab:components}
-    \begin{threeparttable}
-    \centering
-    \scriptsize
-        \centering
-        \scriptsize
-        \begin{tabular}{l | l | c | c}
-            Component                           &  Function                     & Active Power          & Idle Power \\\hline
-            \multirow{2}{*}{Nordic NRF52840}    & Processor                     & 56\,\uA/MHz           & 940\,nA\,\tnote{a}  \\
-                                                & Radio                         & 5.2\,mA @ 0\,dbm      & \textemdash\,\tnote{a}\\
-            Ambiq AB1815-T3                     & Real time clock               & 55\,nA                & N/A\,\tnote{b}  \\
-            ST Micro LIS2DW12                   & Accelerometer                 & 1\,uA @ 12.5\,Hz      & 50\,nA  \\
-            Maxim MAX44009                      & Light sensor                  & 650\,nA               & N/A\,\tnote{b}  \\
-            Intersil ISL29125                   & Color sensor                  & 56\,\uA               & 500\,nA  \\
-            Silicon Labs SI7021                 & Humidty sensor& 1.5\,\uA @ 1\,Hz      & 60\,nA  \\
-            TE Connectivity MS5637              & Pressure sensor               & 0.6 - 5\,\uA @ 1\,Hz  & 10\,nA  \\
-            Panasonic EKMB11011                 & PIR Occupancy                 & 100\,\uA              & 1\,uA  \\
-        \end{tabular}
-    \end{threeparttable}
-    \begin{tablenotes}[para]
-    \scriptsize
-    \item[a] Sleep current for both processor and radio.
-    \item[b] No shutdown or idle mode.
-    \end{tablenotes}
-    \caption{
-    \normalfont
-    The components used in \name.
-    These components are among the lowest power options available, and
-    are even 2-4x lower power than those used on relatively recent
-    systems such as BLEES, Flicker, Capybara, and Hamilton.
-    }
-    %Technology
-    %scaling for embedded sensors, processors, and radios
-    %has driven down the average power of a sensor node much closer to the
-    %harvestable solar energy available in indoor lighting conditions. This allows
-    %more systems to subsist or achieve extended lifetimes through energy harvesting.
-\end{definetable}
-
 \begin{definefigure}{fig:permamote}
     \centering
     \begin{subfigure}{0.7\columnwidth}

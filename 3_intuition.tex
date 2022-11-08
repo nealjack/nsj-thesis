@@ -19,11 +19,10 @@ Harvesting and storage technologies are often difficult to directly compare, and
 Many times, the type and size of harvesters, batteries, or capacitors are chosen arbitrarily~\cite{hamiltoniot,lee2013modular,juang2002energy}, or are chosen to make the design minimally feasible~\cite{yervaGrafting12,debruin2013monjolo,hesterFlicker17,afanasov2020battery}.
 
 The goal of this chapter is to provide high-level guidance for navigating the design space of wireless sensor power supplies. 
-This chapter seeks to formalize the the application requirements that were discussed in 
+We formalize the the application requirements that were discussed in 
 \cref{sec:background:background_reqs}.
 Using these requirements, this chapter provides guidance to designers for when energy harvesting is a beneficial technique for energy income instead of, or in addition to, a non-rechargeable storage, how prospective income and workloads drive component types and sizing, and if energy-harvesting is utilized, what techniques are required to ensure a minimum useful operation or what is required to capture sufficient energy to maximize system availability. 
-To limit scope to a manageable size, 
-this chapter, along with the those following, focus exclusively on indoor photovoltaic energy harvesting.
+To limit scope of this chapter among those following to a manageable size we choose to focus exclusively on indoor photovoltaic energy harvesting.
 %This is because in the conditions of the majority of human-occupied indoor locations, photovoltaic harvesting offers an order of magnitude more energy than other methods.
 %Despite this focus, similar explorations can be made with other harvesting methods.
 Occupied indoor environments are the focus of a significant
@@ -102,7 +101,7 @@ This is especially apparent in environments where available harvestable energy i
 
 \subsection{Harvesting can Provide More Energy than Preallocation}
 \label{sec:intuition:energy_income_pvh}
-In many cases where potential harvestable energy is limited, it is difficult to determine whether energy preallocation or harvesting is the most suitable technique.
+When potential harvestable energy is limited, it is difficult to determine whether energy preallocation or harvesting is the most suitable technique.
 It is very difficult to directly compare these methods, as the power and energy supplied by either option is dependent on many factors, including the availability, variance, and magnitude of available harvestable energy, the size of the battery or harvester, and the expected sensor workload. 
 %The most important metrics for consideration are the power and energy supplied by battery preallocation or energy harvesting.
 %Energy income defines both the lifetime of a sensor, as well as a maximum supportable power available for a workload.
@@ -309,7 +308,7 @@ Despite these limitations, the analysis of this chapter has enough basis to serv
 %\end{enumerate}
 
 
-\section{Harvesting Feasibility and Intermittent Reliance}
+\section{Harvesting Feasibility and Intermittency}
 \label{sec:intuition:feasibility}
 From the previous section, it is obvious that the availability and magnitude of harvestable energy directly impacts the energy income of an energy harvesting system.
 %This energy income has a direct impact on the performance of an energy harvesting system.
@@ -666,12 +665,12 @@ Additionally, this analysis did not consider the effect of a backup non-recharge
 
 
 \section{Summary}
-This section presented analytical methods for considering the design space of an energy harvesting wireless sensor power supply.
-It presents methods for determining the proper sizing of non-rechargeable battery storage and photovoltaic harvesters, and provides a framework for considering the use of either option for powering sensors, or a hybrid solution of both preallocation and harvesting.
+In this chapter, we present analytical methods for considering the design space of an energy harvesting wireless sensor power supply.
+We present heuristics for determining the proper sizing of non-rechargeable battery storage and photovoltaic harvesters, and we provide a framework for considering the use of either option for powering sensors, or a hybrid solution of both preallocation and harvesting.
 For energy harvesting sensors, they may require batteryless and intermittent techniques to ensure feasibility and forward progress. 
 The requirement for intermittent techniques is solely dependent on energy income and rechargeable energy storage, and they are avoidable by properly sizing a harvester and energy storage.
-This chapter also presented a simple model for energy capacity and presented analysis that indicates that the size of rechargeable capacity in energy harvesting systems directly impacts the amount of energy that is actually captured by a system.
-We present a reasoned method for determining appropriate capacity for a system based on its income and workload that is superior to previous arbitrary methods.
+We also present a simple model for energy capacity and analysis that indicates that the size of rechargeable capacity in energy harvesting systems directly impacts the amount of energy that is actually captured by a system.
+We present a reasoned method for determining appropriate capacity for a system based on its income and workload that is superior to previous methods, which were largely arbitrary.
 
 The next chapter seeks to expand upon the iterative model of capacity presented in \cref{sec:intuition:capacity} by developing an energy simulation for wireless sensors. 
 It will seek to address the three previously mentioned limitations by modelling energy income and storage more realistically, modelling sensor workload more dynamically, and considers the impact of non-rechargeable backup energy. 
