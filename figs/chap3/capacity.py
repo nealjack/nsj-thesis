@@ -2,6 +2,7 @@
 
 import os
 import math
+import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -33,11 +34,11 @@ traces = {}
 
 #b = 2*math.pi / SECONDS_IN_DAY
 amplitudes = np.logspace(-6, -3, 100) #np.array([x * 1E-6 for x in range(10, 101, 10)])
-print(amplitudes)
 #seconds = np.array(range(0, DAYS_TO_MODEL * SECONDS_IN_DAY))
-disparities = [1]#np.array([x/10 for x in range(2,12,2)])
+margins = [x/10.0 for x in range(0, 10)]#np.array([x/10 for x in range(2,12,2)])
 capacities = np.logspace(-3, 3, num=200)
-
+total_runs = len(amplitudes) * len(margins) * len(capacities)
+print(total_runs)
 #print(len(capacity), len(a), len(disparity))
 #
 #sine = np.sin(b * seconds + 3/2 * math.pi)
@@ -56,14 +57,13 @@ def load_trace(fname):
     b = np.interp(newtimes, times, a)
     return (fname.split('.')[0].split('/')[-1], b)
 
-def run(a_i, amplitude, disparity, capacity, trace_name):
-    # model income as sinusoid with day period and shifted to be positive
+def run(index, amplitude, margin, capacity, trace_name):
+    start = time.time()
     trace = traces[trace_name]
     e = np.zeros(trace.shape)
     income = trace * amplitude
     actual_capture = np.zeros(trace.shape)
-    workload = amplitude * disparity
-    print("settings: ", workload, amplitude, capacity)
+    workload = amplitude * (1 - margin)
 
 
     for ind, i in enumerate(income):
@@ -83,7 +83,9 @@ def run(a_i, amplitude, disparity, capacity, trace_name):
     total = np.sum(income)
     actual = np.sum(actual_capture)
 
-    result = {"income": amplitude, "income_index": a_i, "disparity": disparity, "capacity": capacity, "workload": workload, "total": total, "actual": actual, "actual_avg": actual/(len(trace)), "type": trace_name}
+    elapsed = time.time() - start
+    print("simulation: {}/{}".format(index, total_runs), trace_name, elapsed)
+    result = {"index": index, "income": amplitude, "margin": margin, "capacity": capacity, "workload": workload, "total": total, "actual": actual, "actual_avg": actual/(len(trace)), "type": trace_name}
     return result
 
 #amp = a[4]
@@ -104,10 +106,11 @@ if len(results_fnames) < len(trace_fnames):
         for d in loaded_data:
             traces[d[0]] = d[1]
 
-    with Pool(processes=10) as pool:
+    with Pool(processes=20) as pool:
         for trace in traces:
             print(trace)
-            execute_list = [(i, amplitudes[i], y, z, trace) for i,_ in enumerate(amplitudes) for y in disparities for z in capacities]
+            execute_list = [[amplitudes[i], y, z, trace] for i,_ in enumerate(amplitudes) for y in margins for z in capacities]
+            execute_list = [[x] + y for x,y in enumerate(execute_list)]
             result = list(pool.starmap(run, execute_list))
             print("Done")
             df = pd.DataFrame(result)
@@ -140,11 +143,11 @@ print(df)
 #ax.legend()
 #fig.savefig("percent_workload")
 
-def plot_curve(ind):
+def plot_curve(amplitude):
     fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
-    dfi = df[df["income_index"] == ind]
+    dfi = df[df["income"] == amplitude]
     dfi = dfi.sort_values(["capacity", "type"])
-    print(ind, dfi["income"].iloc[0])
+    print(amplitude, dfi["income"].iloc[0])
     for typ in traces:
         dfi_type_slice = dfi[dfi["type"] == typ]
         ax.plot(dfi_type_slice["capacity"] / 3600 * 1E3, dfi_type_slice["actual_avg_vs_work"], label=typ)
@@ -152,23 +155,23 @@ def plot_curve(ind):
     ax.set_xlabel("Capacity (mWh)")
     ax.set_ylabel("Percent Energy Captured (%)")
     ax.legend()
-    fig.savefig("percent_v_capacity_" + str(ind) + ".pdf", bbox_inches='tight')
+    fig.savefig("percent_v_capacity_" + str(amplitude) + ".pdf", bbox_inches='tight')
     plt.close()
 
 with Pool() as pool:
-    pool.map(plot_curve, range(len(amplitudes)))
+    pool.map(plot_curve, amplitudes)
 
 fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
 
-dfd = df[df["disparity"] == 1.0]
-dfd = dfd.sort_values(["capacity", "income_index", "type"])
+dfd = df[df["margin"] == 0]
+dfd = dfd.sort_values(["capacity", "income", "type"])
 print(dfd)
 
 income_v_sufficient_capacity = {}
 for typ in traces:
     income_v_sufficient_capacity[typ] = []
-for ind in range(0, len(amplitudes)):
-    dfd_slice = dfd[dfd["income_index"] == ind]
+for amplitude in amplitudes:
+    dfd_slice = dfd[dfd["income"] == amplitude]
     income = dfd_slice.iloc[0]["income"]
 
     for typ in traces:
@@ -178,7 +181,7 @@ for ind in range(0, len(amplitudes)):
             print(dfd_slice_type)
             break
         first_sufficient = first_sufficient.iloc[0]["capacity"]
-        income_v_sufficient_capacity[typ].append([amplitudes[ind], first_sufficient])
+        income_v_sufficient_capacity[typ].append([amplitude, first_sufficient])
 #ivsc = pd.DataFrame(income_v_sufficient_capacity)
 #print(ivsc)
 for x in income_v_sufficient_capacity:
