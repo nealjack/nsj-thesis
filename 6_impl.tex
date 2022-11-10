@@ -1,10 +1,16 @@
 \chapter{Implementation and Evaluation of Capacity Sizing}
 \label{chap:permacam}
 
-This chapter considers two wireless sensor applications and the design of systems to address these applications.
-The first application is the periodic measurement of workplane illuminance with the goal of a decade lifetime. This application is relatively simple it is used to validate the simulation and conclusions presented in \cref{chap:capacity}.
-The second application is image-based person detection. This application is used as a motivation for considering an existing batteryless image sensing solution and reconsidering its design in the context of the conclusions of \cref{chap:capacity}.
-This chapter finishes with an examination of the power and energy trends of image-based sensing application requirements and a few predictions for the future. 
+This chapter considers two sensing applications and the design of wireless sensor systems to achieve the goals of these applications.
+We explore the system design within the context of the conclusions of \cref{chap:intuition,chap:capacity,chap:battery}, which suggest that energy capacity is a first order concern for energy harvesting wireless sensor design.
+The first application that we consider is the measurement of fine-grained workplane illuminance. These illuminance measurements are used to inform the operation of a lighting control system to balance artificial and natural light for occupant's workplanes. 
+The goals of this application are to measure illuminance at high granularity with high availability and provide a lifetime of at least a decade. 
+This application is relatively simple and it is used to validate the simulation and conclusions presented in \cref{chap:capacity}.
+The second application is image-based human occupancy detection and counting. 
+Human occupancy measurement can help inform building energy management and climate control.
+The goal of this application is to accurately and consistently detect the presence of humans within view while providing a lifetime of several years.
+This application considers existing image sensing solutions and reconsiders their design in the context of the conclusions of previous chapters.
+This chapter finishes with an examination of the power and energy trends of image-based sensing application requirements and a few predictions for the future of energy harvesting wireless sensor applications and design. 
 
 \section{Measuring Workplane Illuminance}
 \label{sec:impl:permamote}
@@ -28,7 +34,7 @@ This chapter finishes with an examination of the power and energy trends of imag
         \caption{Hardware}
     \end{subfigure}
     \caption{\normalfont The \name power supply architecture is informed by the
-    findings in \cref{sec:store,sec:primary}. An
+    findings in \cref{chap:intuition,chap:capacity,chap:battery}. An
     LTO battery is recharged by a solar panel. When the battery is depleted,
     a primary-cell powers the system, providing reliability and avoiding
     intermittency.
@@ -42,11 +48,12 @@ This chapter finishes with an examination of the power and energy trends of imag
 The advent of LED lighting has significantly reduced electricity consumption in residential and commercial sectors. However, residential and commercial lighting still consumes 5\% of the \textit{total} U.S. electrical consumption~\cite{aeo2022}.
 Beyond the utilization of LED lighting, the technique of daylighting, or lighting buildings with natural light, can further reduce the amount of electricity consumed by buildings. 
 Since the intensity of daylight can be unpredictable as it depends on weather, it can be difficult to achieve consistent lighting with natural light alone.
-Artificial lighting can be used to augment insufficient natural light, but it requires measurement fine-grained feedback and control to accurately maintain a set point in a space.
-In particular, workplane illuminance for commercial buildings is important for occupant comfort and productivity, but is difficult to maintain. 
-Traditional lighting control systems do not perform fine-grained measurement or control, as the cost of instrumentation is often too exorbitant.
+Artificial lighting can be used to augment insufficient natural light, but it requires fine-grained measurement to provide feedback to control and maintain a set point in a space.
+In particular, workplane illuminance for commercial buildings is important for occupant comfort and productivity, but is difficult to maintain with existing lighting control systems. 
+Modern lighting control systems that perform both measurement and control are generally limited to large zones of measurement and influence. 
+The cost of instrumentation and automation is often too exorbitant to justify fine-grained more fine-grained focus.
 This often results in inequitable and sometimes uncomfortable lighting for occupants.
-Wireless sensing could provide a solution for providing measurement for daylighting applications, assuming the sensor is cost-effective, does not require frequent maintenance, and provides high availability and consistent measurements for the lighting system feedback loop.
+Wireless sensing could provide a solution for providing fine-grained workplane measurement for daylighting applications, assuming the sensor is cost-effective, does not require frequent maintenance, and provides high availability and consistent measurements for the lighting system feedback loop.
 For this specific example, our application goals are to provide at least a ten year lifetime, provide high availability, and limit cost of individual sensors. 
 
 \placefigure{fig:permamote}
@@ -57,7 +64,7 @@ We design and implement a prototype sensor named \name to perform workplane illu
 %utilizes the components from the representative hardware listed in \cref{tab:capacity:components} 
 %used in our simulation. 
 \name integrates a processor, BLE/802.15.4 radio, and various environmental, lighting,
-and occupancy sensors. 
+and a passive infrared (PIR) occupancy sensor.
 The components used in \name are the same ones that we used to develop our representative hardware and workloads for our simulation. 
 These components are listed in \cref{tab:capacity:components}. 
 A picture
@@ -65,20 +72,23 @@ and system diagram of \name is shown in \cref{fig:permamote}. All hardware
 and software for the platform is open source\footnote{\url{https://github.com/lab11/permamote/tree/master/hardware/permamote}}.
 
 \subsubsection{Energy Harvesting and Storage.}
-Some of the primary goals of \name are to provide periodic workplane illuminance measurements with high availability for a long lifetime of greater than ten years. 
+Some of the primary goals of \name are to provide workplane illuminance measurements with high availability for a long lifetime of greater than ten years. 
+Given the results of our simulation, a design that relies solely on energy preallocation is unlikely to achieve a sufficiently long lifetime. 
 \name is powered by an energy harvesting front end that realizes the benefits
-of using batteries. It uses the TI BQ25505 energy harvesting IC, which
+of rechargeable and non-rechargeable energy capacity. 
+It utilizes the TI BQ25505 energy harvesting IC, which
 harvests energy while monitoring both
 rechargeable and backup energy stores,
-switching between them at user-configurable voltages~\cite{bq25505}. A
-20\,mAh (48\,mWh) LTO battery is charged by an 10.9\ssi{\centi\meter\squared} amorphous
+switching between them at user-configurable voltage thresholds~\cite{bq25505}. A
+20\ssi{\milli\Ah} (48\ssi{\milli\Wh}) LTO battery is charged by an 10.9\ssi{\centi\meter\squared} amorphous
 silicon photovoltaic panel~\cite{LTODatasheet, LTODatasheet2}. 
-This panel was chosen arbitrarily, however in indoor conditions it can provide between an average of 7--70\ssi{\micro\watt} assuming the bounds of indoor irradiance (10--100\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}). 
-We derate the apparent
-capacity of this battery to 
-elongate the cycle lifetime as described in \cref{sec:battery}, but still have 24\,mWh of
+This panel can provide between an average of 7--70\ssi{\micro\watt} assuming the conservative bounds of indoor irradiance (10--100\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}). 
+We configure the voltage thresholds of the BQ25505 to derate the 
+usable capacity of this battery. This 
+increases the apparent cycle lifetime of the battery as described in \cref{sec:battery:life}.
+The resulting energy storage provides 24\ssi{\milli\Wh} of
 energy storage, more than the capacity required to achieve the reliability and energy utilization
-improvements of the intended workload that was simulated in \cref{sec:store}. 
+improvements of the workloads that were simulated in \cref{sec:capacity:primary}. 
 For the backup energy
 store, \name uses lithium primary-cells which can be configured to either one or two CR2032 coin
 cells or a CR123A cell.
@@ -95,13 +105,13 @@ is boosted by a MAX17222 regulator, which features high conversion efficiency
 %is also capable of gating all sensors from the main power supply to save
 %power.\\
 
-\subsubsection{Processor, Radio and Sensor Selection.}
+\subsubsection{Processor, Radio and Sensor Selection}
 In designing \name, we strive to select modern and low power components.
 %We feel that it may
 To benefit other
 platform builders, we document our component selections
 along with their key performance metrics. A summary of these
-components can be found in \cref{tab:components}.
+components can be found in \cref{tab:capacity:components}.
 
 We note our choice of the Nordic NRF52840 MCU over the more commonly used MSP430FR series
 because of its higher active power efficiency while offering comparable sleep currents.
@@ -109,71 +119,36 @@ Specifically, it only draws 56\,\uA/MHz compared to over 100\,uA/MHz
 for the MSP430, which is a common choice for batteryless systems. 
 Unlike batteryless systems,
 \name is designed with sufficient rechargeable capacity and backup energy and is intended to never power off and lose volatile state. 
-This reduces the reliance on state retention techniques and eliminates the need for the non-volatile FRAM present on the MSP430FR series chips. 
+This eliminates any reliance on state retention techniques and the need for the non-volatile FRAM present on the MSP430FR series chips. 
 While
 slightly more efficient
 processors and radios exist than those found in the NRF52840,
-we value the simplicity of an SoC-based design. 
+we value the simplicity of the SoC-based design. 
 
-\subsubsection{Energy Benchmarks}
-The data presented in \cref{tab:components} are benchmarks taken
-on the \name platform. We find that a BLE advertisement at 0\,dbm consumes
-86\,\uJ and that sampling both light and color sensors and transmitting
-them in a BLE advertisement consumes 586\,\uJ. Additionally, the entire system, including
-the energy harvesting front end, consumes only 5.0\,\uW in deep sleep with RAM
-retained and all sensors powered off. We use the energy numbers from \name as a basis
-for our workloads to fairly compare against prior energy storage architectures.
-%\subsection{Numerical Model}
-%\label{impl:model}
-%
-%We develop a numerical model that simulates the behavior of energy harvesting
-%systems in indoor environments. For this work, we've primarily focused on solar
-%energy input, and have tailored the model to use solar energy traces. As
-%mentioned, we use the Columbia EnHANTs irradiance traces
-%\cite{margolies2015energy}. We process the traces, filling the few periods of
-%missing data by copying from a week prior.
-%
-%The model operates at second granularity, and at each
-%step, the amount of incoming energy is calculated based on the input irradiance
-%and solar panel configuration. If the device has enough energy to turn on
-%and perform the task from the specified workload it does so. If there is
-%energy to spare after the task, the device will enter a low power sleep state.
-%The model tallies the amount of successful and unsuccessful events that it
-%was expected to complete, as well as the percentage of energy used out
-%the energy that was available from the harvesting source. To estimate
-%lifetime, the model attempts tasks for the totality of solar irradiance
-%data present, then extrapolates primary-cell discharge to find its lifetime
-%at empty. The one second granularity imposes some limitations, however
-%we find that sensor node workloads are rarely more intensive.
-%
-%If the secondary store is not at capacity
-%this incoming energy is stored
-%
-%If the device is online, it attempts to turn on
-%if it has enough energy to do so, otherwise it remains offline and continues to
-%fail performing its workload.  If the device is on, it perform tasks from its
-%workload. It prioritizes using the energy from its rechargeable store, and if
-%depleted, will either go offline or use energy from its primary-cell, if
-%available. If it has energy to spare, it enters a low power sleep state. The
-%model tallies the amount of successful and unsuccessful events that it was
-%expected to complete, as well as the percentage of energy it used out of how
-%much was available from the irradiance source. It also performs a linear fit on
-%the primary state of charge to estimate lifetime, if applicable to the
-%simulated device's configuration.
-%
-%This
-%granularity also limits that of workloads to a second, but we argue
-%that realistic sensor workloads are rarely more intensive \hl{cite}.
-
-\section{Model Evaluation}
+\subsection{Simulation Evaluation}
 \label{sec:eval}
-To evaluate the model, we perform a three-month-long deployment in a partially sunlit room
+To evaluate our simulation and the benefits of a capacity-focused design, 
+we perform a three-month-long deployment in a partially sunlit room
 using i) a primary-cell only system, ii) an intermittent, capacitor-only system, and iii) \name, our
-system that features both a secondary and primary-cell. We model these
-systems over the same period and compare the availability of \name to the
-intermittent system.
+system that features both a secondary and primary-cell. 
+We model these
+systems over the same period and compare the performance and lifetime of these three systems with the predictions generated by a simulation of their workload. We also compare the availability of \name to the intermittent system.
 
-\subsection{Model Analysis}
+\subsubsection{Simulating Sense and Send with \name}
+We perform benchmarks on the \name platform to develop the workloads presented in \cref{sec:capacity:modelling}.
+The workplane illuminance measurement application represents the periodic sense and send workload.
+\name requires a total of 586\ssi{\micro\joule} to measure from its light and color sensors and transmit
+the results in a BLE advertisement.
+Out of this event energy, 86\ssi{\micro\joule}
+is required to transmit a single BLE advertisement at 0\,dbm. 
+Additionally, the entire system, including
+the energy harvesting front end, consumes only 5.0\,\uW in deep sleep with volatile state  
+retention and all sensors powered off. 
+We use the energy numbers from \name as a basis
+for our simulation workloads to fairly compare against prior energy storage architectures.
+
+
+\subsubsection{Simulation Verification}
 \label{sec:eval:model}
 We analyze the deployment of these systems
 %in a partially sunlit room for three months
@@ -278,7 +253,8 @@ are identical to our experimental measurements.
 %\noindent
 %\textbf{Permamote.}\\
 \subsection{\name Performance}
-\placefigure[t]{fig:eval}
+\placefigure{fig:impl:eval_pkt}
+\placefigure{fig:impl:eval_soc}
 \label{sec:eval:permamote}
 %In addition to evaluating our model,
 We also compare the performance of the
@@ -319,9 +295,8 @@ it was deployed for this evaluation, albeit configured with a less intense workl
     \centering
     \includegraphics[width=\linewidth]{figs/capacity/experiment_soc/exp_vs_sim_soc}
     \label{fig:eval:soc}
-    \caption{Model comparison to deployed hardware.
-    Data from a three month deployment of two systems is used to verify our model.
-    (a) We use three weeks of illuminance measurements %from a month-long deployment
+    \caption{The estimated state of charge of a week of a workload compared to our model's estimation.
+    We use three weeks of illuminance measurements %from a month-long deployment
     to estimate irradiance and model the number of packets transmitted by an
     intermittent node. Average daily error is 15\%, with a standard deviation
     of 17\%. (b) We model and measure a \name's state of charge while running a
@@ -365,7 +340,7 @@ it was deployed for this evaluation, albeit configured with a less intense workl
     \caption{
       \normalfont
         Packets received over two days.
-      This figure compares the reliability of an
+      This figure compares the availability of an
       intermittent design and \name. \name sends a packet every second and does
       so without fail, while the intermittent system is only able to send when
       light is available.
