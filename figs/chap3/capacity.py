@@ -96,7 +96,7 @@ def run(index, amplitude, margin, capacity, trace_name):
 #
 #exit()
 results = {}
-results_fnames = glob('*capacity.csv')
+results_fnames = glob('results/*capacity.csv')
 results_fnames.sort()
 print(trace_fnames)
 print(results_fnames)
@@ -114,7 +114,7 @@ if len(results_fnames) < len(trace_fnames):
             result = list(pool.starmap(run, execute_list))
             print("Done")
             df = pd.DataFrame(result)
-            df.to_csv(trace + "_capacity.csv")
+            df.to_csv('results/' + trace + "_capacity.csv")
             results[trace] = df
 
 else:
