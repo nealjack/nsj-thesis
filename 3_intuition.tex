@@ -650,8 +650,11 @@ Capacity sizing depends on the temporal behavior of energy income in addition to
 \placefigure{fig:intuition:required_capacity}
 
 \subsection{The Impact of a Harvesting Margin}
-Throughout this section, we assumed that the average workload power was equivalent to the average income power. This is a very conservative assumption, and engineers rarely design systems without considering additional margins\dots
-\hl{todo}
+Throughout this section, we have assumed that the average workload power was equivalent to the average income power. This is a very conservative assumption, and engineers rarely design systems that operate on the edge of feasibility. 
+Usually, systems are over-provisioned to allow for a margin of error, usually between 20-50\%. 
+For energy harvesting, this would represent changing a workload to only require a percentage of the expected available harvestable power.
+We can model this margin to identify the impact of over-provisioning energy harvesting income for a given workload. 
+
 
 \subsection{Limitations}
 The analytical model presented in \cref{eqn:intuition:iterative_capacity} is a simple model that assumes a perfect energy buffer. In reality, energy storage technologies are imperfect. They feature less than perfect efficiency; they leak and have parasitic resistance. 
@@ -661,7 +664,7 @@ Any further system voltage regulation has similar limits to efficiency.
 All of these imperfections result in energy loss and prevent a perfect capture of all available harvestable energy.
 Workload is also assumed to be a constant average power. In reality, a workload can be variable depending on an application's reporting requirements or the probability distribution of detectable events.
 This section makes the argument that the variability of a workload is sufficiently less than the variability of income, to the point that workload can be treated as an average in comparison. This assumption needs validation.
-Additionally, this analysis did not consider the effect of a backup non-rechargeable energy store. As seen in \cref{sec:intuition:hybrid}, the addition of a non-rechargeable backup can result in significant increases in the lifetime of a system while maintaining fully reliable operation.
+Additionally, this analysis did not consider the effect of a backup non-rechargeable energy store. As seen in \cref{sec:intuition:hybrid}, the addition of a non-rechargeable backup can result in significant increases in the lifetime of a system while maintaining operation with high availability.
 
 
 \section{Summary}
@@ -894,5 +897,12 @@ It will seek to address the three previously mentioned limitations by modelling 
     \includegraphics[width=\columnwidth]{figs/chap3/required_capacity.pdf}
     \caption{
     The minimum sufficient capacity to support a workload given an income. Note the x- and y-axis log scale. The average workload and income power are set equal; however the variability of income power is determined by the synthetic EnHANTs traces. The minimum sufficient capacity follows a linear trend with increasing income and workload power. Even though each line appears parallel, lines that are higher up on the y-axis are actually steeper due to the log scale. 
+    }
+\end{definefigure}
+
+\begin{definefigure}{fig:intuition:capacity_margin}
+    \centering
+    \includegraphics[width=\columnwidth]{figs/chap3/capacity_margin.pdf}
+    \caption{
     }
 \end{definefigure}
