@@ -5,7 +5,7 @@ This chapter considers two sensing applications and the design of wireless senso
 We explore the system design within the context of the conclusions of \cref{chap:intuition,chap:capacity,chap:battery}, which suggest that energy capacity is a first order concern for energy harvesting wireless sensor design.
 The first application that we consider is the measurement of fine-grained workplane illuminance. These illuminance measurements are used to inform the operation of a lighting control system to balance artificial and natural light for occupant's workplanes. 
 The goals of this application are to measure illuminance at high granularity with high availability and provide a lifetime of at least a decade. 
-This application is relatively simple and it is used to validate the simulation and conclusions presented in \cref{chap:capacity}.
+This application is relatively simple and it is used to validate the simulation and conclusions presented in \cref{chap:intuition,chap:capacity}.
 The second application is image-based human occupancy detection and counting. 
 Human occupancy measurement can help inform building energy management and climate control.
 The goal of this application is to accurately and consistently detect the presence of humans within view while providing a lifetime of several years.
@@ -53,8 +53,9 @@ In particular, workplane illuminance for commercial buildings is important for o
 Modern lighting control systems that perform both measurement and control are generally limited to large zones of measurement and influence. 
 The cost of instrumentation and automation is often too exorbitant to justify fine-grained more fine-grained focus.
 This often results in inequitable and sometimes uncomfortable lighting for occupants.
-Wireless sensing could provide a solution for providing fine-grained workplane measurement for daylighting applications, assuming the sensor is cost-effective, does not require frequent maintenance, and provides high availability and consistent measurements for the lighting system feedback loop.
-For this specific example, our application goals are to provide at least a ten year lifetime, provide high availability, and limit cost of individual sensors. 
+Wireless sensing could provide a solution for fine-grained workplane measurement for daylighting applications, assuming the sensor does not require frequent maintenance and provides high availability and consistent measurements for the lighting system feedback loop.
+For this specific example, our application goals are to provide at least a ten year lifetime with consistently high availability. 
+This section details the realization of a design to meet these requirements, and utilizes this design to verify our the results of the simulation and design conclusions detailed in earlier chapters.
 
 \placefigure{fig:permamote}
 
@@ -74,24 +75,26 @@ and software for the platform is open source\footnote{\url{https://github.com/la
 \subsubsection{Energy Harvesting and Storage.}
 Some of the primary goals of \name are to provide workplane illuminance measurements with high availability for a long lifetime of greater than ten years. 
 Given the results of our simulation, a design that relies solely on energy preallocation is unlikely to achieve a sufficiently long lifetime. 
-\name is powered by an energy harvesting front end that realizes the benefits
+\name is powered by an energy harvesting front end that capitalizes on the benefits
 of rechargeable and non-rechargeable energy capacity. 
 It utilizes the TI BQ25505 energy harvesting IC, which
 harvests energy while monitoring both
 rechargeable and backup energy stores,
 switching between them at user-configurable voltage thresholds~\cite{bq25505}. A
 20\ssi{\milli\Ah} (48\ssi{\milli\Wh}) LTO battery is charged by an 10.9\ssi{\centi\meter\squared} amorphous
-silicon photovoltaic panel~\cite{LTODatasheet, LTODatasheet2}. 
-This panel can provide between an average of 7--70\ssi{\micro\watt} assuming the conservative bounds of indoor irradiance (10--100\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}). 
+silicon photovoltaic panel~\cite{LTODatasheet, LTODatasheet2}.
 We configure the voltage thresholds of the BQ25505 to derate the 
 usable capacity of this battery. This 
 increases the apparent cycle lifetime of the battery as described in \cref{sec:battery:life}.
 The resulting energy storage provides 24\ssi{\milli\Wh} of
 energy storage, more than the capacity required to achieve the reliability and energy utilization
-improvements of the workloads that were simulated in \cref{sec:capacity:primary}. 
-For the backup energy
-store, \name uses lithium primary-cells which can be configured to either one or two CR2032 coin
-cells or a CR123A cell.
+improvements of the workloads that were simulated in \cref{sec:capacity:primary,fig:capacity:primary}.
+The chosen photovoltaic panel can provide between an average of 7--70\ssi{\micro\watt} assuming the conservative bounds of indoor irradiance (10--100\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}). 
+\Cref{fig:impl:permamote_life} is a recreation of \cref{fig:capacity:primary} presenting the estimated lifetime of \name with its configured 24\ssi{\micro\Wh} rechargeable storage and various non-rechargeable backup energy storage options.
+
+From this simulation result, \name requires at least one CR2032 coin cell to achieve the application lifetime goals in the worst case energy harvesting potential.
+Thus, \name can be configured to either one or two CR2032 coin
+cells or a CR123A cell. 
 %Primary-cells provide 3-13x more density and 2-12x less
 %leakage than a secondary-cell.
 %making them more desirable than a single,
@@ -125,18 +128,20 @@ slightly more efficient
 processors and radios exist than those found in the NRF52840,
 we value the simplicity of the SoC-based design. 
 
-\subsection{Simulation Evaluation}
+\subsection{Simulation Evaluation using Real Systems}
 \label{sec:eval}
 To evaluate our simulation and the benefits of a capacity-focused design, 
 we perform a three-month-long deployment in a partially sunlit room
-using i) a primary-cell only system, ii) an intermittent, capacitor-only system, and iii) \name, our
+using i) a primary-cell only system~\cite{adkins2015michigan}, ii) an intermittent, capacitor-only system~\cite{campbellEnergy14}, and iii) \name, our
 system that features both a secondary and primary-cell. 
 We model these
-systems over the same period and compare the performance and lifetime of these three systems with the predictions generated by a simulation of their workload. We also compare the availability of \name to the intermittent system.
+systems over the same period using estimated irradiance from \name illuminance masurements. 
+We compare the performance and lifetime of these three systems with the predictions generated by a simulation of their workload. 
+We also compare the availability of \name to the intermittent system.
 
 \subsubsection{Simulating Sense and Send with \name}
 We perform benchmarks on the \name platform to develop the workloads presented in \cref{sec:capacity:modelling}.
-The workplane illuminance measurement application represents the periodic sense and send workload.
+The workplane illuminance measurement application represents the same periodic sense and send workload used in our simulation.
 \name requires a total of 586\ssi{\micro\joule} to measure from its light and color sensors and transmit
 the results in a BLE advertisement.
 Out of this event energy, 86\ssi{\micro\joule}
@@ -153,7 +158,7 @@ for our simulation workloads to fairly compare against prior energy storage arch
 We analyze the deployment of these systems
 %in a partially sunlit room for three months
 and compare their behavior to our
-model's predictions: i) ten CR2032 primary-cell only devices, ii) an
+model's predictions: i) ten CR2032 primary-cell (720\ssi{\milli\Wh}) only devices, ii) an
 intermittent system configured with just 500\textmu F of capacitance (about
 0.36\,\textmu Wh at 2.2\,V), and iii) \name, configured with a 20\,mAh
 (48\,mWh) secondary-cell, half of which is usable, and a CR2032 backup.  The
@@ -161,17 +166,17 @@ primary-cell only device performs environmental sensing over BLE every second.
 The intermittent system  sends a beacon as soon as its capacitor bank is full.
 When its energy is depleted, it powers off and charges
 again. \name is running the ``sense and send'' workload that we described in
-\cref{sec:overview}, and sends illuminance measurements every second. This
+\cref{sec:capacity:modelling}, and sends illuminance measurements every second. This
 workload stresses the model and requires more charge and discharge cycles.  We
 use \name illuminance readings to estimate irradiance using the same scaling factors used by
 Yerva et al.~\cite{yervaGrafting12}, and use these traces as
-model input.\\
+model input for the energy harvesting sensors.\\
 
 \vspace{-6pt}
 \noindent
 \textbf{Primary-Cell Only.}
-We model the workload of the primary-cell system and produce estimates for
-lifetime.  Our model predicts the platform lifetime
+We measure and model the workload of the primary-cell system and produce estimates for
+lifetime. The primary cell system requires on average 480\ssi{\micro\watt} to measure and beacon every second. Our model predicts the platform lifetime
 to be 58 days.  We find that the average lifetime of the 10 devices is 61 days.
 %,
 %from initial deployment to energy depletion, is 61 days.
@@ -350,13 +355,15 @@ it was deployed for this evaluation, albeit configured with a less intense workl
 \end{definefigure}
 \placefigure{tab:related}
 
-% what does power subsystem need to provide? 
-% upsizing battery? what are interfaces
-% as you increase size of charge buffer, size of amount of buffering you have for small variations goes away
-% big cap squelch high frequency, keep increasing further and further, squelch over day, week, year
-%contininuity of buffer, hard to reason over intermittency, easy to reason about how to buffer over it
-%0.1uF noise, 10 uF surge, larger 100uF stabilize power supply, even larger mF operate store charge for a workload, only good for one activation
-%continium on buffer capacity
+\begin{definefigure}{fig:impl:permamote_life}
+    \centering
+    \includegraphics[width=\linewidth]{figs/capacity/primary}
+    \caption{
+        Lifetime estimation of the \name sense and send workload given different rechargeable buffer sizes and different primary cell sizes.
+      This is a different presentation of \cref{fig:capacity:primary} that identifies the rechargeable capacity of \name.
+      }
+    
+\end{definefigure}
 
 \section{Evaluating an Existing System through Simulation}
 

@@ -106,8 +106,8 @@ Instead of batteries, these systems utilize small capacitor-based energy buffers
 While the longevity of CRFIDs are not limited to to the lifetime of a battery, they require the proximity of an RFID reader to provide power and bidirectional communication. 
 Since the development of CRFIDs, and as technology has continued to improve in efficiency, researchers have extended the technique beyond RFID to systems with active radios and other harvesting methods, including photovoltaic, piezoelectric, and thermoelectric harvesting~\cite{yervaGrafting12, debruin2013monjolo, hesterFlicker17, colinReconfigurable18, nardello2019camaroptera}. 
 %This approach has since become very popular, and the utilization of batteries for modern indoor wireless sensors is uncommon.
-The majority of modern research wireless sensor platforms are batteryless and many researchers are convinced that batteryless designs are the future for wireless sensors~\cite{hester2017future}.
-Despite the batteryless excitement, the design pattern exhibits some serious detracting qualities that may limit feasibility and adoption for many applications.
+The majority of modern wireless sensor platforms build by researchers are batteryless, with many convinced that batteryless designs are the future for wireless sensor power supply design~\cite{hesterFlicker17,colinReconfigurable18,fraternali2018pible,truong2018capband,shukla2019skinnypower,hester2017future}.
+Despite the excitement around batteryless designs, they exhibit some serious detracting qualities that may limit feasibility and adoption for many applications.
 The next section explores the design and development of batteryless systems in more detail and describes the benefits and trade offs of the design.
 %However, the greater energy capacity provided by batteries allows these designs to avoid the complications of frequent power interruptions.
 
@@ -311,8 +311,8 @@ It is uniquely suited for applications that are only concerned with close to rea
 InK prioritizes availability by incorporating timers, interrupts, and event handling into a batteryless context.
 The runtime utilizes sleep states and low power interrupts to persist for longer periods and increase the likelihood of detecting and capturing events. It also utilizes an ultra-low power timer subsystem to ensure timekeeping across power failures.
 With these improvements, a system using Ink is able to capture 14x the number of events over the same system using Alpaca.
-While this seems like a dramatic increase, Alpaca was simply not designed for event detection, and performs abysmally 
-when applied to such a task. With controlled solar harvesting conditions, a system running on Alpaca was only able to capture less than 5\% of events. 
+While this seems like a dramatic increase, Alpaca was not designed with event detection workloads in mind. It performs abysmally 
+when applied to such tasks. With controlled solar harvesting conditions, a system running on Alpaca was only able to capture less than 5\% of events. 
 Comparatively, the system with Ink was only able to capture slightly over half of the events even when in the same light conditions~\cite{yildirim2018ink}. The authors did not compare the performance of these runtimes with that of a traditionally programmed and continuously powered embedded system, so there is no baseline comparison.
 
 While these approaches increase the timeliness and availability of a system,

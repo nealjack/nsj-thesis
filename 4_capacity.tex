@@ -230,7 +230,7 @@ unable to capture enough energy to allow continuous sensing through periods with
 
 \subsection{Workload Timeliness}
 \placefigure{fig:capacity:ttc}
-\placefigure{fig:primary}
+\placefigure{fig:capacity:primary}
 Finally, we analyze the ability of different storage configurations to perform a 
 long-running, contiguous, higher energy task. 
 The characteristics of the long-running task are presented in \cref{tab:capacity:rep_work}. We 
@@ -265,7 +265,7 @@ idle overnight waiting for power from daytime to continue and eventually complet
 %
 % Wisp
 % - 1 10uF ?? $0.05 @ 100
-\begin{definefigure}{fig:primary}
+\begin{definefigure}{fig:capacity:primary}
   \centering
   \begin{subfigure}{\columnwidth}
     \centering
@@ -321,8 +321,7 @@ that appear to achieve near 100\% availability actually miss between 0.1 and 2\%
 %with
 %diminishing returns for increased secondary capacity.
 %Additionally, some workloads
-In both of these cases, a backup energy store can increase availability 
-to 100\%.
+In both of these cases, a backup energy store can greatly increase availability.
 However, the introduction of a non-rechargeable backup means a system now has a finite lifetime.
 %In both of these case, further increasing secondary
 %capacity does not improve availability.
@@ -387,7 +386,7 @@ superior energy density.
 %volume significantly this energy store will almost certainly manifest itself
 %as a non-rechargeable battery.
 An analysis of the reliable lifetime of sensors configured with energy
-harvesting and a backup energy store is shown in \cref{fig:primary}.
+harvesting and a backup energy store is shown in \cref{fig:capacity:primary}.
 %for
 %both periodic and event based workloads.
 We choose several backup energy

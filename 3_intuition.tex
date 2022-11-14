@@ -1,5 +1,5 @@
 \chapter{
-Heuristics for System-Level Power Supply Design 
+Developing System Level Power Supply Design Heuristics
 }
 %system level
 
@@ -160,7 +160,7 @@ T = \frac{\rho L^3}{\bar{P_w} + P_l}
 \end{equation}
 
 \noindent Where $\bar{P_w}$ is the average power required to drive a sensor workload, and $P_l$ is the self-discharge power of the battery. 
-Any aging effects other than self-discharge are unpredictable and not considered here. 
+Any aging effects other than self-discharge are unpredictable and we do not consider them here. 
 With this new definition of battery lifetime, the comparison of power is not as useful a metric, as workload power provided by the battery ($P_w$) is independent of the battery capacity. 
 The power provided by a battery \textit{is} technically limited by its maximum rated load current, which is often related to its capacity. 
 However, this limit is not usually relevant when considering low power operation.
@@ -178,7 +178,7 @@ E_h = \eta \bar{E_e} A T
 
 \placefigure{fig:intuition:eh_worth_it_nano}
 
-With these relations, it is possible to calculate the energy contained in a battery of size $L^3$, the lifetime of that battery given a workload power $P_w$, and the energy captured by a photovoltaic panel of size $L^2$ over the lifetime of the similarly sized battery.
+With these relations, it is possible to calculate the energy contained in a battery of size $L^3$, the lifetime of that battery given an average workload power $P_w$, and the energy captured by a photovoltaic panel of size $L^2$ over the lifetime of the similarly sized battery.
 This is visually presented in \cref{fig:intuition:eh_worth_it}, 
 an updated energy-harvesting reality check~\cite{yervaGrafting12}. 
 This figure compares the preallocated energy provided by a battery with that of the potential harvestable solar energy over the same time period. 
@@ -511,9 +511,9 @@ Many batteryless systems that expect frequent restarts size their energy storage
 They size their energy storage to support the largest atomic operation required by their application, as described by 
 \cref{eqn:intuition:atomic}. 
 For example, the sensors developed for the aforementioned deployment at Mithræum of Circus Maximus have energy storage sized to provide enough instantaneous energy to ensure the completion of a few atomic operations and subsequent forward progress~\cite{afanasov2020battery}. Other platforms also adopt this approach for sizing: Both the previously mentioned cathodic protection system and Camaroptera size their supercapacitor bank to support sending a single atomic LoRa radio packet~\cite{nardello2019camaroptera,jagtap2021repurposing},  SkinnyPower sizes its capacitor to provide enough energy for the boot cycle of its SoC~\cite{shukla2019skinnypower}, and the Flicker platform's federated capacitors are all sized to support predefined atomic operations for its peripherals~\cite{hesterFlicker17}.
-Similarly, one-shot batteryless platforms size their energy storage to support the entirety of their small workload~\cite{yervaGrafting12,debruin2013monjolo,campbellEnergy14,campbellThermes14}.
+Similarly, one-shot batteryless platforms size their energy buffer to support the entirety of their small workload~\cite{yervaGrafting12,debruin2013monjolo,campbellEnergy14,campbellThermes14}.
 
-Other more traditional energy harvesting systems size their energy storage to support an arbitrary amount of runtime without harvestable energy. 
+Other more traditional energy harvesting systems size their energy buffer to support an arbitrary amount of runtime without harvestable energy. 
 The Pible platform uses a supercapacitor that allows 2 hours of BLE advertizing at a 100ms period, but employs a dynamic power management technique to scale back advertising frequency when available energy is low~\cite{fraternali2018pible}.
 The ZebraNet collar has enough battery energy capacity to support five days of operation without harvestable energy~\cite{juang2002energy}. 
 This approach is also taken by millimeter-scale systems. The M\textsuperscript{3} platform has allocated enough energy storage to persist for just over two days in sleep mode~\cite{lee2013modular}.
@@ -521,23 +521,29 @@ The energy capacity allocated by all of these examples is arbitrarily chosen.
 In cases like the ZebraNet collar and the M\textsuperscript{3} platform, physical size constraints likely drive the limits of energy capacity.
 However, no consideration or analysis is given regarding the consequence of the chosen energy capacity.
 
-Like energy income or the size of preallocated energy, the quantity of energy capacity must similarly be considered in a principled manner.
+The proper capacity of a charge buffer for a given purpose exists on a continuum. 
+We illustrate this continuum in \cref{fig:intuition:continuum}.
+In electrical circuits, the buffer provided by capacitors generally acts as a low pass filter of incoming and outgoing power, averaging out noise, ripples, and general supply variation.
+As a capacitor or other type of charge buffer increases in capacity, it smooths out larger and larger temporal variations in power.
+For example, smaller capacitors are generally used for filtering out noise, slightly larger capacitors are used to stabilize and smooth out power supply ripple, and even larger capacitors can be used to provide instantaneous spikes in power when needed. 
+The capacity of a supercapacitor energy buffer increases the timescale of averaging variance in power income to hours and days. 
+Rechargeable batteries offer even greater density and can smooth out energy income variation over the course of weeks, months, and seasons. 
+
+Like energy income or the size of preallocated energy, the capacity of an energy buffer must be considered in a similarily principled manner.
 By making arbitrary choices regarding income, system designers may be impacting the efficiency of their energy harvesting and ultimately the performance of their system. 
 This section seeks to identify the relationships between energy capacity and sensor workload and potential energy income.
 By understanding these relationships, future system designers can determine suitable energy capacity analytically
 instead of making arbitrary design decisions. 
 
-\subsection{Defining a Workload}
-A sensor workload can be represented as the time series of instantaneous powers over a time period $T$, as described by \cref{eqn:intuition:work_sequence}. 
-\begin{equation} \label{eqn:intuition:work_sequence}
-    P_w = (w_{t})^{T}_{t=0} 
-\end{equation}
-The time series of required power for a system can be measured or it can be estimated if the sensor behavior is predictable and the power and duration of operations are known.
-A simplifying assumption is to reduce the workload trace to an average workload power, $\bar{W} = \frac{1}{T}\sum_{t=0}^T w_t$.
-For many workloads, a time scale of a few hours to a day is sufficient to calculate an average workload power assuming periodic behavior occurring within the time period, or for an application that reacts to events, the probability distribution of those events is well described by that time period.
+% what does power subsystem need to provide? 
+% upsizing battery? what are interfaces
+% as you increase size of charge buffer, size of amount of buffering you have for small variations goes away
+% big cap squelch high frequency, keep increasing further and further, squelch over day, week, year
+%contininuity of buffer, hard to reason over intermittency, easy to reason about how to buffer over it
+%0.1uF noise, 10 uF surge, larger 100uF stabilize power supply, even larger mF operate store charge for a workload, only good for one activation
+%continium on buffer capacity
 
-
-\subsection{Defining an Income}
+\subsection{Defining an Energy Harvesting Income}
 \placefigure{tab:intuition:enhants}
 \placefigure{fig:intuition:traces}
 Conversely, photovoltaic energy harvesting can differ significantly over the course of a day, a week, or even a year. 
@@ -571,6 +577,15 @@ This indicates that A and B mostly follow a diurnal pattern, while C and D are s
 These traces exhibit different variances, which will impact the necessary capacity required to support a given workload.
 To isolate the impact of the variance of energy income, as well as the magnitude of the income, we synthesize income traces with arbitrary average power from mean-scaled EnHANTs traces. The traces are divided by their mean to achieve a mean of one, and then scaled by the multiplication of any average power.
 This allows us to sweep average power while maintaining the characteristics of each trace, resulting in a higher granularity analysis.
+
+\subsection{Defining a Workload}
+A sensor workload can be represented as the time series of instantaneous powers over a time period $T$, as described by \cref{eqn:intuition:work_sequence}. 
+\begin{equation} \label{eqn:intuition:work_sequence}
+    P_w = (w_{t})^{T}_{t=0} 
+\end{equation}
+The time series of required power for a system can be measured or it can be estimated if the sensor behavior is predictable and the power and duration of operations are known.
+A simplifying assumption is to reduce the workload trace to an average workload power, $\bar{W} = \frac{1}{T}\sum_{t=0}^T w_t$.
+For many workloads, a time scale of a few hours to a day is sufficient to calculate an average workload power assuming periodic behavior occurring within the time period, or for an application that reacts to events, the probability distribution of those events is well described by that time period.
 
 
 \subsection{Determining Capacity}
@@ -610,7 +625,7 @@ the amount of available energy income that was captured by the energy buffer.
 Given that the average income power is equal to the average workload power for this analysis, capturing all of the available energy also indicates enough energy was captured to run the workload continuously. 
 Insufficient capacity will fill up prematurely and be unable to capture any additional energy. 
 Capacity, if too small, can severely limit the total energy captured by an energy harvesting system.
-The trace of instantaneous energy captured by an energy buffer is represented by the sequence $Z = (z_t)^T_{t=0}$, and each element $z_t$ is defined by \cref{eqn:intuition:captured}. The total energy captured by an energy harvesting system is represented by the sum of the elements in $Z$, defined in \cref{eqn:intuition:captured_total}.
+The trace of instantaneous energy captured by an energy buffer is represented by the sequence $Z = (z_t)^T_{t=0}$, and each element $z_t$ is defined by \cref{eqn:intuition:captured}. The total energy captured by an energy harvesting system over a time period $T$ is represented by the sum of the elements in $Z$, defined in \cref{eqn:intuition:captured_total}.
 
 \begin{equation} \label{eqn:intuition:captured}
     z_t = \begin{cases}
@@ -625,7 +640,7 @@ Due to the conditional and iterative nature of the elements of the capacity sequ
 Instead, we can use \cref{eqn:intuition:iterative_capacity,eqn:intuition:captured} to perform a parameter sweep of average workload power, income power, and capacity.
 To simplify the sweep, we assume that the sensor workload has been tailored to match the expected income, such that the average workload power is equivalent to the average energy income ($\bar{P_w} = \bar{P_h}$). 
 This is a conservative assumption, as it is usually beneficial to tailor the workload to require less average power than its income. 
-This provides a margin to ensure performance even if energy income is worse than expected. However, for this analysis a conservative estimate is ideal.
+This provides a margin to ensure performance even if energy income is worse than expected. However, for this analysis a conservative estimate is ideal. We explore the impact of including a margin in \cref{sec:intuition:margin}.
 
 To determine capacity, we are essentially sweeping two variables: capacity and average power.
 One of the sweeps of capacity is illustrated in \cref{fig:intuition:capacity_sweep}. 
@@ -642,19 +657,28 @@ As the sensor's power requirements and income increase, its capacity requirement
 The parameter sweep resulting from varying both capacity and power results in a multitude of curves like those shown in \cref{fig:intuition:capacity_sweep}. 
 From the curves, we can identify the points at which capacity is sufficient for 100\% energy capture for a given power. \Cref{fig:intuition:required_capacity} shows the minimum capacity required to capture all of the available harvestable energy. This is also the necessary amount of energy required to power the workload continuously, because the average workload power is equal to the average harvestable power. 
 From this analysis, we find that the relationship between minimum sufficient capacity and workload power is linear, assuming the same energy income variability. 
-Traces synthesized from Setup C and D have nearly identical capacity requirements across a sweep of workload power. These traces also require the more energy capacity than traces A and B as they have more seasonal variability. 
+Traces synthesized from Setup C and D have nearly identical minimum capacity requirements across a sweep of workload power. These traces also require the more energy capacity than traces A and B as they have more seasonal variability. 
 Out of all the income traces, those synthesized from Setup B require an order of magnitude less energy capacity compared to Setup C and D. 
 Traces synthesized from Setup A require amounts of energy capacity in between that of B and C or D.
-The result from \cref{fig:intuition:required_capacity} is a more reasoned method for determining correct rechargeable energy capacity than sizing capacity to atomic operations in a workload, or sizing to support arbitrary amounts of operating time.
-Capacity sizing depends on the temporal behavior of energy income in addition to the magnitude of income and workload power. 
+Energy harvesting applications that can expect an amount of natural light should size their rechargeable capacity according to either the Setup C or D lines. Such an application would have to scale its capacity by at least 8--\num{9e6} times the expected magnitude of the income and workload power.
+For indoor applications without significant seasonal variance, capacity can be sized according to the Setup A and B lines, to be at least 1--\num{4e6} times the magnitude of income and workload power.
+This result is a significantly more reasoned method for determining the minimum sufficient rechargeable energy capacity than other methods, like sizing capacity to atomic operations in a workload, or sizing to support arbitrary amounts of operating time.
+%Capacity sizing depends on the temporal behavior of energy income in addition to the magnitude of income and workload power. 
 \placefigure{fig:intuition:required_capacity}
 
-\subsection{The Impact of a Harvesting Margin}
+\subsection{The Impact of Workload Margin on Sufficient Capacity}
+\label{sec:intuition:margin}
 Throughout this section, we have assumed that the average workload power was equivalent to the average income power. This is a very conservative assumption, and engineers rarely design systems that operate on the edge of feasibility. 
 Usually, systems are over-provisioned to allow for a margin of error, usually between 20-50\%. 
-For energy harvesting, this would represent changing a workload to only require a percentage of the expected available harvestable power.
-We can model this margin to identify the impact of over-provisioning energy harvesting income for a given workload. 
+For energy harvesting, this would represent altering a workload to only require a percentage of the expected available harvestable power, increasing the size of the harvester, or deploying in a location with more ambient harvestable energy.
+In \cref{fig:intuition:capacity_margin}, we model the impact of a workload margin on the required capacity to capture sufficient energy. 
+We utilize the Setup D EnHANTs trace as it represents the worst case seasonal light distribution out of all of the traces. 
+\Cref{fig:intuition:capacity_margin} presents multiple sweeps of income power and the minimum sufficient capacity for that income. 
+The different sweeps consider different margins of workload power compared to income power, from no margin to an 80\% margin. 
+No margin indicates that the average workload power is equal to the income power, while an 80\% margin indicates the workload power is only 20\% of the average income power, for example. 
+As expected, when a workload requires less energy than is available to harvest, it requires less energy capacity to harvest that energy.
 
+\placefigure{fig:intuition:capacity_margin}
 
 \subsection{Limitations}
 The analytical model presented in \cref{eqn:intuition:iterative_capacity} is a simple model that assumes a perfect energy buffer. In reality, energy storage technologies are imperfect. They feature less than perfect efficiency; they leak and have parasitic resistance. 
@@ -896,7 +920,7 @@ It will seek to address the three previously mentioned limitations by modelling 
     \centering
     \includegraphics[width=\columnwidth]{figs/chap3/required_capacity.pdf}
     \caption{
-    The minimum sufficient capacity to support a workload given an income. Note the x- and y-axis log scale. The average workload and income power are set equal; however the variability of income power is determined by the synthetic EnHANTs traces. The minimum sufficient capacity follows a linear trend with increasing income and workload power. Even though each line appears parallel, lines that are higher up on the y-axis are actually steeper due to the log scale. 
+    The minimum sufficient capacity to support a workload given an income. Note the x- and y-axis log scale. The average workload and income power are set equal; however the variability of income power is determined by the synthetic EnHANTs traces. The minimum sufficient capacity follows a linear trend with increasing income and workload power. Even though each line appears parallel, lines that are higher up on the y-axis actually have a larger slope due to the log scale.
     }
 \end{definefigure}
 
@@ -904,5 +928,7 @@ It will seek to address the three previously mentioned limitations by modelling 
     \centering
     \includegraphics[width=\columnwidth]{figs/chap3/capacity_margin.pdf}
     \caption{
+    The impact of workload margin on the minimum sufficient capacity. Traces synthesized from Setup D are considered, and are scaled by an income power. Six different workload margins are considered. The zero margin corresponds to the workload power being equal to the average income power. The $0.2$ margin represents the workload power requiring 80\% the power provided by the average income, for example. 
+    As the margin increases, the ratio of the average workload power to the income power decreases. With a higher margin there is less energy that must be captured to satisfy the workload and the minimum sufficient capacity decreases.
     }
 \end{definefigure}
