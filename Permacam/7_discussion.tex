@@ -1,0 +1,22 @@
+\section{Discussion}
+The near future holds significant promise in inference at the edge. Upcoming accelerators and processors with specific architectural components for machine learning have the potential to greatly expand the capability of systems like \name. Increased capability allows a platform to spend less energy transmitting large data and the ability to provide better privacy guarantees.
+
+\textbf{What will the future hold?}
+The conclusions we make about local inference and image transmission are not only unique to our application space, but also the technology currently available. Application specific hardware is on the very near horizon that provides dedicated tensor and image processing for edge devices, and has the potential to provide significant speedup to inference. 
+The ARM Ethos processors~\cite{armethos}, and the Himax WiseEye~\cite{himaxwiseeye} are all soon to be released. 
+%Many accelerators like the Coral TPU and ARM Ethos-N processors are designed for phone-class devices, or single board computers. They generally require on the order of 1\,W to operate, and are not designed with low power idle modes. 
+The upcoming ARM Cortex-M55~\cite{armm55} is specifically designed for machine learning inference, and includes an onboard Ethos-U55 neural processing unit. 
+%This has the potential to substantially decrease the latency and energy, and increase the accuracy of inference on microcontroller-based devices.
+The Himax WiseEye is a fused camera and processor with dedicated compression hardware. 
+%From available details, the processor is a highly parallelized DSP processor (Synopsys ARC EM9D) clocked at 400MHz with 2\,MB of SRAM memory. 
+Himax is working with TensorFlow to add support for their framework.
+At the time of writing, details are sparse, especially power numbers and quantative analysis on performance on real workloads.
+However, these upcoming offerings will greatly increase the ability to perform complex and accurate machine learning inference on edge platforms like \name.
+
+\textbf{Privacy}
+As the capability of local inference increases with new technology, this has a profound impact on the ability to preserve privacy. Currently, we envision that many applications will require full transmission of images from \name in order to perform flexible inference. While countermeasures like end-to-end image encryption and sending images to a local endpoint instead of the cloud can provide some privacy, it does not compare to a design where images never leave the sensor. We hope that through the introduction of new technology we can create increasingly complex applications without compromising privacy.
+
+%\textbf{Network protocols}
+%\hl{I wanted to talk about using tcp here, but not sure it fits in with the rest of discussion.}
+
+\placefigure[t]{fig:cycle-per-byte}

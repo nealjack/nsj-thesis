@@ -1,0 +1,96 @@
+\section{Design}
+
+\name{}'s design is driven by two high-level goals:
+\noindent
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Deployability} is the central goal of the platform. \name can only be useful and widely adopted if it is not onerous to deploy and maintain.
+    \item \textbf{Capability} of the platform to enable complex and useful computer vision tasks like object classification and detection is necessary for a deployment to be worthwhile.
+\end{itemize}
+
+\subsection{Deployability}
+The majority of conventional cameras are not wireless. At the very least, they require a wired connection to mains power \cite{nestindoor}. This limits deployment locations, and increases the effort needed for deployment planning and installation. Research \cite{rahimi2005cyclops, rowe2007firefly, josephson2019wireless} and commercial \cite{blinkindoor,wyzeoutdoor} wireless cameras exist and present an easier deployment option, but generally only offer a lifetime on the order of weeks or months. With large deployments, battery replacement or recharging presents an untenable maintenance burden. Some recent research platforms have attempted to perform imaging with energy harvesting \cite{naderiparizi2015wispcam, nardello2019camaroptera}, but require a nearby RFID transmitter, or are limited to outdoor use. With \name, we seek to achieve indoor wireless operation with longevity approaching half a decade or more, on par with that of other building infrastructure. For example, most modern commercial LED fixtures are rated for a decade of lifetime \cite{en200715193,phillipstled}. To achieve long-lifetime wireless operation, we employ solar energy harvesting. To increase usability and reliability, \name must also provide reliability in the face of volatile energy harvesting conditions.
+
+\subsubsection{Wireless}
+We design \name to be untethered from wired communication and power. There are several options we consider for \name's networking, including WiFi, and personal area networks like BLE and 802.15.4. WiFi is attractive as it supports high bandwidth, which would be appropriate for transmitting large data like images. However, many low power WiFi SoCs like the ESP32 have significant idle and startup power requirements~\cite{esp32}. If included on \name, a WiFi radio or SoC must act as an external, power-gated component to reduce idle current. This complicates system design, and it is unclear if WiFi start up cost is worth the bandwidth advantage. Instead, we focus on technologies like BLE and networks built on top of 802.15.4. These networks are specifically designed to cater to devices that spend the majority of their lifetimes in an ultra low power sleep state. We trade off bandwidth and the time to send images for a simpler design and a longer lifetime.
+ 
+%We utilize 6LoWPAN to enable a modern, IP-enabled design that allows direct end-to-end communication between sensors and the desired endpoint. We design a low power end-to-end image transfer architecture that makes images captured by \name{} easily accessible in high level languages and machine learning frameworks.
+%To reduce the energy and time required to send images, \name{} compresses each image captured before transmission. 
+%The use of IPv6 enables \name{} devices to directly send images to endpoints without any custom application layers. Received images can then be used for inference or published on a data stream.
+
+\subsubsection{Longevity}
+To support fully wireless operation for a long lifetime, \name optimizes energy harvesting and storage through the use of rechargeable and non-rechargeable batteries.
+The recent trend in energy harvesting sensors research has been to eschew batteries (both rechargable and non-rechargable) in favor of capacitor-based storage \cite{naderiparizi2015wispcam,nardello2019camaroptera,colin2018reconfigurable,hester2017flicker}. This has the benefit of providing these systems an "indefinite" energy storage lifetime as capacitors do not have the same recharge cycle limits as batteries.
+As a trade off, capacitors offer very little energy capacity. This generally means a device can only be online and operating when there is available harvestable energy. This class of energy harvesting sensors are known as "intermittent" as they intermittently work to complete a task based on available energy.
+In the case of vision applications, significant energy is required to capture images, process them, and send them. The Camaroptera platform requires a large supercapacitor to provide enough energy capacity to perform these tasks on a single charge~\cite{nardello2019camaroptera}. After every image collection and transmission, it must wait for harvestable energy to recharge its storage.
+Contrarily, \name is inspired by the battery-centric design of Permamote~\cite{jackson2019capacity}, a battery-based energy harvesting wireless sensor.
+Like Permamote, \name uses a small rechargable battery with energy harvesting. 
+Compared to the capacitor and super capacitor configurations used in intermittent platforms, a small rechargeable battery provides orders of magnitude more energy capacity~\cite{jackson2018reconsidering}.
+This additional energy capacity on \name enables it to perform many tasks before needing to recharge. Greater capacity also allows the system to capture larger amounts of available harvested energy before filling up. This allows the platform to weather periods of energy drought like cloudy days or nighttime~\cite{jackson2019capacity}.
+%Compared to the capacitor and super capacitor configurations used in many recent platforms , a small rechargeable battery provides orders of magnitude more energy capacity \cite{jackson2018reconsidering}. 
+%This increase in energy capacity allows the platform to more optimally capture available harvestable energy.
+%A larger energy storage can capture more energy before filling up. This additional energy can help a device weather periods of energy drought, where a smaller energy buffer would fail to \cite{jackson2019capacity}. Increased energy capture also means more energy available for a sensing task, and thus, a longer lifetime.
+
+\name includes additional sensors besides a camera to limit duty cycle and minimize idle power. A PIR sensor is used to sense motion, providing an ultra low power wake up mechanism for capturing images. Performing imaging on event detection instead of periodically can save considerable amounts of energy and extend lifetime. The platform also has a light sensor that can interrupt on large changes in light illuminance. This provides another wake up mechanism, allows \name to tell when it is too dark to capture an image, and enables illuminance calibration for captured images. Both PIR and illumance sensors require many orders of magnitude less energy than an image sensor to sense motion or illuminance.
+
+To address the long-term relevancy of the platform, we also support an over-the-air update mechanism such that \name can receive regular updates to improve energy management. Additionally, updates can be used to deploy new inference algorithms and models, as well as change image capture workload behavior. The platform can be configured to periodically take pictures, use the low power wakeup mechanisms mentioned previously, or use some other software heuristic to only send interesting images.
+
+\subsubsection{Reliability}
+Indoor energy harvesting is inherently unreliable.
+To augment harvested energy, we include a backup nonrechargable battery on \name. A backup battery allows continuous operation regardless of energy harvesting conditions. It safeguards the system from the volatile nature of energy harvesting, at the cost of a finite, but very long, lifetime.
+%For intermittent sensors, this unreliability means the system can lose power at any moment, and any volatile state will be lost. These systems deal with this unreliablity in a number of ways, including techniques like checkpointing~\cite{luciaIntermittent17} and federated or reconfigurable capacitor storage~\cite{hester2017flicker,colin2018reconfigurable}.
+%Intermittent capacitor-based systems utilize techniques like checkpointing \cite{luciaIntermittent17}, where the processor saves execution state before running out of power allow these platforms to continue to make forward progress on tasks.  
+%However, as their operation is inherently tied on the availability of harvestable energy, they can not maintain any guarantees about reliability. 
+Some recent work has attempted to address this issue for energy harvesting intermittent systems by developing programming models that allow programmers to declare time-sensitive code that is prioritized by the system \cite{maeng2020adaptive}. Other work attempts to enable continuous sensing on intermittent nodes by exploiting redundant sensors that coordinate sensing schedules \cite{majid2020continuous}. While these methods do increase the reliability of intermittent systems, they either require more rigid programming frameworks, or additional sensors. These requirements are at odds with \name's goals of maximizing usability and minimizing deployment costs.
+%\name{} is designed with a backup battery to provide a minimal reliable lifetime where the device is able to react all events or keep to a defined schedule.
+The addition of a backup non-rechargeable battery in \name is a significantly simpler solution if a finite lifetime is tolerable.
+
+\subsection{Capability}
+Even if \name is able to achieve a long lifetime, it is only successful if it is capable of supporting interesting and useful applications on top of the images it captures.  Our goal is to enable state of the art object classification and detection using machine learning models. The platform must either be capable of local object classification and detection on images, or be able to send images to an endpoint that is. The choice between these two architectural decisions is complex, and warrants further exploration.
+
+\subsubsection{Local Inference}
+Performing local inference on captured images can provide many benefits over directly sending images, if feasible. Inference on images can greatly reduce the amount of data sent by a sensor by summarizing an entire image to detected objects and their locations. SoCs like the one used by \name{} exhibit an imbalance in processor and radio speed and power. Processors operate faster over data than a radio can send it, and require less power to do so. This indicates a potential to severely reduce energy by trading off transmitting over a radio for processor cycles. Additionally, local inference can provide increased privacy. Privacy can be guaranteed if raw images never leave the device and only the results of inference are transmitted end-to-end.
+
+%\subsubsection{Local Inference Limitations}
+While local inference has the potential to provide higher efficiency and privacy, a wireless sensor will be constrained in many resources, including energy, memory, and compute speed. Modern wireless sensors are limited to processors with on the order of 256\,kB of RAM, 1\,MB of flash, and operate at less than 100\,MHz with simple instruction set architectures. This provides hard limits on what can be run locally.. Additionally, deploying models to microcontrollers requires much more effort than in high-level frameworks like TensorFlow or Pytorch~\cite{8675201}. Deploying a model requires scaling a model to fit in a microcontroller's memory and porting operations for matrix multiplies. New tools like TensorFlow Lite for Microcontrollers have been developed to lower the burden for deploying neural network machine learning models to microcontrollers~\cite{tflm}. It exposes a subset of TensorFlow operations, and provides tools for pruning and quantizing models to fit in microcontroller-sized memory. Despite these tools, porting the TensorFlow Lite operations to a platform still requires a non-trivial amount of work.
+
+Two particular inference tasks are of primary interest for camera systems: classification and detection.
+
+\textbf{Classification.}
+Image classification refers to the task of specifying which object(s) exist within an image. There are a number of well known models that perform image classification, including ResNet~\cite{he2016deep}, FBNet~\cite{wu2019fbnet}, MobileNets\cite{howard2019searching}, among many others. Notably, MobileNets v1~\cite{howard2017mobilenets} is designed for constrained applications and specifically exports two hyperparameters that allow modification to model size at the cost of accuracy. Compared to later versions of MobileNets and other models, MobileNets v1 is also unique in that it requires lower peak runtime memory usage due to fewer residual connections. Due to these characteristics, MobileNets is an ideal candidate to implement and deploy on the extremely resource constrained microcontrollers used in wireless sensors. In fact, MobileNets v1 is currently used in a person classification example within the TensorFlow Lite for Microcontrollers framework~\cite{tflm}.
+%Furthermore, memory constraints guide our choice to use MobileNet over more complex models as the residual connections used in such models would add to the peak memory usage
+%MobileNetv1 is chosen for its customizability as it exposes two hyperparameters that allow significant modification to model size and speed at the cost of accuracy. . Mobilenet's parameter flexibility allows us to reduce the size of the model so it can fit on a microcontroller. We reduce the size of the network by reducing the depth of each convolutional layer by 75\% ($\alpha$ = .25).
+
+\textbf{Detection.}
+The task of image detection takes image classification a step further by adding object localization within an image. An object detector is not only able to label an image with the objects it contains, but also draw bounding boxes around the area of image where the objects are located. This is a more challenging task than classification, although a multitude of modern algorithms and models exist that perform this task efficiently. These include models based on Recurrent CNN (R-CNNs)~\cite{dai2016r}, SSD~\cite{liu2016ssd}, and YOLOv3~\cite{redmon2018yolov3}. YOLOv3 is generally regarded as best in class with regards to combined accuracy, speed, and memory requirements. It has a "tiny" configuration that reduces weight size and number of operations for a forward pass by an order of magnitude, resulting in a faster but less accurate detector. The YOLOv3-tiny model requires 5.56\,Billion FLOPS for a forward pass, and 33\,MB for weights, and peak runtime memory on the order of hundreds of megabytes~\cite{yolowebsite}. Even with a size-optimized detector like YOLOv3, the computational and memory requirements of detection are far outside the capabilities of modern microcontrollers.
+
+\subsubsection{Image Transmission}
+To enable the ability to perform object detection or other more complicated inference tasks on images from \name, a mechanism to transmit images to a more capable endpoint is necessary. 
+A desktop-class endpoint can perform object detection and classification with full-sized models and not compromise accuracy. However, images are large and require significant time and energy to transfer. Low power PAN networks commonly used by wireless sensors, like 802.15.4 and BLE, support low bandwidths (250\,kbps - 2\,Mbps) and sensor network stacks often do not implement reliable transfer protocols like TCP to facilitate large data transmissions. 
+Regardless, the ability to collect full image data increases the flexibility of the platform and enables experimentation on full images.
+
+%State of the art algorithms and models for object detection and tracking require significant resources. Networks designed for object detection like the one used in YOLOv3 \cite{redmon2016you, redmon2018yolov3} require tens to hundreds of megabytes of memory for weights alone, and perform billions of floating point operations during a forward pass. These steep requirements are at odd with the resource constrained nature of wireless sensors. 
+%Many models can be customized however, and their compute and memory requirements significantly reduced for an equally significant reduction in classification and detection accuracy.
+%In addition to resource limitations, the lack of portable user-friendly computer vision frameworks on microcontrollers significantly increases the amount of effort required to implement local inference.
+
+%\textbf{Compute Power.} The forward pass for many object detection algorithms require billions of floating point operations. While \name{}'s processor has a floating point unit (FPU), the FPU usually requires 2-3 cycles for multiply operations \cite{arm2015cortex}. To optimize compute speed and size, models deployed on these devices are often quantized into 8-bit values for a large size reduction (4x) and a marginal loss in accuracy \cite{lin2016fixed}. Every multiply operation on a Cortex-M4F requires operands to be loaded (4 cycles) from and stored (2 cycles) to memory as a data cache is rarely implemented. Performing the 5.56 billion FLOPS \cite{redmon2018yolov3} required of a YOLOv3-tiny detection would take over 10 minutes on \name{}'s 64\,MHz MCU \cite{arm2015cortex}.
+
+%\textbf{Memory.} 
+%Models like YOLOv3 also require substantial amounts of memory to store weights, as well intermediate calculations during a forward inference pass.
+%YOLOv3-tiny is an optimization to reduce weight, size, and execution time and memory usage. Provided pre-trained weights still require 36\.MB of space \cite{yolowebsite}. Even if quantized, they would still require more memory than available. In addition to weights, runtime memory usage for YOLOv3 can approach hundreds of megabytes to gigabytes. External memory and flash are options for increasing memory, but they must be connected over a SPI or QSPI interface that is slower and requires more power than on-chip memory. If every memory access is external to the CPU during execution, the amount of time and energy required to perform a detection would be absurd.
+
+%\textbf{Usability}
+%Recent tools have reduced the difficulty of implementing local inference on microcontrollers. 
+%TensorFlow Lite for Microcontrollers (TFLM) \cite{tflm} is an open source framework for employing neural nets for inference on microcontroller based platforms \cite{tflm}
+%The framework provides a C++ API to a library of common TensorFlow operations for inference. Users can train a model using the normal high-level TensorFlow library, quantize the resulting model weights, and deploy to a microcontroller. The framework is limited to a subset of TensorFlow operations, requires manual memory management, and only supports inference. Due to the heterogeneity of microcontrollers, porting the TFLM framework to a new processor requires non-trivial effort compared to the ease of using TensorFlow and other machine learning frameworks in Python.
+
+
+
+
+
+%Characterise desired algorithm by cycles required per byte of data on chosen processor
+%Using processor uA/MHz, radio tx power, network protocol goodput, and size of data
+%For example, for \name{}: 22.7kCycles/Byte, 52uA/MHz, 4.7mA, 41.7kbps, 14.4kB
+
+
+
+

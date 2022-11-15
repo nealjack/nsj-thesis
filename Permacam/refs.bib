@@ -1,0 +1,720 @@
+%%% ====================================================================
+%%%  BibTeX-file{
+%%%     author          = "Gerry Murray",
+%%%     version         = "1.2",
+%%%     date            = "2 April 2012",
+%%%     filename        = "acmsmall-sample-bibfile.bib",
+%%%     address         = "ACM, NY",
+%%%     email           = "murray at hq.acm.org",
+%%%     codetable       = "ISO/ASCII",
+%%%     keywords        = "ACM Reference Format, bibliography, citation, references",
+%%%     supported       = "yes",
+%%%     docstring       = "This BibTeX database file contains 'bibdata' entries
+%%%                        that 'match' the examples provided in the Specifications Document
+%%%                        AND, also, 'legacy'-type bibs. It should assist authors in
+%%%                        choosing the 'correct' at-bibtype and necessary bib-fields
+%%%                        so as to obtain the appropriate ACM Reference Format output.
+%%%                        It also contains many 'Standard Abbreviations'. "
+%%%  }
+%%% ====================================================================
+
+% Journals
+
+% First the Full Name is given, then the abbreviation used in the AMS Math
+% Reviews, with an indication if it could not be found there.
+% Note the 2nd overwrites the 1st, so swap them if you want the full name.
+
+ %{AMS}
+ @String{AMSTrans = "American Mathematical Society Translations" }
+ @String{AMSTrans = "Amer. Math. Soc. Transl." }
+ @String{BullAMS = "Bulletin of the American Mathematical Society" }
+ @String{BullAMS = "Bull. Amer. Math. Soc." }
+ @String{ProcAMS = "Proceedings of the American Mathematical Society" }
+ @String{ProcAMS = "Proc. Amer. Math. Soc." }
+ @String{TransAMS = "Transactions of the American Mathematical Society" }
+ @String{TransAMS = "Trans. Amer. Math. Soc." }
+
+ %ACM
+ @String{CACM = "Communications of the {ACM}" }
+ @String{CACM = "Commun. {ACM}" }
+ @String{CompServ = "Comput. Surveys" }
+ @String{JACM = "J. ACM" }
+ @String{ACMMathSoft = "{ACM} Transactions on Mathematical Software" }
+ @String{ACMMathSoft = "{ACM} Trans. Math. Software" }
+ @String{SIGNUM = "{ACM} {SIGNUM} Newsletter" }
+ @String{SIGNUM = "{ACM} {SIGNUM} Newslett." }
+
+ @String{AmerSocio = "American Journal of Sociology" }
+ @String{AmerStatAssoc = "Journal of the American Statistical Association" }
+ @String{AmerStatAssoc = "J. Amer. Statist. Assoc." }
+ @String{ApplMathComp = "Applied Mathematics and Computation" }
+ @String{ApplMathComp = "Appl. Math. Comput." }
+ @String{AmerMathMonthly = "American Mathematical Monthly" }
+ @String{AmerMathMonthly = "Amer. Math. Monthly" }
+ @String{BIT = "{BIT}" }
+ @String{BritStatPsych = "British Journal of Mathematical and Statistical
+          Psychology" }
+ @String{BritStatPsych = "Brit. J. Math. Statist. Psych." }
+ @String{CanMathBull = "Canadian Mathematical Bulletin" }
+ @String{CanMathBull = "Canad. Math. Bull." }
+ @String{CompApplMath = "Journal of Computational and Applied Mathematics" }
+ @String{CompApplMath = "J. Comput. Appl. Math." }
+ @String{CompPhys = "Journal of Computational Physics" }
+ @String{CompPhys = "J. Comput. Phys." }
+ @String{CompStruct = "Computers and Structures" }
+ @String{CompStruct = "Comput. \& Structures" }
+ @String{CompJour = "The Computer Journal" }
+ @String{CompJour = "Comput. J." }
+ @String{CompSysSci = "Journal of Computer and System Sciences" }
+ @String{CompSysSci = "J. Comput. System Sci." }
+ @String{Computing = "Computing" }
+ @String{ContempMath = "Contemporary Mathematics" }
+ @String{ContempMath = "Contemp. Math." }
+ @String{Crelle = "Crelle's Journal" }
+ @String{GiornaleMath = "Giornale di Mathematiche" }
+ @String{GiornaleMath = "Giorn. Mat." } % didn't find in AMS MR., ibid.
+
+ %IEEE
+ @String{Computer = "{IEEE} Computer" }
+ @String{IEEETransComp = "{IEEE} Transactions on Computers" }
+ @String{IEEETransComp = "{IEEE} Trans. Comput." }
+ @String{IEEETransAC = "{IEEE} Transactions on Automatic Control" }
+ @String{IEEETransAC = "{IEEE} Trans. Automat. Control" }
+ @String{IEEESpec = "{IEEE} Spectrum" } % didn't find in AMS MR
+ @String{ProcIEEE = "Proceedings of the {IEEE}" }
+ @String{ProcIEEE = "Proc. {IEEE}" } % didn't find in AMS MR
+ @String{IEEETransAeroElec = "{IEEE} Transactions on Aerospace and Electronic
+     Systems" }
+ @String{IEEETransAeroElec = "{IEEE} Trans. Aerospace Electron. Systems" }
+
+ @String{IMANumerAna = "{IMA} Journal of Numerical Analysis" }
+ @String{IMANumerAna = "{IMA} J. Numer. Anal." }
+ @String{InfProcLet = "Information Processing Letters" }
+ @String{InfProcLet = "Inform. Process. Lett." }
+ @String{InstMathApp = "Journal of the Institute of Mathematics and
+     its Applications" }
+ @String{InstMathApp = "J. Inst. Math. Appl." }
+ @String{IntControl = "International Journal of Control" }
+ @String{IntControl = "Internat. J. Control" }
+ @String{IntNumerEng = "International Journal for Numerical Methods in
+     Engineering" }
+ @String{IntNumerEng = "Internat. J. Numer. Methods Engrg." }
+ @String{IntSuper = "International Journal of Supercomputing Applications" }
+ @String{IntSuper = "Internat. J. Supercomputing Applic." } % didn't find
+%% in AMS MR
+ @String{Kibernetika = "Kibernetika" }
+ @String{JResNatBurStand = "Journal of Research of the National Bureau
+     of Standards" }
+ @String{JResNatBurStand = "J. Res. Nat. Bur. Standards" }
+ @String{LinAlgApp = "Linear Algebra and its Applications" }
+ @String{LinAlgApp = "Linear Algebra Appl." }
+ @String{MathAnaAppl = "Journal of Mathematical Analysis and Applications" }
+ @String{MathAnaAppl = "J. Math. Anal. Appl." }
+ @String{MathAnnalen = "Mathematische Annalen" }
+ @String{MathAnnalen = "Math. Ann." }
+ @String{MathPhys = "Journal of Mathematical Physics" }
+ @String{MathPhys = "J. Math. Phys." }
+ @String{MathComp = "Mathematics of Computation" }
+ @String{MathComp = "Math. Comp." }
+ @String{MathScand = "Mathematica Scandinavica" }
+ @String{MathScand = "Math. Scand." }
+ @String{TablesAidsComp = "Mathematical Tables and Other Aids to Computation" }
+ @String{TablesAidsComp = "Math. Tables Aids Comput." }
+ @String{NumerMath = "Numerische Mathematik" }
+ @String{NumerMath = "Numer. Math." }
+ @String{PacificMath = "Pacific Journal of Mathematics" }
+ @String{PacificMath = "Pacific J. Math." }
+ @String{ParDistComp = "Journal of Parallel and Distributed Computing" }
+ @String{ParDistComp = "J. Parallel and Distrib. Comput." } % didn't find
+%% in AMS MR
+ @String{ParComputing = "Parallel Computing" }
+ @String{ParComputing = "Parallel Comput." }
+ @String{PhilMag = "Philosophical Magazine" }
+ @String{PhilMag = "Philos. Mag." }
+ @String{ProcNAS = "Proceedings of the National Academy of Sciences
+                    of the USA" }
+ @String{ProcNAS = "Proc. Nat. Acad. Sci. U. S. A." }
+ @String{Psychometrika = "Psychometrika" }
+ @String{QuartMath = "Quarterly Journal of Mathematics, Oxford, Series (2)" }
+ @String{QuartMath = "Quart. J. Math. Oxford Ser. (2)" }
+ @String{QuartApplMath = "Quarterly of Applied Mathematics" }
+ @String{QuartApplMath = "Quart. Appl. Math." }
+ @String{RevueInstStat = "Review of the International Statisical Institute" }
+ @String{RevueInstStat = "Rev. Inst. Internat. Statist." }
+
+ %SIAM
+ @String{JSIAM = "Journal of the Society for Industrial and Applied
+     Mathematics" }
+ @String{JSIAM = "J. Soc. Indust. Appl. Math." }
+ @String{JSIAMB = "Journal of the Society for Industrial and Applied
+     Mathematics, Series B, Numerical Analysis" }
+ @String{JSIAMB = "J. Soc. Indust. Appl. Math. Ser. B Numer. Anal." }
+ @String{SIAMAlgMeth = "{SIAM} Journal on Algebraic and Discrete Methods" }
+ @String{SIAMAlgMeth = "{SIAM} J. Algebraic Discrete Methods" }
+ @String{SIAMAppMath = "{SIAM} Journal on Applied Mathematics" }
+ @String{SIAMAppMath = "{SIAM} J. Appl. Math." }
+ @String{SIAMComp = "{SIAM} Journal on Computing" }
+ @String{SIAMComp = "{SIAM} J. Comput." }
+ @String{SIAMMatrix = "{SIAM} Journal on Matrix Analysis and Applications" }
+ @String{SIAMMatrix = "{SIAM} J. Matrix Anal. Appl." }
+ @String{SIAMNumAnal = "{SIAM} Journal on Numerical Analysis" }
+ @String{SIAMNumAnal = "{SIAM} J. Numer. Anal." }
+ @String{SIAMReview = "{SIAM} Review" }
+ @String{SIAMReview = "{SIAM} Rev." }
+ @String{SIAMSciStat = "{SIAM} Journal on Scientific and Statistical
+     Computing" }
+ @String{SIAMSciStat = "{SIAM} J. Sci. Statist. Comput." }
+
+ @String{SoftPracExp = "Software Practice and Experience" }
+ @String{SoftPracExp = "Software Prac. Experience" } % didn't find in AMS MR
+ @String{StatScience = "Statistical Science" }
+ @String{StatScience = "Statist. Sci." }
+ @String{Techno = "Technometrics" }
+ @String{USSRCompMathPhys = "{USSR} Computational Mathematics and Mathematical
+     Physics" }
+ @String{USSRCompMathPhys = "{U. S. S. R.} Comput. Math. and Math. Phys." }
+ @String{VLSICompSys = "Journal of {VLSI} and Computer Systems" }
+ @String{VLSICompSys = "J. {VLSI} Comput. Syst." }
+ @String{ZAngewMathMech = "Zeitschrift fur Angewandte Mathematik und
+     Mechanik" }
+ @String{ZAngewMathMech = "Z. Angew. Math. Mech." }
+ @String{ZAngewMathPhys = "Zeitschrift fur Angewandte Mathematik und Physik" }
+ @String{ZAngewMathPhys = "Z. Angew. Math. Phys." }
+
+% Publishers % ================================================= |
+
+ @String{Academic = "Academic Press" }
+ @String{ACMPress = "{ACM} Press" }
+ @String{AdamHilger = "Adam Hilger" }
+ @String{AddisonWesley = "Addison-Wesley" }
+ @String{AllynBacon = "Allyn and Bacon" }
+ @String{AMS = "American Mathematical Society" }
+ @String{Birkhauser = "Birkha{\"u}ser" }
+ @String{CambridgePress = "Cambridge University Press" }
+ @String{Chelsea = "Chelsea" }
+ @String{ClaredonPress = "Claredon Press" }
+ @String{DoverPub = "Dover Publications" }
+ @String{Eyolles = "Eyolles" }
+ @String{HoltRinehartWinston = "Holt, Rinehart and Winston" }
+ @String{Interscience = "Interscience" }
+ @String{JohnsHopkinsPress = "The Johns Hopkins University Press" }
+ @String{JohnWileySons = "John Wiley and Sons" }
+ @String{Macmillan = "Macmillan" }
+ @String{MathWorks = "The Math Works Inc." }
+ @String{McGrawHill = "McGraw-Hill" }
+ @String{NatBurStd = "National Bureau of Standards" }
+ @String{NorthHolland = "North-Holland" }
+ @String{OxfordPress = "Oxford University Press" }  %address Oxford or London?
+ @String{PergamonPress = "Pergamon Press" }
+ @String{PlenumPress = "Plenum Press" }
+ @String{PrenticeHall = "Prentice-Hall" }
+ @String{SIAMPub = "{SIAM} Publications" }
+ @String{Springer = "Springer-Verlag" }
+ @String{TexasPress = "University of Texas Press" }
+ @String{VanNostrand = "Van Nostrand" }
+ @String{WHFreeman = "W. H. Freeman and Co." }
+
+%Entries
+
+@inproceedings{jackson2019capacity,
+  title={Capacity over capacitance for reliable energy harvesting sensors},
+  author={Jackson, Neal and Adkins, Joshua and Dutta, Prabal},
+  booktitle={Proceedings of the 18th International Conference on Information Processing in Sensor Networks},
+  pages={193--204},
+  year={2019}
+}
+
+\textbf{@inproceedings{jackson2018reconsidering,
+  title={Reconsidering batteries in energy harvesting sensing},
+  author={Jackson, Neal and Adkins, Joshua and Dutta, Prabal},
+  booktitle={Proceedings of the 6th International Workshop on Energy Harvesting \& Energy-Neutral Sensing Systems},
+  pages={14--18},
+  year={2018}
+}
+
+@inproceedings{luciaIntermittent17,
+  title={Intermittent Computing: Challenges and Opportunities},
+  author={Brandon Lucia and Vignesh Balaji and Alexei Colin and Kiwan Maeng and Emily Ruppel},
+  booktitle={SNAPL},
+  year={2017}
+}
+
+@inproceedings{redmon2016you,
+  title={You only look once: Unified, real-time object detection},
+  author={Redmon, Joseph and Divvala, Santosh and Girshick, Ross and Farhadi, Ali},
+  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages={779--788},
+  year={2016}
+}
+
+@article{redmon2018yolov3,
+  title={Yolov3: An incremental improvement},
+  author={Redmon, Joseph and Farhadi, Ali},
+  journal={arXiv preprint arXiv:1804.02767},
+  year={2018}
+}
+
+@article{shi2016edge,
+  title={Edge computing: Vision and challenges},
+  author={Shi, Weisong and Cao, Jie and Zhang, Quan and Li, Youhuizi and Xu, Lanyu},
+  journal={IEEE internet of things journal},
+  volume={3},
+  number={5},
+  pages={637--646},
+  year={2016},
+  publisher={IEEE}
+}
+
+@article{en200715193,
+  title={15193-Energy performance of buildings-Energy requirements for lighting},
+  author={EN, CEN},
+  journal={European Committee for Standardization},
+  year={2007}
+}
+
+@manual{phillipstled,
+    author={{Phillips}},
+    title={MasterConnect LEDtube EM/Mains T8},
+    number={T8},
+    year={2020},
+    month={6},
+}
+
+@misc{
+    sparkfunedge, 
+    url={https://www.sparkfun.com/products/15170}, 
+    title={Sparkfun Edge}, 
+    author={Sparkfun}
+}
+
+@manual{
+    hm01b0,
+    organization={Himax},
+    title={HM01B0 Ultra Low Power Image Sensor},
+    number={HM01B0},
+    year={2018},
+    month={07},
+    note={Ver. 08},
+}
+
+@manual{
+    esp32,
+    organization={Espressif},
+    title={ESP32 Series Datasheet},
+    number={ESP32},
+    year={2020},
+    note={Ver. 3.4},
+    url={https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf}
+}
+
+@misc{
+    tinyddarknet, 
+    url={https://pjreddie.com/darknet/tiny-darknet/}, 
+    title={Tiny Darknet}, 
+    author={Redmon, Joseph}
+}
+
+@misc{
+    yolowebsite, 
+    url={https://pjreddie.com/darknet/yolo/}, 
+    title={YOLO}, 
+    author={Redmon, Joseph}
+}
+
+@misc{
+    nestindoor, 
+    url={https://store.google.com/us/product/nest_cam}, 
+    title={Nest Indoor}, 
+    author={Google}
+}
+
+@misc{
+    blinkindoor, 
+    url={https://www.amazon.com/Blink-Home-Security-Detection-Included/dp/B018HC6PVA}, 
+    title={Blink Indoor}, 
+    author={Amazon}
+}
+
+@misc{
+    wyzeoutdoor, 
+    url={https://wyze.com/wyze-cam-outdoor.html}, 
+    title={Wyze Outdoor}, 
+    author={Wyze}
+}
+
+@article{arm2015cortex,
+  title={Cortex-M4 Processor Technical Reference Manual},
+  author={ARM, ARM},
+  journal={Revision: r0p1, ARM 100166\_0001\_00\_en},
+  year={2015}
+}
+
+@article{howard2017mobilenets,
+  title={Mobilenets: Efficient convolutional neural networks for mobile vision applications},
+  author={Howard, Andrew G and Zhu, Menglong and Chen, Bo and Kalenichenko, Dmitry and Wang, Weijun and Weyand, Tobias and Andreetto, Marco and Adam, Hartwig},
+  journal={arXiv preprint arXiv:1704.04861},
+  year={2017}
+}
+
+ @misc{
+    tflm, 
+    url={https://www.tensorflow.org/lite/microcontrollers
+}, 
+    title={TensorFlow Lite for Microcontrollers}, 
+    author={TensorFlow}
+}
+
+@inproceedings{kulkarni2005senseye,
+  title={SensEye: a multi-tier camera sensor network},
+  author={Kulkarni, Purushottam and Ganesan, Deepak and Shenoy, Prashant and Lu, Qifeng},
+  booktitle={Proceedings of the 13th annual ACM international conference on Multimedia},
+  pages={229--238},
+  year={2005}
+}
+
+@inproceedings{chen2008citric,
+  title={CITRIC: A low-bandwidth wireless camera network platform},
+  author={Chen, Phoebus and Ahammad, Parvez and Boyer, Colby and Huang, Shih-I and Lin, Leon and Lobaton, Edgar and Meingast, Marci and Oh, Songhwai and Wang, Simon and Yan, Posu and others},
+  booktitle={2008 Second ACM/IEEE International Conference on Distributed Smart Cameras},
+  pages={1--10},
+  year={2008},
+  organization={IEEE}
+}
+
+@inproceedings{rahimi2005cyclops,
+  title={Cyclops: in situ image sensing and interpretation in wireless sensor networks},
+  author={Rahimi, Mohammad and Baer, Rick and Iroezi, Obimdinachi I and Garcia, Juan C and Warrior, Jay and Estrin, Deborah and Srivastava, Mani},
+  booktitle={Proceedings of the 3rd international conference on Embedded networked sensor systems},
+  pages={192--204},
+  year={2005}
+}
+
+@inproceedings{rowe2007firefly,
+  title={Firefly mosaic: A vision-enabled wireless sensor networking system},
+  author={Rowe, Anthony and Goel, Dhiraj and Rajkumar, Raj},
+  booktitle={28th IEEE International Real-Time Systems Symposium (RTSS 2007)},
+  pages={459--468},
+  year={2007},
+  organization={IEEE}
+}
+
+@article{feng2005panoptes,
+  title={Panoptes: scalable low-power video sensor networking technologies},
+  author={Feng, Wu-Chi and Kaiser, Ed and Feng, Wu Chang and Baillif, Mikael Le},
+  journal={ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM)},
+  volume={1},
+  number={2},
+  pages={151--167},
+  year={2005},
+  publisher={Acm New York, NY, USA}
+}
+
+@inproceedings{hengstler2007mesheye,
+  title={MeshEye: a hybrid-resolution smart camera mote for applications in distributed intelligent surveillance},
+  author={Hengstler, Stephan and Prashanth, Daniel and Fong, Sufen and Aghajan, Hamid},
+  booktitle={Proceedings of the 6th international conference on Information processing in sensor networks},
+  pages={360--369},
+  year={2007}
+}
+
+@article{kerhet2007low,
+  title={A low-power wireless video sensor node for distributed object detection},
+  author={Kerhet, Aliaksei and Magno, Michele and Leonardi, Francesco and Boni, Andrea and Benini, Luca},
+  journal={journal of real-time image processing},
+  volume={2},
+  number={4},
+  pages={331--342},
+  year={2007},
+  publisher={Springer}
+}
+
+@inproceedings{naderiparizi2015wispcam,
+  title={WISPCam: A battery-free RFID camera},
+  author={Naderiparizi, Saman and Parks, Aaron N and Kapetanovic, Zerina and Ransford, Benjamin and Smith, Joshua R},
+  booktitle={2015 IEEE International Conference on RFID (RFID)},
+  pages={166--173},
+  year={2015},
+  organization={IEEE}
+}
+
+@inproceedings{josephson2019wireless,
+  title={Wireless computer vision using commodity radios},
+  author={Josephson, Colleen and Yang, Lei and Zhang, Pengyu and Katti, Sachin},
+  booktitle={2019 18th ACM/IEEE International Conference on Information Processing in Sensor Networks (IPSN)},
+  pages={229--240},
+  year={2019},
+  organization={IEEE}
+}
+
+@inproceedings{nardello2019camaroptera,
+  title={Camaroptera: A batteryless long-range remote visual sensing system},
+  author={Nardello, Matteo and Desai, Harsh and Brunelli, Davide and Lucia, Brandon},
+  booktitle={Proceedings of the 7th International Workshop on Energy Harvesting \& Energy-Neutral Sensing Systems},
+  pages={8--14},
+  year={2019}
+}
+
+@inproceedings{lin2016fixed,
+  title={Fixed point quantization of deep convolutional networks},
+  author={Lin, Darryl and Talathi, Sachin and Annapureddy, Sreekanth},
+  booktitle={International conference on machine learning},
+  pages={2849--2858},
+  year={2016}
+}
+
+@inproceedings{colin2018reconfigurable,
+  title={A reconfigurable energy storage architecture for energy-harvesting devices},
+  author={Colin, Alexei and Ruppel, Emily and Lucia, Brandon},
+  booktitle={Proceedings of the Twenty-Third International Conference on Architectural Support for Programming Languages and Operating Systems},
+  pages={767--781},
+  year={2018}
+}
+
+@inproceedings{hester2017flicker,
+  title={Flicker: Rapid prototyping for the batteryless internet-of-things},
+  author={Hester, Josiah and Sorber, Jacob},
+  booktitle={Proceedings of the 15th ACM Conference on Embedded Network Sensor Systems},
+  pages={1--13},
+  year={2017}
+}
+
+@inproceedings{majid2020continuous,
+  title={Continuous Sensing on Intermittent Power},
+  author={Majid, Amjad Yousef and Schilder, Patrick and Langendoen, Koen},
+  booktitle={2020 19th ACM/IEEE International Conference on Information Processing in Sensor Networks (IPSN)},
+  pages={181--192},
+  year={2020},
+  organization={IEEE}
+}
+
+@inproceedings{maeng2020adaptive,
+  title={Adaptive low-overhead scheduling for periodic and reactive intermittent execution},
+  author={Maeng, Kiwan and Lucia, Brandon},
+  booktitle={Proceedings of the 41st ACM SIGPLAN Conference on Programming Language Design and Implementation},
+  pages={1005--1021},
+  year={2020}
+}
+
+@article{chowdhery2019visual,
+  title={Visual wake words dataset},
+  author={Chowdhery, Aakanksha and Warden, Pete and Shlens, Jonathon and Howard, Andrew and Rhodes, Rocky},
+  journal={arXiv preprint arXiv:1906.05721},
+  year={2019}
+}
+
+@article{bormann2016block,
+  title={Block-wise transfers in the constrained application protocol (coap)},
+  author={Bormann, Carsten and Shelby, Zach},
+  journal={Internet proposed standard RFC},
+  volume={7959},
+  year={2016}
+}
+
+@article{shelby2014constrained,
+  title={The constrained application protocol (CoAP)},
+  author={Shelby, Zach and Hartke, Klaus and Bormann, Carsten},
+  year={2014}
+}
+
+@article{wang2004image,
+  title={Image quality assessment: from error visibility to structural similarity},
+  author={Wang, Zhou and Bovik, Alan C and Sheikh, Hamid R and Simoncelli, Eero P},
+  journal={IEEE transactions on image processing},
+  volume={13},
+  number={4},
+  pages={600--612},
+  year={2004},
+  publisher={IEEE}
+}
+
+@misc {ImageAI,
+    author = "Olafenwa, Moses and Olafenwa, John",
+    title  = "ImageAI, an open source python library built to empower developers to build applications and systems  with self-contained Computer Vision capabilities",
+    url    = "https://github.com/OlafenwaMoses/ImageAI",
+    month  = "mar",
+    year   = "2018--"
+}
+
+@misc {moodstocks,
+    author = "Brénon, Maxime and Deltheil, Cédric",
+    title  = "Moodstocks JPEC JPEG Encoder",
+    url    = "https://github.com/Moodstocks/jpec",
+    month  = "mar",
+    year   = "2018--"
+}
+
+@inproceedings{krizhevsky2012imagenet,
+  title={Imagenet classification with deep convolutional neural networks},
+  author={Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
+  booktitle={Advances in neural information processing systems},
+  pages={1097--1105},
+  year={2012}
+}
+
+@article{iandola2016squeezenet,
+  title={SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and< 0.5 MB model size},
+  author={Iandola, Forrest N and Han, Song and Moskewicz, Matthew W and Ashraf, Khalid and Dally, William J and Keutzer, Kurt},
+  journal={arXiv preprint arXiv:1602.07360},
+  year={2016}
+}
+
+@inproceedings{he2016deep,
+  title={Deep residual learning for image recognition},
+  author={He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages={770--778},
+  year={2016}
+}
+
+@inproceedings{sandler2018mobilenetv2,
+  title={Mobilenetv2: Inverted residuals and linear bottlenecks},
+  author={Sandler, Mark and Howard, Andrew and Zhu, Menglong and Zhmoginov, Andrey and Chen, Liang-Chieh},
+  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages={4510--4520},
+  year={2018}
+}
+
+@inproceedings{liu2016ssd,
+  title={Ssd: Single shot multibox detector},
+  author={Liu, Wei and Anguelov, Dragomir and Erhan, Dumitru and Szegedy, Christian and Reed, Scott and Fu, Cheng-Yang and Berg, Alexander C},
+  booktitle={European conference on computer vision},
+  pages={21--37},
+  year={2016},
+  organization={Springer}
+}
+@inproceedings{dai2016r,
+  title={R-fcn: Object detection via region-based fully convolutional networks},
+  author={Dai, Jifeng and Li, Yi and He, Kaiming and Sun, Jian},
+  booktitle={Advances in neural information processing systems},
+  pages={379--387},
+  year={2016}
+}
+
+@misc{tensorflow2015-whitepaper,
+title={{TensorFlow}: Large-Scale Machine Learning on Heterogeneous Systems},
+url={http://tensorflow.org/},
+note={Software available from tensorflow.org},
+author={
+    Mart\'{\i}n~Abadi and
+    Ashish~Agarwal and
+    Paul~Barham and},
+  year={2015},
+}
+
+@incollection{pytorch,
+title = {PyTorch: An Imperative Style, High-Performance Deep Learning Library},
+author = {Paszke, Adam and Gross, Sam and Massa, Francisco and Lerer, Adam and Bradbury, James and Chanan, Gregory and Killeen, Trevor and Lin, Zeming and Gimelshein, Natalia and Antiga, Luca and Desmaison, Alban and Kopf, Andreas and Yang, Edward and DeVito, Zachary and Raison, Martin and Tejani, Alykhan and Chilamkurthy, Sasank and Steiner, Benoit and Fang, Lu and Bai, Junjie and Chintala, Soumith},
+booktitle = {Advances in Neural Information Processing Systems 32},
+editor = {H. Wallach and H. Larochelle and A. Beygelzimer and F. d\textquotesingle Alch\'{e}-Buc and E. Fox and R. Garnett},
+pages = {8024--8035},
+year = {2019},
+publisher = {Curran Associates, Inc.},
+url = {http://papers.neurips.cc/paper/9015-pytorch-an-imperative-style-high-performance-deep-learning-library.pdf}
+}
+
+@misc{itseez2015opencv,
+  title={Open Source Computer Vision Library},
+  author={Itseez},
+  year={2015},
+  howpublished = {\url{https://github.com/itseez/opencv}}
+}
+
+@inproceedings{Gorlatova_Infocom2011,
+  title={Networking Low-Power Energy Harvesting Devices: Measurements and 
+  Algorithms},
+  author={M. Gorlatova and A. Wallwater and G. Zussman},
+  booktitle={Proc. IEEE INFOCOM'11},
+  month = {Apr.},
+  year={2011},
+}
+
+@article{everingham2010pascal,
+  title={The pascal visual object classes (voc) challenge},
+  author={Everingham, Mark and Van Gool, Luc and Williams, Christopher KI and Winn, John and Zisserman, Andrew},
+  journal={International journal of computer vision},
+  volume={88},
+  number={2},
+  pages={303--338},
+  year={2010},
+  publisher={Springer}
+}
+
+@manual{coraltpu,
+    author={{Coral}},
+    title={Accelerator Module datasheet},
+    number={G313-06329-00},
+    year={2020},
+    howpublished = {\url{https://coral.ai/static/files/Coral-Accelerator-Module-datasheet.pdf}}
+}
+
+@misc{armethos,
+  title={Arm Ethos-N series processors},
+  author={ARM},
+  year={2020},
+  howpublished = {\url{https://developer.arm.com/ip-products/processors/machine-learning/arm-ethos-n}}
+}
+
+@misc{armm55,
+  title={CORTEX-M55},
+  author={ARM},
+  year={2020},
+  howpublished = {\url{https://www.arm.com/products/silicon-ip-cpu/cortex-m/cortex-m55}}
+}
+
+@misc{himaxwiseeye,
+  title={Himax Unveils AI-Embedded WiseEye ASIC to Enable Tiny Machine Learning for Ultra-Low Power Applications
+},
+  author={Himax},
+  year={2019},
+  howpublished = {\url{https://www.globenewswire.com/news-release/2019/09/17/1916484/0/en/Himax-Unveils-AI-Embedded-WiseEye-ASIC-to-Enable-Tiny-Machine-Learning-for-Ultra-Low-Power-Applications.html}}
+}
+
+@inproceedings{kim2018system,
+  title={System architecture directions for post-soc/32-bit networked sensors},
+  author={Kim, Hyung-Sin and Andersen, Michael P and Chen, Kaifei and Kumar, Sam and Zhao, William J and Ma, Kevin and Culler, David E},
+  booktitle={Proceedings of the 16th ACM Conference on Embedded Networked Sensor Systems},
+  pages={264--277},
+  year={2018}
+}
+
+@inproceedings{howard2019searching,
+  title={Searching for mobilenetv3},
+  author={Howard, Andrew and Sandler, Mark and Chu, Grace and Chen, Liang-Chieh and Chen, Bo and Tan, Mingxing and Wang, Weijun and Zhu, Yukun and Pang, Ruoming and Vasudevan, Vijay and others},
+  booktitle={Proceedings of the IEEE International Conference on Computer Vision},
+  pages={1314--1324},
+  year={2019}
+}
+
+@inproceedings{wu2019fbnet,
+  title={Fbnet: Hardware-aware efficient convnet design via differentiable neural architecture search},
+  author={Wu, Bichen and Dai, Xiaoliang and Zhang, Peizhao and Wang, Yanghan and Sun, Fei and Wu, Yiming and Tian, Yuandong and Vajda, Peter and Jia, Yangqing and Keutzer, Kurt},
+  booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  pages={10734--10742},
+  year={2019}
+}
+
+@inproceedings{kumar2020performant,
+  title={Performant $\{$TCP$\}$ for Low-Power Wireless Networks},
+  author={Kumar, Sam and Andersen, Michael P and Kim, Hyung-Sin and Culler, David E},
+  booktitle={17th $\{$USENIX$\}$ Symposium on Networked Systems Design and Implementation ($\{$NSDI$\}$ 20)},
+  pages={911--932},
+  year={2020}
+}
+
+@INPROCEEDINGS{8675201,  author={C. {Wu} and D. {Brooks} and K. {Chen} and D. {Chen} and S. {Choudhury} and M. {Dukhan} and K. {Hazelwood} and E. {Isaac} and Y. {Jia} and B. {Jia} and T. {Leyvand} and H. {Lu} and Y. {Lu} and L. {Qiao} and B. {Reagen} and J. {Spisak} and F. {Sun} and A. {Tulloch} and P. {Vajda} and X. {Wang} and Y. {Wang} and B. {Wasti} and Y. {Wu} and R. {Xian} and S. {Yoo} and P. {Zhang}},  booktitle={2019 IEEE International Symposium on High Performance Computer Architecture (HPCA)},   title={Machine Learning at Facebook: Understanding Inference at the Edge},   year={2019},  volume={},  number={},  pages={331-344},}
+
+@misc{bq25505,
+    author = {{Texas Instruments}},
+    title = {BQ25505 Datasheet},
+    howpublished = {\url{http://www.ti.com/lit/ds/symlink/bq25505.pdf}},
+    year = {2015},
+}
+
+@misc{bayer1976color,
+  title={Color imaging array},
+  author={Bayer, Bryce E},
+  year={1976},
+  month=jul # "~20",
+  publisher={Google Patents},
+  note={US Patent 3,971,065}
+}
