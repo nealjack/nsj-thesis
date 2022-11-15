@@ -766,53 +766,6 @@ It will seek to address the three previously mentioned limitations by modelling 
 %    $T_{life} = \frac{E_{total}}{P_{avg}}$
 %    
 
-\begin{definetable}{tab:related}
-  \scriptsize
-  \begin{threeparttable}
-  \centering
-  \begin{tabular}{l | c c| c c| c}
-      \multirow{2}{*}{Platform} & \multicolumn{2}{c|}{Successful Events\,(\%)}  & \multicolumn{2}{c|}{\parbox{2.5cm}{\centering Long-Running\\Time to Completion Ratio}} & \multirow{2}{*}{Lifetime\,(yrs)}\\
-                              & Periodic     & Reactive                     & Average & 95th Percentile & \\
-    \hline
-    Telos \cite{polastre2005telos}                      & 100   & 100   & 1     & 1     & 8.55\\
-    Hamilton \cite{kim2018system}                & 100   & 100   & 1     & 1     & 6.75\\
-    BLEES \cite{adkins2015michigan}                     & 100   & 100   & 1     & 1     & 1.11\\
-    Gecko \cite{yervaGrafting12}                 & 39.5  & 64.9  & 387   & 981   & $\infty$\,\tnote{g} \\
-    Capybara~\cite{colinReconfigurable18}\,\tnote{a}    & 46.3  & 72.8  & 37.6  & 1     & $\infty$\,\tnote{g}\\
-    Capybara~\cite{colinReconfigurable18}\,\tnote{b}    & 41.1  & 67.1  & 2730  & 8900 & $\infty$\,\tnote{g}\\
-    Flicker \cite{hesterFlicker17}                      & 39.3  & 64.2  & 1307  & 5670 & $\infty$\,\tnote{g}\\
-    EnHANTs \cite{margolies2015energy}                  & 79.4  & 96.0  & 1     & 1     & \textemdash\,\tnote{h}\\
-    DoubleDip \cite{martin2012doubledip}                & 77.9  & 66.5  & 1     & 1     & \textemdash\,\tnote{h}\\
-    \cite{raisigel2010autonomous}                       & 78.4  & 66.9  & 1     & 1     & \textemdash\,\tnote{h}\\
-    \textbf{\name}\,\tnote{c}                           & 81.2  & 98.3  & 1     & 1     & \textemdash\,\tnote{i}\\
-    \textbf{\name}\,\tnote{d}                           & 100   & 100   & 1     & 1     &  35.8\\
-    \textbf{\name}\,\tnote{e}                           & 100   & 100   & 1     & 1     &  30.2\\
-    \textbf{\name}\,\tnote{f}                           & 100   & 100   & 1     & 1     &  6.27\\
-  \end{tabular}
-    \begin{tablenotes}[para]
-      \item[a] With capacitors: 400\,\ssi{\micro\farad} ceramic + 330\,\ssi{\micro\farad} tantalum + 67.5\,mF supercapacitor.
-      \item[b] With capacitors: 300\,\ssi{\micro\farad} ceramic + 1100\,\ssi{\micro\farad} tantalum + 7.5\,mF supercapacitor.
-      \item[c] No primary-cell.
-      \item[d] AA primary-cells like Telos.
-      \item[e] CR123A primary-cell like Hamilton.
-      \item[f] CR2032 like BLEES.
-      \item[g] Lifetimes are theoretically infinite for capacitor-based systems.
-      \item[h] Not enough information to predict cycling failure time for theses systems.
-      \item[i] Expect cycling failure in 20-50 years, but do not attempt to estimate.
-    \end{tablenotes}
-  \end{threeparttable}
-  \caption{
-  \normalfont
-      Modeled performance of energy-harvesting systems.
-    For each  platform considered, we model the performance of its energy storage
-    architecture. Periodic workload and lifetime estimates are based on a 10\,s
-    period, and the reactive workload is scaled to
-    generate a maximum of 2000 events per hour (3.4\,s average daily period). Generally,
-    intermittent systems have significantly worse availability and responsiveness compared to
-    battery-only systems and systems that use a secondary-cell. Battery-only
-    systems achieve perfect operation, but have finite, sub-decade lifetimes.
-    }
-\end{definetable}
 
 \begin{definefigure}{fig:intuition:framework}
   \centering

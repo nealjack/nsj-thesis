@@ -186,24 +186,29 @@ wasted energy, since our workload definitions \textit{do not} perform
 tasks in response to available energy; instead they attempt to maximize the success
 rates for the specified sensing tasks.
 The results of this modeling are shown in \cref{fig:usage}.
-No matter the amount of available energy or the workload considered, energy utilization increases as
-storage capacity increases. For scenarios with low harvesting potential and high
-power workloads, a sensor with at least 1\ssi{\milli\Wh} of storage can accomplish 100\% utilization.
-In cases of
-high harvesting potential and low power workloads, utilization often
-stops increasing before reaching 100\%. This
-can be attributed to a small fraction of the available energy being sufficient
-to fully support the sensing task.
 The x-axis of \cref{fig:usage} is split by energy capacities possible with capacitors, supercapacitors, and
 batteries. 
 The upper extents of capacity for capacitors represents ten 100\,\si{\micro\farad} tantalum capacitors~\cite{tantalumDatasheet}. 
 For supercapacitors, the extent is represented by one
 large 220\,mF supercapacitor~\cite{murataCap}. 
 These delineations are not hard partitions, as capacitors and supercapacitors have a wide range of capacities and the capacities offered can overlap in some configurations.
-In most cases, energy utilization is maximized with energy capacity characteristic of small batteries or large supercapacitors.
+
+Regardless of the amount of available energy or the workload considered, energy utilization increases as
+buffer energy capacity increases. 
+For scenarios with low harvesting potential and high
+power workloads, a sensor with at least 1--10\ssi{\milli\Wh} of storage can accomplish 100\% utilization.
+In cases of
+high harvesting potential and low power workloads, utilization often
+stops increasing before reaching 100\%. This
+can be attributed to a small fraction of the available energy being sufficient
+to fully support the sensing task.
 For the low light, 15\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}, environment, a few of the workloads are eventually able to harvest 100\% of the available light as capacity increases. This indicates that the sensor performance is bounded by available harvestable energy, which is not enough to sustain the workload.
 Conversely, in the high light 97\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared} environment, regardless of the workload, the simulated sensors are not harvesting all or even the majority of the available energy. 
 This indicates they are harvesting as much as needed to power their workload. 
+
+In most cases, energy utilization for a workload is maximized with the energy capacity offered by small batteries or very large supercapacitors (\textgreater 1\ssi{\farad}).
+A system configured with ceramic or tantalum capacitors will be unable to fully utilize available harvestable energy, resulting not only in unreliable energy, but also less energy. 
+A capacitor-based batteryless system will simply harvest less overall energy than a supercapacitor or battery counterpart. 
 
 \placefigure{fig:capacity:availability}
 \placefigure{fig:capacity:period}
@@ -211,22 +216,22 @@ This indicates they are harvesting as much as needed to power their workload.
 \subsection{Workload Availability}
 \label{sec:capacity:availability}
 
-In addition to energy utilization we also measure the ability of varying energy stores to meet the chosen 
-sensing tasks and intensities. 
+The amount of captured energy directly impacts the capability of an energy harvesting sensor. With more captured energy, a system is better able to complete its workload consistently and with high reliability. 
+We utilize our simulation to also measure the ability of varying energy capacity sizes to meet the simulated 
+sensing tasks under various harvesting intensities. 
 The results are
-shown in \cref{fig:capacity:availability}. 
+presented in \cref{fig:capacity:availability}. 
 Similar to the results of \cref{fig:capacity:availability}, we see marked
-increases in performance when the amount of energy capacity reaches 1-10\,mWh
+increases in performance when the amount of energy capacity is increased to 1--10\,mWh
 of capacity.
 Simulations experience 100\% availability for all but
 the most energy constrained scenarios with high power workloads and
 $\geq$2\,mWh of energy storage.
-\Cref{fig:capacity:period} is another view of availability, and examines sweeping the period of the periodic workload with four decades of energy capacity.
-This figure shows that even 
-with gratuitous energy harvesting potentials and infrequent workloads, sensors with low energy capacity experience low
-availability.
-This is because they
-unable to capture enough energy to allow continuous sensing through periods with little to no harvestable energy, like nighttime or winter. 
+\Cref{fig:capacity:period} is another perspective of availability, and examines sweeping the period of the periodic workload with four decades of energy capacity.
+These simulated results indicate that even 
+with gratuitous energy harvesting potentials and infrequent workloads, sensors with energy capacity on the order of that offered by capacitors or supercapacitors will experience low availability compared to a sensor designed with sufficient energy capacity.
+This is because they are
+unable to capture and utilize enough harvestable energy to allow continuous sensing through periods with little to no harvestable energy, like nighttime or winter. 
 
 \subsection{Workload Timeliness}
 \placefigure{fig:capacity:ttc}
@@ -416,11 +421,15 @@ In this chapter, we present an upgraded energy harvesting and storage model and 
 This simulation improves upon the simple analysis performed in \cref{sec:intuition:capacity} by considering a dynamic workload, more realistic energy income and energy storage characteristics, and the effects of preallocated backup energy storage.
 We use the results from multiple simulation runs to illustrate the impact of energy capacity on the performance of wireless sensors.
 Increasing energy capacity allows a system to increase its energy utilization. In turn, increased energy utilization allows a wireless sensor to more successfully complete its workload, regardless of the type or distribution of workload activity.
+When considering the workloads presented in \cref{sec:capacity:modelling} and the results of \cref{fig:usage,fig:capacity:availability}, they will require an energy buffer capacity on the order of 1--10\ssi{\milli\Wh} to achieve sufficient energy capture and workload availability.
+
 Despite the improvements granted by increased capacity, a wireless energy harvesting sensor will still be limited by the magnitude of available harvestable energy.
 In cases where harvestable energy is insufficient to power an intended application workload, it can be beneficial to include a backup non-rechargeable source of energy to ensure high availability.
 While this inclusion results in a wireless sensor with a finite lifetime, the inclusion of energy harvesting with sufficient rechargeable energy capacity significantly increases the lifetime of the system.
 
-In the next chapter, we explore the options for rechargeable energy capacity for wireless sensors. We seek to identify options that provide sufficient energy capacity and density to achieve the amounts identified in \cref{sec:intuition:capacity,sec:capacity:capture} to maximize energy capture.
+In the next chapter, we explore and compare the options for rechargeable energy capacity for wireless sensors, including capacitors, supercapacitors, and batteries. 
+Capacitors and reasonably sized supercapacitors are unable to provide the amount of energy capacity predicted by our workload simulations. 
+However, batteries are a promising option to provide sufficient energy capacity and density to achieve the energy utilization and workload availability identified in \cref{sec:intuition:capacity,sec:capacity:capture}. 
 
 
 
