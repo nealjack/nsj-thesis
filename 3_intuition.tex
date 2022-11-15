@@ -501,6 +501,7 @@ conditions.
 %We explore the lifetime of energy-harvesting
 %designs with backup energy stores in \cref{sec:primary}.
 
+\placefigure{fig:intuition:continuum}
 \section{A Case for Capacity}
 \label{sec:intuition:capacity}
 There are currently many approaches to determining the energy capacity for energy harvesting sensor designs. 
@@ -518,18 +519,18 @@ This approach is also taken by millimeter-scale systems. The M\textsuperscript{3
 The energy capacity allocated by all of these examples is arbitrarily chosen. 
 In cases like the ZebraNet collar and the M\textsuperscript{3} platform, physical size constraints likely drive the limits of energy capacity.
 However, no consideration or analysis is given regarding the consequence of the chosen energy capacity.
+Like energy income or the size of preallocated energy, the sizing of capacity of an energy buffer must be considered in a similarly principled manner.
 
-The proper capacity of a charge buffer for a given purpose exists on a continuum. 
+The proper capacity of a charge buffer for a given purpose exists on a continuum of how it averages or filters temporal power variation. 
 We illustrate this continuum in \cref{fig:intuition:continuum}.
 In electrical circuits, the buffer provided by capacitors generally acts as a low pass filter of incoming and outgoing power, averaging out noise, ripples, and general supply variation.
 As a capacitor or other type of charge buffer increases in capacity, it smooths out larger and larger temporal variations in power.
-For example, smaller capacitors are generally used for filtering out noise, slightly larger capacitors are used to stabilize and smooth out power supply ripple, and even larger capacitors can be used to provide instantaneous spikes in power when needed. 
+For example, smaller capacitors are generally used for filtering out noise, slightly larger capacitors are used to stabilize and smooth out power supply ripple, and even larger capacitors can be used to provide instantaneous power spikes to circuits when needed. 
 The capacity of a supercapacitor energy buffer increases the timescale of averaging variance in power income to hours and days. 
 Rechargeable batteries offer even greater density and can smooth out energy income variation over the course of weeks, months, and seasons. 
 
-Like energy income or the size of preallocated energy, the capacity of an energy buffer must be considered in a similarily principled manner.
-By making arbitrary choices regarding income, system designers may be impacting the efficiency of their energy harvesting and ultimately the performance of their system. 
-This section seeks to identify the relationships between energy capacity and sensor workload and potential energy income.
+By making arbitrary choices regarding the size of energy capacity, system designers may be impacting the efficiency of their energy harvesting and ultimately the performance of their system. 
+This section seeks to identify the relationships between energy capacity, sensor workload, and potential energy income.
 By understanding these relationships, future system designers can determine suitable energy capacity analytically
 instead of making arbitrary design decisions. 
 
@@ -547,7 +548,7 @@ instead of making arbitrary design decisions.
 Conversely, photovoltaic energy harvesting can differ significantly over the course of a day, a week, or even a year. 
 To accurately consider the effects of capacity on energy capture, the full trace of income power must be considered, not simply an average.
 For a photovoltaic, this potential income power is dependent on the time series of energetic spectral irradiance, $E_e$, the photovoltaic efficiency $\eta$, and panel area $A$.
-The irradiance trace $E_e$ is described by \cref{eqn:intuition:irradiance}, and the resultant power available to a harvesting system based on this irradiance is given by \cref{eqn:intuition:harvest_sequence}.
+The irradiance trace $E_e$ is described by \cref{eqn:intuition:irradiance}, and the resulting power available to a harvesting system based on this irradiance is given by \cref{eqn:intuition:harvest_sequence}.
 \begin{equation}
     \label{eqn:intuition:irradiance}
     E_e = (e_t) ^ {T}_{t=0}
@@ -695,7 +696,7 @@ We present heuristics for determining the proper sizing of non-rechargeable batt
 For energy harvesting sensors, they may require batteryless and intermittent techniques to ensure feasibility and forward progress. 
 The requirement for intermittent techniques is solely dependent on energy income and rechargeable energy storage, and they are avoidable by properly sizing a harvester and energy storage.
 We also present a simple model for energy capacity and analysis that indicates that the size of rechargeable capacity in energy harvesting systems directly impacts the amount of energy that is actually captured by a system.
-We present a reasoned method for determining appropriate capacity for a system based on its income and workload that is superior to previous methods, which were largely arbitrary.
+The end result of the analysis of this chapter is a reasoned method for determining appropriate capacity for a system based on its income and workload that is superior and more exact compared to other arbitrary methods. 
 
 The next chapter seeks to expand upon the iterative model of capacity presented in \cref{sec:intuition:capacity} by developing an energy simulation for wireless sensors. 
 It will seek to address the three previously mentioned limitations by modelling energy income and storage more realistically, modelling sensor workload more dynamically, and considers the impact of non-rechargeable backup energy. 
@@ -881,5 +882,15 @@ It will seek to address the three previously mentioned limitations by modelling 
     \caption{
     The impact of workload margin on the minimum sufficient capacity. Traces synthesized from Setup D are considered, and are scaled by an income power. Six different workload margins are considered. The zero margin corresponds to the workload power being equal to the average income power. The $0.2$ margin represents the workload power requiring 80\% the power provided by the average income, for example. 
     As the margin increases, the ratio of the average workload power to the income power decreases. With a higher margin there is less energy that must be captured to satisfy the workload and the minimum sufficient capacity decreases.
+    }
+\end{definefigure}
+
+\begin{definefigure}{fig:intuition:continuum}
+    \centering
+    \includegraphics[width=\columnwidth]{figs/chap3/continuum.pdf}
+    \caption{
+    The continuum of the efficacy of energy storage technologies for averaging and filtering power at different temporal scales. 
+    Small energy buffers filter out high frequency power supply noise and spikes, while 
+    larger energy capacities filter out power variance on larger temporal scales.
     }
 \end{definefigure}

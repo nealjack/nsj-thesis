@@ -1,7 +1,7 @@
 \chapter{Implementation and Evaluation of Capacity Sizing}
 \label{chap:permacam}
 
-This chapter considers two sensing applications and the design of wireless sensor systems to achieve the goals of these applications.
+This chapter considers two example sensing applications and the design of wireless sensor systems to achieve the goals of these applications.
 We explore the system design for these applications within the context of the conclusions of \cref{chap:intuition,chap:capacity,chap:battery}, which suggest that energy capacity is a first order concern for energy harvesting wireless sensor design.
 The first application that we consider is the measurement of fine-grained workplane illuminance. These illuminance measurements are used to inform the operation of a lighting control system to balance artificial and natural light for occupant's workplanes. 
 The goals of this application are to measure illuminance at high granularity with high availability and provide a lifetime of at least a decade. 
@@ -80,8 +80,17 @@ of rechargeable and non-rechargeable energy capacity.
 It utilizes the TI BQ25505 energy harvesting IC, which
 harvests energy while monitoring both
 rechargeable and backup energy stores,
-switching between them at user-configurable voltage thresholds~\cite{bq25505}. A
-20\ssi{\milli\Ah} (48\ssi{\milli\Wh}) LTO battery is charged by an 10.9\ssi{\centi\meter\squared} amorphous
+switching between them at user-configurable voltage thresholds~\cite{bq25505}. 
+
+We utilize the hueristics developed in \cref{sec:intuition:capacity} to determine the required sizing for our energy harvesting and energy storage. 
+The chosen photovoltaic panel can provide between an average of 7--70\ssi{\micro\watt} assuming the conservative bounds of indoor irradiance (10--100\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}).
+On average, this range can provide sufficient average power to support various frequencies of the sense and send workload.
+We can consult \cref{fig:intuition:capacity_sweep,fig:intuition:capacity_margin} to estimate the minimum required capacity for the sense and send workload.
+Considering the average power required by the sense and send workload with a 30 second period (24.5\ssi{\micro\watt}), 
+the minimum sufficient capacity should be between 3--\num{6E6}x the workload power, or  
+
+
+A 20\ssi{\milli\Ah} (48\ssi{\milli\Wh}) LTO battery is charged by an 10.9\ssi{\centi\meter\squared} amorphous
 silicon photovoltaic panel~\cite{LTODatasheet, LTODatasheet2}.
 We configure the voltage thresholds of the BQ25505 to derate the 
 usable capacity of this battery. This 
@@ -89,7 +98,9 @@ increases the apparent cycle lifetime of the battery as described in \cref{sec:b
 The resulting energy storage provides 24\ssi{\milli\Wh} of
 energy storage, more than the capacity required to achieve the reliability and energy utilization
 improvements of the workloads that were simulated in \cref{sec:capacity:primary,fig:capacity:primary}.
-The chosen photovoltaic panel can provide between an average of 7--70\ssi{\micro\watt} assuming the conservative bounds of indoor irradiance (10--100\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}). 
+
+In some cases, the available harvestable power may be insufficient to operate in an energy neutral fashion.
+This justifies the choice for a reliable, non-rechargeable backup energy source.
 
 \placefigure{fig:impl:permamote_life}
 
@@ -278,6 +289,13 @@ it was deployed for this evaluation, albeit configured with a less intense workl
 
 \placefigure{tab:related}
 
+\subsection{Summary}
+The design of \name encapsulates the design conclusions from \cref{chap:intuition}, \cref{chap:capacity}, and \cref{chap:battery} to develop a long-lived and highly available solution for illuminance sensing.
+We avoid adhering to a single design strategy, such as a batteryless or preallocation-only design.
+Instead, we consider the requirements of the application and identify the type and size of energy harvesting, rechargeable buffers, and non rechargeable storage to achieve these goals.
+We utilize results of our analysis and simulation to make these design decisions.
+
+
 \begin{definefigure}{fig:impl:eval_pkt}
     \centering
     \includegraphics[width=\linewidth]{figs/capacity/experiment_pkt/exp_vs_sim_pkt}
@@ -353,7 +371,7 @@ it was deployed for this evaluation, albeit configured with a less intense workl
     \centering
     \includegraphics[width=\linewidth]{figs/capacity/primary/sense_and_send_life_vs_sec_size_permamote.pdf}
     \caption{
-        Lifetime estimation of the \name sense and send workload given different rechargeable buffer sizes and different primary cell sizes in the low irradiance Setup A environment.
+        Lifetime estimation of the \name sense and send workload given different rechargeable buffer sizes and different primary cell sizes. This figure utilizes the low irradiance Setup A environment and the 30 second sense and send workload period.
       This is a different presentation of \cref{fig:capacity:primary} that identifies the rechargeable capacity of \name with a red vertical line.
       }
     
