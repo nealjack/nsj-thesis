@@ -158,30 +158,34 @@ def plot_curve(amplitude):
     fig.savefig("percent_v_capacity_" + str(amplitude) + ".pdf", bbox_inches='tight')
     plt.close()
 
-with Pool() as pool:
-    pool.map(plot_curve, amplitudes)
+#with Pool() as pool:
+#    pool.map(plot_curve, amplitudes)
 
 fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
 
-dfd = df[df["margin"] == 0]
-dfd = dfd.sort_values(["capacity", "income", "type"])
+if "margin" in df:
+    dfd = df[df["margin"] == 0]
+else:
+    dfd = df[df["disparity"] == 1]
+dfd = dfd.sort_values(["capacity", "income_index", "type"])
 print(dfd)
 
 income_v_sufficient_capacity = {}
 for typ in traces:
     income_v_sufficient_capacity[typ] = []
-for amplitude in amplitudes:
+for amplitude in pd.unique(dfd["income"]):
     dfd_slice = dfd[dfd["income"] == amplitude]
     income = dfd_slice.iloc[0]["income"]
 
     for typ in traces:
-        dfd_slice_type = dfd_slice[dfd_slice["type"]==typ]
+        dfd_slice_type = dfd_slice[dfd_slice["type"]==typ.split('/')[-1]]
         first_sufficient = dfd_slice_type[dfd_slice_type["actual_avg_vs_work"] >= 1]
         if(len(first_sufficient) == 0):
             print(dfd_slice_type)
             break
         first_sufficient = first_sufficient.iloc[0]["capacity"]
         income_v_sufficient_capacity[typ].append([amplitude, first_sufficient])
+
 #ivsc = pd.DataFrame(income_v_sufficient_capacity)
 #print(ivsc)
 for x in income_v_sufficient_capacity:
@@ -193,8 +197,8 @@ for x in income_v_sufficient_capacity:
     p = np.polyfit(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1], 1)
     p[1] = 0
     fit = np.poly1d(p)
-    print(fit)
-    name = x[:-1] + " " + x[-1] + ", m = " + "%.1E" % p[0]
+    print(fit / 3600 * 1E3)
+    name = x[:-1] + " " + x[-1] + ", m = " + "%.1E" % (p[0] / 3600 * 1E3)
     ax.plot(income_v_sufficient_capacity[x][:,0], fit(income_v_sufficient_capacity[x][:,0] / 3600 * 1E3),  color=color, alpha = 1, label=name)
     print(x, p)
 

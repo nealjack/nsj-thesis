@@ -42,7 +42,7 @@ for margin in [0, 0.2, 0.4, 0.5, 0.6, 0.8]:#pd.unique(results["margin"]):
     p = np.polyfit(array[:,0], array[:,1], 1)
     p[1] = 0
     fit = np.poly1d(p)
-    name = "%.1f" % margin + " margin, m = " + "%.1E" % p[0]
+    name = "%.1f" % margin + " margin, m = " + "%.1E" % (p[0] / 3600 * 1E3)
     line = ax.scatter(array[:,0], array[:,1] / 3600 * 1E3, alpha=0.5, s=8)
     color = line.get_facecolor()
     ax.plot(array[:,0], fit(array[:,0] / 3600 * 1E3),  color=color, alpha = 1, label=name)
