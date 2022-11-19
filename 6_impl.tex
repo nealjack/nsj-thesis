@@ -474,10 +474,9 @@ When idle, Camaroptera's power subsystem consumes 197\ssi{\micro\watt}.
 With this information, along with operation timing provided by the authors~\cite{desai2022camaroptera}, we are able to complete a simulation configuration like \cref{tab:capacity:parameters} for Camaroptera's hardware design and workload.
 
 For energy income, we synthesize an outdoor irradiance trace based on the EnHANTs Setup D trace. 
-The authors evaluated Camaroptera from 5--95\ssi{\kilo\lux}, which roughly corresponds to 4--77\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} 
-\footnote{For natural sunlight: 1\ssi[per-mode=symbol]{\watt\per\meter\squared} $\approx$ 122\ssi{lux}~\cite{michael2020conversion}}.
-We scale the mean of the Setup D trace to represent 10 and 50 \ssi{\milli\watt\per\centi\meter\squared} for an estimate of outdoor irradiance on the same scale.
-
+The authors evaluated Camaroptera from 5--95\ssi{\kilo\lux}, which roughly corresponds to 4--77\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} for natural light\footnote{For natural sunlight: 1\ssi[per-mode=symbol]{\watt\per\meter\squared} $\approx$ 122\ssi{\lux}~\cite{michael2020conversion}}.
+We scale the mean of the Setup D trace to represent 10 and 50 \ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} for an estimate of outdoor irradiance on the same scale.
+\placefigure{fig:impl:camaroptera_pkt}
 
 \subsection{Implementation}
 
@@ -488,11 +487,11 @@ We scale the mean of the Setup D trace to represent 10 and 50 \ssi{\milli\watt\p
 
 \begin{definefigure}{fig:impl:camaroptera_pkt}
     \centering
-    \includegraphics[width=\linewidth]{figs/chap6}
+    \includegraphics[width=\linewidth]{figs/chap6/camaroptera_performance.pdf}
     \caption{
         The distribution of simulated Camaroptera transmitted image packets per hour in a day. 
         The distribution represents an average over the length of a synthesized outdoor trace based on the EnHANTs Setup D trace. 
-        Camaroptera operation is limited to times when daylight is available. The average number of packets is significantly lower during  
+        Camaroptera operation is limited to times when daylight is available. The average number of packets is significantly lower between 6PM and 6AM.
      }
 \end{definefigure}
 
