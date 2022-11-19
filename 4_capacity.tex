@@ -76,7 +76,7 @@ of once every two weeks.
 We optimistically assume this long running task can be interrupted
 and resumed at any point during execution and that any checkpointing does not incur any overhead.
 
-\placefigure[t]{tab:parameters}
+\placefigure[t]{tab:capacity:parameters}
 
 \section{An Energy Model for Wireless Sensors}
 We use the previously discussed indoor irradiance traces, generalized
@@ -86,7 +86,7 @@ source\footnote{\url{https://github.com/lab11/permamote/tree/master/simulator}}
 iterative simulator that allows parameterization of various system
 characteristics, including regulator efficiency, solar harvester size
 and efficiency, energy storage capacity, leakage, equivalent series resistance (ESR), and charge-discharge
-efficiency. These parameters are summarized in \cref{tab:parameters}.
+efficiency. These parameters are summarized in \cref{tab:capacity:parameters}.
 
 The simulation of our model operates as a second-by-second calculation of the
 amount of energy entering and exiting a device, similar to the model presented in \cref{sec:intuition:capacity}.
@@ -114,7 +114,7 @@ the state of the system moves to the upper
 half (\textsf{offline}) of this diagram. The state of the system moves downward (\textsf{online})
 if the state of charge of the secondary reaches the \texttt{max\_hyst}
 limit. 
-Secondary charging hysteresis limits are defined by parameters described in \cref{tab:parameters}.
+Secondary charging hysteresis limits are defined by parameters described in \cref{tab:capacity:parameters}.
 A device's state can also move
 to the right or left of the state machine depending on whether a workload event
 is scheduled, or the prescribed workload has been completed. A new
@@ -573,7 +573,7 @@ However, batteries are a promising option to provide sufficient energy capacity 
     }
 \end{definetable}
 
-\begin{definetable}{tab:parameters}
+\begin{definetable}{tab:capacity:parameters}
     \centering
     \begin{tabularx}{\columnwidth}{@{\extracolsep{\fill}} lll}
 \hline
