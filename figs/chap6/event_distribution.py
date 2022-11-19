@@ -45,6 +45,7 @@ for result, label in zip(results, labels):
     df_time_group = df.groupby(df.index.hour).mean()
     ax.plot(df_time_group, label=label)
 ax.legend()
+ax.xaxis.set_ticks(np.arange(0, 23, 2))
 ax.set_xlim(0,23)
 ax.set_ylim(0)
 ax.set_xlabel("Hour of Day")
