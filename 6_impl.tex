@@ -72,6 +72,7 @@ A picture
 and system diagram of \name is shown in \cref{fig:permamote}. All hardware
 and software for the platform is open source\footnote{\url{https://github.com/lab11/permamote/tree/master/hardware/permamote}}.
 
+\placefigure{fig:impl:permamote_life}
 \subsubsection{Energy Harvesting and Storage.}
 Some of the primary goals of \name are to provide workplane illuminance measurements with high availability for a long lifetime of greater than ten years. 
 Given the results of our simulation, a design that relies solely on energy preallocation is unlikely to achieve a sufficiently long lifetime. 
@@ -83,30 +84,30 @@ rechargeable and backup energy stores,
 switching between them at user-configurable voltage thresholds~\cite{bq25505}. 
 
 We utilize the hueristics developed in \cref{sec:intuition:capacity} to determine the required sizing for our energy harvesting and energy storage. 
-The chosen photovoltaic panel can provide between an average of 7--70\ssi{\micro\watt} assuming the conservative bounds of indoor irradiance (10--100\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}).
+We select a 10.9\ssi{\centi\meter\squared} amorphous
+silicon photovoltaic panel as our energy harvester.
+This photovoltaic panel can provide between an average of 7--70\ssi{\micro\watt} assuming the conservative bounds of indoor irradiance (10--100\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}).
 On average, this range can provide sufficient average power to support various frequencies of the sense and send workload.
 We can consult \cref{fig:intuition:capacity_sweep,fig:intuition:capacity_margin} to estimate the minimum required capacity for the sense and send workload.
 Considering the average power required by the sense and send workload with a 30 second period (24.5\ssi{\micro\watt}), 
-the minimum sufficient capacity should be between 3--\num{6E6}x the workload power, or  
-
-
-A 20\ssi{\milli\Ah} (48\ssi{\milli\Wh}) LTO battery is charged by an 10.9\ssi{\centi\meter\squared} amorphous
-silicon photovoltaic panel~\cite{LTODatasheet, LTODatasheet2}.
-We configure the voltage thresholds of the BQ25505 to derate the 
-usable capacity of this battery. This 
-increases the apparent cycle lifetime of the battery as described in \cref{sec:battery:life}.
+the minimum sufficient capacity should be between \num{7.9E5} and \num{1.8E6} times the average workload power. This is if we assume an income distribution similar to the EnHANTs Setup D and a workload margin between 20--50\% the expected income power.
+This suggests the capacity of the rechargeable energy storage should be between 20--44\ssi{\milli\Wh}.
+This agrees with results from our simulation in \cref{fig:capacity:availability} suggesting energy capacity on the order of 10\ssi{\milli\Wh} will be sufficient to achieve near perfect availability in conditions like Setup D captures.
+We select a 20\ssi{\milli\Ah} (48\ssi{\milli\Wh}) LTO battery 
+to achieve this energy capacity~\cite{LTODatasheet, LTODatasheet2}.
+As described in \cref{sec:battery:life},
+we configure the voltage thresholds of the BQ25505 to derate the 
+usable capacity of this battery to  
+increase the apparent cycle lifetime of the battery. 
 The resulting energy storage provides 24\ssi{\milli\Wh} of
 energy storage, more than the capacity required to achieve the reliability and energy utilization
 improvements of the workloads that were simulated in \cref{sec:capacity:primary,fig:capacity:primary}.
 
-In some cases, the available harvestable power may be insufficient to operate in an energy neutral fashion.
-This justifies the choice for a reliable, non-rechargeable backup energy source.
-
-\placefigure{fig:impl:permamote_life}
-
-\Cref{fig:impl:permamote_life} is a recreation of \cref{fig:capacity:primary} presenting the estimated lifetime of \name with its configured 24\ssi{\micro\Wh} rechargeable storage and various non-rechargeable backup energy storage options.
+In some cases, the available harvestable power may be insufficient to operate in an energy neutral fashion even though we have sized the rechargeable battery correctly.
+This justifies the addition of a reliable, non-rechargeable backup energy source.
+\Cref{fig:impl:permamote_life} is a recreation of \cref{fig:capacity:primary} presenting the estimated lifetime of \name with its configured 24\ssi{\micro\Wh} rechargeable storage and various non-rechargeable backup energy storage options. We assume a 30 second sense and send workload period.
 From this simulation result, \name requires at least one CR2032 coin cell to achieve the application lifetime goals in the worst case energy harvesting potential.
-Thus, \name can be configured to either one or two CR2032 coin
+Thus, \name is designed to be configured with either one or two CR2032 coin
 cells or a CR123A cell. 
 %Primary-cells provide 3-13x more density and 2-12x less
 %leakage than a secondary-cell.
@@ -206,7 +207,7 @@ to inaccurate light measurements, we introduce error through our estimation of
 irradiance. We measure illuminance
 instead of irradiance, and must resort to a piecewise linear estimation, when
 in reality the relationship is not well defined and non-linear when considering
-different light sources. In the case of our estimation, results
+different light sources~\cite{michael2020conversion}. In the case of our estimation, results
 indicate that the model consistently underestimates high irradiance measurements.
 
 \placefigure{fig:impl:eval_soc}
@@ -290,11 +291,12 @@ it was deployed for this evaluation, albeit configured with a less intense workl
 \placefigure{tab:related}
 
 \subsection{Summary}
-The design of \name encapsulates the design conclusions from \cref{chap:intuition}, \cref{chap:capacity}, and \cref{chap:battery} to develop a long-lived and highly available solution for illuminance sensing.
+The design of \name encapsulates the conclusions from \cref{chap:intuition}, \cref{chap:capacity}, and \cref{chap:battery} to develop a long-lived and highly available solution for illuminance sensing.
 We avoid adhering to a single design strategy, such as a batteryless or preallocation-only design.
 Instead, we consider the requirements of the application and identify the type and size of energy harvesting, rechargeable buffers, and non rechargeable storage to achieve these goals.
 We utilize results of our analysis and simulation to make these design decisions.
-
+The end result is a hybrid energy harvesting system that utilizes a rechargeable LTO battery for buffering, and either coin cell or cylindrical non-rechargeable batteries for backup.
+Through simulation, we show that this design can achieve the application goals, and is estimated to be able to provide more than a decade lifetime with high availability.
 
 \begin{definefigure}{fig:impl:eval_pkt}
     \centering
@@ -424,9 +426,94 @@ We utilize results of our analysis and simulation to make these design decisions
     }
 \end{definetable*}
 
-\section{Image-based Person Detection}
+\section{Image-based Occupancy Detection}
+Besides the utilization of LED lighting and daylighting, another way to increase lighting efficiency in buildings is to automate lighting power states based on human occupancy.
+Human occupancy is also a useful metric for regulating building heating and cooling.
+The presence and number of people in a space directly effects the amount of heating, ventilation, and air conditioning (HVAC) a building must perform to maintain a temperature set point~\cite{wei2020deep}.
+Compared to lighting, building HVAC is much more energy intensive, with cooling consisting of 10\% of the total U.S. electricity consumption in 2021~\cite{aeo2022}. 
+Occupancy is measured in lighting control systems, however they often rely on a binary indication of occupancy based on simple ultrasonic or PIR motion detection~\cite{levitonDecora}.
+This technique can not quantify the occupancy of a space, and it is prone to false positives and negatives.
+Non-human objects that move through a space can trigger an ultrasonic sensor, while any rapid changes in surface temperatures can result in false positives for a PIR sensor.
+When a person is not moving sufficiently, both ultrasonic and PIR sensors may sense a false negative.
+Instead of, or in addition to these binary occupancy measurements, image sensing can be used to more accurately capture the occupancy, including person count, of a space.
+Image inference, including classification and object detection, has been one of the most active areas of modern computer science and machine learning research. 
+However, due to the cost and difficulty of deploying wired cameras, long-lived applications based on continuous image sensing has traditionally been untenable.
+This is especially true for indoor building-centric applications, where camera density must be higher for sufficient coverage and lifetime must be sufficient to avoid frequent maintenance.
 
-\subsection{}
+\subsection{Related Work}
+Indoor wireless camera sensors have been heavily researched and commercialized over the past fifteen years, but due to the technology available at the time, as well as incompatibilities between design decisions and longevity, these platforms are typically limited to lifetimes of at most weeks to months~\cite{rowe2007firefly,rahimi2005cyclops,blinkindoor,wyzeoutdoor,josephson2019wireless}. 
+Deployment of these platforms beyond small or temporary installations remain a challenge due to the cost of frequent battery replacement.
+%With the confluence of new and improved COTS technology, like low power processors, radios, and image sensors, it is worth revisiting the design of wireless camera sensors. 
+
+Modern image sensing platforms have taken advantage of technology improvements, as well as employed new techniques to reduce transmit power and increase (or abolish) lifetime. WISPCam~\cite{naderiparizi2015wispcam}, is a battery-free camera that utilizes RFID for power and backscatter communication. It can capture an image every 15 minutes when an RFID reader is 5 meters away. BackCam~\cite{josephson2019wireless} is  another camera platform that utilizes backscatter for communication, but over commodity WiFi. BackCam can stream video at 4 frames per second for a lifetime of 32 days. Similar to WISPCam, BackCam also requires a nearby wall-powered transmitter to generate excitation packets for backscatter communication. Camaroptera~\cite{nardello2019camaroptera} is another batteryless platform, focused on wide-area image sensing. 
+The platform uses a long-range LoRa radio and harvests energy from solar panels. It performs local inference to detect people within captured photos and can achieve an end-to-end latency of less than 20 seconds in well-lit outdoor environments. Commercial platforms like the Blink Indoor wireless security camera~\cite{blinkindoor} and the Wyze outdoor camera~\cite{wyzeoutdoor} utilize low power motion detection to minimize energy usage. The Blink Indoor claims a 2 year lifetime consisting of 40000 seconds of recording 720p video on two AA batteries. Wyze estimates a lifetime of three to six months on its internal 5.2\,Ah battery if capturing 10 to 20 video clips per day.
+
+While these modern platforms push the envelop for video streaming or batteryless imaging, they have drawbacks that limit their deployability in indoor spaces. Backscatter-based systems require a nearby transmitter to communicate. Even with a dedicated, nearby transmitter, WISPCam can only periodically capture images every 15 minutes. Camaroptera is designed for outdoor use, and it is unclear how frequent it can capture and send images indoors, especially as its energy harvesting system requires 197\,\uW when idle. 
+The Blink camera lasts two years if it is placed in locations infrequently occupied by people. Placing the camera in a kitchen that sees an average 26\% occupancy on weekdays leads to a lifetime of only 1.78 days \cite{josephson2019wireless}. The Wyze camera faces a similar fate if placed in a frequently occupied area.
+
+Image sensing platforms developed by industry and in research exhibit the same design disconnect that we noted in \cref{chap:background}. Commercial image sensing systems largely utilize batteries and avoid energy harvesting, while modern research systems are largely energy harvesting and batteryless.
+These two different design result in a deceptive choice between reliable operation with a preallocated energy source but a limited lifetime, or an unlimited but unreliable lifetime with batteryless energy harvesting.
+Neither option is satisfactory for many applications, including our indoor human occupancy detection example application that simultaneously demands a long sensor lifetime and high availability.
+
+\subsection{The Design and Performance of a Batteryless Image Sensor}
+In this dissertation, we have argued that a batteryless approach is not appropriate for applications with QoS requirements. Designers of batteryless systems rarely evaluate their platforms and frameworks in regards to availability and reliability. However, utilizing the heuristics and simulation tools we have developed in \cref{chap:intuition,chap:capacity}, we can estimate the performance of these systems and identify alternate design decisions that may result in a more performant image sensing system.
+
+In this section, we consider the design and performance of Camaroptera, a batteryless image sensor
+~\cite{nardello2019camaroptera,desai2022camaroptera}.
+We capture the design details of Camaroptera and use them to simulate the system and examine its performance.
+Camaroptera is designed as a primarily outdoor system, and utilizes LoRa for communication and image backhaul.
+It performs local inference to detect people in captured frames. A positive detection results in transmitting an image, and if no person is detected, it discards the captured image to preserve energy. 
+It harvests solar energy with four small high-efficiency monocrystaline solar panels and stores this energy in a 33\ssi{\milli\farad} supercapacitor.
+Camaroptera, like many batteryless systems, operates opportunistically. 
+Whenever its capacitor is charged sufficiently, it performs its workload. 
+Camaroptera's workload consists of capturing an image, performing some computations and inference on this image, compressing the image, and finally transmitting the packetized image. 
+Camaroptera's energy storage is sized to the most energy intensive operation in its workload: transmitting a single LoRa packet.
+A single packet can not fit an entire compressed image, so Camaroptera relies on multiple power cycles to send between seven and eight packets to transmit an entire image.
+All combined, a single image capture and transmission requires 2.1\ssi{\joule}\footnote{3.06 (capture) + 0.253 (difference) + 66 (inference) + 40 (jpeg) + 288$\times$7 (transmission) = 2125 \ssi{\milli\joule}~\cite{desai2022camaroptera}}.
+When idle, Camaroptera's power subsystem consumes 197\ssi{\micro\watt}.
+With this information, along with operation timing provided by the authors~\cite{desai2022camaroptera}, we are able to complete a simulation configuration like \cref{tab:capacity:parameters} for Camaroptera's hardware design and workload.
+
+For energy income, we synthesize an outdoor irradiance trace based on the EnHANTs Setup D trace. 
+The authors evaluated Camaroptera from 5--95\ssi{\kilo\lux}, which roughly corresponds to 4--77\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} 
+\footnote{For natural sunlight: 1\ssi[per-mode=symbol]{\watt\per\meter\squared} $\approx$ 122\ssi{lux}~\cite{michael2020conversion}}.
+We scale the mean of the Setup D trace to represent 10 and 50 \ssi{\milli\watt\per\centi\meter\squared} for an estimate of outdoor irradiance on the same scale.
+
+
+\subsection{Implementation}
+
+\subsection{Evaluation}
+
+
+\subsection{Summary}
+
+\begin{definefigure}{fig:impl:camaroptera_pkt}
+    \centering
+    \includegraphics[width=\linewidth]{figs/chap6}
+    \caption{
+        The distribution of simulated Camaroptera transmitted image packets per hour in a day. 
+        The distribution represents an average over the length of a synthesized outdoor trace based on the EnHANTs Setup D trace. 
+        Camaroptera operation is limited to times when daylight is available. The average number of packets is significantly lower during  
+     }
+\end{definefigure}
+
+%Recent improvements in microcontrollers go beyond lower power improvements\cite{kim2018system}. Many embedded processors now include hardware floating point, single cycle multiplies, and data-parallel instruction (SIMD) support. The promise of new dedicated accelerators provides the potential of significant improvements in inference performance on low power systems~\cite{armm55,himaxwiseeye}. This has led to renewed interest in performing complex local inference on a battery budget, especially as transmitting large data like images is traditionally very expensive. However, radios have also become far more power efficient, which again muddies the conventional wisdom. Indeed, it is now much cheaper to transmit large data to a more capable system. Desktop or server class machines handily outclass their low power microcontroller and accelerator brethren on performance, providing the ability to perform more complex and accurate inference, if only data can be efficiently delivered to them.
+%%Regardless of recent improvements, microcontroller and accelerator performance will continue to pale in comparison to desktop and server class computing systems. 
+%This is especially true as memory has not scaled at the same pace as processing.
+%This rapidly changing design space points to a requirement for a flexible architecture and framework for thinking about what applications are most suited for local processing versus cloud offload.
+%% or data transmission.
+%
+%In this section, we present \name, the first wireless, energy-harvesting camera platform capable of capturing and transmitting an image every ten minutes for half a decade in indoor environments.
+%\name represents a culmination of recent work on low power camera sensors~\cite{josephson2019wireless,nardello2019camaroptera,naderiparizi2015wispcam} and energy harvesting sensor platforms~\cite{jackson2019capacity}. \name features a hierarchical energy harvesting system that couples a small rechargeable battery with a backup non-rechargeable battery. This combination provides the system with a long and reliable lifetime. The longevity and reliability of the platform make it suitable for long-term, low-maintenance deployments. Images captured by \name are capable of driving applications like people detection and counting. 
+%With default, pretrained weights, an object detection model is able to detect a person in \name images from 20 meters away.
+%
+%\name is capable of performing both local inference and transmitting full images end-to-end to more powerful systems. Local inference potentially requires less energy than image transmission, and also provides significantly better privacy guarantees. In cases where privacy is not as much of a concern, image transmission to a more capable endpoint increases the flexibility and performance of inference run on images. Privacy can still be guaranteed if images are transmitted only within a local network.
+%We examine the implications of both architectural choices with respect to capability, energy, and latency.
+%
+%Our results show that on modern SoCs, transmitting images surprisingly enables longer lifetimes and improved inference. While this conclusion is unique to indoor wireless camera sensors 
+%whose footprints are not dominated by their energy harvester or storage, its general methodology can be applied to other application spaces as well.
+%%
+%Through this conclusion, we develop an end-to-end architecture that makes images captured by \name accessible to data collectors and application builders. \name provides a scalable and easily deployable method to quickly gather visual data for machine learning training or datasets. Images collected by \name are easily integrated into popular computer vision and machine learning frameworks like OpenCV, TensorFlow, and PyTorch. Using these tools, high level applications can be built to drive visual applications like building occupancy counting for more efficient energy management and critical infrastructure monitoring atop a long-lived deployment of wireless \name devices.
+
 
 
 \section{Summary}
