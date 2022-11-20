@@ -190,7 +190,7 @@ for amplitude in pd.unique(dfd["income"]):
 #print(ivsc)
 for x in income_v_sufficient_capacity:
     income_v_sufficient_capacity[x] = np.array(income_v_sufficient_capacity[x])
-    line = ax.scatter(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1] / 3600 * 1E3, alpha=0.5, s= 8)
+    line = ax.scatter(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1] / 3600, alpha=0.5, s= 8)
     color = line.get_facecolor()
     #line = ax.plot(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1] / 3600 * 1E3, label=x)
     #color = line[0].get_color()
@@ -199,15 +199,15 @@ for x in income_v_sufficient_capacity:
     fit = np.poly1d(p)
     print(fit / 3600 * 1E3)
     name = x[:-1] + " " + x[-1] + ", m = " + "%.1E" % (p[0] / 3600 * 1E3)
-    ax.plot(income_v_sufficient_capacity[x][:,0], fit(income_v_sufficient_capacity[x][:,0] / 3600 * 1E3),  color=color, alpha = 1, label=name)
+    ax.plot(income_v_sufficient_capacity[x][:,0], fit(income_v_sufficient_capacity[x][:,0] / 3600),  color=color, alpha = 1, label=name)
     print(x, p)
 
 ax.set_xlabel("Workload/Income Power (W)")
-ax.set_ylabel("Minimum Sufficient Capacity (mWh)")
+ax.set_ylabel("Minimum Sufficient Capacity (Wh)")
 ax.set_xscale("log")
 ax.set_yscale("log")
 ax.set_xlim(1E-6, 2E-4)
-ax.set_ylim(2E-1, 1E2)
+ax.set_ylim(2E-1 / 1E3, 1E2 / 1E3)
 ax.legend(loc="lower right")
 fig.savefig("required_capacity.pdf", bbox_inches='tight')
 
