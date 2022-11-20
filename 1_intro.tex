@@ -1,64 +1,92 @@
 \chapter{Introduction}
 \label{chap:intro}
 
-The design, implementation, and deployment of low power wireless sensors has been studied and improved significantly over the past two decades. Despite this, wireless sensor networks can hardly be described as ubiquitous and pervasive in our environment. Sensor deployments are only commonly used with specific applications; they are from resembling the pervasive and invisible computer imagined by Mark Weiser and Xerox PARC~\cite{weiser1991computer}.
+Currently, as a community of wireless system designers, we lack a shared understanding regarding how to actually approach system-level power supply design. 
+Industrial and commercial sensors continue to embrace the same method of powering sensors as was used twenty years ago: preallocated energy via batteries. 
+Meanwhile, researchers are forging ahead with designs that abandon batteries completely and instead harvest all the energy for their workload from their environment.  
+The current direction of wireless sensor design research is primarily focused on maximizing the longevity and minimizing the maintenance of these systems
+This is a first order concern, as the cost of frequent maintenance and battery replacement is clearly untenable as the number of wireless devices grows to trillions of devices.
+However, in this pursuit, batteryless systems researchers have sacrificed simplicity, utility, and any guarantees for application quality of service. 
+Despite these flaws, researchers have touted batteryless systems as the design pattern for future sensing applications~\cite{hester2017future}. 
+%To be truly pervasive, systems must only require minimal maintenance. While some applications are important enough to justify some routine maintenance, many are only realistic and cost-effective if sensors can be deployed and forgotten for long periods of time.
+%The continual improvement of power efficiency across all wireless sensor components has resulted in battery-based sensors that can persist for decades, as well as batteryless sensors that can function with minute amounts of ambient energy.
+%To achieve long lifetimes, battery-based sensors must sacrifice size to employ large batteries, while a purely energy-harvesting system must sacrifice any guarantees of availability and quality of service as their energy income may not be guaranteed.
+In reality, neither option, battery-only or batteryless, is entirely satisfactory for many or all applications. 
+Instead of thinking of wireless sensor power supply design as adhering to a predetermined class or pattern of design, system designers should consider an application's requirements and how those requirements impact the design space.
+This dissertation attempts to address system-level power supply design in the context of real application requirements.
 
-While there are many problems that stand of the way of this vision, this dissertation's focus is on how to power the computer of the 21st century. 
-%To be truly pervasive, and invisible, a system must reliably provide sufficient utility to justify the cost of its widespread implementation and deployment, and require such little maintenance 
-%to the point that its existence can be ignored.
-To be truly pervasive, systems must only require minimal maintenance. While some applications are important enough to justify some routine maintenance, many are only realistic and cost-effective if sensors can be deployed and forgotten for long periods of time.
-%When considering the estimated trillions of devices
-The current direction of wireless sensor design research is
-primarily focused on maximizing the longevity and minimizing the maintenance of these systems, but in this pursuit have entirely sacrificed utility and reliability. Researchers have abandoned the reliability and predictability offered by batteries, and touted batteryless systems as the design pattern for future sensing applications~\cite{hester2017future}. 
+\section{The Batteryless Problem}
+The operation of a batteryless system is inexplicably tied to the availability of harvestable energy.
+This is due to the limited charge capacity provided by non-battery options. Batteryless systems generally utilize capacitors or supercapacitors for energy buffering instead of batteries, and are orders of magnitude less energy dense.
+This results in an energy uncertainty; these devices often run out of energy and lose volatile state at potentially inopportune and unpredictable times. 
+With such intermittently powered systems, energy intensive operations require either careful manual tuning to operate within their limited energy envelope~\cite{yervaGrafting12,campbellEnergy14,debruin2013monjolo}, or complex software techniques to enable eventual forward progress across reboots~\cite{ransford2012mementos,maeng2017alpaca,hesterTimely17}.
+Batteryless system software that ensures forward progress must manage energy state on short timescales and save and restore non-volatile state in ways that avoid consistency problems. 
+These problems are challenging to develop for and reliably debug and researchers have responded by introducing software frameworks and compilers that provide safety guarantees and hide these complexities from programmers. 
+While seemingly attractive, these abstractions hide the realities of batteryless performance from programmers, instead providing a notion of non-stop, continuous, and eventual progress. 
+In reality, these systems are only as continuous as their source of harvested energy, and programmers and users are left without a method of reasoning about system performance.
 
-Long-lifetime and low maintenance sensors \textit{are} a requirement for pervasive sensing, as the maintenance and battery replacement of the eventual trillions of wireless devices is clearly untenable~\hl{cite}. 
-However, 
-the vision of ubiquitous sensing can not succeed without useful and reliable devices. This dissertation explores the design space of wireless sensor power supplies in order to achieve designs that offer long-lived and reliable operation. 
-%How have so many system builders arrived at the conclusion that this design point is the future of sensing? 
-
-\section{A Brief History of Energy-harvesting Sensing}
-In order to understand the current state of energy-harvesting wireless sensor design, it is important to revisit the history of their development. The inception of wireless sensor networks became possible around the turn of the millennium, when improvements in microcontroller and short range radio technology resulted in efficient components requiring very low active and idle power. This enabled heavily duty-cycled systems that could reliably persist over the course of months to a year on battery power~\cite{mainwaring2002wireless,tolle2005macroscope}. 
-For longer deployments, or in applications where the size and weight of a non-rechargeable battery was untenable, researchers also developed energy harvesting solutions, the majority of which utilized outdoor solar power and rechargeable batteries~\cite{juang2002energy,raghunathan2005design}.
-
-Around the same time, researchers at University of Washington and Intel Research Seattle began experimenting with computational RFIDs (CRFIDs) to create battery-free sensors built around the WISP platform~\cite{sample2008design}. 
-These researchers noted the limited storage of non-rechargeable batteries, and the limited cycle lifetime of rechargeable batteries. 
-Instead of batteries, these systems utilize small capacitor-based energy buffers that are able to store just enough energy to complete a small atomic task, be it operating a sensor, transmitting a packet via RFID backscatter, or performing some amount of computation. 
-While the longevity of CRFIDs are not limited to to the lifetime of a battery, they require the proximity of an RFID reader to provide power and bidirectional communication. 
-Since the development of CRFIDs, researchers have extended the technique beyond RFID to systems with active radios and other harvesting methods, including photovoltaic, piezoelectric, and thermoelectric harvesting~\cite{yervaGrafting12, debruin2013monjolo, hesterFlicker17, colinReconfigurable18, nardello2019camaroptera}. This approach has since become very popular, with many researchers convinced that it is the future for wireless sensor design~\cite{hester2017future}. This has resulted in the confluence of the terms "energy-harvesting" and "batteryless" in the community. 
-
-Due to limited energy storage, the operation of these systems is intrinsic to the availability of harvestable energy. This results in an energy uncertainty; these devices often run out of energy and lose volatile state at inopportune and unpredictable times. With such intermittently powered systems, energy intensive operations require either careful manual tuning to operate within their limited energy envelope, or complex software techniques to enable eventual forward progress across reboots. 
 %To enable forward progress, researchers developed software solutions to help generalize computing on these platforms through software techniques like checkpointing~\cite{ransford2012mementos}.
   %As the programs got more complex, and the hardware more sophisticated, it became clear that adding bits of capacitance could help, but only for so long, since the energy density was so low
 
-However, as the energy intensity of sensing and computational workloads increased, it became necessary to increase the storage capacitance of these systems by adding larger or additional capacitors, or utilizing newer supercapacitor technology. 
+As the energy intensity of sensing and computational workloads increase, it becomes necessary to increase the storage capacitance of these systems by adding larger or additional capacitors, or utilizing newer supercapacitor technology. 
 This increased capacitance results in longer charging hysteresis, in which it takes a long time to charge the storage capacitor to a sufficient voltage level, limiting the system's responsiveness.
-To address this,
-these researchers began adding complex hardware solutions to manage hysteresis, and complex software to manage this hardware 
-~\cite{colinReconfigurable18,hesterFlicker17}.
-All the while, researchers developing energy-harvesting systems continued to argue that batteries (both non-rechargeable and rechargeable) could not be trusted
+To address this, researchers have explored complex hardware solutions to manage hysteresis, and additional complex software to manage this hardware~\cite{colinReconfigurable18,hesterFlicker17}.
+
+After all this complexity, batteryless systems are still unable to perform sensing tasks with high availability in the common case where harvestable energy is not consistent.
+Batteryless systems possess a single \textit{fundemental} limitation: their energy capacity.
+This limitation discounts their applicability in use cases that demand any estimates or guarantees of availabilty and quality of service.
+
+Researchers developing energy-harvesting systems have continued to argue that batteries (both non-rechargeable and rechargeable) can not be trusted
 ~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, hester2017future, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, majid2020continuous}.
-The prevailing belief that batteries offer very limited lifetimes and are difficult to manage and charge has led to their abandonment by batteryless system researchers. 
-The assumed superiority of batteryless design has resulted in a constrained and stagnated design space, in which energy-harvesting efficacy is a severely hampered, and the inherent unreliability and requisite complexity of the design regime dissuades adoption by industry.
+%The prevailing belief that batteries offer very limited lifetimes and are difficult to manage and charge has led to their abandonment by batteryless system researchers. 
+The assumed superiority of batteryless design has resulted in a constrained and stagnated design space, in which the terms energy-harvesting efficacy is a severely hampered, and the inherent unreliability and requisite complexity of the design regime dissuades serious and wide-spread adoption by industry.
 
-\section{A Research-Industry Rift}
-There is an implicit disagreement between research and industry when it comes to powering wireless sensors. 
-While many researchers are convinced that batteryless design represents the future of wireless sensors, this confidence has not extended to system builders in industry, despite many years of research and development. 
-To achieve reliable and predictable operation, 
-industrial
-~\cite{emersonRosemount,GEInsightMesh,honeywellOneWireless}.
-and commercial sensors 
-~\cite{ecobeeSensor, honeywellThermostat, lutronSolutions, googleNestTemperature, hueSensor} 
-have, for the most part, rejected energy harvesting and continue to utilize the same design pattern as the first wireless sensors built 20 years ago: a non-rechargeable battery~\cite{polastre2005telos, hill2002wireless}. 
-Energy-harvesting has been utilized in industry, but is generally limited to obvious applications with plenty of harvestable energy, like outdoor photovoltaics. 
-
-This reality begs the question: why is it that industry has largely ignored energy-harvesting and batteryless design? 
-%I argue that the primary reason is the fact that batteryless systems
-%For the last decade, many platform builders in the research community have eschewed batteries and embraced energy-harvesting techniques for powering sensors with the lofty goal of building immortal, maintenance free sensors~\cite{hester2017future}.
-Despite more than a decade of batteryless energy-harvesting system design, implementation, and improvement, this body of work has failed to materialize serious solutions for industrial and commercial applications, nor has it ushered in a golden age of long-lived, distributed, and ubiquitous sensing and computing.
-The reality is that these designs mandate a level of complexity, unpredictability, and unreliability that hinders their adoption in a marketplace that prizes simplicity, consistency, and availability.
-
-The design disparity between industry and research 
-points to a lack of understanding about how to approach designing energy-harvesting systems that can achieve the requirements of real-world applications. This dissertation seeks to provide clarity and serve as a design guide for building low power wireless sensors that utilize energy harvesting to elongate their lifetimes while maintaining high reliability and predictability.
+\subsection{Energy Harvesting for Real Applications}
+The popularity of batteryless sensing has resulted in the terms ``energy-harvesting'' becoming almost synonymous with ``batteryless''.
+%The design, implementation, and deployment of low power wireless sensors has been studied and improved significantly over the past two decades. Despite this, wireless sensor networks can hardly be described as ubiquitous and pervasive in our environment. Sensor deployments are only commonly used with specific applications; they are from resembling the pervasive and invisible computer imagined by Mark Weiser and Xerox PARC~\cite{weiser1991computer}.
+%
+%While there are many problems that stand of the way of this vision, this dissertation's focus is on how to power the computer of the 21st century. 
+%%To be truly pervasive, and invisible, a system must reliably provide sufficient utility to justify the cost of its widespread implementation and deployment, and require such little maintenance 
+%%to the point that its existence can be ignored.
+%To be truly pervasive, systems must only require minimal maintenance. While some applications are important enough to justify some routine maintenance, many are only realistic and cost-effective if sensors can be deployed and forgotten for long periods of time.
+%The current direction of wireless sensor design research is
+%primarily focused on maximizing the longevity and minimizing the maintenance of these systems, but in this pursuit have entirely sacrificed utility and reliability. Researchers have abandoned the reliability and predictability offered by batteries, and touted batteryless systems as the design pattern for future sensing applications~\cite{hester2017future}. 
+%
+%Long-lifetime and low maintenance sensors \textit{are} a requirement for pervasive sensing, as the maintenance and battery replacement of the eventual trillions of wireless devices is clearly untenable~\hl{cite}. 
+%However, 
+%the vision of ubiquitous sensing can not succeed without useful and reliable devices. This dissertation explores the design space of wireless sensor power supplies in order to achieve designs that offer long-lived and reliable operation. 
+%%How have so many system builders arrived at the conclusion that this design point is the future of sensing? 
+%
+%\section{A Brief History of Energy-harvesting Sensing}
+%In order to understand the current state of energy-harvesting wireless sensor design, it is important to revisit the history of their development. The inception of wireless sensor networks became possible around the turn of the millennium, when improvements in microcontroller and short range radio technology resulted in efficient components requiring very low active and idle power. This enabled heavily duty-cycled systems that could reliably persist over the course of months to a year on battery power~\cite{mainwaring2002wireless,tolle2005macroscope}. 
+%For longer deployments, or in applications where the size and weight of a non-rechargeable battery was untenable, researchers also developed energy harvesting solutions, the majority of which utilized outdoor solar power and rechargeable batteries~\cite{juang2002energy,raghunathan2005design}.
+%
+%Around the same time, researchers at University of Washington and Intel Research Seattle began experimenting with computational RFIDs (CRFIDs) to create battery-free sensors built around the WISP platform~\cite{sample2008design}. 
+%These researchers noted the limited storage of non-rechargeable batteries, and the limited cycle lifetime of rechargeable batteries. 
+%Instead of batteries, these systems utilize small capacitor-based energy buffers that are able to store just enough energy to complete a small atomic task, be it operating a sensor, transmitting a packet via RFID backscatter, or performing some amount of computation. 
+%While the longevity of CRFIDs are not limited to to the lifetime of a battery, they require the proximity of an RFID reader to provide power and bidirectional communication. 
+%Since the development of CRFIDs, researchers have extended the technique beyond RFID to systems with active radios and other harvesting methods, including photovoltaic, piezoelectric, and thermoelectric harvesting~\cite{yervaGrafting12, debruin2013monjolo, hesterFlicker17, colinReconfigurable18, nardello2019camaroptera}. This approach has since become very popular, with many researchers convinced that it is the future for wireless sensor design~\cite{hester2017future}. This has resulted in the confluence of the terms "energy-harvesting" and "batteryless" in the community. 
+%
+%
+%\section{A Research-Industry Rift}
+%There is an implicit disagreement between research and industry when it comes to powering wireless sensors. 
+%While many researchers are convinced that batteryless design represents the future of wireless sensors, this confidence has not extended to system builders in industry, despite many years of research and development. 
+%To achieve reliable and predictable operation, 
+%industrial
+%~\cite{emersonRosemount,GEInsightMesh,honeywellOneWireless}.
+%and commercial sensors 
+%~\cite{ecobeeSensor, honeywellThermostat, lutronSolutions, googleNestTemperature, hueSensor} 
+%have, for the most part, rejected energy harvesting and continue to utilize the same design pattern as the first wireless sensors built 20 years ago: a non-rechargeable battery~\cite{polastre2005telos, hill2002wireless}. 
+%Energy-harvesting has been utilized in industry, but is generally limited to obvious applications with plenty of harvestable energy, like outdoor photovoltaics. 
+%
+%This reality begs the question: why is it that industry has largely ignored energy-harvesting and batteryless design? 
+%%I argue that the primary reason is the fact that batteryless systems
+%%For the last decade, many platform builders in the research community have eschewed batteries and embraced energy-harvesting techniques for powering sensors with the lofty goal of building immortal, maintenance free sensors~\cite{hester2017future}.
+%Despite more than a decade of batteryless energy-harvesting system design, implementation, and improvement, this body of work has failed to materialize serious solutions for industrial and commercial applications, nor has it ushered in a golden age of long-lived, distributed, and ubiquitous sensing and computing.
+%The reality is that these designs mandate a level of complexity, unpredictability, and unreliability that hinders their adoption in a marketplace that prizes simplicity, consistency, and availability.
+%
+%The design disparity between industry and research 
+%points to a lack of understanding about how to approach designing energy-harvesting systems that can achieve the requirements of real-world applications. This dissertation seeks to provide clarity and serve as a design guide for building low power wireless sensors that utilize energy harvesting to elongate their lifetimes while maintaining high reliability and predictability.
 
 
 \section{Thesis Statement}
