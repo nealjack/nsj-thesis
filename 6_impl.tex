@@ -486,7 +486,16 @@ Since Camaroptera performs its workload in response to its energy storage state,
 
 This limitation is primarily due to the energy capacity available to the platform. The available energy in an outdoor setting is essentially limitless to a low power embedded system like Camaroptera. For the two simulations we consider, our simulated Camaroptera is only able to capture 48\% and 21\% of the available energy for the 10 and 50\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} traces, respectively. 
 Due to its designed energy capacity, Camaroptera is simultaneously limited in the amount of energy it can capture and the amount of instantaneous energy available to it at any given time.
-To explore the impact of capacity for Camaroptera, we expand on our simulation with a sweep of capacity while considering the same two synthesized traces as above. 
+Given the design heuristics developed in \cref{chap:intuition}, we can determine an estimate for Camaroptera's average income and average workload power if we assume a fixed sensing period instead of the opportunistic operation of the actual platform.
+From these averages and using the capacity sizing heuristics from \cref{sec:intuition:capacity}, we can determine an estimate for the minimum sufficient capacity to sustain this workload given our synthesized incomes.
+As mentioned earlier, each Camaroptera activation requires 781\ssi{\milli\joule} over 40 seconds\footnote{Assuming all images go through the entire inference pipeline} and the platform's idle power is 197\ssi{\micro\watt}.
+While the platform is capable of transmitting an image every 45 seconds to two minutes, we assume a relaxed periodic rate of capturing and transmitting an image every five minutes.
+This results in a 2.8\ssi{\milli\watt} average workload power.
+Considering Camaroptera's designed solar panel size, maximum power point voltage, and efficiency, it can expect between 12.3 and 61.6\ssi{\milli\watt} average income from our two synthesized traces.
+This corresponds to a workload to income margin of $\sim$80--95\%. Considering the sizing factor for income resembling the distribution of Setup D, determined in \cref{sec:intuition:margin}, we should expect a minimum sufficient capacity that is at least \num{3.4E5}$\times$ the workload power. 
+This corresponds to an energy capacity of 952\ssi{\milli\Wh}. The 33\ssi{\milli\farad} supercapacitor on Camaroptera only provides 41\ssi{\micro\watt\hour}, or \num{23E3}$\times$ less than the minimum sufficient energy capacity.
+On average, this theoretical energy income should be sufficient to power this periodic sense and send workload, assuming the platform has enough capacity to capture it.
+To explore the impact of capacity sizing for Camaroptera, we utilize our simulation with a sweep of capacity while considering the same two synthesized traces as above. 
 We change our simulated Camaroptera's workload behavior from an opportunistic strategy to a periodic schedule.
 We configure it to capture an image and transmit every two minutes, which should be feasible with either magnitude of energy income considered.
 
