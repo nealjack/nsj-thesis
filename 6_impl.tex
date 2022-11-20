@@ -296,7 +296,7 @@ We avoid adhering to a single design strategy, such as a batteryless or prealloc
 Instead, we consider the requirements of the application and identify the type and size of energy harvesting, rechargeable buffers, and non rechargeable storage to achieve these goals.
 We utilize results of our analysis and simulation to make these design decisions.
 The end result is a hybrid energy harvesting system that utilizes a rechargeable LTO battery for buffering, and either coin cell or cylindrical non-rechargeable batteries for backup.
-Through simulation, we show that this design can achieve the application goals, and is estimated to be able to provide more than a decade lifetime with high availability.
+Through simulation, we show that this design can achieve the application goals, as it is estimated to provide more than a decade lifetime with high availability.
 
 \begin{definefigure}{fig:impl:eval_pkt}
     \centering
@@ -469,14 +469,26 @@ Whenever its capacitor is charged sufficiently, it performs its workload.
 Camaroptera's workload consists of capturing an image, performing some computations and inference on this image, compressing the image, and finally transmitting the packetized image. 
 Camaroptera's energy storage is sized to the most energy intensive operation in its workload: transmitting a single LoRa packet.
 A single packet can not fit an entire compressed image, so Camaroptera relies on multiple power cycles to send between seven and eight packets to transmit an entire image.
-All combined, a single image capture and transmission requires 2.1\ssi{\joule}\footnote{3.06 (capture) + 0.253 (difference) + 66 (inference) + 40 (jpeg) + 288$\times$7 (transmission) = 2125 \ssi{\milli\joule}~\cite{desai2022camaroptera}}.
+All combined, a single image capture and transmission requires 781\ssi{\joule}\footnote{3.06 (capture) + 0.253 (difference) + 66 (inference) + 40 (jpeg) + 96$\times$7 (transmission) = 781\ssi{\milli\joule}~\cite{desai2022camaroptera}}.
 When idle, Camaroptera's power subsystem consumes 197\ssi{\micro\watt}.
 With this information, along with operation timing provided by the authors~\cite{desai2022camaroptera}, we are able to complete a simulation configuration like \cref{tab:capacity:parameters} for Camaroptera's hardware design and workload.
 
 For energy income, we synthesize an outdoor irradiance trace based on the EnHANTs Setup D trace. 
-The authors evaluated Camaroptera from 5--95\ssi{\kilo\lux}, which roughly corresponds to 4--77\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} for natural light\footnote{For natural sunlight: 1\ssi[per-mode=symbol]{\watt\per\meter\squared} $\approx$ 122\ssi{\lux}~\cite{michael2020conversion}}.
-We scale the mean of the Setup D trace to represent 10 and 50 \ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} for an estimate of outdoor irradiance on the same scale.
+The authors evaluated Camaroptera from 5--95\ssi{\kilo\lux}, which roughly corresponds to 4--77\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} for natural light\footnote{For natural sunlight: 1\ssi[per-mode=symbol]{\watt\per\meter\squared} $\approx$ 
+122\ssi{\lux}~\cite{michael2020conversion}}.
+We scale the mean of the synthesized outdoor trace to represent 10 and 50\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} for an estimate of outdoor irradiance on the same scale.
+The simulation results of Camaroptera's average packet distribution under these two harvesting conditions are summarized by \cref{fig:impl:camaroptera_pkt}.
+With either income, Camaroptera is able to maintain high image capture and transmit rates when light is available. However, 
+As expected of a batteryless system, when light is unavailable, Camaroptera is unable to capture and send many images.
+Since Camaroptera performs its workload in response to its energy storage state, it can not maintain a periodic schedule or reliably react and capture the presence of people.
+
 \placefigure{fig:impl:camaroptera_pkt}
+
+This limitation is primarily due to the energy capacity available to the platform. The available energy in an outdoor setting is essentially limitless to a low power embedded system like Camaroptera. For the two simulations we consider, our simulated Camaroptera is only able to capture 48\% and 21\% of the available energy for the 10 and 50\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} traces, respectively. 
+Due to its designed energy capacity, Camaroptera is simultaneously limited in the amount of energy it can capture and the amount of instantaneous energy available to it at any given time.
+To explore the impact of capacity for Camaroptera, we expand on our simulation with a sweep of capacity while considering the same two synthesized traces as above. 
+We change our simulated Camaroptera's workload behavior from an opportunistic strategy to a periodic schedule.
+We configure it to capture an image and transmit every two minutes, which should be feasible with either magnitude of energy income considered.
 
 \subsection{Implementation}
 
@@ -490,8 +502,8 @@ We scale the mean of the Setup D trace to represent 10 and 50 \ssi[per-mode=symb
     \includegraphics[width=\linewidth]{figs/chap6/camaroptera_performance.pdf}
     \caption{
         The distribution of simulated Camaroptera transmitted image packets per hour in a day. 
-        The distribution represents an average over the length of a synthesized outdoor trace based on the EnHANTs Setup D trace. 
-        Camaroptera operation is limited to times when daylight is available. The average number of packets is significantly lower between 6PM and 6AM.
+        The distribution represents an average over the length of two synthesized outdoor traces (10 and 50\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared}) based on the EnHANTs Setup D trace. 
+        Camaroptera operation is limited to times when daylight is available, regardless of the scale of average input power. The average number of packets is significantly lower between 6PM and 6AM.
      }
 \end{definefigure}
 
