@@ -198,7 +198,7 @@ for x in income_v_sufficient_capacity:
     p[1] = 0
     fit = np.poly1d(p)
     print(fit / 3600 * 1E3)
-    name = x[:-1] + " " + x[-1] + ", m = " + "%.1E" % (p[0] / 3600 * 1E3)
+    name = x[:-1] + " " + x[-1] + ", m = " + "%.1E" % (p[0] / 3600)
     ax.plot(income_v_sufficient_capacity[x][:,0], fit(income_v_sufficient_capacity[x][:,0] / 3600),  color=color, alpha = 1, label=name)
     print(x, p)
 
