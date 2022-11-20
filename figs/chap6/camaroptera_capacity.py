@@ -1,36 +1,53 @@
 #! /usr/bin/env python3
 
 import matplotlib
-matplotlib.use('TKAgg')
 from matplotlib import rcParams
-font= {'family': 'Arial',
-        'size': 14}
-matplotlib.rc('font', **font)
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import glob
 
-fname = 'camaroptera_sweep.pkl'
+plt.rcParams["font.family"] = "Arial"
+plt.rcParams["font.size"] = "14"
+plt.rcParams["xtick.major.width"] = "1"
+plt.rcParams["xtick.major.size"]  = "6"
+plt.rcParams["xtick.minor.width"] = "0.8"
+plt.rcParams["xtick.minor.size"] = "4"
+plt.rcParams["ytick.major.width"] = "1"
+plt.rcParams["ytick.major.size"] = "6"
+plt.rcParams["ytick.minor.width"] = "0.8"
+plt.rcParams["ytick.minor.size"] = "4"
+plt.rcParams["grid.linewidth"] = "1"
 
-a = pd.read_pickle(fname)
-print(a)
-fig, ax = plt.subplots(1, figsize=(12,6))
-plt.plot(a['capacity_J']/3.6, 100* a['events_success'] / (a['events_success'] + a['events_missed']), label='% successful events', linewidth=2)
-#plt.plot(a['capacity_J']/3.6, 100*a['time_online'], label='% time online')
-#plt.plot(a['capacity_J']/3.6, 100*a['used_energy'], label='energy')
-plt.xscale("log")
+fnames = glob.glob('camaroptera_capacity_sweep_*.pkl')
+
+fig, ax = plt.subplots(1, figsize=(10.7,5))
+
+for fname in fnames:
+    a = pd.read_pickle(fname)
+    for col in a.columns:
+        print(col)
+    print(a)
+    print(a['events_success'] / (a['events_missed']+ a['events_success']))
+    print(a['capacity_J'])
+    ax.plot(a['capacity_J']/3.6, 100* a['events_success'] / (a['events_success'] + a['events_missed']), label='% successful events', linewidth=2)
+    #ax.plot(a['capacity_J']/3.6, 100 * a['secondary_end_energy'] / a['secondary_start_energy'], label='% successful events', linewidth=2)
+    #plt.plot(a['capacity_J']/3.6, 100*a['time_online'], label='% time online')
+    #plt.plot(a['capacity_J']/3.6, 100*a['used_energy'], label='energy')
+
+ax.set_xscale("log")
 #plt.xlim(0,100)
-plt.ylim(0,110)
-plt.xlabel("Secondary Size (mWh)")
-plt.ylabel("Reliability")
+ax.set_ylim(0,110)
+ax.set_xlabel("Secondary Size (mWh)")
+ax.set_ylabel("Availability")
 #plt.title("Camaroptera Reliability with Secondary Size")
 #plt.axvline(x=64., color = 'b')
-plt.axvline(x=138.e-3 / 3.6, color = 'r', linewidth=2)
-plt.text(x=150e-3 / 3.6, y=10, s='Camaroptera\nDesigned Capacity', color = 'r', fontsize=12)
+ax.axvline(x=.1485 / 3.6, color = 'r', linewidth=2)
+ax.text(x=.17 / 3.6, y=64, s='Camaroptera\nDesigned Capacity', color = 'C3', weight='bold')
 #plt.axvline(x= 10.125 / 3.6, color = 'b')
 #plt.axvline(x= 200, color = 'g')
-plt.grid(True)
+ax.grid(True)
 #plt.legend(loc='lower right')
 #plt.show()
-plt.savefig('camaroptera_simulation.png', dpi=300, bbox_inches='tight')
+plt.savefig('camaroptera_simulation.pdf', bbox_inches='tight')
 
