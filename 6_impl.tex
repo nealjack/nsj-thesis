@@ -88,10 +88,10 @@ We select a 10.9\ssi{\centi\meter\squared} amorphous
 silicon photovoltaic panel as our energy harvester.
 This photovoltaic panel can provide between an average of 7--70\ssi{\micro\watt} assuming the conservative bounds of indoor irradiance (10--100\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}).
 On average, this range can provide sufficient average power to support various frequencies of the sense and send workload.
-We can consult \cref{fig:intuition:capacity_sweep,fig:intuition:capacity_margin} to estimate the minimum required capacity for the sense and send workload.
+We can consult \cref{sec:intuition:capacity,sec:capacity:capture} to estimate the minimum required capacity for the sense and send workload.
 Considering the average power required by the sense and send workload with a 30 second period (24.5\ssi{\micro\watt}), 
-the minimum sufficient capacity should be between \num{7.9E5} and \num{1.8E6} times the average workload power. This is if we assume an income distribution similar to the EnHANTs Setup D and a workload margin between 20--50\% the expected income power.
-This suggests the capacity of the rechargeable energy storage should be between 20--44\ssi{\milli\Wh}.
+the minimum sufficient capacity should be between \num{7.9E2} and \num{1.8E3} times the average workload power. This is if we assume an income distribution similar to the EnHANTs Setup D and a workload margin between 20--50\% the expected income power.
+This suggests the capacity of the rechargeable energy storage should be between 19--44\ssi{\milli\Wh}.
 This agrees with results from our simulation in \cref{fig:capacity:availability} suggesting energy capacity on the order of 10\ssi{\milli\Wh} will be sufficient to achieve near perfect availability in conditions like Setup D captures.
 We select a 20\ssi{\milli\Ah} (48\ssi{\milli\Wh}) LTO battery 
 to achieve this energy capacity~\cite{LTODatasheet, LTODatasheet2}.
@@ -465,11 +465,11 @@ Camaroptera is designed as a primarily outdoor system, and utilizes LoRa for com
 It performs local inference to detect people in captured frames. A positive detection results in transmitting an image, and if no person is detected, it discards the captured image to preserve energy. 
 It harvests solar energy with four small high-efficiency monocrystaline solar panels and stores this energy in a 33\ssi{\milli\farad} supercapacitor.
 Camaroptera, like many batteryless systems, operates opportunistically. 
-Whenever its capacitor is charged sufficiently, it performs its workload. 
+Whenever its capacitor is charged sufficiently, it turns on and  performs its workload. 
 Camaroptera's workload consists of capturing an image, performing some computations and inference on this image, compressing the image, and finally transmitting the packetized image. 
-Camaroptera's energy storage is sized to the most energy intensive operation in its workload: transmitting a single LoRa packet.
+Camaroptera's energy storage is sized to support the most energy intensive operation in its workload: transmitting a single LoRa packet.
 A single packet can not fit an entire compressed image, so Camaroptera relies on multiple power cycles to send between seven and eight packets to transmit an entire image.
-All combined, a single image capture and transmission requires 781\ssi{\joule}\footnote{3.06 (capture) + 0.253 (difference) + 66 (inference) + 40 (jpeg) + 96$\times$7 (transmission) = 781\ssi{\milli\joule}~\cite{desai2022camaroptera}}.
+All combined, a single image capture and transmission requires 781\ssi{\joule}\footnote{Capture energy: 3.06 (capture) + 0.253 (difference) + 66 (inference) + 40 (jpeg) + 96$\times$7 (transmission) = 781\ssi{\milli\joule}~\cite{desai2022camaroptera}}.
 When idle, Camaroptera's power subsystem consumes 197\ssi{\micro\watt}.
 With this information, along with operation timing provided by the authors~\cite{desai2022camaroptera}, we are able to complete a simulation configuration like \cref{tab:capacity:parameters} for Camaroptera's hardware design and workload.
 
@@ -484,20 +484,24 @@ Since Camaroptera performs its workload in response to its energy storage state,
 
 \placefigure{fig:impl:camaroptera_pkt}
 
-This limitation is primarily due to the energy capacity available to the platform. The available energy in an outdoor setting is essentially limitless to a low power embedded system like Camaroptera. For the two simulations we consider, our simulated Camaroptera is only able to capture 48\% and 21\% of the available energy for the 10 and 50\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} traces, respectively. 
+This limitation is primarily due to the energy capacity available to the platform. The available energy in an outdoor setting is essentially limitless to a low power embedded system like Camaroptera. 
+For the two simulations we consider, our simulated Camaroptera with its capacitor energy buffer is only able to capture 48\% and 21\% of the available energy for the 10 and 50\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} traces, respectively. 
 Due to its designed energy capacity, Camaroptera is simultaneously limited in the amount of energy it can capture and the amount of instantaneous energy available to it at any given time.
 Given the design heuristics developed in \cref{chap:intuition}, we can determine an estimate for Camaroptera's average income and average workload power if we assume a fixed sensing period instead of the opportunistic operation of the actual platform.
 From these averages and using the capacity sizing heuristics from \cref{sec:intuition:capacity}, we can determine an estimate for the minimum sufficient capacity to sustain this workload given our synthesized incomes.
-As mentioned earlier, each Camaroptera activation requires 781\ssi{\milli\joule} over 40 seconds\footnote{Assuming all images go through the entire inference pipeline} and the platform's idle power is 197\ssi{\micro\watt}.
+As mentioned earlier, each Camaroptera activation requires 781\ssi{\milli\joule} over 40 seconds, assuming all images go through the entire inference pipeline. The platform's idle power is 197\ssi{\micro\watt}.
 While the platform is capable of transmitting an image every 45 seconds to two minutes, we assume a relaxed periodic rate of capturing and transmitting an image every five minutes.
-This results in a 2.8\ssi{\milli\watt} average workload power.
-Considering Camaroptera's designed solar panel size, maximum power point voltage, and efficiency, it can expect between 12.3 and 61.6\ssi{\milli\watt} average income from our two synthesized traces.
-This corresponds to a workload to income margin of $\sim$80--95\%. Considering the sizing factor for income resembling the distribution of Setup D, determined in \cref{sec:intuition:margin}, we should expect a minimum sufficient capacity that is at least \num{3.4E5}$\times$ the workload power. 
-This corresponds to an energy capacity of 952\ssi{\milli\Wh}. The 33\ssi{\milli\farad} supercapacitor on Camaroptera only provides 41\ssi{\micro\watt\hour}, or \num{23E3}$\times$ less than the minimum sufficient energy capacity.
+This results in a 2.8\ssi{\milli\watt} average workload power\footnote{~$\frac{781\si{\milli\joule} + (197\ssi{\micro\watt} \times (300 - 40)\si{\second})}{300\si{\second}} = 2.77\si{\milli\watt}$}.
+With Camaroptera's designed solar panel size, maximum power point voltage, and efficiency, it can expect between 12.3 and 61.6\ssi{\milli\watt} average income power from our two synthesized traces.
 On average, this theoretical energy income should be sufficient to power this periodic sense and send workload, assuming the platform has enough capacity to capture it.
+This income corresponds to a workload to income margin of $\sim$80--95\%. 
+Considering the sizing factor for income resembling the distribution of Setup D, determined in \cref{sec:intuition:margin}, we should expect a minimum sufficient capacity that is at least \num{3.4E2} times the income power. 
+This corresponds to an energy capacity of at least 4182\ssi{\milli\Wh}. 
+The 33\ssi{\milli\farad} supercapacitor on Camaroptera only provides 41\ssi{\micro\Wh}, or five orders of magnitude less than the minimum sufficient energy capacity.
 To explore the impact of capacity sizing for Camaroptera, we utilize our simulation with a sweep of capacity while considering the same two synthesized traces as above. 
-We change our simulated Camaroptera's workload behavior from an opportunistic strategy to a periodic schedule.
-We configure it to capture an image and transmit every two minutes, which should be feasible with either magnitude of energy income considered.
+We change our simulated Camaroptera's workload behavior from an opportunistic strategy to the periodic schedule discussed above.
+We sweep capacity from the size of Camaroptera's original energy capacity to slightly more than predicted by our sizing heuristic.
+The results are presented in \cref{fig:impl:cam_sweep}.
 
 \subsection{Implementation}
 
@@ -516,6 +520,13 @@ We configure it to capture an image and transmit every two minutes, which should
      }
 \end{definefigure}
 
+\begin{definefigure}{fig:impl:cam_sweep}
+    \centering
+    \includegraphics[width=\linewidth]{figs/chap6/camaroptera_simulation.pdf}
+    \caption{
+       blah
+     }
+\end{definefigure}
 %Recent improvements in microcontrollers go beyond lower power improvements\cite{kim2018system}. Many embedded processors now include hardware floating point, single cycle multiplies, and data-parallel instruction (SIMD) support. The promise of new dedicated accelerators provides the potential of significant improvements in inference performance on low power systems~\cite{armm55,himaxwiseeye}. This has led to renewed interest in performing complex local inference on a battery budget, especially as transmitting large data like images is traditionally very expensive. However, radios have also become far more power efficient, which again muddies the conventional wisdom. Indeed, it is now much cheaper to transmit large data to a more capable system. Desktop or server class machines handily outclass their low power microcontroller and accelerator brethren on performance, providing the ability to perform more complex and accurate inference, if only data can be efficiently delivered to them.
 %%Regardless of recent improvements, microcontroller and accelerator performance will continue to pale in comparison to desktop and server class computing systems. 
 %This is especially true as memory has not scaled at the same pace as processing.
