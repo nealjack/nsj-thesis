@@ -1,48 +1,62 @@
 \chapter{Introduction}
 \label{chap:intro}
 
-Currently, as a community of wireless system designers, we lack a shared understanding regarding how to actually approach system-level power supply design. 
-Industrial and commercial sensors continue to embrace the same method of powering sensors as was used twenty years ago: preallocated energy via batteries. 
-Meanwhile, researchers are forging ahead with designs that abandon batteries completely and instead harvest all the energy for their workload from their environment.  
-The current direction of wireless sensor design research is primarily focused on maximizing the longevity and minimizing the maintenance of these systems
-This is a first order concern, as the cost of frequent maintenance and battery replacement is clearly untenable as the number of wireless devices grows to trillions of devices.
-However, in this pursuit, batteryless systems researchers have sacrificed simplicity, utility, and any guarantees for application quality of service. 
-Despite these flaws, researchers have touted batteryless systems as the design pattern for future sensing applications~\cite{hester2017future}. 
+Today, if you wanted to build a wireless sensor, perhaps the most important step in the design process is determining how to allocate or capture energy to power that sensor. 
+Nowadays, there are many options for energy storage--- capacitors, supercapacitors, batteries, and even more options for energy harvesting, including photovoltaic panels, thermoelectric and piezoelectric generators, and microbial fuel cells.
+This results in a vast system-level design space that can be difficult to navigate.
+To reduce the design space problem to something comprehensible, it is reasonable to consider existing industrial and research designs as templates for a design.
+You may look to modern commercial sensors for inspiration, like the Google Nest temperature sensor~\cite{googleNestTemperature}, or to a modern research device like the Flicker platform~\cite{hesterFlicker17}.
+While these two examples use similar sensors, microcontrollers, and radios, and are designed for a similar sensing purpose, they exhibit disparate differences in their power supply design.
+
+Like most modern commercial sensors, the Nest temperature sensor utilizes a non-rechargeable battery for an energy source. 
+Batteries have been the preferred method of powering sensors for the last twenty years. And for good reason, they are simple to use and provide reliable and predictable power.
+However, a battery provides a finite lifetime and battery or sensor replacement is inevitable.
+Wireless sensor lifetime is a first order concern, as the cost of frequent maintenance and battery replacement is clearly untenable as the number of wireless devices grows to trillions of devices.
+Meanwhile, researchers have forged ahead with designs that abandon batteries completely and instead harvest all the energy for their workload from their environment.
+Sensors built with this technique possess indeterminate lifetimes. The cost of immortality is steep, however.
+These systems are generally much more complex to design, and operate unpredictably and without any quality of service guarantees.
+
+In reality, neither option, battery or energy harvesting, is an entirely satisfactory solution for many sensing applications. 
+Instead of thinking of wireless sensor power supply design as adhering to a predetermined class or pattern of design, system designers should consider an application's requirements and how those requirements impact the design space.
+
+%Currently, as a community of wireless system designers, we lack a shared understanding regarding how to actually approach system-level power supply design. 
+
+%Despite these flaws, researchers have touted batteryless systems as the design pattern for future sensing applications~\cite{hester2017future}. 
 %To be truly pervasive, systems must only require minimal maintenance. While some applications are important enough to justify some routine maintenance, many are only realistic and cost-effective if sensors can be deployed and forgotten for long periods of time.
 %The continual improvement of power efficiency across all wireless sensor components has resulted in battery-based sensors that can persist for decades, as well as batteryless sensors that can function with minute amounts of ambient energy.
 %To achieve long lifetimes, battery-based sensors must sacrifice size to employ large batteries, while a purely energy-harvesting system must sacrifice any guarantees of availability and quality of service as their energy income may not be guaranteed.
-In reality, neither option, battery-only or batteryless, is entirely satisfactory for many or all applications. 
-Instead of thinking of wireless sensor power supply design as adhering to a predetermined class or pattern of design, system designers should consider an application's requirements and how those requirements impact the design space.
-This dissertation attempts to address system-level power supply design in the context of real application requirements.
 
-\section{The Batteryless Problem}
-The operation of a batteryless system is inexplicably tied to the availability of harvestable energy.
-This is due to the limited charge capacity provided by non-battery options. Batteryless systems generally utilize capacitors or supercapacitors for energy buffering instead of batteries, and are orders of magnitude less energy dense.
-This results in an energy uncertainty; these devices often run out of energy and lose volatile state at potentially inopportune and unpredictable times. 
-With such intermittently powered systems, energy intensive operations require either careful manual tuning to operate within their limited energy envelope~\cite{yervaGrafting12,campbellEnergy14,debruin2013monjolo}, or complex software techniques to enable eventual forward progress across reboots~\cite{ransford2012mementos,maeng2017alpaca,hesterTimely17}.
-Batteryless system software that ensures forward progress must manage energy state on short timescales and save and restore non-volatile state in ways that avoid consistency problems. 
-These problems are challenging to develop for and reliably debug and researchers have responded by introducing software frameworks and compilers that provide safety guarantees and hide these complexities from programmers. 
-While seemingly attractive, these abstractions hide the realities of batteryless performance from programmers, instead providing a notion of non-stop, continuous, and eventual progress. 
-In reality, these systems are only as continuous as their source of harvested energy, and programmers and users are left without a method of reasoning about system performance.
+\section{The Difficulty of Gathering Data}
 
-%To enable forward progress, researchers developed software solutions to help generalize computing on these platforms through software techniques like checkpointing~\cite{ransford2012mementos}.
-  %As the programs got more complex, and the hardware more sophisticated, it became clear that adding bits of capacitance could help, but only for so long, since the energy density was so low
-
-As the energy intensity of sensing and computational workloads increase, it becomes necessary to increase the storage capacitance of these systems by adding larger or additional capacitors, or utilizing newer supercapacitor technology. 
-This increased capacitance results in longer charging hysteresis, in which it takes a long time to charge the storage capacitor to a sufficient voltage level, limiting the system's responsiveness.
-To address this, researchers have explored complex hardware solutions to manage hysteresis, and additional complex software to manage this hardware~\cite{colinReconfigurable18,hesterFlicker17}.
-
-After all this complexity, batteryless systems are still unable to perform sensing tasks with high availability in the common case where harvestable energy is not consistent.
-Batteryless systems possess a single \textit{fundemental} limitation: their energy capacity.
-This limitation discounts their applicability in use cases that demand any estimates or guarantees of availabilty and quality of service.
-
-Researchers developing energy-harvesting systems have continued to argue that batteries (both non-rechargeable and rechargeable) can not be trusted
-~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, hester2017future, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, majid2020continuous}.
-%The prevailing belief that batteries offer very limited lifetimes and are difficult to manage and charge has led to their abandonment by batteryless system researchers. 
-The assumed superiority of batteryless design has resulted in a constrained and stagnated design space, in which the terms energy-harvesting efficacy is a severely hampered, and the inherent unreliability and requisite complexity of the design regime dissuades serious and wide-spread adoption by industry.
+%The operation of a batteryless system is inexplicably tied to the availability of harvestable energy.
+%This is due to the limited charge capacity provided by non-battery options. Batteryless systems generally utilize capacitors or supercapacitors for energy buffering instead of batteries, and are orders of magnitude less energy dense.
+%This results in an energy uncertainty; these devices often run out of energy and lose volatile state at potentially inopportune and unpredictable times. 
+%With such intermittently powered systems, energy intensive operations require either careful manual tuning to operate within their limited energy envelope~\cite{yervaGrafting12,campbellEnergy14,debruin2013monjolo}, or complex software techniques to enable eventual forward progress across reboots~\cite{ransford2012mementos,maeng2017alpaca,hesterTimely17}.
+%Batteryless system software that ensures forward progress must manage energy state on short timescales and save and restore non-volatile state in ways that avoid consistency problems. 
+%These problems are challenging to develop for and reliably debug and researchers have responded by introducing software frameworks and compilers that provide safety guarantees and hide these complexities from programmers. 
+%While seemingly attractive, these abstractions hide the realities of batteryless performance from programmers, instead providing a notion of non-stop, continuous, and eventual progress. 
+%In reality, these systems are only as continuous as their source of harvested energy, and programmers and users are left without a method of reasoning about system performance.
+%
+%%To enable forward progress, researchers developed software solutions to help generalize computing on these platforms through software techniques like checkpointing~\cite{ransford2012mementos}.
+%  %As the programs got more complex, and the hardware more sophisticated, it became clear that adding bits of capacitance could help, but only for so long, since the energy density was so low
+%
+%As the energy intensity of sensing and computational workloads increase, it becomes necessary to increase the storage capacitance of these systems by adding larger or additional capacitors, or utilizing newer supercapacitor technology. 
+%This increased capacitance results in longer charging hysteresis, in which it takes a long time to charge the storage capacitor to a sufficient voltage level, limiting the system's responsiveness.
+%To address this, researchers have explored complex hardware solutions to manage hysteresis, and additional complex software to manage this hardware~\cite{colinReconfigurable18,hesterFlicker17}.
+%
+%After all this complexity, batteryless systems are still unable to perform sensing tasks with high availability in the common case where harvestable energy is not consistent.
+%Batteryless systems possess a single \textit{fundemental} limitation: their energy capacity.
+%This limitation discounts their applicability in use cases that demand any estimates or guarantees of availabilty and quality of service.
+%
+%Researchers developing energy-harvesting systems have continued to argue that batteries (both non-rechargeable and rechargeable) can not be trusted
+%~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, hester2017future, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, majid2020continuous}.
+%%The prevailing belief that batteries offer very limited lifetimes and are difficult to manage and charge has led to their abandonment by batteryless system researchers. 
+%The assumed superiority of batteryless design has resulted in a constrained and stagnated design space, in which the terms energy-harvesting efficacy is a severely hampered, and the inherent unreliability and requisite complexity of the design regime dissuades serious and wide-spread adoption by industry.
 
 \subsection{Energy Harvesting for Real Applications}
 The popularity of batteryless sensing has resulted in the terms ``energy-harvesting'' becoming almost synonymous with ``batteryless''.
+
+person detection, gathering data is difficult, worth anything, reliable enough?
 %The design, implementation, and deployment of low power wireless sensors has been studied and improved significantly over the past two decades. Despite this, wireless sensor networks can hardly be described as ubiquitous and pervasive in our environment. Sensor deployments are only commonly used with specific applications; they are from resembling the pervasive and invisible computer imagined by Mark Weiser and Xerox PARC~\cite{weiser1991computer}.
 %
 %While there are many problems that stand of the way of this vision, this dissertation's focus is on how to power the computer of the 21st century. 
@@ -114,11 +128,14 @@ The popularity of batteryless sensing has resulted in the terms ``energy-harvest
 
 %A simulation driven design framework provides better guidance for system design than current energy harvesting intuition and highlights that contemporary solutions are significantly under provisioning energy capacity. Systems built with design points determined through simulation provide higher availability, lower latency, long lifetimes, and the capability of supporting more energy intensive applications, all without the need for complex intermittent techniques.
 
-For a given application, the best power supply design solution in terms of size, weight, cost, power, usability, and availability can not be achieved through the exclusive use of any one particular design archetype. The best design for an application can only be determined through a careful and quantitative exploration of a multi-dimensional design space that addresses the application's requirements for preallocated energy, energy harvesting potential, and rechargeable energy storage. 
+%For a given application, the best power supply design solution in terms of size, weight, cost, power, usability, and availability can not be achieved through the exclusive use of any one particular design archetype. The best design for an application can only be determined through a careful and quantitative exploration of a multi-dimensional design space that addresses the application's requirements for preallocated energy, energy harvesting potential, and rechargeable energy storage. 
 
+An analytical and simulation driven design framework provides better guidance for system-level power supply design than current energy harvesting intuition and highlights that contemporary solutions are significantly under provisioning energy capacity. 
+Systems built with design points determined through simulation provide higher availability, lower latency, long lifetimes, and the capability of supporting more energy intensive applications, all without the need for complex intermittent techniques.
 
 \the\textwidth
 
 \section{Contributions of this Dissertation}
+This dissertation attempts to address system-level power supply design in the context of real application requirements.
 
 

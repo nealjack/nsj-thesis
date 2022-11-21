@@ -2,15 +2,16 @@
 \label{chap:permacam}
 
 This chapter considers two example sensing applications and the design of wireless sensor systems to achieve the goals of these applications.
-We explore the system design for these applications within the context of the conclusions of \cref{chap:intuition,chap:capacity,chap:battery}, which suggest that energy capacity is a first order concern for energy harvesting wireless sensor design.
+We explore the system design for these applications within the context of the conclusions of \cref{chap:intuition,chap:capacity,chap:battery}, which suggest that energy capacity is highly important for energy harvesting wireless sensor performance.
 The first application that we consider is the measurement of fine-grained workplane illuminance. These illuminance measurements are used to inform the operation of a lighting control system to balance artificial and natural light for occupant's workplanes. 
 The goals of this application are to measure illuminance at high granularity with high availability and provide a lifetime of at least a decade. 
 This application is relatively simple and it is used to validate the simulation and conclusions presented in \cref{chap:intuition,chap:capacity}.
 The second application is image-based human occupancy detection and counting. 
 Human occupancy measurement can help inform building energy management and climate control.
 The goal of this application is to accurately and consistently detect the presence of humans within view while providing a lifetime of several years.
-This application considers existing image sensing solutions and reconsiders their design in the context of the conclusions of previous chapters.
-This chapter finishes with an examination of the power and energy trends of image-based sensing application requirements and a few predictions for the future of energy harvesting wireless sensor applications and design. 
+This application considers an existing batteryless image sensing solution and reconsiders their design in the context of the conclusions of previous chapters.
+We propose designs for each of these applications, and detail their implementation and evaluation.
+Utilizing a hybrid energy harvesting architecture with sufficient rechargeable energy buffer and a backup non-rechargeable energy storage, our proposed sensor designs are able to provide significantly higher availability than batteryless designs, as well as much longer lifetimes than battery-based designs. 
 
 \section{Measuring Workplane Illuminance}
 \label{sec:impl:permamote}
@@ -93,6 +94,12 @@ Considering the average power required by the sense and send workload with a 30 
 the minimum sufficient capacity should be between \num{7.9E2} and \num{1.8E3} times the average workload power. This is if we assume an income distribution similar to the EnHANTs Setup D and a workload margin between 20--50\% the expected income power.
 This suggests the capacity of the rechargeable energy storage should be between 19--44\ssi{\milli\Wh}.
 This agrees with results from our simulation in \cref{fig:capacity:availability} suggesting energy capacity on the order of 10\ssi{\milli\Wh} will be sufficient to achieve near perfect availability in conditions like Setup D captures.
+The simulation underestimates the heuristic-determined energy capacity because the simulations assume the energy buffer starts fully charged.
+Most systems, especially those that rely on rechargeable batteries, are deployed fully or partially charged.
+In our simulation, this provides an influx of energy into the system and it does not need to capture as much harvested energy to power its workload, and thus requires less energy capacity.
+If simulated for more time, over a longer period than the energy income trace provides, the capacity determined by simulation results may not be sufficient to continue an energy neutral operation.
+The heuristic for energy capacity sizing provides a more safer, more conservative estimate. 
+
 We select a 20\ssi{\milli\Ah} (48\ssi{\milli\Wh}) LTO battery 
 to achieve this energy capacity~\cite{LTODatasheet, LTODatasheet2}.
 As described in \cref{sec:battery:life},
@@ -265,7 +272,9 @@ The amount of energy that is charged and discharged from the secondary cell is a
 %\noindent
 %\textbf{Permamote.}\\
 \subsection{\name Performance and Lifetime}
-\placefigure[t]{fig:evalcmp}
+\placefigure{fig:evalcmp}
+\placefigure{tab:related}
+
 \label{sec:eval:permamote}
 %In addition to evaluating our model,
 We also compare the performance of the
@@ -281,26 +290,26 @@ We also use our model to explore the estimated performance of \name
 compared to the power supply architectures of historical systems for workloads including our illuminance sense and send application and the other applications defined in \cref{sec:capacity:modelling}.
 To isolate the analysis to just power supply types and sizing, we assume each
 system uses the same low-power hardware and is performing the same workload as \name.
-The results of this modeling are shown in \cref{tab:related}. Our model estimates that
+The results of this modeling are shown in \cref{tab:related}. 
+Our model estimates that
 \name can expect several decades of 100\% reliable lifetime when configured as
-it was deployed for this evaluation, albeit configured with a less intense workload.
+it was deployed for this evaluation, albeit configured with the less intense 10 or 30 \ssi{second} periodic workload.
+For some workloads, \name can provide over double the availability of similar batteryless platforms and more than triple the lifetime of battery-based architectures. 
 %While the workload used with \name is not
 %sustainable for the multi-decade lifetimes we are targeting, it still
 %exemplifies the increase in reliability afforded by including a primary-cell.
 
-\placefigure{tab:related}
-
 \subsection{Summary}
-The design of \name encapsulates the conclusions from \cref{chap:intuition}, \cref{chap:capacity}, and \cref{chap:battery} to develop a long-lived and highly available solution for illuminance sensing.
+The design of \name encapsulates the conclusions from \cref{chap:intuition}, \cref{chap:capacity}, and \cref{chap:battery} to develop a simultaneously long-lived and highly available solution for illuminance sensing.
 We avoid adhering to a single design strategy, such as a batteryless or preallocation-only design.
 Instead, we consider the requirements of the application and identify the type and size of energy harvesting, rechargeable buffers, and non rechargeable storage to achieve these goals.
-We utilize results of our analysis and simulation to make these design decisions.
 The end result is a hybrid energy harvesting system that utilizes a rechargeable LTO battery for buffering, and either coin cell or cylindrical non-rechargeable batteries for backup.
-Through simulation, we show that this design can achieve the application goals, as it is estimated to provide more than a decade lifetime with high availability.
+Through simulation, we show that this design can achieve the application goals better than any other proposed battery-based or batteryless wireless sensor power supply in the literature.
+\name is estimated to provide decades of lifetime with high availability, which is more than triple the lifetime of battery-only sensors, and more than double the availability of batteryless platforms in some cases.
 
 \begin{definefigure}{fig:impl:eval_pkt}
     \centering
-    \includegraphics[width=\linewidth]{figs/capacity/experiment_pkt/exp_vs_sim_pkt}
+    \includegraphics[width=\columnwidth]{figs/capacity/experiment_pkt/exp_vs_sim_pkt}
     \label{fig:eval:pkt}
     \caption{Performance comparison of model expectation versus real batteryless system. 
     Data from a three month deployment of two systems is used to verify our model.
@@ -313,7 +322,7 @@ Through simulation, we show that this design can achieve the application goals, 
 
 \begin{definefigure}{fig:impl:eval_soc}
     \centering
-    \includegraphics[width=\linewidth]{figs/capacity/experiment_soc/exp_vs_sim_soc}
+    \includegraphics[width=\columnwidth]{figs/capacity/experiment_soc/exp_vs_sim_soc}
     \label{fig:eval:soc}
     \caption{The estimated state of charge of a week of a workload compared to our model's estimation.
     We use three weeks of illuminance measurements %from a month-long deployment
@@ -415,14 +424,12 @@ Through simulation, we show that this design can achieve the application goals, 
   \end{threeparttable}
   \caption{
   \normalfont
-      Modeled performance of energy-harvesting systems.
+      Simulated performance of energy-harvesting systems performing the same workloads.
     For each  platform considered, we model the performance of its energy storage
     architecture. Periodic workload and lifetime estimates are based on a 10\,s
     period, and the reactive workload is scaled to
-    generate a maximum of 2000 events per hour (3.4\,s average daily period). Generally,
-    intermittent systems have significantly worse availability and responsiveness compared to
-    battery-only systems and systems that use a secondary-cell. Battery-only
-    systems achieve perfect operation, but have finite, sub-decade lifetimes.
+    generate a maximum of 2000 events per hour (3.4\,s average daily period). 
+    \name is the only energy harvesting platform that can provide 100\% availability, while also offering a lifetime of more than triple that of similar battery-only platforms.
     }
 \end{definetable*}
 
@@ -455,7 +462,7 @@ Image sensing platforms developed by industry and in research exhibit the same d
 These two different design result in a deceptive choice between reliable operation with a preallocated energy source but a limited lifetime, or an unlimited but unreliable lifetime with batteryless energy harvesting.
 Neither option is satisfactory for many applications, including our indoor human occupancy detection example application that simultaneously demands a long sensor lifetime and high availability.
 
-\subsection{The Design and Performance of a Batteryless Image Sensor}
+\subsection{The Performance of a Batteryless Image Sensor}
 In this dissertation, we have argued that a batteryless approach is not appropriate for applications with QoS requirements. Designers of batteryless systems rarely evaluate their platforms and frameworks in regards to availability and reliability. However, utilizing the heuristics and simulation tools we have developed in \cref{chap:intuition,chap:capacity}, we can estimate the performance of these systems and identify alternate design decisions that may result in a more performant image sensing system.
 
 In this section, we consider the design and performance of Camaroptera, a batteryless image sensor
@@ -490,27 +497,32 @@ Due to its designed energy capacity, Camaroptera is simultaneously limited in th
 Given the design heuristics developed in \cref{chap:intuition}, we can determine an estimate for Camaroptera's average income and average workload power if we assume a fixed sensing period instead of the opportunistic operation of the actual platform.
 From these averages and using the capacity sizing heuristics from \cref{sec:intuition:capacity}, we can determine an estimate for the minimum sufficient capacity to sustain this workload given our synthesized incomes.
 As mentioned earlier, each Camaroptera activation requires 781\ssi{\milli\joule} over 40 seconds, assuming all images go through the entire inference pipeline. The platform's idle power is 197\ssi{\micro\watt}.
-While the platform is capable of transmitting an image every 45 seconds to two minutes, we assume a relaxed periodic rate of capturing and transmitting an image every five minutes.
+While the platform is capable of transmitting an image every 45 seconds to two minutes depending on lighting conditions, we assume a relaxed periodic rate of capturing and transmitting an image every five minutes.
 This results in a 2.8\ssi{\milli\watt} average workload power\footnote{~$\frac{781\si{\milli\joule} + (197\ssi{\micro\watt} \times (300 - 40)\si{\second})}{300\si{\second}} = 2.77\si{\milli\watt}$}.
-With Camaroptera's designed solar panel size, maximum power point voltage, and efficiency, it can expect between 12.3 and 61.6\ssi{\milli\watt} average income power from our two synthesized traces.
-On average, this theoretical energy income should be sufficient to power this periodic sense and send workload, assuming the platform has enough capacity to capture it.
-This income corresponds to a workload to income margin of $\sim$80--95\%. 
+
+From this example workload and Camaroptera's income, we can use the huristics developed in \cref{chap:intuition} to determine the proper capacity sizing for the platform.
+With Camaroptera's designed solar panel size, maximum power point voltage, and efficiency, 
+it can expect between 12.3 and 61.6\ssi{\milli\watt} average income power from our two synthesized traces.
+On average, this theoretical energy income should be more than sufficient to power this periodic sense and send workload, assuming the platform has enough capacity to capture it.
+This income corresponds to a workload margin of $\sim$80--95\%. 
 Considering the sizing factor for income resembling the distribution of Setup D, determined in \cref{sec:intuition:margin}, we should expect a minimum sufficient capacity that is at least \num{3.4E2} times the income power. 
 This corresponds to an energy capacity of at least 4182\ssi{\milli\Wh}. 
 The 33\ssi{\milli\farad} supercapacitor on Camaroptera only provides 41\ssi{\micro\Wh}, or five orders of magnitude less than the minimum sufficient energy capacity.
 To explore the impact of capacity sizing for Camaroptera, we utilize our simulation with a sweep of capacity while considering the same two synthesized traces as above. 
 We change our simulated Camaroptera's workload behavior from an opportunistic strategy to the periodic schedule discussed above.
 We sweep capacity from the size of Camaroptera's original energy capacity to slightly more than predicted by our sizing heuristic.
-The results of this capacity sweep are presented in \cref{fig:impl:cam_sweep}.
+The availability results of this capacity sweep are presented in \cref{fig:impl:cam_sweep}.
+For each successive simulation that increases energy capacity, the periodic Camaroptera workload is able to achieve higher availability.
+With energy capacities above 100\ssi{\milli\watt\hour}, simulations with the 50\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} income are able to achieve near 100\% availability, while it requires at least 1000\ssi{\milli\watt\hour} for the 10\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} simulations to achieve similar levels of availability. 
+Both of these simulation results suggest less energy capacity is required than the previously estimated 4182\ssi{\milli\Wh}.
+This is for the same reason as explained in \cref{sec:impl:permamote}: the simulation begins with a partially charged energy buffer to mimic how a real system would be deployed while the heuristic analysis assumes starting from empty.
+Thus, the heuristic provides a more conservative estimate that is more likely to result in energy neutral operation over longer periods of time.
+
+Camaroptera was implemented with an energy capacity that was sized arbitrarily to support its most energy intensive task. This arbitrary design decision results in a minimally feasible design that is unable to fully capture and utilize the more than sufficient available harvestable energy.
+With significantly more energy capacity, Camaroptera is able to capture more energy, persist through periods of no harvesting potential, and provide significantly higher availability. 
+Based on the capacity requirements determined by this analysis, Camaroptera alternatively could be designed with a medium-sized rechargeable battery, on the order of 1000\ssi{\Ah}, to achieve the higher performance estimated in \cref{fig:impl:cam_sweep}.
 
 \placefigure{fig:impl:cam_sweep}
-
-\subsection{Implementation}
-
-\subsection{Evaluation}
-
-
-\subsection{Summary}
 
 \begin{definefigure}{fig:impl:camaroptera_pkt}
     \centering
@@ -526,9 +538,176 @@ The results of this capacity sweep are presented in \cref{fig:impl:cam_sweep}.
     \centering
     \includegraphics[width=\linewidth]{figs/chap6/camaroptera_simulation.pdf}
     \caption{
-       blah
+        The availability of Camaroptera running a five minute sense and send workload, as energy capacity is increased from that offered by its original 33\ssi{\milli\farad} supercapacitor to the minimum sufficient capacity estimated by the heuristics developed in \cref{sec:intuition:capacity}.
+        Capacity must be increased by five orders of magnitude in order to achieve near 100\% availability.
      }
 \end{definefigure}
+
+\subsection{The Design of an Indoor Wireless Image Sensor}
+Due to Camaroptera's relatively high active and idle power requirements, it is unsuitable for use in many indoor environments. 
+Designing an image sensor for indoor use will require different design decisions to achieve lower power operation.
+An indoor sensor does not need to depend on higher power wide-area communications like LoRa. Instead, with  modest infrastructure investment, and indoor platform can rely on low power personal- or local-area networks.
+Besides data transmission efficiency, power efficiency can be improved through the use of a more efficient and capable processor.
+Using the heuristics and simulation tools developed, we can also identify the appropriate size of our energy harvesting, buffer capacity, and non-rechargeable storage to maximize energy available to our application. 
+The next few sections expand on these design changes for indoor image sensor we name \namec.
+
+\subsubsection{Indoor Wireless}
+We design \namec to be untethered from wired communication and power. There are several options we consider for \namec's networking, including WiFi, and personal area networks like BLE and 802.15.4. WiFi is attractive as it supports high bandwidth, which would be appropriate for transmitting large data like images. However, many low power WiFi SoCs like the ESP32 have significant idle and startup power requirements~\cite{esp32}. 
+If included on \namec, a WiFi radio or SoC must act as an external, power-gated component to reduce idle current. 
+This complicates system design, and it is unclear if WiFi start up cost is worth the bandwidth advantage. 
+Instead, we focus on technologies like BLE and networks built on top of 802.15.4. 
+These networks are specifically designed to cater to devices that spend the majority of their lifetimes in an ultra low power sleep state. 
+We trade off bandwidth and the time to send images for a simpler design and lower overall power.
+ 
+%We utilize 6LoWPAN to enable a modern, IP-enabled design that allows direct end-to-end communication between sensors and the desired endpoint. We design a low power end-to-end image transfer architecture that makes images captured by \name{} easily accessible in high level languages and machine learning frameworks.
+%To reduce the energy and time required to send images, \name{} compresses each image captured before transmission. 
+%The use of IPv6 enables \name{} devices to directly send images to endpoints without any custom application layers. Received images can then be used for inference or published on a data stream.
+
+\subsubsection{Computation and Memory}
+Processing and manipulating images requires significant computing and memory resources when compared to sensor data with lesser dimensionality, like periodic illuminance and color sensor data that is collected by \name.
+Camaroptera's 16--bit, 16\ssi{\mega\hertz} processor requires 25 seconds of constant computation to compress a 160$\times$120 JPEG image with floating point emulation, and seven seconds to compress the same image with a fixed point algorithm.
+This represents a significant amount of time for a low power device to be active and continuously computing.
+Camaroptera's processor also only offers 256\ssi{\kilo\byte} of total memory, which is only enough to hold one entire image\footnote{$160 \times 120 = 192\ssi{\kilo\byte}$}. 
+This leaves only 64\ssi{\kilo\byte} for image manipulation and inference.
+The image sensor used by Camaroptera is actually able to capture images in 320$\times$320 resolution, but these images would not fit within Camaroptera's volatile memory.
+The Camaroptera design is limited by its processor selection. 
+For \namec, we consider faster, more capable processors with floating point support and more memory.
+
+\subsubsection{Power Supply}
+Like \name, to support fully wireless operation for a long lifetime, \namec optimizes energy harvesting and storage through the use of rechargeable and non-rechargeable batteries.
+As we have explored previously in our analysis of Camaroptera, vision applications require significant energy to capture images, process them, and transmit them. 
+We size \namec's battery in the same manner as \name, utilizing the heuristics and simulation tool from \cref{chap:intuition,chap:capacity} to determine a sufficient capacity.
+To determine this, we take benchmarks of capturing and transmitting images over an 802.15.4 network, and utilize these benchmarks to estimate an average power.
+We utilize the same indoor irradiance traces that we considered previously.
+
+Indoor energy harvesting is inconsistent and variable.
+To augment harvested energy, we include a backup nonrechargable battery on \namec. A backup battery allows continuous operation regardless of energy harvesting conditions. 
+It safeguards the system from the volatile nature of energy harvesting, at the cost of a finite, but very long, lifetime.
+%For intermittent sensors, this unreliability means the system can lose power at any moment, and any volatile state will be lost. These systems deal with this unreliablity in a number of ways, including techniques like checkpointing~\cite{luciaIntermittent17} and federated or reconfigurable capacitor storage~\cite{hester2017flicker,colin2018reconfigurable}.
+%Intermittent capacitor-based systems utilize techniques like checkpointing \cite{luciaIntermittent17}, where the processor saves execution state before running out of power allow these platforms to continue to make forward progress on tasks.  
+%However, as their operation is inherently tied on the availability of harvestable energy, they can not maintain any guarantees about reliability. 
+
+\subsubsection{Other Considerations}
+\namec includes additional sensors besides a camera to limit duty cycle and minimize idle power. A PIR sensor is used to sense motion, providing an ultra low power wake up mechanism for capturing images. Performing imaging on event detection instead of periodically can save considerable amounts of energy and extend lifetime. The platform also has a light sensor that can interrupt on large changes in light illuminance. This provides another wake up mechanism, allows \namec to detect when it is too dark to capture a useful image, and enables illuminance calibration for captured images. Both PIR and illuminance sensors require many orders of magnitude less energy than an image sensor to sense motion or illuminance.
+
+To address the long-term relevancy of the platform, we also support an over-the-air update mechanism such that \namec can receive regular updates to improve energy management. Additionally, updates can be used to deploy new inference algorithms and models, as well as change image capture workload behavior. The platform can be configured to periodically take pictures, use the low power wake up mechanisms mentioned previously, or use some other software heuristic to only send interesting images.
+
+\subsection{\namec Implementation}
+\begin{definefigure}{fig:block}
+\includegraphics[width=\columnwidth]{figs/permacam/figs/block_diagram.pdf}
+\caption{\name system block diagram.
+The system is based on the Himax HM01B0 camera and the Nordic NRF52840 MCU. We include a light and PIR sensor to provide a low power wake up mechanism to drive image capture. A hierarchical energy harvesting system with a rechargeable and non-rechargeable battery are utilized to provide a long, reliable lifetime to the system.
+}
+\end{definefigure}
+
+\begin{definefigure}{fig:arch}
+\includegraphics[width=0.85\columnwidth]{figs/permacam/figs/arch.pdf}
+\caption{The \namec end-to-end image transfer architecture. \namec uses OpenThread, a 6LoWPAN network. This allows it to transmit images over the CoAP block protocol directly to any IP endpoint. We implement a CoAP server to receive and reassemble image, demosaic them, and publish them over an MQTT stream. This CoAP server can be local to the sensors if privacy is desired. User applications running on PCs or on servers can easily subscribe to incoming images.}
+\end{definefigure}
+
+\begin{definetable}{tab:components}
+    \begin{threeparttable}
+        \centering
+        \footnotesize
+        \begin{tabular}{l | l | c | c}
+            Component                           & Function                     & Active Current          & Idle Current \\
+            \hline
+            Himax HM01B0                        & Image sensor                  & 2.0 mA                & 25.1\,\uA\,\tnote{a} \\
+            \multirow{2}{*}{Nordic NRF52840}    & Processor                     & 52\,\uA/MHz           & 3.16\,\uA\,\tnote{b}  \\
+                                                & Radio                         & 4.8\,mA @ 0\,dbm      & \textemdash\,\tnote{b}\\
+            Ambiq AB1815-T3                     & Real time clock               & 55\,nA                & N/A\,\tnote{c}  \\
+            Maxim MAX44009                      & Light sensor                  & 650\,nA               & N/A\,\tnote{c}  \\
+            Panasonic EKMB11011                 & PIR Occupancy                 & 100\,\uA              & 1\,uA  \\
+        \end{tabular}
+    \end{threeparttable}
+    \begin{tablenotes}[para]
+    \scriptsize
+    \item[a] Power gated when not in use.\\
+    \item[b] Sleep current for both processor and radio, full RAM retention, wake on low freq. timer.\\
+    \item[c] No shutdown or idle mode.
+    \end{tablenotes}
+    \vspace*{1mm}
+    \caption{
+    \normalfont
+    The components used in \namec. They represent some of the lowest power options currently available. Due to the extremely low idle power of all included components, \namec is able to sleep at 4.4\uA.
+    }
+\end{definetable}
+
+\begin{definefigure}{fig:demosaic}
+\centering
+\begin{subfigure}{0.49\columnwidth}
+\includegraphics[width=0.5\columnwidth]{images/mosaic.jpeg}
+\end{subfigure}
+%
+\begin{subfigure}{0.49\columnwidth}
+\includegraphics[width=0.5\columnwidth]{figs/permacam/images/demosaic.jpeg}
+\end{subfigure}
+\caption{\normalfont{An image from \namec, displayed as a mosaiced image (left) and demosaiced (right).}}
+\end{definefigure}
+
+
+\placefigure[t]{fig:block}
+
+In this section, we explore the implementation of \namec{}, including component selection, techniques to enable a low power camera interface, and architectural details about the energy harvesting and storage architecture
+
+We implement the design of \namec{} in an \textbf{open source}\footnote{A link to project repository will be included on publication} hardware and software design. The platform is built around the Himax HM01B0 ultra low power camera \cite{hm01b0}. This camera has also enabled other platforms like BackCam \cite{josephson2019wireless} and Camaroptera \cite{nardello2019camaroptera}. The Himax camera is available in two different versions: monochrome and color. We use the color version of the sensor to ensure the ability to capture color information of images, but the two versions are pin compatible and can be interchanged. The other key component of the design is the SoC processor. We use the Nordic nRF52840 Cortex-M4F SoC as it is one of the most power efficient processors available, includes a Floating Point Unit (FPU), and is relatively fast compared to other low power microcontrollers at 64\,MHz. An FPU allows the platform to perform floating point dependent tasks like image compression. It has a multiprotocol BLE/802.15.4 radio that is well supported by OpenThread, an open source implementation of the Thread 6LoWPAN mesh network protocol. It features comparatively large amounts of flash (1\.MB) and SRAM (256\.kB), which is enough to capture images and perform some local processing. We include an ultra-low power real time clock (RTC) to provide accurate image timestamps. The platform also features an ultra low power PIR sensor and illuminance sensor to provide a low power wakeup mechanism and illuminance calibration for captured images. A block diagram of the major system components is displayed in \cref{fig:block}. Characteristics of the sensors and the MCU are summarized in \cref{tab:components}. In the next few sections we describe \namec{}'s implementation, including the MCU to camera interface, energy harvesting architecture, image compression methods, the end-to-end image transmission architecture, and an implementation of onboard person classification.
+
+\subsection{Camera Interface}
+The majority of image sensors do not support normal sensor interfaces like I2C or SPI to transfer data. Instead they rely on high frequency ($\geq$8\,MHz) serial or parallel data busses. This is because images are many kilobytes or megabytes in size, and data transfer must be at a high frequency or parallel to transfer multiple frames per second. The majority of embedded processors, the nRF52840 included, are not designed to interface with parallel camera busses. Traditionally, platforms have used intermediate hardware like dedicated processors, CPLDs or FPGAs to interface with image sensors and buffer frames \cite{rowe2007firefly,rahimi2005cyclops}. The Himax HM01B0 has two interfaces, an I2C command interface and a serial, 4x, or 8x data interface.
+The Himax HM01B0 requires an input master clock (MCLK) of 3-36\,MHz to drive internal sensor timings and outputs a pixel clock (PCLKO), and frame valid (FVLD) and line valid (LVLD) signals \cite{hm01b0}. It can be configured to capture full frame (320x320), QVGA (320x240), and if the mono version of the sensor, downscaled QQVGA (160x120) resolution images. In \namec{} we capture full frame images and use the color version of the sensor. This version produces CFA images that must be demosaiced into a three channel RGB image. An example of a mosaiced image and its demosaiced counterpart is displayed in \cref{fig:demosaic}. \namec{}'s processor does not possess enough memory to locally demosaic an image so any inference or transmission must be done with the mosaiced image. We power-gate the HM01B0 camera on \namec, allowing the system to power the camera off and enter the lowest possible power state.
+
+\placefigure[t]{tab:components}
+
+Other systems that utilize the Himax HM01B0 camera including BackCam, Camaroptera, and the Sparkfun Edge have developed a bitbang protocol to emulate a parallel interface \cite{josephson2019wireless, nardello2019camaroptera, sparkfunedge}. This is possible because their processors support GPIO direct memory access (DMA). This allows the GPIO peripheral to directly write to memory, avoiding costly processor cycles to load GPIO state into registers and then write it to memory. This optimization allows a bitbang protocol on these platforms to operate faster than the HM01B0's minimum operating frequency. However, a bitbang protocol is undesirable because it requires the processor to be on during an image transfer, consuming additional energy. The nRF52840 does not support DMA GPIO. Because of this, developing a bitbang protocol that adheres to the required camera timing is infeasible. Instead, we note that the camera serial protocol closely resembles SPI, and the nRF52840 implements an 8\,MHz SPI peripheral with DMA support. The camera PCLKO signal is identical to SCLK, and can be gated by LVLD. The signal LVLD from the camera indicates when a line of the image is being transmitted, and is analogous to a SPI chip select line. However, this line is active high, and most SPI implementations, including the hardware on the nRF52840, expect active low. Inserting a low latency inverter in between the LVLD output of the camera and the MCU allows the nRF52840 SPI peripheral to interface with the camera. This has the added benefit of reducing power required to read in images as the processor can sleep while the SPI peripheral directly writes images to memory.
+
+\subsection{Energy Harvesting and Storage}
+The energy storage architecture for \namec{} is built around the TI BQ25505, an ultra-low power energy harvesting front-end~\cite{bq25505}. It supports a backup cell, and seamlessly handles power transitions between it and the rechargeable storage. We use the BQ25505 with a 2.4\,V 10.9\,cm\textsuperscript{2} amorphous solar panel to charge a 2.4\,V 20\,mAh rechargeable Lithium Titanate Oxide (LTO) battery. The BQ25505 uses maximum power point tracking to optimize the amount of captured energy. We use a lithium 3\,V 1\,Ah CR2477 coin cell as a backup. The output of the BQ25505's power OR is boosted to the system voltage by a MAX17222 regulator to power all components under a single voltage domain.
+
+\placefigure[t]{fig:demosaic}
+
+\subsection{Image Compression}
+To reduce energy and time required to transmit images, we employ JPEG compression on images prior to transmission. We use the Moodstocks JPEC encoder, a simple and portable monochrome JPEG encoder written in C \cite{moodstocks}. JPEG compression, like most DSP algorithms, relies heavily on floating point arithmetic. Due to its integrated FPU, \namec{}'s processor is able to compress full resolution 320x320 images in 210\,ms.
+This encoder is also used in Camaroptera \cite{nardello2019camaroptera}, although this platform is based on the MSP430, which lacks an FPU. It requires 25 s to compress an downsampled 160x120 image using floating point emulation, and 7s when JPEC is adapted to fixed point math. This fixed point adaptation also reduces image quality slightly. It is clear that a camera platform like \namec{} benefits greatly from the inclusion of a faster, more capable processor.
+The current configuration of \namec captures color filter array (CFA) images. A CFA is an alternating "mosaic" of green-blue-green and red-green-red rows of pixels~\cite{bayer1976color}. Each pixel corresponds to a single color, and through post-processing known as "demosaicing", a three channel RGB image is generated from the single channel representation. An example of a mosaiced image and its demosaiced counterpart are displayed in \cref{fig:demosaic}.
+JPEG is not designed to compress mosaic images. However, we find that monochrome compression with a high quality setting does not overly degrade image fidelity or color representation. We explore the effects of monochrome compression on \namec's captured images further in \cref{eval:compression}.
+
+\placefigure[t]{fig:arch}
+
+\subsection{End-to-end Image Pipeline}
+To support transmitting full images, we implement a full application stack based on standard IP-based protocols. This end-to-end image architecture is depicted in \cref{fig:arch}.
+We choose to use OpenThread, an open source implementation of the Thread network protocol for \namec devices. Thread is a 6LoWPAN mesh network, and allows packets to be sent end-to-end over a standard IP network. OpenThread also provides implementations of useful protocols like CoAP, SNTP, and DNS. 
+CoAP is a lightweight restful protocol similar to HTTP, but over UDP \cite{shelby2014constrained}. 
+On top of OpenThread's CoAP API, we implement the CoAP Block add-on feature. This allows us to fragment large data like an image across multiple CoAP payloads \cite{bormann2016block}. 
+The choice to use CoAP block is a reluctant one however, and was based on the available implementations of reliable transfer protocols for low power networks.
+\namec image transmission is a perfect application for TCP, although TCP is rarely implemented for low power networks. TCP has been shown to be provide a 40\% higher throughput compared to CoAP block over an OpenThread network~\cite{kumar2020performant} over an OpenThread network. However, this implementation is not yet included in mainline OpenThread, limiting us to CoAP block.
+
+\namec captures an image, compresses it using JPEG, and transmits the image using a CoAP blockwise transfer. The CoAP block messages are sent to an endpoint that reassembles them, parses their contents, and publishes a JSON message over an MQTT broker. An application running on the endpoint listens for the transmitted mosaiced images, demosaics them, and republishes the color image for application use. High level applications wishing to interface with images captured by \namec devices simply must subscribe to the relevant device topics to receive images. From there, the images can be processed in frameworks like OpenCV, Tensorflow, or Pytorch~\cite{tensorflow2015-whitepaper, pytorch,itseez2015opencv}.
+
+In addition to our data backhaul pipeline, we implement an independent update server. \namec devices arbitrarily poll the update server every 24 hours for a new application image. If a newer image exists, it downloads it over a CoAP blockwise transfer and applies it. This allows users to deploy new applications quickly across an entire deployment with minimal intervention.
+
+\placefigure[t]{fig:size-time-energy}
+\placefigure[t]{fig:compression}
+\placefigure[t]{fig:ssim}
+\placefigure[t]{fig:lifetime}
+
+\subsection{Local Image Classification}
+In addition to transmitting images, we also demonstrate the ability of the platform to perform local inference.
+While performing local object detection appears out of reach of the capabilities of \namec,image classification (with a limited number of classes) is not. 
+To explore the capabilities of machine learning inference on \namec,
+we modify and train our own MobileNets v1 network to perform person classification. We then deploy it to \namec's processor using TensorFlow Lite for Microcontrollers. 
+
+The parameter flexibility of MobileNets v1 allows us to reduce the size of the model so it can fit on a microcontroller. We reduce the size of the network by reducing the depth of each convolutional layer by 75\% ($\alpha$ = .25).  
+%\hl{cut some of model details if space needed: }
+The model consists of a regular convolution with batch normalization followed by multiple depthwise separable convolutions~\cite{howard2017mobilenets}. 
+%The result of the convolutions is passed through an average pooling layer and a dense layer of 2 units, resulting in a person and no person score. A kernel size of 3 is throughout all convolutions.
+There is insufficient memory to perform the forward pass on full sized 320x320 images, so images need to be downscaled. We configure this network for different input image dimensions including 48, 72, 96, and 120.
+We train this model for 80 epochs on the Visual Wake Word dataset~\cite{chowdhery2019visual} to achieve a validation accuracy of 78\%, compared to a 90\% accuracy with an unmodified MobileNet. The model weights require 230\.kB after post-training quantization and achieve an accuracy of 76\% for input images of size 120x120 when using TensorFlow in Python. We deploy this model on \namec and evaluate its performance in \cref{eval:localinf}.
+
+\subsection{Evaluation}
+
+
+\subsection{Summary}
+
 %Recent improvements in microcontrollers go beyond lower power improvements\cite{kim2018system}. Many embedded processors now include hardware floating point, single cycle multiplies, and data-parallel instruction (SIMD) support. The promise of new dedicated accelerators provides the potential of significant improvements in inference performance on low power systems~\cite{armm55,himaxwiseeye}. This has led to renewed interest in performing complex local inference on a battery budget, especially as transmitting large data like images is traditionally very expensive. However, radios have also become far more power efficient, which again muddies the conventional wisdom. Indeed, it is now much cheaper to transmit large data to a more capable system. Desktop or server class machines handily outclass their low power microcontroller and accelerator brethren on performance, providing the ability to perform more complex and accurate inference, if only data can be efficiently delivered to them.
 %%Regardless of recent improvements, microcontroller and accelerator performance will continue to pale in comparison to desktop and server class computing systems. 
 %This is especially true as memory has not scaled at the same pace as processing.
