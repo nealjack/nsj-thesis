@@ -617,6 +617,9 @@ Given these traces of workload and income power, the trace of cumulative energy 
     \end{split} \label{eqn:intuition:iterative_capacity} 
 \end{align}
 This relation is essentially a capped sum over the difference of instantaneous income and workload powers. The amount of energy stored in the buffer is limited to values between zero and the maximum capacity of the buffer. 
+We assume the energy buffer starts empty.
+While systems with large energy capacities are normally deployed with fully or partially charged buffers,
+for later analysis using these relations, starting empty will produce a more accurate estimation of required energy capacity over long periods of time.
 For simplicity, the $\Delta t$ between each element of $P_h$ and $P_w$ can be assumed to be one second. This simplifies future calculations for energy. Also, as mentioned previously, $w_t$ is replaced by the average of the workload sequence $\bar{P_w}$.
 
 The key metric of interest given the trace of energy storage, $Y = (y_t)_{t=0}^T$, is  
