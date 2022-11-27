@@ -126,6 +126,7 @@ else:
 df = pd.concat(results.values())
 df["actual_avg_vs_work"] = df["actual_avg"] / df["workload"]
 print(df)
+
 #fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
 #for i in df.income.unique():
 #    dfi = df[df["income"] == i]
@@ -148,7 +149,7 @@ def plot_curve(amplitude):
     dfi = df[df["income"] == amplitude]
     dfi = dfi.sort_values(["capacity", "type"])
     print(amplitude, dfi["income"].iloc[0])
-    for typ in traces:
+    for typ in pd.unique(dfi['type']):
         dfi_type_slice = dfi[dfi["type"] == typ]
         ax.plot(dfi_type_slice["capacity"] / 3600 * 1E3, dfi_type_slice["actual_avg_vs_work"], label=typ)
     ax.set_xscale("log")
@@ -159,7 +160,10 @@ def plot_curve(amplitude):
     plt.close()
 
 #with Pool() as pool:
-#    pool.map(plot_curve, amplitudes)
+#    pool.map(plot_curve, pd.unique(df['income']))
+
+#for amp in pd.unique(df['income']):
+#    plot_curve(amp)
 
 fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
 
@@ -198,7 +202,8 @@ for x in income_v_sufficient_capacity:
     p[1] = 0
     fit = np.poly1d(p)
     print(fit / 3600 * 1E3)
-    name = x[:-1] + " " + x[-1] + ", m = " + "%.1E" % (p[0] / 3600)
+    name = x[:-1].split('/')[-1] + " " + x[-1] + ", m = " + "%.1E" % (p[0] / 3600)
+    print(name)
     ax.plot(income_v_sufficient_capacity[x][:,0], fit(income_v_sufficient_capacity[x][:,0] / 3600),  color=color, alpha = 1, label=name)
     print(x, p)
 
