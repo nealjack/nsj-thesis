@@ -35,8 +35,8 @@ traces = {}
 #b = 2*math.pi / SECONDS_IN_DAY
 amplitudes = np.logspace(-6, -3, 100) #np.array([x * 1E-6 for x in range(10, 101, 10)])
 #seconds = np.array(range(0, DAYS_TO_MODEL * SECONDS_IN_DAY))
-margins = [x/10.0 for x in range(0, 10)]#np.array([x/10 for x in range(2,12,2)])
 capacities = np.logspace(-3, 3, num=200)
+margins = [1, 1.25, 1.5, 2, 4]#np.array([x/10 for x in range(2,12,2)])
 total_runs = len(amplitudes) * len(margins) * len(capacities)
 print(total_runs)
 #print(len(capacity), len(a), len(disparity))
@@ -61,31 +61,32 @@ def run(index, amplitude, margin, capacity, trace_name):
     start = time.time()
     trace = traces[trace_name]
     e = np.zeros(trace.shape)
-    income = trace * amplitude
-    actual_capture = np.zeros(trace.shape)
-    workload = amplitude * (1 - margin)
+    income_scale = amplitude * margin
+    actual_capture = 0
+    workload = amplitude
 
 
-    for ind, i in enumerate(income):
+    for ind, t in enumerate(trace):
+        i = t * income_scale
         if ind == 0:
             e[ind] = i - workload
         else:
             e[ind] = e[ind-1] + i - workload
 
-        actual_capture[ind] = i
+        actual_capture += i
 
         if e[ind] >= capacity:
-            actual_capture[ind] = capacity - e[ind-1]
+            actual_capture += capacity - e[ind-1] - i
             e[ind] = capacity
         elif e[ind] < 0:
             e[ind] = 0
 
-    total = np.sum(income)
-    actual = np.sum(actual_capture)
+    total = income_scale * np.sum(trace)
+    actual = actual_capture
 
     elapsed = time.time() - start
     print("simulation: {}/{}".format(index, total_runs), trace_name, elapsed)
-    result = {"index": index, "income": amplitude, "margin": margin, "capacity": capacity, "workload": workload, "total": total, "actual": actual, "actual_avg": actual/(len(trace)), "type": trace_name}
+    result = {"index": index, "amplitude": amplitude, "income": income_scale, "margin": margin, "capacity": capacity, "workload": workload, "total": total, "actual": actual, "actual_avg": actual/(len(trace)), "type": trace_name}
     return result
 
 #amp = a[4]
@@ -168,46 +169,44 @@ def plot_curve(amplitude):
 fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
 
 if "margin" in df:
-    dfd = df[df["margin"] == 0]
+    dfd = df[df["margin"] == 1]
 else:
     dfd = df[df["disparity"] == 1]
-dfd = dfd.sort_values(["capacity", "income_index", "type"])
-print(dfd)
+dfd = dfd.sort_values(["capacity", "amplitude", "type"])
 
-income_v_sufficient_capacity = {}
-for typ in traces:
-    income_v_sufficient_capacity[typ] = []
-for amplitude in pd.unique(dfd["income"]):
-    dfd_slice = dfd[dfd["income"] == amplitude]
-    income = dfd_slice.iloc[0]["income"]
+amplitude_v_sufficient_capacity = {}
+for typ in pd.unique(df['type']):
+    amplitude_v_sufficient_capacity[typ] = []
+for amplitude in pd.unique(dfd["amplitude"]):
+    dfd_slice = dfd[dfd["amplitude"] == amplitude]
 
-    for typ in traces:
+    for typ in pd.unique(df['type']):
         dfd_slice_type = dfd_slice[dfd_slice["type"]==typ.split('/')[-1]]
         first_sufficient = dfd_slice_type[dfd_slice_type["actual_avg_vs_work"] >= 1]
         if(len(first_sufficient) == 0):
             print(dfd_slice_type)
             break
         first_sufficient = first_sufficient.iloc[0]["capacity"]
-        income_v_sufficient_capacity[typ].append([amplitude, first_sufficient])
+        amplitude_v_sufficient_capacity[typ].append([amplitude, first_sufficient])
 
-#ivsc = pd.DataFrame(income_v_sufficient_capacity)
+#ivsc = pd.DataFrame(amplitude_v_sufficient_capacity)
 #print(ivsc)
-for x in income_v_sufficient_capacity:
-    income_v_sufficient_capacity[x] = np.array(income_v_sufficient_capacity[x])
-    line = ax.scatter(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1] / 3600, alpha=0.5, s= 8)
+for x in amplitude_v_sufficient_capacity:
+    amplitude_v_sufficient_capacity[x] = np.array(amplitude_v_sufficient_capacity[x])
+    line = ax.scatter(amplitude_v_sufficient_capacity[x][:,0], amplitude_v_sufficient_capacity[x][:,1] / 3600, alpha=0.5, s= 8)
     color = line.get_facecolor()
-    #line = ax.plot(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1] / 3600 * 1E3, label=x)
+    #line = ax.plot(amplitude_v_sufficient_capacity[x][:,0], amplitude_v_sufficient_capacity[x][:,1] / 3600 * 1E3, label=x)
     #color = line[0].get_color()
-    p = np.polyfit(income_v_sufficient_capacity[x][:,0], income_v_sufficient_capacity[x][:,1], 1)
+    p = np.polyfit(amplitude_v_sufficient_capacity[x][:,0], amplitude_v_sufficient_capacity[x][:,1], 1)
     p[1] = 0
     fit = np.poly1d(p)
     print(fit / 3600 * 1E3)
     name = x[:-1].split('/')[-1] + " " + x[-1] + ", m = " + "%.1E" % (p[0] / 3600)
     print(name)
-    ax.plot(income_v_sufficient_capacity[x][:,0], fit(income_v_sufficient_capacity[x][:,0] / 3600),  color=color, alpha = 1, label=name)
+    ax.plot(amplitude_v_sufficient_capacity[x][:,0], fit(amplitude_v_sufficient_capacity[x][:,0] / 3600),  color=color, alpha = 1, label=name)
     print(x, p)
 
-ax.set_xlabel("Workload/Income Power (W)")
+ax.set_xlabel("Workload Power (W)")
 ax.set_ylabel("Minimum Sufficient Capacity (Wh)")
 ax.set_xscale("log")
 ax.set_yscale("log")
