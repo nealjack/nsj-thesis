@@ -15,26 +15,28 @@ plt.rcParams["font.size"] = "14"
 plt.rcParams["grid.linewidth"] = "1"
 
 results = pd.read_csv("margin_results/SetupD_capacity.csv",index_col="index")
-results = results.sort_values(["capacity", "income", "type"])
+results = results.sort_values(["margin", "amplitude", "capacity", "type"])
 results["actual_avg_vs_work"] = results["actual_avg"] / results["workload"]
 
+print(results.to_string())
 income_v_sufficient_capacity = {}
 
 fig, ax = plt.subplots(figsize=(10.7, 5), dpi=300)
 
-for margin in [0, 0.2, 0.4, 0.5, 0.6, 0.8]:#pd.unique(results["margin"]):
-    print(margin)
+for margin in pd.unique(results["margin"]):
+    print('margin:', margin)
     r_slice = results[results["margin"] == margin]
     income_v_sufficient_capacity[margin] = []
 
-    for amplitude in pd.unique(results["income"]):
+    for amplitude in pd.unique(results["amplitude"]):
         print(amplitude)
-        r_slice_amp = r_slice[r_slice["income"] == amplitude]
+        r_slice_amp = r_slice[r_slice["amplitude"] == amplitude]
         first_sufficient = r_slice_amp[r_slice_amp["actual_avg_vs_work"] >= 1]
+        print(r_slice_amp)
         if(len(first_sufficient) == 0):
-            print(r_slice_amp)
             break
         first_sufficient = first_sufficient.iloc[0]["capacity"]
+        print(first_sufficient)
         income_v_sufficient_capacity[margin].append([amplitude, first_sufficient])
 
     print(income_v_sufficient_capacity[margin])
@@ -47,7 +49,7 @@ for margin in [0, 0.2, 0.4, 0.5, 0.6, 0.8]:#pd.unique(results["margin"]):
     color = line.get_facecolor()
     ax.plot(array[:,0], fit(array[:,0] / 3600),  color=color, alpha = 1, label=name)
 
-ax.set_xlabel("Income Power (W)")
+ax.set_xlabel("Workload Power (W)")
 ax.set_ylabel("Minimum Sufficient Capacity (Wh)")
 ax.set_xscale("log")
 ax.set_yscale("log")

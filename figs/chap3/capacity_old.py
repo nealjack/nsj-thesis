@@ -173,13 +173,13 @@ if "margin" in df:
     dfd = df[df["margin"] == 1]
 else:
     dfd = df[df["disparity"] == 1]
-dfd = dfd.sort_values(["capacity", "amplitude", "type"])
+dfd = dfd.sort_values(["capacity", "income", "type"])
 
 amplitude_v_sufficient_capacity = {}
 for typ in pd.unique(df['type']):
     amplitude_v_sufficient_capacity[typ] = []
-for amplitude in pd.unique(dfd["amplitude"]):
-    dfd_slice = dfd[dfd["amplitude"] == amplitude]
+for amplitude in pd.unique(dfd["income"]):
+    dfd_slice = dfd[dfd["income"] == amplitude]
 
     for typ in pd.unique(df['type']):
         dfd_slice_type = dfd_slice[dfd_slice["type"]==typ.split('/')[-1]]
