@@ -8,10 +8,17 @@ import numpy as np
 import pandas as pd
 from skimage import img_as_float
 from skimage.metrics import structural_similarity as ssim
-font = {'family' : 'Arial',
-        'weight' : 'medium',
-        'size'   : 8}
-matplotlib.rc('font', **font)
+plt.rcParams["font.family"] = "Arial"
+plt.rcParams["font.size"] = "14"
+plt.rcParams["xtick.major.width"] = "0.5"
+plt.rcParams["xtick.major.size"]  = "6"
+plt.rcParams["xtick.minor.width"] = "0.8"
+plt.rcParams["xtick.minor.size"] = "4"
+plt.rcParams["ytick.major.width"] = "1"
+plt.rcParams["ytick.major.size"] = "6"
+plt.rcParams["ytick.minor.width"] = "0.8"
+plt.rcParams["ytick.minor.size"] = "4"
+plt.rcParams["grid.linewidth"] = "1"
 import os
 import shutil
 import subprocess
@@ -28,10 +35,10 @@ types = np.unique(data['type'])
 cam_data = data[data['type'] == 'cam']
 phone_data = data[data['type'] == 'phone']
 
-fig, ax = plt.subplots(1, figsize=(4,2))
+fig, ax = plt.subplots(1, figsize=(10.7,5))
 
-ax.plot(cam_data['distance'], cam_data['confidence'], marker='.', label='Eternacam')
-ax.plot(phone_data['distance'], phone_data['confidence'], marker='.', label='Pixel 3')
+ax.plot(cam_data['distance'], cam_data['confidence'], marker='.', markersize=10, label='Permacam')
+ax.plot(phone_data['distance'], phone_data['confidence'], marker='.', markersize=10, label='Pixel 3')
 ax.set_xticks(np.unique(data['distance']))
 
 ax.set_ylabel('Detection Confidence (%)')
