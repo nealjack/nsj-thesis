@@ -681,9 +681,9 @@ In \cref{fig:intuition:capacity_margin}, we model the impact of a income safety 
 We utilize the Setup D EnHANTs trace as it represents the worst case seasonal light distribution out of all of the traces. 
 \Cref{fig:intuition:capacity_margin} presents required capacity for multiple sweeps of workload power under different safety margins. 
 The different sweeps consider different safety margins of income power, from no margin to an 300\% margin. 
-No margin indicates that the average workload power is equal to the income power, while an 300\% margin indicates the income power is 4$\times$ the amount required by the workload, on average\footnote{A safety margin is calculated as a percent difference, $100 \times \frac{\text{Income} - \text{Workload}}{\text{Income}}$}. 
+No margin indicates that the average workload power is equal to the income power, while an 300\% margin indicates the income power is 4$\times$ the amount required by the workload, on average\footnote{A safety margin is calculated as a percent difference, $100 \times \frac{\text{Income} - \text{Workload}}{\text{Workload}}$}. 
 As expected, when a workload requires less energy than is available to harvest, it requires less energy capacity to harvest that energy.
-With a 25\% margin, where the income provides 1.2$\times$ the average required workload power, a design that can expect an energy income with a similar distribution to the Setup D trace will require a capacity sized to \num{2.3E3}$\times$ the income power. 
+With a 25\% margin, where the income provides 1.2$\times$ the average required workload power, a design that can expect an energy income with a similar distribution to the Setup D trace will require a capacity scaled by \num{2.3E3} multiplied by the average workload power. 
 
 \placefigure{fig:intuition:capacity_margin}
 
@@ -694,7 +694,7 @@ Beyond the efficiency of a harvester, the DC-DC regulation of a harvesting IC do
 Any further system voltage regulation has similar limits to efficiency. 
 All of these imperfections result in energy loss and prevent a perfect capture of all available harvestable energy.
 Workload is also assumed to be a constant average power. In reality, a workload can be variable depending on an application's reporting requirements or the probability distribution of detectable events.
-This section makes the argument that the variability of a workload is sufficiently less than the variability of income, to the point that workload can be treated as an average in comparison. This assumption needs validation.
+This section makes the argument that the variability of a workload is sufficiently less than the variability of income, to the point that workload can be treated as an average in comparison. This assumption is reasonable for many workloads that do not exhibit long term variation but does not apply to all possible sensor workloads.
 Additionally, this analysis did not consider the effect of a backup non-rechargeable energy store. As seen in \cref{sec:intuition:hybrid}, the addition of a non-rechargeable backup can result in significant increases in the lifetime of a system while maintaining operation with high availability.
 
 

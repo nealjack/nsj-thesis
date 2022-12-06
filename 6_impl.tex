@@ -86,15 +86,16 @@ switching between them at user-configurable voltage thresholds~\cite{bq25505}.
 
 We utilize the hueristics developed in \cref{sec:intuition:capacity} to determine the required sizing for our energy harvesting and energy storage. 
 We select a 10.9\ssi{\centi\meter\squared} amorphous
-silicon photovoltaic panel as our energy harvester.
+silicon photovoltaic panel as our energy harvester to fit within our form factor.
 Assuming the lower end of efficiency (10\%) and the upper bound of indoor irradiance, this panel can provide an average of 100\ssi{\micro\watt}. 
-On average, this income power can provide sufficient average power to support various frequencies of the sense and send workload.
+On average, this income power provides more than sufficient average power to support various frequencies of the sense and send workload.
 We can consult \cref{sec:intuition:capacity,sec:capacity:capture} to estimate the minimum required capacity for the sense and send workload.
 Considering the average power required by the sense and send workload with a 30 second period (24.5\ssi{\micro\watt}), 
-the minimum sufficient capacity should be \num{3.4E2} times the average income power. This is if we assume an income distribution similar to the EnHANTs Setup D and a workload margin of 80\% of the expected income power\footnote{100\ssi{\micro\watt} represents about an 80\% margin over the 24.5\ssi{\micro\watt} workload}.
+the minimum sufficient capacity should be \num{1.4E3} times the average workload power. 
+This is if we assume an income distribution similar to the EnHANTs Setup D and an income margin of 300\% of the expected workload power\footnote{100\ssi{\micro\watt} represents a 300\% margin over the 24.5\ssi{\micro\watt} workload}.
 This suggests the capacity of the rechargeable energy storage should be on the order of 34\ssi{\milli\Wh}.
 This agrees with results from our simulation in \cref{fig:capacity:availability} suggesting energy capacity on the order of 1--10\ssi{\milli\Wh} will be sufficient to achieve near perfect availability in conditions like Setup D captures.
-The simulation slightly underestimates the heuristic-determined energy capacity.
+The simulation suggests slightly less capacity is required compared to the heuristic estimate.
 This is because the simulations assume the energy buffer starts fully charged.
 Most systems, especially those that rely on rechargeable batteries, are deployed fully or partially charged.
 In our simulation, this provides an influx of energy into the system and it does not need to capture as much harvested energy to power its workload, and thus requires less energy capacity.
@@ -148,7 +149,7 @@ This eliminates any reliance on state retention techniques and the need for the 
 While
 slightly more efficient
 processors and radios exist than those found in the NRF52840,
-we value the simplicity of the SoC-based design. 
+we value the simplicity of the SoC-based design as well the platform's capability of using either BLE or 802.15.4 over its 2.4\ssi{\giga\hertz} radio.  
 
 \subsection{Simulation Evaluation using Real Systems}
 \label{sec:eval}
@@ -194,9 +195,7 @@ model input for the energy harvesting sensors.
 \subsubsection{Primary-Cell Only}
 We measure and model the workload of the primary-cell system and produce estimates for
 lifetime. The primary cell system requires on average 480\ssi{\micro\watt} to measure and beacon every second. Our model predicts the platform lifetime
-to be 58 days.  We find that the average lifetime of the 10 devices is 61 days.
-%,
-%from initial deployment to energy depletion, is 61 days.
+to be 58 days.  The average lifetime of the devices in our ten device deployment is 61 days, which is on par with our simulation estimate. 
 
 \placefigure{fig:impl:eval_pkt}
 \subsubsection{Batteryless}
@@ -506,14 +505,14 @@ From this example workload and Camaroptera's income, we can use the huristics de
 With Camaroptera's designed solar panel size, maximum power point voltage, and efficiency, 
 it can expect between 12.3 and 61.6\ssi{\milli\watt} average income power from our two synthesized traces.
 On average, this theoretical energy income should be more than sufficient to power this periodic sense and send workload, assuming the platform has enough capacity to capture it.
-This income corresponds to a workload margin of $\sim$80--95\%. 
-Considering the sizing factor for income resembling the distribution of Setup D, determined in \cref{sec:intuition:margin}, we should expect a minimum sufficient capacity that is \num{3.4E2} times the lower end of income power. 
-This corresponds to an energy capacity of 4182\ssi{\milli\Wh}. 
-The 33\ssi{\milli\farad} supercapacitor on Camaroptera only provides 41\ssi{\micro\Wh}, or five orders of magnitude less than the energy capacity we predict.
-To explore the impact of capacity sizing for Camaroptera, we utilize our simulation with a sweep of capacity while considering the same two synthesized traces as above. 
+The lower end of this income corresponds to an income margin of over 300\%. 
+Considering the sizing factor for income resembling the distribution of Setup D, determined in \cref{sec:intuition:margin}, we should expect a minimum sufficient capacity that is \num{1.4E3} times Camaroptera's workload power. 
+This corresponds to an energy capacity of 3920\ssi{\milli\Wh}. 
+The 33\ssi{\milli\farad} supercapacitor on Camaroptera only provides 41\ssi{\micro\Wh}. This capacity represents five orders of magnitude less than the minimum sufficient energy capacity predicted by our heuristic.
+To further explore the impact of capacity sizing for Camaroptera, we simulate the platform with a sweep of different amounts of rechargeable capacity. 
 We change our simulated Camaroptera's workload behavior from an opportunistic strategy to the periodic schedule discussed above.
-We sweep capacity from the size of Camaroptera's original energy capacity to slightly more than predicted by our sizing heuristic.
-The availability results of this capacity sweep are presented in \cref{fig:impl:cam_sweep}.
+We sweep capacity from the size of Camaroptera's original energy capacity to the amount predicted by our sizing heuristic.
+The results of the simulated platform performance versus capacity are presented in \cref{fig:impl:cam_sweep}.
 For each successive simulation that increases energy capacity, the periodic Camaroptera workload is able to achieve higher availability.
 With energy capacities above 100\ssi{\milli\watt\hour}, simulations with the 50\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} income are able to achieve near 100\% availability, while it requires at least 1000\ssi{\milli\watt\hour} for the 10\ssi[per-mode=symbol]{\milli\watt\per\centi\meter\squared} simulations to achieve similar levels of availability. 
 Both of these simulation results suggest less energy capacity is required than the previously estimated 4182\ssi{\milli\Wh}.
