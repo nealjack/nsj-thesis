@@ -299,14 +299,6 @@ For some workloads, \name can provide over double the availability of similar ba
 %sustainable for the multi-decade lifetimes we are targeting, it still
 %exemplifies the increase in reliability afforded by including a primary-cell.
 
-\subsection{Summary}
-The design of \name encapsulates the conclusions from \cref{chap:intuition}, \cref{chap:capacity}, and \cref{chap:battery} to develop a simultaneously long-lived and highly available solution for illuminance sensing.
-We avoid adhering to a single design strategy, such as a batteryless or preallocation-only design.
-Instead, we consider the requirements of the application and identify the type and size of energy harvesting, rechargeable buffers, and non rechargeable storage to achieve these goals.
-The end result is a hybrid energy harvesting system that utilizes a rechargeable LTO battery for buffering, and either coin cell or cylindrical non-rechargeable batteries for backup.
-Through simulation, we show that this design can achieve the application goals better than any other proposed battery-based or batteryless wireless sensor power supply in the literature.
-\name is estimated to provide decades of lifetime with high availability, which is more than triple the lifetime of battery-only sensors, and more than double the availability of batteryless platforms in some cases.
-
 \begin{definefigure}{fig:impl:eval_pkt}
     \centering
     \includegraphics[width=\columnwidth]{figs/capacity/experiment_pkt/exp_vs_sim_pkt}
@@ -600,9 +592,18 @@ The system is based on the Himax HM01B0 camera and the Nordic NRF52840 MCU. We i
 \end{definefigure}
 
 \begin{definefigure}{fig:arch}
-\centering
-\includegraphics[width=\columnwidth]{figs/permacam/figs/arch.pdf}
-\caption{The \namec end-to-end image transfer architecture. \namec uses OpenThread, a 6LoWPAN network. This allows it to transmit images over the CoAP block protocol directly to any IP endpoint. We implement a CoAP server to receive and reassemble image, demosaic them, and publish them over an MQTT stream. This CoAP server can be local to the sensors if privacy is desired. User applications running on PCs or on servers can easily subscribe to incoming images.
+    \centering
+    \begin{subfigure}{0.7\columnwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/permacam/figs/arch}
+        \caption{End-to-end image transfer architecture}
+    \end{subfigure}
+    \begin{subfigure}{0.29\columnwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/permacam/detection_90_59158.jpeg}
+        \caption{Example YOLOv3 detection}
+    \end{subfigure}
+\caption{The \namec end-to-end image transfer architecture. \namec uses OpenThread, a 6LoWPAN network. This allows it to transmit images over the CoAP block protocol directly to any IP endpoint. We implement a CoAP server to receive and reassemble image, demosaic them, and publish them over an MQTT stream. This CoAP server can be local to the sensors if privacy is desired. User applications running on PCs or on servers can easily subscribe to incoming images and use them as inputs to object detection machine learning models, like YOLOv3.
 }
 \end{definefigure}
 
@@ -855,7 +856,7 @@ We train this model for 80 epochs on the Visual Wake Word dataset~\cite{chowdher
     \centering
     \includegraphics[width=\columnwidth]{figs/permacam/permacam_processing/distance_detection.pdf}
     \caption{
-        Detection confidence as distance from camera to person is increased. Compared to a modern smartphone camera, the camera on \name can not compete due to limited resolution. However, images captured by \name still enable person detection at a distance of 15-20 meters. This distance is generally sufficient for most indoor spaces.
+        Detection confidence as distance from camera to person is increased. Compared to a modern smartphone camera, the camera on \namec can not compete due to limited resolution. However, images captured by \namec still enable person detection at a distance of 15-20 meters. This distance is generally sufficient for most indoor spaces.
     }
 \end{definefigure}
 
@@ -877,8 +878,8 @@ Dimension (pixels) & Latency (s) & MOPs & Energy (mJ) & Memory (kB) & Accuracy (
 \begin{definetable}{tab:end-to-end}
 \setlength\tymin{1cm}
 \small
-\begin{tabulary}{\columnwidth}{l c c c}
-Compression\newline Quality & Size\newline(kB) & Latency\newline(s) & Energy\newline(mJ) \\
+\begin{tabularx}{\columnwidth}{@{\extracolsep{\fill}} l c c c}
+Compression Quality & Size (kB) & Latency (s) & Energy (mJ) \\
 \hline
 30  & 1.98 & 0.513 & 4.23\\
 50  & 3.25 & 0.764 & 6.95\\
@@ -887,22 +888,22 @@ Compression\newline Quality & Size\newline(kB) & Latency\newline(s) & Energy\new
 90  & 9.12 & 1.86 & 19.5\\
 93  & 10.6 & 2.13 & 22.7\\
 raw & 25.6 & 4.91 & 54.7\\
-\end{tabulary}
+\end{tabularx}
 \caption {\normalfont{Time and energy required to send 160x160 images end-to-end. Images are compressed with varying JPEG qualities. Sending compressed images requires less time and energy than performing person classification on lower resolution images.}}
 \end{definetable}
 
 \begin{definefigure}{fig:cycle-per-byte}
     \centering
     \includegraphics[width=\columnwidth]{figs/permacam/figs/cycles_per_byte.pdf}
-    \caption{The required energy per byte of image data to run different algorithms on the processor used by \name{}.
+    \caption{The required energy per byte of image data to run different algorithms on the processor used by \namec{}.
         \normalfont{
             The slope of the solid line represents the energy per cycle of the processor. The dashed line represents the energy per byte of a compressed transmission of an image. Three algorithms are plotted here: JPEG compression with quality factor 90, our custom MobileNets v1 person classifier, YOLOv3-tiny object detection. We estimate the cycles and energy required of YOLOv3, as it requires more memory than available on our microcontroller.
         }}
 \end{definefigure} 
 
-We evaluate \name{} on our goals of deployability and capability through a number of experiments. We begin with an analysis of the effects of JPEG compression on image size, time to send, and energy. From this analysis, we use these measured metrics to estimate platform lifetime using different representative workloads. 
+We evaluate \namec{} on our goals of deployability and capability through a number of experiments. We begin with an analysis of the effects of JPEG compression on image size, time to send, and energy. From this analysis, we use these measured metrics to estimate platform lifetime using different representative workloads. 
 %We estimate platform lifetime using different configurations of workloads and image compression. 
-We explore the capability of the platform by writing an object detection application on top of the \name{} end-to-end image transfer architecture. We evaluate the ability to detect objects in images captured by \name{} at varying qualities of compression and distance from the camera. We also implement local image inference in the form of person classification. We evaluate the performance of local classification, and compare it to image transmission.
+We explore the capability of the platform by writing an object detection application on top of the \namec end-to-end image transfer architecture. We evaluate the ability to detect objects in images captured by \namec{} at varying qualities of compression and distance from the camera. We also implement local image inference in the form of person classification. We evaluate the performance of local classification, and compare it to image transmission.
 %into the options for reducing energy spent transmitting images, including image compression and downsampling. We analyze the effects of these techniques have on resulting image quality. Based on the efficacy of image compression, we estimate lifetime using a simulation of \name{} to evaluate the longevity of the platform. We evaluate the capability of the platform by performing object detection tasks on the images that it captures. We measure the effects of design decisions on the accuracy of detections.  
 
 \placefigure{fig:size-time-energy}
@@ -973,21 +974,26 @@ For example, we are able to transmit a 160x160 image compressed at quality 93 fo
 Considering the effort to deploy machine learning inference to a microcontroller, the marginal accuracy of shrunken models, and the demanding energy requirements, a simpler and more beneficial solution is to just transmit images to more capable endpoints.
 
 \placefigure{tab:local-inference}
-
-\subsection{To send or not to send}
-This conclusion is unique to the design choices made for \name{} and its envisioned indoor application space. For example, outdoor applications have access to significantly more harvestable energy, but also have different, often higher power, options for wireless communication. Therefore, we seek to provide a generalizable guiding methodology for determining if a device should perform local computation or just send data in entirety based on the kind of applications that designers want to enable. This determination depends on several data points, including processor and radio power, data size, and desired algorithms to run on sensed data.
-Most of these parameters are fixed based on component selection and power requirements. Component selection of processor, radio and camera define the \uA/MHz of the processor (52\,\uA/MHz), radio TX current (4.7\,mA), and data size (320x320, 102.4\,kB raw or \textasciitilde35\,kB compressed at quality 90) for \name. We are interested in applying several algorithms on collected image data, including image compression, classification, and detection. We present a metric, cycles per byte, that represent how many processor cycles per byte of data are required for different algorithms. This metric must be measured from microbenchmarks of the algorithm on the desired processor, or estimated from required (FL)OPs of the algorithm and the ISA of the processor.
-
-In \cref{fig:cycle-per-byte}, we plot the energy required for algorithms based on their cycle per byte metric. We plot horizontal lines that represent the amount of energy required to compress and send images. We also display a linear trendline that represents the increasing energy cost per byte of data as more cycles of \name's processor are required. This trendline gives us the inflection point where transmitting data requires the same amount of energy as performing an algorithm of a given cycles per byte of image data. We also plot points for specific algorithms, including image compression, classification, and detection. Note that this figure is plotted on a log-log scale due to the disparity of algorithm complexity.
-From this figure, it is clear that our desired inference algorithms require more energy than simply transmitting an image. Beyond just energy, transmitting these images allows us to use full sized and high accuracy versions of models. Additionally, deploying these models to microcontrollers requires significantly more effort than using high level APIs exposed by popular machine learning frameworks like TensorFlow and Pytorch~\cite{8675201}.
-
 \placefigure{tab:end-to-end}
 
-\subsection{Summary}
-\hl{TODO: make this more of a summary of the entire permacam section...}
-Through many experiments, we evaluate \name's deployability and capability. For deployability, we demonstrate the effectiveness of image compression on image size and resulting time and energy to transmit images. We find that with high compression quality factors, images sent by \name are nearly indistinguishable from raw images, and are half the size. We use these results to inform a numerical model which we use to estimate lifetime of the the \name platform under periodic and reactive workloads. Our model produces an estimated lifetime of 5 to 10 years with compression using quality factor 90, and a period of 10-15 minutes, or a back off of 5-10 minute. We also evaluate the effect of compression on the resulting usefulness of images for object detection. We find that high quality compressed images produce near identical detection results to raw images, and also find that \name is able to produce images that allow a person to be detected at 20 meters, despite the low resolution of its image sensor.
+%\subsection{To send or not to send}
+%This conclusion is unique to the design choices made for \name{} and its envisioned indoor application space. For example, outdoor applications have access to significantly more harvestable energy, but also have different, often higher power, options for wireless communication. Therefore, we seek to provide a generalizable guiding methodology for determining if a device should perform local computation or just send data in entirety based on the kind of applications that designers want to enable. This determination depends on several data points, including processor and radio power, data size, and desired algorithms to run on sensed data.
+%Most of these parameters are fixed based on component selection and power requirements. Component selection of processor, radio and camera define the \uA/MHz of the processor (52\,\uA/MHz), radio TX current (4.7\,mA), and data size (320x320, 102.4\,kB raw or \textasciitilde35\,kB compressed at quality 90) for \name. We are interested in applying several algorithms on collected image data, including image compression, classification, and detection. We present a metric, cycles per byte, that represent how many processor cycles per byte of data are required for different algorithms. This metric must be measured from microbenchmarks of the algorithm on the desired processor, or estimated from required (FL)OPs of the algorithm and the ISA of the processor.
+%
+%In \cref{fig:cycle-per-byte}, we plot the energy required for algorithms based on their cycle per byte metric. We plot horizontal lines that represent the amount of energy required to compress and send images. We also display a linear trendline that represents the increasing energy cost per byte of data as more cycles of \name's processor are required. This trendline gives us the inflection point where transmitting data requires the same amount of energy as performing an algorithm of a given cycles per byte of image data. We also plot points for specific algorithms, including image compression, classification, and detection. Note that this figure is plotted on a log-log scale due to the disparity of algorithm complexity.
+%From this figure, it is clear that our desired inference algorithms require more energy than simply transmitting an image. Beyond just energy, transmitting these images allows us to use full sized and high accuracy versions of models. Additionally, deploying these models to microcontrollers requires significantly more effort than using high level APIs exposed by popular machine learning frameworks like TensorFlow and Pytorch~\cite{8675201}.
 
-In addition to end-to-end image transmission, we also evaluate \name on its capability of performing local image classification. We find that it is possible to deploy a neural network for person detection on \name. However, the resulting accuracy is only 74.7\% and the required energy to perform this inference is more than double what is required to simply transmit an image. We conclude our evaluation with a generalizable framework and metric, "cycles-per-byte". This framework helps ground decisions about when to process data locally, or send elsewhere for remote processing.
+\section{Summary}
+The design of \name encapsulates the conclusions from \cref{chap:intuition}, \cref{chap:capacity}, and \cref{chap:battery} to develop a simultaneously long-lived and highly available solution for illuminance sensing.
+We avoid adhering to a single design strategy, such as a batteryless or preallocation-only design.
+Instead, we consider the requirements of the application and identify the type and size of energy harvesting, rechargeable buffers, and non rechargeable storage to achieve these goals.
+The end result is a hybrid energy harvesting system that utilizes a rechargeable LTO battery for buffering, and either coin cell or cylindrical non-rechargeable batteries for backup.
+Through simulation, we show that this design can achieve the application goals better than any other proposed battery-based or batteryless wireless sensor power supply in the literature.
+\name is estimated to provide decades of lifetime with high availability, which is more than triple the lifetime of battery-only sensors, and more than double the availability of batteryless platforms in some cases.
+
+Through many experiments, we evaluate \namec's deployability and capability. For deployability, we demonstrate the effectiveness of image compression on image size and resulting time and energy to transmit images. We find that with high compression quality factors, images sent by \namec are nearly indistinguishable from raw images, and are half the size. We use these results to inform a numerical model which we use to estimate lifetime of the the \namec platform under periodic and reactive workloads. Our model produces an estimated lifetime of 5 to 10 years with compression using quality factor 90, and a period of 10-15 minutes, or a back off of 5-10 minute. We also evaluate the effect of compression on the resulting usefulness of images for object detection. We find that high quality compressed images produce near identical detection results to raw images, and also find that \namec is able to produce images that allow a person to be detected at 20 meters, despite the low resolution of its image sensor.
+
+In addition to end-to-end image transmission, we also evaluate \namec on its capability of performing local image classification. We find that it is possible to deploy a neural network for person detection on \namec. However, the resulting accuracy is only 74.7\% and the required energy to perform this inference is more than double what is required to simply transmit an image. We conclude our evaluation with a generalizable framework and metric, "cycles-per-byte". This framework helps ground decisions about when to process data locally, or send elsewhere for remote processing.
 
 %Recent improvements in microcontrollers go beyond lower power improvements\cite{kim2018system}. Many embedded processors now include hardware floating point, single cycle multiplies, and data-parallel instruction (SIMD) support. The promise of new dedicated accelerators provides the potential of significant improvements in inference performance on low power systems~\cite{armm55,himaxwiseeye}. This has led to renewed interest in performing complex local inference on a battery budget, especially as transmitting large data like images is traditionally very expensive. However, radios have also become far more power efficient, which again muddies the conventional wisdom. Indeed, it is now much cheaper to transmit large data to a more capable system. Desktop or server class machines handily outclass their low power microcontroller and accelerator brethren on performance, providing the ability to perform more complex and accurate inference, if only data can be efficiently delivered to them.
 %%Regardless of recent improvements, microcontroller and accelerator performance will continue to pale in comparison to desktop and server class computing systems. 
@@ -1006,7 +1012,3 @@ In addition to end-to-end image transmission, we also evaluate \name on its capa
 %whose footprints are not dominated by their energy harvester or storage, its general methodology can be applied to other application spaces as well.
 %%
 %Through this conclusion, we develop an end-to-end architecture that makes images captured by \name accessible to data collectors and application builders. \name provides a scalable and easily deployable method to quickly gather visual data for machine learning training or datasets. Images collected by \name are easily integrated into popular computer vision and machine learning frameworks like OpenCV, TensorFlow, and PyTorch. Using these tools, high level applications can be built to drive visual applications like building occupancy counting for more efficient energy management and critical infrastructure monitoring atop a long-lived deployment of wireless \name devices.
-
-\section{Summary}
-
-\hl{TODO}
