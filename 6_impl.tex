@@ -853,10 +853,10 @@ We train this model for 80 epochs on the Visual Wake Word dataset~\cite{chowdher
 
 \begin{definefigure}{fig:distance}
     \centering
-    \includegraphics[width=\columnwidth]{figs/permacam/figs/distance_detection.pdf}
-    \caption{\normalfont{
+    \includegraphics[width=\columnwidth]{figs/permacam/permacam_processing/distance_detection.pdf}
+    \caption{
         Detection confidence as distance from camera to person is increased. Compared to a modern smartphone camera, the camera on \name can not compete due to limited resolution. However, images captured by \name still enable person detection at a distance of 15-20 meters. This distance is generally sufficient for most indoor spaces.
-    }}
+    }
 \end{definefigure}
 
 \begin{definetable}{tab:local-inference}
@@ -957,7 +957,7 @@ In \cref{fig:map}, we display the mAP for different JPEG quality factors. Surpri
 
 A person is successfully detected at a distance of 20 meters with images from \name{}, though confidence is only 16\%. Unsurprisingly, a person is easily detected at all distances tested with images taken by a Pixel 3. While images captured by \name{} can not compete with the resolution of those captured by cell phones, they are sufficient for detection at reasonable distances. Many indoor spaces do not have sight lines longer than 20 meters, and if they do, additional camera coverage can help mitigate the lack of resolution of a single camera. The ability to clearly depict objects in the distance is partially dependent on the lens configuration of a camera. During this experiment, \name{} was configured with a 200\textdegree\xspace wide angle lens. Better performance could be achieved with a lens with a narrower field of view and more magnification, at the cost of less coverage. We envision most applications will prioritize field of view to cover large areas instead of additional magnification.
 
-\placefigure[t]{fig:distance}
+\placefigure{fig:distance}
 
 \subsubsection{Local Inference}
 \label{eval:localinf}
