@@ -600,9 +600,10 @@ The system is based on the Himax HM01B0 camera and the Nordic NRF52840 MCU. We i
 \end{definefigure}
 
 \begin{definefigure}{fig:arch}
-\includegraphics[width=0.85\columnwidth]{figs/permacam/figs/arch.pdf}
+\centering
+\includegraphics[width=\columnwidth]{figs/permacam/figs/arch.pdf}
 \caption{The \namec end-to-end image transfer architecture. \namec uses OpenThread, a 6LoWPAN network. This allows it to transmit images over the CoAP block protocol directly to any IP endpoint. We implement a CoAP server to receive and reassemble image, demosaic them, and publish them over an MQTT stream. This CoAP server can be local to the sensors if privacy is desired. User applications running on PCs or on servers can easily subscribe to incoming images.
-\hl{TODO: reformat image, make smaller}}
+}
 \end{definefigure}
 
 \begin{definetable}{tab:permacam:components}
@@ -926,29 +927,13 @@ Compressing images at a high quality factor (JPEC's default 93) results in great
 To more quantitatively analyze the effects of compression on mosaiced images, we measure the Structural Similarity Index (SSIM)~\cite{wang2004image} of all 360 compressed images compared to their raw counterparts. SSIM is often used to measure the quality degradation of images due to compression or transmission. The results are summarized in \cref{fig:ssim}. A higher SSIM indicates that an image is a closer representation to the original raw image.
 Even with a low quality factor of 30 or 50, the SSIM for images average above 0.75. With an image compressed with a high quality factor, the perceived similarity is above 0.9 and, as seen in \cref{fig:compression}, is almost indistinguishable from the raw image. These results suggest that using a quality factor of 90 or above on to compress images on \name is advantageous if we can afford the energy to send them.
 
-\subsubsection{Lifetime}
-\placefigure{fig:lifetime}
-\hl{TODO: maybe roll this into the design part, since capacity is chosen based on lifetime estimates}
-\name is designed with the goal of a multi-year lifetime. While we are unable to physically measure the lifetime of the system, we can utilize a numerical model of the device to estimate lifetime. We utilize the model proposed by the authors of Permamote~\cite{jackson2019capacity} to estimate \name's lifetime. 
-This simulator is designed to model the behavior of wireless energy harvesting sensors with common workloads like periodic and reactive sensing. The model is perameterized by various system characteristics, including regulator, harvester, and solar panel efficiency, energy storage characteristics and size, and various workload types.
-This model operates a second-by-second calculation of incoming harvested energy and energy used by the device.
-This simulator outputs a trace of state of charge over time, which can be used to estimate system lifetime.
-
-We use this numerical model to estimate the lifetime of \name using two different workloads: periodic, and reactive. Periodic represents a workload where \name takes photos on a fixed interval, while reactive assumes that \name uses a PIR sensor to drive image capture. For reactive,
-we model events as a Poisson distribution for each hour, with the busiest hour having an average event every minute. This is chosen to simulate a busy office setting. We vary the period of the periodic workload, and the backoff time after an event for the reactive workload.
-Based on the measurements of the previous section, we also estimate lifetime when sending images of varying JPEG qualities.
-
-We use the EnHANTs indoor irradiance dataset as input to our simulated energy harvester. We use the "SetupD" trace, which represents an average 100\,\uW/cm\textsuperscript{2} over the course of a year~\cite{Gorlatova_Infocom2011}. This irradiance is characteristic of indoor spaces with occasional sunlight from windows. We measure the amount of energy required for an image capture, compression using quality 90, and transmission. For the event workload, we also measure the energy required for the PIR sensor. These measurements are summarized in \cref{tab:measurements}.
-
-The lifetime results of the numerical model are shown in \cref{fig:lifetime} for both workloads. As expected, a periodic workload requires more energy than a reactive one. This is because a reactive workload sends fewer images in periods where there are no people around. Even though the periodic workload results in more image captures in general, \name is still able to achieve an estimated five year lifetime with a 10 minute period while compressing images at quality 90. For a reactive workload, \name is able to achieve a 3 year lifetime with a 5 minute back off with the same compression setting.
-
-\placefigure{fig:multiple}
-
 \subsubsection{Camera Density}
 While our numerical model can provide an accurate estimate of lifetime, it makes an important assumption. In our modelling, we assume that every image transfer requires the same amount of time and energy. The reality is that wireless environments can have interference, especially for low bandwidth networks like 802.15.4. The result of interference from other networks, devices, or other \namecs, means that packets will be dropped and retransmissions are necessary. This extends the length of image transmission and the increases required energy. 
 We explore the scalability and effects of interference when multiple \namecs on the same network. We place all cameras within a meter radius of each other facing the same direction. The network consists of only one Thread router. Each \name is configured to simultaneously capture on a motion event to generate a worst-case collision scenario. Each camera is sending images compressed with quality factor 90.
 %In real deployments, cameras are likely to be sparser and multiple Thread routers will be deployed for greater coverage. 
 The \namecs are configured with a 2 minute backoff period after a motion event and camera capture. At the start of the experiment, a person walks into view of all the cameras, triggering them simultaneously. The person then remains in view of the cameras for half an hour. We vary the number of cameras active and measure the average time to send images over the duration of the experiment. The results are displayed in \cref{fig:multiple}.
+
+\placefigure{fig:multiple}
 
 We do not currently implement any application layer collision avoidance and we use the default 802.11.4 CSMA MAC protocol specified by Thread. Based on our naive implementation, having more than three \name sensors connected to a single router and on the same network leads to a dramatic increase in time to send images. Implementing an actual coordination protocol between \namecs would dramatically reduce collisions. Additionally, the use of  TCP instead of CoAP block would significantly reduce transmission latency and possible overlap.
 %Luckily, during a CoAP backoff period after a missed packet, \name can return to a low power sleep mode, waiting for the back off to expire. 

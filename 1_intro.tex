@@ -142,7 +142,7 @@ This belief has led designers to make arbitrary design decisions regarding the t
 \section{Thesis Statement}
 
 \textit{
-An analytical and simulation driven design framework provides better guidance for system-level power supply design than current energy harvesting intuition and highlights that contemporary solutions are significantly under provisioning energy capacity. Systems built with design points determined through design space analysis and simulation provide higher availability, lower latency, and long lifetimes, all without the need for complex techniques for managing intermittency.
+An analytical and simulation driven design framework provides better guidance for system-level power supply design than current energy harvesting intuition. We can use design points determined through design space analysis and simulation to build systems that provide higher availability, lower latency, and long lifetimes, all without the need for complex techniques for managing intermittency.
 }
 
 \section{Contributions of this Dissertation}
@@ -153,24 +153,23 @@ We explore the design and trade-offs of batteryless system design, a newer class
 We identify the strengths and weaknesses of both battery-based and batteryless design points within the context of real applications based on previous work.
 From this exploration, we identify several common design considerations.
 
-In \cref{chap:intuition}, we utilize these design considerations to develop system-level design constraints and heuristics.
-We consider and compare the efficacy of batteries and energy harvesting and identify inflection conditions where either option excels over the other. We identify the benefits of a rarely used hybrid architecture that employs both options and consider the implications of energy available to a system that utilizes it.
-Next, we define design constraints regarding energy income and energy buffer size that partition the design space into several regions. 
+In \cref{chap:intuition}, we utilize these considerations to develop system-level design constraints and heuristics.
+We consider and compare the efficacy of batteries and energy harvesting and identify inflection conditions where either option excels over the other. We identify the benefits of a rarely used hybrid architecture that employs both options and consider the performance and lifetime implications of a system that utilizes it.
+Next, we define design constraints regarding energy income and energy buffer size that partition the design space into several regions to reason about the necessity of batteryless an intermittent techniques. 
 %Depending on income and buffer size, a design may be feasible or infeasible, and require or not require complex software and hardware techniques to ensure operation in adverse, low power environments.
 We finish this chapter with a deep dive into the effect of rechargeable energy capacity on the performance of an energy harvesting system. From this exploration, we utilize a simple model of energy capacity to develop novel and easy to use design heuristics. These heuristics determine the minimum sufficient sizing for energy capacity for energy harvesting systems. 
 
-
-We expand upon the simple model and heuristics developed in \cref{chap:intution} and build an wireless sensor energy state simulation in \cref{chap:capacity}.
+We expand upon the simple model and heuristics developed in \cref{chap:intuition} and build an wireless sensor energy state simulation in \cref{chap:capacity}.
 We use this simulation to verify our capacity sizing heuristics, consider additional design variables, and examine the performance of the hybrid battery and energy harvesting architecture.
 From the results of our energy simulation, we identify the benefits in energy capture and end system performance when rechargeable energy capacity is increased. From these results, we conclude that energy harvesting system performance can be increased dramatically (by 1.4--2$\times$) if capacity is increased several orders of magnitude more than is commonly offered by batteryless system's capacitor or supercapacitor energy buffers. 
 
 In \cref{chap:battery}, we explore the design space of energy capacity, identifying the classes and options for charge and energy buffers. We compare capacitors, supercapacitors, and batteries, and examine common arguments made against the use of rechargeable batteries by batteryless researchers.
 We find that many of these arguments are unsubstantiated when examined quantitatively and conclude that small rechargeable batteries are the superior method for providing an energy dense buffer for low power applications.
 
-We consider the heuristics, tools, and conclusions from \cref{chap:intuition,chap:capacity,chap:battery} to implement sensors for two wireless sensing applications in \cref{chap:impl}. Both sensor designs utilize the hybrid architecture identified in \cref{chap:intuition,chap:capacity}, and utilize the heuristic and simulation results to size their power supply components to achieve high performance. 
+We consider the heuristics, tools, and conclusions from \cref{chap:intuition,chap:capacity,chap:battery} to implement sensors for two wireless sensing applications in \cref{chap:impl}. Both sensor designs utilize the hybrid architecture identified in \cref{chap:intuition,chap:capacity}, and utilize heuristic and simulation tools to size their power supply components to achieve higher energy capture and performance. 
 We implement and utilize our designs to evaluate and verify our energy simulation developed in \cref{chap:capacity}. 
 We evaluate an existing batteryless image sensing platform, quantify its performance using simulation, and identify design changes that could be made to improve performance.
 From these design changes, we build a new indoor image sensing platform that can capture image data with high consistency and availability and still offer a multi-year lifetime. 
 
-Finally, in \cref{chap:concl}, we identify technology trends that may change how sensors are designed and identify several improvements and features that would enable smarter, more autonomous energy harvesting wireless sensors. 
+Finally, in \cref{chap:conc}, we identify technology trends that may change how sensors are designed and identify several improvements and features that would enable smarter, more autonomous energy harvesting wireless sensors. 
 
