@@ -8,10 +8,17 @@ import numpy as np
 import pandas as pd
 from skimage import img_as_float
 from skimage.metrics import structural_similarity as ssim
-font = {'family' : 'Arial',
-        'weight' : 'medium',
-        'size'   : 8}
-matplotlib.rc('font', **font)
+plt.rcParams["font.family"] = "Arial"
+plt.rcParams["font.size"] = "14"
+plt.rcParams["xtick.major.width"] = "0.5"
+plt.rcParams["xtick.major.size"]  = "6"
+plt.rcParams["xtick.minor.width"] = "0.8"
+plt.rcParams["xtick.minor.size"] = "4"
+plt.rcParams["ytick.major.width"] = "1"
+plt.rcParams["ytick.major.size"] = "6"
+plt.rcParams["ytick.minor.width"] = "0.8"
+plt.rcParams["ytick.minor.size"] = "4"
+plt.rcParams["grid.linewidth"] = "1"
 
 parser = argparse.ArgumentParser(description='Process quality series of Permacam images and generate accuracy measurements')
 parser.add_argument('save_dir', help='Optional save detected images to file in dir')
@@ -45,14 +52,14 @@ for x, i in enumerate(sorted(ids)):
 print(all_arrays)
 print(all_arrays.shape)
 
-fig, ax = plt.subplots(1, figsize=(4,2))
+fig, ax = plt.subplots(1, figsize=(10.7,5))
 ind = np.arange(len(qualities)-1)
 width = 0.25
 #medianprops = dict(linewidth=0.5)
 medianprops = dict(linewidth=2)
-whiskerprops = dict(linewidth=0.5)
-capprops = dict(linewidth=0.5)
-boxprops = dict(linewidth=0.5)
+whiskerprops = dict(linewidth=1)
+capprops = dict(linewidth=1)
+boxprops = dict(linewidth=1)
 for y, q in enumerate(qualities[qualities < 100]):
     bplot = ax.boxplot(all_arrays[y,:], positions=[y], widths=0.25, showfliers=False, manage_ticks=False, boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, medianprops=medianprops)
 
