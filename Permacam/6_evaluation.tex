@@ -138,8 +138,7 @@ raw & 25.6 & 4.91 & 54.7\\
 
 \begin{definetable}{tab:measurements}
 \setlength\tymin{1cm}
-\small
-\begin{tabulary}{\columnwidth}{LS[table-format=1.3]S[table-format=2.2]}
+\begin{tabularx}{LS[table-format=1.3]S[table-format=2.2]}
 {Operation} & {Latency (s)} & {Energy (mJ)} \\
 \hline
 Image Capture           & 1.10  & 4.96\\
@@ -147,10 +146,10 @@ JPEG Compression (Q=90) & 0.203 & 1.71\\
 Image Transmission      & 6.67  & 73.8\\
 \hline
 Total                   & 7.973 & 80.47
-\end{tabulary}
-\caption {\normalfont{
+\end{tabularx}
+\caption {
     Latency and energy measurements for key operations on \name, including image capture, compression, and image transmission. Measurements are averaged over 20 images. %An image capture actually consists of multiple frames to calibrate the exposure. We configure \name to wait four frames before capturing an image.
-}}
+}
 \end{definetable}
 
 \section{Evaluation}
@@ -169,8 +168,6 @@ The results are displayed in \cref{fig:size-time-energy}.
 
 JPEG image compression allows an exponential decrease in image size with respect to the quality factor.
 Compressing images at a high quality factor (JPEC's default 93) results in greater than a 2x reduction in image size, time to send, and energy required. There are diminishing gains after the knee of the curve at quality 90, but an image compressed with quality 30 is only 8\% the size of a raw image, on average. Image compression on mosaiced images from \name also does not appear to degrade the perceived quality of the image. We display four compressed and raw versions of the same image in \cref{fig:compression}. Qualitatively, and from a distance, these images appear nearly identical. However, closer inspection reveals artifacts and a significant loss in color fidelity with lower compression quality factors. Quality 93 and a raw image are nearly identical, while quality 30 is more obviously a lower quality compression. However, the important details in the image are preserved and still visible to the human eye.
-
-\placefigure[t]{tab:measurements}
 
 To more quantitatively analyze the effects of compression on mosaiced images, we measure the Structural Similarity Index (SSIM)~\cite{wang2004image} of all 360 compressed images compared to their raw counterparts. SSIM is often used to measure the quality degradation of images due to compression or transmission. The results are summarized in \cref{fig:ssim}. A higher SSIM indicates that an image is a closer representation to the original raw image.
 Even with a low quality factor of 30 or 50, the SSIM for images average above 0.75. With an image compressed with a high quality factor, the perceived similarity is above 0.9 and, as seen in \cref{fig:compression}, is almost indistinguishable from the raw image. These results suggest that using a quality factor of 90 or above on to compress images on \name is advantageous if we can afford the energy to send them.

@@ -1,23 +1,39 @@
 \chapter{Introduction}
 \label{chap:intro}
 
-Today, if you wanted to build a wireless sensor, perhaps the most important step in the design process is determining how to allocate or capture energy to power that sensor. 
+In the past two decades, we have experienced the proliferation of low power, autonomous, wirelessly connected devices.
+The development and deployment of these devices were inspired by the vision of ubiquitous computing: computers that are pervasive in our environments, providing information about and intuitive control over our environments in such a way that they disappear into the background~\cite{weiser1991computer}.
+While initially inspired by this vision, today's internet of things (IoT) has failed to fully achieve this vision.
+There are many problems standing in the way of this vision, but one of the most pressing and fundamental problem is power.
+Low power embedded systems have experienced exponential increases in computational and power efficiency in the last two decades. Across the board, components used to build wireless systems have increased in power efficiency by one to two orders of magnitude.
+Our ability to process and infer meaning from vast amounts of collected data has also improved by orders of magnitude, with approachable and powerful frameworks for developing effective machine learning models for classification and detection.
+However, the methods of allocating and collecting energy to power wireless sensing systems to collect these data have not improved at the same rate.
+So, while today's small wireless sensing devices have become smaller, more efficient, and more capable of powerful and complex sensing and data processing, they are still limited by the power and energy available to them. 
+%The design, implementation, and deployment of low power wireless sensors has been studied and improved significantly over the past two decades. Despite this, wireless sensor networks can hardly be described as ubiquitous and pervasive in our environment. Sensor deployments are only commonly used with specific applications; they are from resembling the pervasive and invisible computer imagined by Mark Weiser and Xerox PARC~\cite{weiser1991computer}.
+
+\section{The Power and Energy Dilemma}
+Today, if you wanted to build a wireless sensor, perhaps the most important step in the design process is determining how to allocate or capture the energy to power that sensor. 
 Nowadays, there are many options for energy storage--- capacitors, supercapacitors, batteries, and even more options for energy harvesting, including photovoltaic panels, thermoelectric and piezoelectric generators, and microbial fuel cells.
 This results in a vast system-level design space that can be difficult to navigate.
 To reduce the design space problem to something comprehensible, it is reasonable to consider existing industrial and research designs as templates for a design.
 You may look to modern commercial sensors for inspiration, like the Google Nest temperature sensor~\cite{googleNestTemperature}, or to a modern research device like the Flicker platform~\cite{hesterFlicker17}.
 While these two examples use similar sensors, microcontrollers, and radios, and are designed for a similar sensing purpose, they exhibit disparate differences in their power supply design.
+These two different designs represent a fork in the road for wireless system design.
 
 Like most modern commercial sensors, the Nest temperature sensor utilizes a non-rechargeable battery for an energy source. 
-Batteries have been the preferred method of powering sensors for the last twenty years. And for good reason, they are simple to use and provide reliable and predictable power.
+Batteries have been the preferred method of powering sensors for the last twenty years. And for good reason: they are simple to use and provide reliable and predictable power.
 However, a battery provides a finite lifetime and battery or sensor replacement is inevitable.
-Wireless sensor lifetime is a first order concern, as the cost of frequent maintenance and battery replacement is clearly untenable as the number of wireless devices grows to trillions of devices.
-Meanwhile, researchers have forged ahead with designs that abandon batteries completely and instead harvest all the energy for their workload from their environment.
+Wireless sensor lifetime is a first order concern, as the cost of frequent maintenance and battery replacement is clearly untenable as the number of wireless devices grows to trillions of devices. 
+The act of maintaining what should be an invisible sensor renders it visible due to the annoyance of changing a battery.
+Changing a single battery is not usually an issue. 
+Still, it is not uncommon for people to simply ignore a dying device like a smoke detector, opting to remove the battery instead of replace it when low. 
+Changing the battery of hundreds or thousands of devices within a building is a significant and costly undertaking.
+
+Recognizing the problem with short, finite lifetimes, researchers have forged ahead with designs that aspire for immortality.
+For a decade, many researchers have abandoned batteries completely and instead build systems that harvest energy to power themselves. 
 Sensors built with this technique possess indeterminate lifetimes. The cost of immortality is steep, however.
 These systems are generally much more complex to design, and operate unpredictably and without any quality of service guarantees.
-
-In reality, neither option, battery or energy harvesting, is an entirely satisfactory solution for many sensing applications. 
-Instead of thinking of wireless sensor power supply design as adhering to a predetermined class or pattern of design, system designers should consider an application's requirements and how those requirements impact the design space.
+Due to this, energy harvesting systems without batteries have seem limited adoption by industry, despite significant excitement and a large corpus of work by researchers. 
 
 %Currently, as a community of wireless system designers, we lack a shared understanding regarding how to actually approach system-level power supply design. 
 
@@ -27,6 +43,30 @@ Instead of thinking of wireless sensor power supply design as adhering to a pred
 %To achieve long lifetimes, battery-based sensors must sacrifice size to employ large batteries, while a purely energy-harvesting system must sacrifice any guarantees of availability and quality of service as their energy income may not be guaranteed.
 
 \section{The Difficulty of Gathering Data}
+In reality, neither option alone, battery or energy harvesting, is an entirely satisfactory solution for many sensing applications. 
+Modern data gathering applications often simultaneously demand longevity and consistent operation.
+It is often not worth the cost of deployment and frequent maintenance if sensors only last a short while, or if the data they produce is not ultimately useful for the end goal of the data gathering application.
+
+Traditional environmental sensing applications like wildlife monitoring and tracking requires consistent environmental and location data gathering over seasons and years~\cite{mainwaring2002wireless,juang2002energy}.
+Asset tracking applications have to be able to reliably locate and track commodities throughout an entire supply chain, including weeks or months in a warehouse, or on store shelves~\cite{williotpixel}.
+Infrastructure monitoring applications must consistently and reliably detect vibrational anomalies or corrosion throughout the multi-decade lifespan of a bridge or a building~\cite{afanasov2020battery,jagtap2021repurposing}.
+All of these example applications require consistent and reliable data gathering over long periods of time.
+
+New applications are made feasible with new and improved technology, but they would be still be limited by either battery or energy harvesting options.
+As an example, person detection and room occupancy counting is a useful metric for building lighting and HVAC control.
+Having reliable occupancy can increase efficiency as the building management system can provide light and comfortable heating tailored to where people exit within the building. 
+%gathering visual image data to train a model to perform object detection is a difficult and complex task for low power sensors.
+%Traditionally, this task has been a human one, and the ability to gather sufficiently large datasets has been relegated to large companies like Google and Facebook. These companies rely on their large userbases to produce images at a scale sufficient to build datasets to train their models.
+Capturing, manipulating, and transmitting image data requires significant computational, memory, and networking resources. 
+Even with advances in embedded computing and CMOS imaging, these resources are generally costly in power compared to the traditional, simpler one-dimensional data collection of traditional environmental sensors~\cite{mainwaring2002wireless}. 
+If designed with a battery, such an imaging system would possess a short lifetime. If designed to be energy harvesting without a battery, the sensor can provide no guarantees for when or how many images are captured, potentially failing to perform the designed purpose: reliably capturing when people are present and how many are occupying a space. 
+
+This choice between a battery or batteryless energy harvesting solution is a deceiving one.
+This choice is predicated on the assumption that a sensor design must be one or the other, battery-based or energy harvesting.
+Instead of thinking of wireless sensor power supply design as adhering to a predetermined class or pattern of design, designers should consider an application's requirements and how those requirements impact the design space.
+Many recent energy harvesting systems are built with the assumption that batteries can not be trusted, both non-rechargeable and rechargeable
+~\cite{hesterNew17, hesterTragedy15, hesterFlicker17, hesterTimely17, hester2017future, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, majid2020continuous}.
+This belief has led designers to make arbitrary design decisions regarding the type and sizing of components within their power supply in order to achieve minimally feasible batteryless designs.
 
 %The operation of a batteryless system is inexplicably tied to the availability of harvestable energy.
 %This is due to the limited charge capacity provided by non-battery options. Batteryless systems generally utilize capacitors or supercapacitors for energy buffering instead of batteries, and are orders of magnitude less energy dense.
@@ -53,10 +93,6 @@ Instead of thinking of wireless sensor power supply design as adhering to a pred
 %%The prevailing belief that batteries offer very limited lifetimes and are difficult to manage and charge has led to their abandonment by batteryless system researchers. 
 %The assumed superiority of batteryless design has resulted in a constrained and stagnated design space, in which the terms energy-harvesting efficacy is a severely hampered, and the inherent unreliability and requisite complexity of the design regime dissuades serious and wide-spread adoption by industry.
 
-\subsection{Energy Harvesting for Real Applications}
-The popularity of batteryless sensing has resulted in the terms ``energy-harvesting'' becoming almost synonymous with ``batteryless''.
-
-person detection, gathering data is difficult, worth anything, reliable enough?
 %The design, implementation, and deployment of low power wireless sensors has been studied and improved significantly over the past two decades. Despite this, wireless sensor networks can hardly be described as ubiquitous and pervasive in our environment. Sensor deployments are only commonly used with specific applications; they are from resembling the pervasive and invisible computer imagined by Mark Weiser and Xerox PARC~\cite{weiser1991computer}.
 %
 %While there are many problems that stand of the way of this vision, this dissertation's focus is on how to power the computer of the 21st century. 
@@ -105,37 +141,36 @@ person detection, gathering data is difficult, worth anything, reliable enough?
 
 \section{Thesis Statement}
 
-%currently system designers pick a power supply design based on broad assumptions or abstractions. 
-%
-%traditional systems are reliable but are often limited by battery lifetime. to address this developed eh sensors.
-%
-%instead of starting from a design point of a power supply. instead we design 
-%a hybrid battery harvesting system is superior to batteryless reliability and primary lifetime for a wider set of applications
-%
-%Pervasive and ubiquitous sensing applications require more than just longevity and low maintenance; they require reliability. The batteryless design pattern is fundamentally incompatible with reliability. 
-%
-%The batteryless design pattern is inappropriate for the majority of wireless sensor applications. 
-%Unreliability and intermittency are fundamental to batteryless systems, despite the myriad of software and hardware solutions that seek to mask it, which are characteristics that many applications can not tolerate.
-%
-%hypothesis: greater energy capacity results in greater energy capture, reliability, and simpler software/hardware systems
-%
-%The 
-%1. The majority of wireless sensor applications can not tolerate unreliability.
-%1. batteryless is inappropriate for applications
-%2. due to fundemental unreliabity 
-%3. Despite software/hardware solutions that attempt to mask it
-%4. Instead of designing systems under the assumption of batteryless, revisiting energy harvesting design process 
-
-%A simulation driven design framework provides better guidance for system design than current energy harvesting intuition and highlights that contemporary solutions are significantly under provisioning energy capacity. Systems built with design points determined through simulation provide higher availability, lower latency, long lifetimes, and the capability of supporting more energy intensive applications, all without the need for complex intermittent techniques.
-
-%For a given application, the best power supply design solution in terms of size, weight, cost, power, usability, and availability can not be achieved through the exclusive use of any one particular design archetype. The best design for an application can only be determined through a careful and quantitative exploration of a multi-dimensional design space that addresses the application's requirements for preallocated energy, energy harvesting potential, and rechargeable energy storage. 
-
-An analytical and simulation driven design framework provides better guidance for system-level power supply design than current energy harvesting intuition and highlights that contemporary solutions are significantly under provisioning energy capacity. 
-Systems built with design points determined through simulation provide higher availability, lower latency, long lifetimes, and the capability of supporting more energy intensive applications, all without the need for complex intermittent techniques.
-
-\the\textwidth
+\textit{
+An analytical and simulation driven design framework provides better guidance for system-level power supply design than current energy harvesting intuition and highlights that contemporary solutions are significantly under provisioning energy capacity. Systems built with design points determined through design space analysis and simulation provide higher availability, lower latency, and long lifetimes, all without the need for complex techniques for managing intermittency.
+}
 
 \section{Contributions of this Dissertation}
 This dissertation attempts to address system-level power supply design in the context of real application requirements.
 
+We begin with an examination of existing power supply designs and methods for providing energy to sensors. In \cref{chap:background}, we discuss traditional battery-based sensor design as well as the history of energy harvesting in wireless sensor research.
+We explore the design and trade-offs of batteryless system design, a newer class of energy harvesting sensors that forgo the use of batteries as energy storage in favor of capacitors and supercapacitors.
+We identify the strengths and weaknesses of both battery-based and batteryless design points within the context of real applications based on previous work.
+From this exploration, we identify several common design considerations.
+
+In \cref{chap:intuition}, we utilize these design considerations to develop system-level design constraints and heuristics.
+We consider and compare the efficacy of batteries and energy harvesting and identify inflection conditions where either option excels over the other. We identify the benefits of a rarely used hybrid architecture that employs both options and consider the implications of energy available to a system that utilizes it.
+Next, we define design constraints regarding energy income and energy buffer size that partition the design space into several regions. 
+%Depending on income and buffer size, a design may be feasible or infeasible, and require or not require complex software and hardware techniques to ensure operation in adverse, low power environments.
+We finish this chapter with a deep dive into the effect of rechargeable energy capacity on the performance of an energy harvesting system. From this exploration, we utilize a simple model of energy capacity to develop novel and easy to use design heuristics. These heuristics determine the minimum sufficient sizing for energy capacity for energy harvesting systems. 
+
+
+We expand upon the simple model and heuristics developed in \cref{chap:intution} and build an wireless sensor energy state simulation in \cref{chap:capacity}.
+We use this simulation to verify our capacity sizing heuristics, consider additional design variables, and examine the performance of the hybrid battery and energy harvesting architecture.
+From the results of our energy simulation, we identify the benefits in energy capture and end system performance when rechargeable energy capacity is increased. From these results, we conclude that energy harvesting system performance can be increased dramatically (by 1.4--2$\times$) if capacity is increased several orders of magnitude more than is commonly offered by batteryless system's capacitor or supercapacitor energy buffers. 
+
+In \cref{chap:battery}, we explore the design space of energy capacity, identifying the classes and options for charge and energy buffers. We compare capacitors, supercapacitors, and batteries, and examine common arguments made against the use of rechargeable batteries by batteryless researchers.
+We find that many of these arguments are unsubstantiated when examined quantitatively and conclude that small rechargeable batteries are the superior method for providing an energy dense buffer for low power applications.
+
+We consider the heuristics, tools, and conclusions from \cref{chap:intuition,chap:capacity,chap:battery} to implement sensors for two wireless sensing applications in \cref{chap:impl}. Both sensor designs utilize the hybrid architecture identified in \cref{chap:intuition,chap:capacity}, and utilize the heuristic and simulation results to size their power supply components to achieve high performance. 
+We implement and utilize our designs to evaluate and verify our energy simulation developed in \cref{chap:capacity}. 
+We evaluate an existing batteryless image sensing platform, quantify its performance using simulation, and identify design changes that could be made to improve performance.
+From these design changes, we build a new indoor image sensing platform that can capture image data with high consistency and availability and still offer a multi-year lifetime. 
+
+Finally, in \cref{chap:concl}, we identify technology trends that may change how sensors are designed and identify several improvements and features that would enable smarter, more autonomous energy harvesting wireless sensors. 
 
