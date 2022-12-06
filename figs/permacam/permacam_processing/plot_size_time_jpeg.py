@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
-matplotlib.rcParams.update({'errorbar.capsize': 3})
+matplotlib.rcParams.update({'errorbar.capsize': 5})
 plt.rcParams["font.family"] = "Arial"
 plt.rcParams["font.size"] = "14"
 plt.rcParams["xtick.major.width"] = "0.5"
@@ -48,19 +48,19 @@ fig, [ax1, ax2, ax3] = plt.subplots(3,figsize=(10.7,8), sharex=True)
 ax1.set_ylabel('Image Size (kB)')
 gm = quality_group.mean()
 e = quality_group.std()['size']
-ax1.errorbar(gm.index, gm['size']/1E3, yerr=e/1E3, ls='none', lw=2, markersize=5, marker='o', color='tab:blue')
+ax1.errorbar(gm.index, gm['size']/1E3, yerr=e/1E3, ls='none', lw=2, markersize=5, marker='o', color='tab:blue', markeredgewidth=2)
 ax1.grid(True)
 ax1.set_ylim(0,120)
 
 ax2.set_ylabel('Time to Send (s)')
 e = quality_group.std()['time']
-ax2.errorbar(gm.index, gm['time'], yerr=e, ls='none', lw=2, markersize=5, marker='o', color='tab:orange')
+ax2.errorbar(gm.index, gm['time'], yerr=e, ls='none', lw=2, markersize=5, marker='o', color='tab:orange', markeredgewidth=2)
 ax2.grid(True)
 ax2.set_ylim(0,30)
 
 ax3.set_ylabel('Energy (mJ)')
 e = quality_group.std()['energy']*1E3
-ax3.errorbar(gm.index, gm['energy']*1E3, yerr=e, ls='none', lw=2, markersize=4, marker='o', color='tab:green')
+ax3.errorbar(gm.index, gm['energy']*1E3, yerr=e, ls='none', lw=2, markersize=4, marker='o', color='tab:green', markeredgewidth=2)
 ax3.set_ylim(0,300)
 ax3.grid(True)
 
