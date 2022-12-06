@@ -45,7 +45,7 @@ ax.set_ylabel('Detection Confidence (%)')
 ax.set_xlabel('Distance to Camera (m)')
 ax.set_ylim(0,110)
 ax.grid(True, axis='y')
-ax.legend()
+ax.legend(frameon=False)
 plt.tight_layout()
 plt.savefig('distance_detection.pdf')
 
