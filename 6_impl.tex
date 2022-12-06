@@ -841,15 +841,13 @@ We train this model for 80 epochs on the Visual Wake Word dataset~\cite{chowdher
 \begin{definefigure}{fig:multiple}
     \centering
     \includegraphics[width=\columnwidth]{figs/permacam/permacam_processing/multiple_cameras.pdf}
-    \vspace{-2\baselineskip}
     \caption{\normalfont{An image's time to send as number of \namecs on the network increases. All sensors are within one meter radius of each other, and configured to capture and transmit images on motion events to generate the worst case collision condition. Images are compressed with quality 90.
     }}
 \end{definefigure}
 
 \begin{definefigure}{fig:map}
     \centering
-    \includegraphics[width=\columnwidth]{figs/permacam/figs/jpeg_mAP.pdf}
-    \vspace{-2\baselineskip}
+    \includegraphics[width=\columnwidth]{figs/permacam/permacam_processing/jpeg_mAP.pdf}
     \caption{\normalfont{Mean Average Precision (mAP) of YOLOv3 person detection on compressed images compared to original raw versions. An IoU of 0.5 is used. Based on the qualitative and quantitative results of image similarity from \cref{fig:compression} and \cref{fig:ssim} it is surprising that mAP degrades so quickly as the compression quality factor decreases. A quality factor of 90 or higher is necessary to achieve the near the same detection performance as a raw image}}
 \end{definefigure}
 
@@ -945,7 +943,7 @@ Irregardless of these improvements, we expect most deployments of \name will be 
 \subsubsection{Object Detection Performance}
 To illustrate the capability of the platform and end-to-end image transfer system, we evaluate the ability to perform object detection with \name. The images produced by \name are published over an MQTT stream, which feeds into a script that performs object detection using the pre-trained YOLOv3 network included in the Python ImageAI package \cite{ImageAI}. We do not wish to measure the accuracy and performance of the ImageAI YOLOv3 model, but instead isolate the ability to perform detections on images captured by \name's camera and the effects of different compression quality factors on detection performance.
 
-\placefigure[t]{fig:map}
+\placefigure{fig:map}
 
 \subsubsection{Compressed detection accuracy}
 While we measure the structural similarity of compressed images using SSIM, this does not directly relate to the performance of object detection on compressed images. To evaluate the effect of image compression on detection accuracy, we use the same 360 images used previously to measure the effects of JPEG compression. These images feature various representative objects of the classes supported by the YOLOv3 model in ImageAI. To quantify the effects of compression, we calculate the mean average precision (mAP) using an intersection overlap union (IOU) of 50\% of the detections compared to a raw image from \name. 
