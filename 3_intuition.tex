@@ -657,29 +657,33 @@ For this specific income power and workload, Setup C and D require on the order 
 The amount of capacity that is sufficient to capture 100\% varies not only on the income variation but also on the relative magnitude of the workload and income power.
 As the sensor's power requirements and income increase, its capacity requirement to achieve the same performance also increases. 
 The parameter sweep resulting from varying both capacity and power results in a multitude of curves like those shown in \cref{fig:intuition:capacity_sweep}. 
-From the curves, we can identify the points at which capacity is sufficient for 100\% energy capture for a given power. \Cref{fig:intuition:required_capacity} shows the minimum capacity required to capture all of the available harvestable energy. This is also the necessary amount of energy required (when averaged over the period of the trace) to power the workload continuously, because the average workload power is equal to the average harvestable power. 
-From this analysis, we find that the relationship between minimum sufficient capacity and workload/income power magnitude is linear, assuming the same energy income variability. 
-Traces synthesized from Setup C and D have nearly identical minimum capacity requirements across a sweep of workload power. These traces also require the more energy capacity than traces A and B as they have more seasonal variability. 
+For each of these curves, we can identify the points at which capacity is sufficient for 100\% energy capture for a given power. 
+\Cref{fig:intuition:required_capacity} shows the minimum capacity required to capture all of the available harvestable energy versus the magnitude of income and workload power. 
+This is also the necessary amount of energy required (when averaged over the period of the trace) to power the workload continuously, because the average workload power is equal to the average harvestable power. 
+From this analysis, we find that the relationship between minimum sufficient capacity and the magnitude of workload and income power is linear, assuming the same energy income variability. 
+Traces synthesized from Setup C and D have nearly identical minimum capacity requirements across a sweep of workload power. 
+These traces also require the more energy capacity than traces A and B as they have more seasonal variability. 
 Out of all the income traces, those synthesized from Setup B require an order of magnitude less energy capacity compared to Setup C and D. 
 Traces synthesized from Setup A require amounts of energy capacity in between that of B and C or D.
-Energy harvesting applications that can expect an amount of natural light should size their rechargeable capacity according to either the Setup C or D lines. Such an application would have to scale its capacity by at least {2.3e3} times the expected magnitude of the income and workload power.
-For indoor applications without significant seasonal variance, capacity can be sized according to the Setup A and B lines, to be at least \num{4E2}--\num{1E3} times the magnitude of income and workload power.
-This result is a significantly more reasoned method for determining the minimum sufficient rechargeable energy capacity than other methods, like sizing capacity to atomic operations in a workload, or sizing to support arbitrary amounts of operating time.
+Energy harvesting applications that can expect an amount of natural light should size their rechargeable capacity according to either the Setup C or D lines. 
+Such an application would have to scale its capacity by at least \num{2.3e3} times the expected magnitude of the income and workload power.
+For indoor applications that expect to harvest the majority of light from artificial sources, capacity can be sized according to the Setup A and B lines, to be at least \num{4E2} to \num{1E3} times the magnitude of income and workload power.
+This result is a significantly more reasoned method for determining the minimum sufficient rechargeable energy capacity than other methods, like sizing capacity to support a single atomic operation in a workload, or sizing to support arbitrary amounts of operating time.
 %Capacity sizing depends on the temporal behavior of energy income in addition to the magnitude of income and workload power. 
 \placefigure{fig:intuition:required_capacity}
 
-\subsection{The Impact of Workload Margin on Sufficient Capacity}
+\subsection{The Impact of Income Safety Margin on Sufficient Capacity}
 \label{sec:intuition:margin}
 Throughout this section, we have assumed that the average workload power was equivalent to the average income power. This is a very conservative assumption, and engineers rarely design systems that operate on the edge of feasibility. 
 Usually, systems are over-provisioned to allow for a margin of error, usually between 20-50\%. 
-For energy harvesting, this would represent altering a workload to only require a percentage of the expected available harvestable power, increasing the size of the harvester, or deploying in a location with more ambient harvestable energy.
-In \cref{fig:intuition:capacity_margin}, we model the impact of a workload margin on the required capacity to capture sufficient energy. 
+For energy harvesting, this would represent altering a workload to require less than the expected available harvestable power, increasing the size of the harvester, or deploying in a location with more ambient harvestable energy.
+In \cref{fig:intuition:capacity_margin}, we model the impact of a income safety margin on the required capacity to capture sufficient energy. 
 We utilize the Setup D EnHANTs trace as it represents the worst case seasonal light distribution out of all of the traces. 
-\Cref{fig:intuition:capacity_margin} presents multiple sweeps of income power and the minimum sufficient capacity for that income. 
-The different sweeps consider different margins of workload power compared to income power, from no margin to an 80\% margin. 
-No margin indicates that the average workload power is equal to the income power, while an 80\% margin indicates the workload power is only 20\% of the average income power, for example. 
+\Cref{fig:intuition:capacity_margin} presents required capacity for multiple sweeps of workload power under different safety margins. 
+The different sweeps consider different safety margins of income power, from no margin to an 300\% margin. 
+No margin indicates that the average workload power is equal to the income power, while an 300\% margin indicates the income power is 4$\times$ the amount required by the workload, on average\footnote{A safety margin is calculated as a percent difference, $100 \times \frac{\text{Income} - \text{Workload}}{\text{Income}}$}. 
 As expected, when a workload requires less energy than is available to harvest, it requires less energy capacity to harvest that energy.
-With a 20\% margin, where the workload only requires 80\% of the average income power, a design that can expect an energy income with a similar distribution to the Setup D trace will require a capacity sized to \num{1.8E3}$\times$ the income power. 
+With a 25\% margin, where the income provides 1.2$\times$ the average required workload power, a design that can expect an energy income with a similar distribution to the Setup D trace will require a capacity sized to \num{2.3E3}$\times$ the income power. 
 
 \placefigure{fig:intuition:capacity_margin}
 
@@ -700,7 +704,7 @@ We present heuristics for determining the proper sizing of non-rechargeable batt
 For energy harvesting sensors, they may require batteryless and intermittent techniques to ensure feasibility and forward progress. 
 The requirement for intermittent techniques is solely dependent on energy income and rechargeable energy storage, and they are avoidable by properly sizing a harvester and energy storage.
 We also present a simple model for energy capacity and analysis that indicates that the size of rechargeable capacity in energy harvesting systems directly impacts the amount of energy that is actually captured by a system.
-The end result of the analysis of this chapter is a reasoned method for determining appropriate capacity for a system based on its income and workload that is superior and more exact compared to other arbitrary methods. 
+The end result of the analysis of this chapter is a reasoned heuristic for determining appropriate rechargeable capacity sizing for a system based on its income and workload that is superior to other arbitrary methods used by other platform designs. 
 
 The next chapter seeks to expand upon the iterative model of capacity presented in \cref{sec:intuition:capacity} by developing an energy simulation for wireless sensors. 
 It will seek to address the three previously mentioned limitations by modelling energy income and storage more realistically, modelling sensor workload more dynamically, and considers the impact of non-rechargeable backup energy. 
@@ -876,7 +880,7 @@ It will seek to address the three previously mentioned limitations by modelling 
     \centering
     \includegraphics[width=\columnwidth]{figs/chap3/required_capacity.pdf}
     \caption{
-    The minimum sufficient capacity to support a workload given an income. Note the x- and y-axis log scale. The average workload and income power are set equal; however the variability of income power is determined by the synthetic EnHANTs traces. The minimum sufficient capacity follows a linear trend with increasing income and workload power. Even though each line appears parallel, lines that are higher up on the y-axis actually have a larger slope due to the log scale.
+    The minimum sufficient capacity to support an average workload power, assuming an identical average income power. Note the x- and y-axis log scale. The average workload and income power are set equal; however the variability of income power is determined by the synthetic EnHANTs traces. The minimum sufficient capacity follows a linear trend with increasing income and workload power. Even though each line appears parallel, lines that are higher up on the y-axis actually have a larger slope due to the log-log scale.
     }
 \end{definefigure}
 
