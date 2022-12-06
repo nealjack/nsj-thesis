@@ -1,2 +1,31 @@
 \chapter{Conclusion}
-\label{cha:concl-future-work}
+\label{chap:conc}
+
+\section{The Local Compute versus Transmit Trade-Off}
+
+For Camaroptera, the decision to include local inference to filter out non-interesting images was worth it due to cost of transmitting images. This is not necessarily the case with Permacam, where the costs of doing the inference and transmitting images is about equal.
+Embedded computing is improving in power efficiency at higher rate than active radios.
+
+
+\subsection{Power Trends}
+
+Figure: Energy per bit vs \ssi[per-mode=symbol]{\micro\ampere\per\mega\hertz} for radio/processor over time.
+
+\subsection{Computing Trends}
+Introduction and improvement of low power embedded accelerators for DSP and neural net inference. What are the trends? How to compare with conventional Cortex M cores and each other?
+
+\subsection{The Constant Need for More Energy}
+As computing efficiency increases, sensor data processing complexity will continue to increase, resulting in sensors that do more for the same amount of power. These sensors will require all the energy they can get. 
+
+\section{What Primitives will Future Energy Harvesting Sensors Need?}
+
+A wish list for future sensor design primitives.
+
+\begin{enumerate}
+    \item Coulomb counting for energy income and used energy
+    \item Separate power domains for state preservation and active operation
+    \item More memory and memory protection (virtual memory?) for more sophisticated programs and usability
+    \item Parallel interfaces on low power SoCs
+\end{enumerate}
+
+\section{Conclusion}

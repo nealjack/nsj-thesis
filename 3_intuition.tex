@@ -1,5 +1,5 @@
 \chapter{
-Developing System Level Power Supply Design Heuristics
+Developing System-Level Power Supply Design Heuristics
 }
 %system level
 
@@ -631,8 +631,8 @@ The trace of instantaneous energy captured by an energy buffer is represented by
 
 \begin{equation} \label{eqn:intuition:captured}
     z_t = \begin{cases}
-        p_t \Delta t & \text{if $e_t + (p_t - w_t) \Delta t \leq E_{capacity}$} \\
-        E_{capacity} - e_t & \text{if $e_t + (p_t - w_t) \Delta t > E_{capacity}$} 
+        p_t \Delta t & \text{if $y_t + (p_t - w_t) \Delta t \leq E_{capacity}$} \\
+        E_{capacity} - y_t & \text{if $y_t + (p_t - w_t) \Delta t > E_{capacity}$} 
     \end{cases}
 \end{equation}
 \begin{equation} \label{eqn:intuition:captured_total}

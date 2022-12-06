@@ -70,6 +70,7 @@
 \let\subfloat\undefined
 \usepackage[subrefformat=parens]{subcaption}   % Replaces both subfig and subfigure -- clashes with memoir from thesis cls?
 \usepackage{tabularx}     % Complicated table creation
+\usepackage{tabulary}     % Complicated table creation
 \usepackage{textcomp}     % Provides \textmu for upright mu's
 \usepackage{threeparttable} % Add footnotes to a table
 \usepackage{units}        % For nice fractions, \nicefrac{1}{2} --> 1/2
@@ -122,6 +123,7 @@
 % Some paper-specific things:
 \newcommand{\name}{Permamote\xspace}
 \newcommand{\namec}{Permacam\xspace}
+\newcommand{\namecs}{Permacams\xspace}
 \newcommand{\ssi}{\,\si}
 
 % http://tex.stackexchange.com/questions/44330/side-brace-around-image-with-underbrace
@@ -195,8 +197,6 @@
 \newcommand{\markedsubsection}[2]{\subsection[#2]{#2%
 \subsectionmark{#1}}
 \subsectionmark{#1}}
-
-
 
 % https://texblog.org/2012/03/21/cross-referencing-list-items/
 \makeatletter
