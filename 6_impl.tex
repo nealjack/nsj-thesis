@@ -1,9 +1,10 @@
 \chapter{Implementation and Evaluation of Capacity Sizing}
 \label{chap:impl}
 
-This chapter considers two example sensing applications and the design of wireless sensor systems to achieve the goals of these applications.
+This chapter considers two example sensing applications and the design and implementation of wireless sensor systems to achieve the goals of these applications.
 We explore the system design for these applications within the context of the conclusions of \cref{chap:intuition,chap:capacity,chap:battery}, which suggest that energy capacity is highly important for energy harvesting wireless sensor performance.
-The first application that we consider is the measurement of fine-grained workplane illuminance. These illuminance measurements are used to inform the operation of a lighting control system to balance artificial and natural light for occupant's workplanes. 
+The first application that we consider is the measurement of fine-grained workplane illuminance. 
+Illuminance measurements at the desk or computer monitor can be used to inform the operation of a lighting control system to balance artificial and natural light for lighting efficiency and occupant comfort. 
 The goals of this application are to measure illuminance at high granularity with high availability and provide a lifetime of at least a decade. 
 This application is relatively simple and it is used to validate the simulation and conclusions presented in \cref{chap:intuition,chap:capacity}.
 The second application is image-based human occupancy detection and counting. 
@@ -468,7 +469,7 @@ Whenever its capacitor is charged sufficiently, it turns on and  performs its wo
 Camaroptera's workload consists of capturing an image, performing some computations and inference on this image, compressing the image, and finally transmitting the packetized image. 
 Camaroptera's energy storage is sized to support the most energy intensive operation in its workload: transmitting a single LoRa packet.
 A single packet can not fit an entire compressed image, so Camaroptera relies on multiple power cycles to send between seven and eight packets to transmit an entire image.
-All combined, a single image capture and transmission requires 781\ssi{\milli\joule}\footnote{Capture energy: 3.06 (capture) + 0.253 (difference) + 66 (inference) + 40 (JPEG) + 96$\times$7 (transmission) = 781\ssi{\milli\joule}~\cite{desai2022camaroptera}}.
+All combined, a single image capture and transmission requires 781\ssi{\milli\joule}\footnote{3.06 (capture) + 0.253 (difference) + 66 (inference) + 40 (JPEG) + 96$\times$7 (transmission) = 781\ssi{\milli\joule}~\cite{desai2022camaroptera}}.
 When idle, Camaroptera's power subsystem consumes 197\ssi{\micro\watt}.
 With this information, along with operation timing provided by the authors~\cite{desai2022camaroptera}, we are able to complete a simulation configuration like \cref{tab:capacity:parameters} for Camaroptera's hardware design and workload.
 
@@ -498,7 +499,7 @@ With Camaroptera's designed solar panel size, maximum power point voltage, and e
 it can expect between 12.3 and 61.6\ssi{\milli\watt} average income power from our two synthesized traces.
 On average, this theoretical energy income should be more than sufficient to power this periodic sense and send workload, assuming the platform has enough capacity to capture it.
 The lower end of this income corresponds to an income margin of over 300\%. 
-Considering the sizing factor for income resembling the distribution of Setup D, determined in \cref{sec:intuition:margin}, we should expect a minimum sufficient capacity that is \num{1.4E3} times Camaroptera's workload power. 
+Considering the sizing factor for income resembling the distribution of Setup D, determined in \cref{sec:intuition:margin}, we should expect a minimum sufficient capacity that is \num{1.4E3} times Camaroptera's average workload power. 
 This corresponds to an energy capacity of 3920\ssi{\milli\Wh}. 
 The 33\ssi{\milli\farad} supercapacitor on Camaroptera only provides 41\ssi{\micro\Wh}. This capacity represents five orders of magnitude less than the minimum sufficient energy capacity predicted by our heuristic.
 To further explore the impact of capacity sizing for Camaroptera, we simulate the platform with a sweep of different amounts of rechargeable capacity. 
@@ -593,17 +594,21 @@ The system is based on the Himax HM01B0 camera and the Nordic NRF52840 MCU. We i
 
 \begin{definefigure}{fig:arch}
     \centering
-    \begin{subfigure}{0.7\columnwidth}
+    \begin{subfigure}{0.6\columnwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/permacam/figs/arch}
         \caption{End-to-end image transfer architecture}
+        \label{fig:arch:arch}
     \end{subfigure}
-    \begin{subfigure}{0.29\columnwidth}
+    \begin{subfigure}{0.39\columnwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/permacam/detection_90_59158.jpeg}
-        \caption{Example YOLOv3 detection}
+        \caption{\scriptsize{YOLOv3 detection}}
+        \label{fig:arch:yolo_image}
     \end{subfigure}
-\caption{The \namec end-to-end image transfer architecture. \namec uses OpenThread, a 6LoWPAN network. This allows it to transmit images over the CoAP block protocol directly to any IP endpoint. We implement a CoAP server to receive and reassemble image, demosaic them, and publish them over an MQTT stream. This CoAP server can be local to the sensors if privacy is desired. User applications running on PCs or on servers can easily subscribe to incoming images and use them as inputs to object detection machine learning models, like YOLOv3.
+\caption{The \namec end-to-end image transfer architecture. \namec uses OpenThread, a 6LoWPAN network. This allows it to transmit images over the CoAP block protocol directly to any IP endpoint. 
+We implement a CoAP server to receive and reassemble image, demosaic them, and publish them over an MQTT stream. 
+User applications can easily subscribe to incoming images and use them as inputs to object detection machine learning models, like YOLOv3. 
 }
 \end{definefigure}
 
@@ -682,7 +687,7 @@ implementation. The platform is built around the Himax HM01B0 ultra low power ca
 We use the color version of the sensor to ensure the ability to capture color information of images, but the two versions are pin compatible and can be interchanged. The other key component of the design is the SoC processor. 
 For a processor, we select the Nordic nRF52840 Cortex-M4F SoC as it is one of the most power efficient processors available, includes a Floating Point Unit (FPU), and is relatively fast compared to other low power microcontrollers at 64\,MHz. 
 An FPU allows the platform to perform floating point dependent tasks like image compression. 
-It has a multiprotocol BLE/802.15.4 radio that is well supported by OpenThread, an open source implementation of the Thread 6LoWPAN mesh network protocol~\hl{todo cite}. 
+It has a multiprotocol BLE/802.15.4 radio that is well supported by OpenThread, an open source implementation of the Thread 6LoWPAN mesh network protocol~\cite{openthread}.
 It features comparatively large amounts of flash (1\ssi{\mega\byte}) and SRAM (256\ssi{\mega\byte}), which is enough to capture images and perform some local processing. 
 We include an ultra-low power real time clock (RTC) to provide accurate image timestamps. 
 The platform also features an ultra low power PIR sensor and illuminance sensor to provide a low power wakeup mechanism and illuminance calibration for captured images. 
@@ -690,9 +695,10 @@ A block diagram of the major system components is displayed in \cref{fig:block}.
 Characteristics of the sensors and the MCU are summarized in \cref{tab:permacam:components}. 
 In the next few sections we describe \namec{}'s implementation, including the MCU to camera interface, energy harvesting architecture, image compression methods, the end-to-end image transmission architecture, and an implementation of onboard person classification.
 
+\placefigure{tab:permacam:components}
 
 \subsubsection{Camera Interface}
-The majority of image sensors do not support normal sensor interfaces like I2C or SPI to transfer data. Instead they rely on high frequency ($\geq$8\,MHz) serial or parallel data busses. This is because images are many kilobytes or megabytes in size, and data transfer must be at a high frequency or parallel to transfer multiple frames per second. The majority of embedded processors, the nRF52840 included, are not designed to interface with parallel camera busses. Traditionally, platforms have used intermediate hardware like dedicated processors, CPLDs or FPGAs to interface with image sensors and buffer frames \cite{rowe2007firefly,rahimi2005cyclops}. The Himax HM01B0 has two interfaces, an I2C command interface and a serial, 4x, or 8x data interface.
+The majority of image sensors do not support normal sensor interfaces like I2C or SPI to transfer data. Instead they rely on high frequency ($\geq$8\ssi{\mega\hertz}) serial or parallel data busses. This is because images are many kilobytes or megabytes in size, and data transfer must be at a high frequency or parallel to transfer multiple frames per second. The majority of embedded processors, the nRF52840 included, are not designed to interface with parallel camera busses. Traditionally, platforms have used intermediate hardware like dedicated processors, CPLDs or FPGAs to interface with image sensors and buffer frames \cite{rowe2007firefly,rahimi2005cyclops}. The Himax HM01B0 has two interfaces, an I2C command interface and a serial, 4x, or 8x data interface.
 The Himax HM01B0 requires an input master clock (MCLK) of 3-36\,MHz to drive internal sensor timings and outputs a pixel clock (PCLKO), frame valid (FVLD), and line valid (LVLD) signals \cite{hm01b0}. It can be configured to capture full frame (320x320), QVGA (320x240), and if the mono version of the sensor, downscaled QQVGA (160x120) resolution images. In \namec{} we capture full frame images and use the color version of the sensor. 
 This version produces color filter array (CFA) images. 
 A CFA is an alternating "mosaic" of green-blue-green and red-green-red rows of pixels~\cite{bayer1976color}. 
@@ -701,10 +707,8 @@ An example of a mosaiced image and its demosaiced counterpart are displayed in \
 \namec{}'s processor does not possess enough memory to locally demosaic an full image so any inference or transmission must be done with the mosaiced image. 
 We power-gate the HM01B0 camera on \namec, allowing the system to completely power the camera off and enter the lowest possible power state.
 
-\placefigure{tab:permacam:components}
-
-Other systems that utilize the Himax HM01B0 camera including BackCam, Camaroptera, and the Sparkfun Edge have developed a bitbang protocol to emulate a parallel interface \cite{josephson2019wireless, nardello2019camaroptera, sparkfunedge}. This is possible because their processors support GPIO direct memory access (DMA). This allows the GPIO peripheral to directly write to memory, avoiding costly processor cycles to load GPIO state into registers and then write it to memory. This optimization allows a bitbang protocol on these platforms to operate faster than the HM01B0's minimum operating frequency. However, a bitbang protocol is undesirable because it requires the processor to be on during an image transfer, consuming additional energy. The nRF52840 does not support GPIO DMA. 
-Because of this, developing a bitbang protocol that adheres to the required camera timing is infeasible. 
+Other systems that utilize the Himax HM01B0 camera including BackCam, Camaroptera, and the Sparkfun Edge have developed a bit bang protocol to emulate a parallel interface \cite{josephson2019wireless, nardello2019camaroptera, sparkfunedge}. This is possible because their processors support GPIO direct memory access (DMA). This allows the GPIO peripheral to directly write to memory, avoiding costly processor cycles to load GPIO state into registers and then write it to memory. This optimization allows a bit-bang protocol on these platforms to operate faster than the HM01B0's minimum operating frequency. However, a bit-bang protocol is undesirable because it requires the processor to be on during an image transfer, consuming additional energy. The nRF52840 does not support GPIO DMA. 
+Because of this, developing a bit-bang protocol that adheres to the required camera timing is infeasible. 
 Instead, we note that the camera serial protocol closely resembles SPI, and the nRF52840 implements an 8\,MHz SPI peripheral with DMA support. 
 The camera PCLKO signal is identical to SCLK, and can be gated by the LVLD signal. 
 The LVLD signal from the camera indicates when a line of the image is being transmitted, and is analogous to a SPI chip select line. However, this line is active high, and most SPI implementations, including the hardware on the nRF52840, expect active low. Inserting a low latency inverter in between the LVLD output of the camera and the MCU allows the nRF52840 SPI peripheral to interface with the camera. 
@@ -763,9 +767,6 @@ There is insufficient memory to perform the forward pass on full sized 320x320 i
 We train this model for 80 epochs on the Visual Wake Word dataset~\cite{chowdhery2019visual} to achieve a validation accuracy of 78\%, compared to a 90\% accuracy with an unmodified MobileNet. The model weights require 230\.kB after post-training quantization and achieve an accuracy of 76\% for input images of size 120x120 when using TensorFlow in Python. We deploy this model on \namec and evaluate its performance in \cref{eval:localinf}.
 
 \subsection{\namec Evaluation}
-\hl{TODO: need to go through this section and edit + fix figures}
-
-
 
 \begin{definefigure}{fig:compression}
 \captionsetup[subfigure]{labelformat=empty}
@@ -942,7 +943,9 @@ Irregardless of these improvements, we expect most deployments of \name will be 
 %\hl{I only downscaled to 160x160 for comparison with local inference, is it worth it to mention here? Could just plot on same figures as above section}
 
 \subsubsection{Object Detection Performance}
-To illustrate the capability of the platform and end-to-end image transfer system, we evaluate the ability to perform object detection with \name. The images produced by \name are published over an MQTT stream, which feeds into a script that performs object detection using the pre-trained YOLOv3 network included in the Python ImageAI package \cite{ImageAI}. We do not wish to measure the accuracy and performance of the ImageAI YOLOv3 model, but instead isolate the ability to perform detections on images captured by \name's camera and the effects of different compression quality factors on detection performance.
+To illustrate the capability of the platform and end-to-end image transfer system, we evaluate the ability to perform object detection with \name. The images produced by \name are published over an MQTT stream, which feeds into a script that performs object detection using the pre-trained YOLOv3 network included in the Python ImageAI package \cite{ImageAI}. 
+An example of classification and bounding box detection results are illustrated by \cref{fig:arch:yolo_image}.
+We do not wish to measure the accuracy and performance of the ImageAI YOLOv3 model, but instead isolate the ability to perform detections on images captured by \name's camera and the effects of different compression quality factors on detection performance.
 
 \placefigure{fig:map}
 
@@ -956,7 +959,7 @@ In \cref{fig:map}, we display the mAP for different JPEG quality factors. Surpri
 \subsubsection{Limitations of resolution}
 \name{}'s camera is limited in resolution and color representation compared to most image sensors in modern cameras and cell phones. For example, the Google Pixel 3 features a 12.2 megapixel image sensor, which offers two orders of magnitude more resolution than the HM01B0's 0.1 megapixel. A lower resolution places a limit on the size of objects and the distance at which they can be detected. If an object is only represented by a few pixels, there is unlikely to be enough information to successfully detect it. To evaluate the capability to perform object detection with images captured by \name{}, we compare detection accuracy to images captured by a modern cell phone camera. We successively capture images of a person at varying distances and measure the resultant detection accuracy, if any. The results are summarized in \cref{fig:distance}.
 
-A person is successfully detected at a distance of 20 meters with images from \name{}, though confidence is only 16\%. Unsurprisingly, a person is easily detected at all distances tested with images taken by a Pixel 3. While images captured by \name{} can not compete with the resolution of those captured by cell phones, they are sufficient for detection at reasonable distances. Many indoor spaces do not have sight lines longer than 20 meters, and if they do, additional camera coverage can help mitigate the lack of resolution of a single camera. The ability to clearly depict objects in the distance is partially dependent on the lens configuration of a camera. During this experiment, \name{} was configured with a 200\textdegree\xspace wide angle lens. Better performance could be achieved with a lens with a narrower field of view and more magnification, at the cost of less coverage. We envision most applications will prioritize field of view to cover large areas instead of additional magnification.
+A person is successfully detected at a distance of 20 meters with images from \name{}, though confidence is only 16\%. Unsurprisingly, a person is easily detected at all distances tested with images taken by a Pixel 3. While images captured by \name{} can not compete with the resolution of those captured by cell phones, they are sufficient for detection at reasonable distances. Many indoor spaces do not have sight lines longer than 20 meters, and if they do, additional camera coverage can help mitigate the lack of resolution of a single camera. The ability to clearly depict objects in the distance is partially dependent on the lens configuration of a camera. During this experiment, \name{} was configured with a 200\textdegree\xspace, wide angle lens. Better performance could be achieved with a lens with a narrower field of view and more magnification, at the cost of less coverage. We envision most applications will prioritize field of view to cover large areas instead of additional magnification.
 
 \placefigure{fig:distance}
 
@@ -984,16 +987,28 @@ Considering the effort to deploy machine learning inference to a microcontroller
 %From this figure, it is clear that our desired inference algorithms require more energy than simply transmitting an image. Beyond just energy, transmitting these images allows us to use full sized and high accuracy versions of models. Additionally, deploying these models to microcontrollers requires significantly more effort than using high level APIs exposed by popular machine learning frameworks like TensorFlow and Pytorch~\cite{8675201}.
 
 \section{Summary}
-The design of \name encapsulates the conclusions from \cref{chap:intuition}, \cref{chap:capacity}, and \cref{chap:battery} to develop a simultaneously long-lived and highly available solution for illuminance sensing.
+The designs of \name and \namec are results of the design process developed in \cref{chap:intuition}, \cref{chap:capacity}, and \cref{chap:battery}. These designs are simultaneously long-lived and highly available solutions for illuminance sensing and image sensing.
 We avoid adhering to a single design strategy, such as a batteryless or preallocation-only design.
-Instead, we consider the requirements of the application and identify the type and size of energy harvesting, rechargeable buffers, and non rechargeable storage to achieve these goals.
-The end result is a hybrid energy harvesting system that utilizes a rechargeable LTO battery for buffering, and either coin cell or cylindrical non-rechargeable batteries for backup.
-Through simulation, we show that this design can achieve the application goals better than any other proposed battery-based or batteryless wireless sensor power supply in the literature.
-\name is estimated to provide decades of lifetime with high availability, which is more than triple the lifetime of battery-only sensors, and more than double the availability of batteryless platforms in some cases.
+Instead, we consider the requirements of each application and identify the type and size of energy harvesting, rechargeable buffers, and non rechargeable storage to achieve these goals.
+The end results are hybrid energy harvesting systems that utilizes a rechargeable LTO battery for buffering, and either coin cell or cylindrical non-rechargeable batteries for backup.
+Through simulation, we show that these designs can achieve the intended application goals better than any other proposed battery-based or batteryless wireless sensor power supply in the literature.
+\name is estimated to provide decades of lifetime with high availability, which is more than triple the lifetime of similarly sized battery-only sensors, and more than double the availability of batteryless platforms in some cases.
+\namec, inspired by other recent image sensor work like Camaroptera, is the first long-lived, energy harvesting indoor image sensor. Unlike Camaroptera, its design considers the effect of energy capacity and makes alternate design decisions to dramatically lower system power to enable indoor use.
 
-Through many experiments, we evaluate \namec's deployability and capability. For deployability, we demonstrate the effectiveness of image compression on image size and resulting time and energy to transmit images. We find that with high compression quality factors, images sent by \namec are nearly indistinguishable from raw images, and are half the size. We use these results to inform a numerical model which we use to estimate lifetime of the the \namec platform under periodic and reactive workloads. Our model produces an estimated lifetime of 5 to 10 years with compression using quality factor 90, and a period of 10-15 minutes, or a back off of 5-10 minute. We also evaluate the effect of compression on the resulting usefulness of images for object detection. We find that high quality compressed images produce near identical detection results to raw images, and also find that \namec is able to produce images that allow a person to be detected at 20 meters, despite the low resolution of its image sensor.
+We utilize \name and other battery-based and batteryless systems to evaluate our simulation. We find that our simulation produces lifetime and performance estimates that match reality. We simultaneously utilize our simulation to identify non-rechargeable backup battery sizing and estimate lifetime. \name is estimated to last for over a decade while maintaining a reliable and consistent periodic workload schedule.
 
-In addition to end-to-end image transmission, we also evaluate \namec on its capability of performing local image classification. We find that it is possible to deploy a neural network for person detection on \namec. However, the resulting accuracy is only 74.7\% and the required energy to perform this inference is more than double what is required to simply transmit an image. We conclude our evaluation with a generalizable framework and metric, "cycles-per-byte". This framework helps ground decisions about when to process data locally, or send elsewhere for remote processing.
+Through many experiments, we evaluate \namec's deployability and capability. For deployability, we demonstrate the effectiveness of image compression on image size and resulting time and energy to transmit images. 
+We find that with high compression quality factors, images sent by \namec are nearly indistinguishable from raw images, and are half the size. 
+We also explore network congestion and the impact on the time to send images when multiple \namec{}'s are on the same network. 
+We find that our 6LoWPAN network can easily tolerate 1-3 \namecs without any significant increase in time to send. 
+We utlize our simulation tool to measure the performance and lifetime of \namec under a periodic workload.
+Our simulation produces an estimated lifetime of over 5 years with compression using quality factor 90, and a period of 10 minutes. 
+We also evaluate the effect of compression on the resulting usefulness of images for object detection. 
+We find that high quality compressed images produce near identical detection results to raw images, and also find that \namec is able to produce images that allow a person to be detected at 20 meters, despite the low resolution of its image sensor.
+
+In addition to end-to-end image transmission, we also evaluate \namec on its capability of performing local image classification. We find that it is possible to deploy a neural network for person detection on \namec. However, the resulting accuracy is only 74.7\% and the required energy to perform this inference is more than double what is required to simply transmit an image. 
+When considering energy and inference performance, it is preferable for \namec to forward images to more capable servers that can perform more complex and accurate machine learning inference.
+%We conclude our evaluation with a generalizable framework and metric, "cycles-per-byte". This framework helps ground decisions about when to process data locally, or send elsewhere for remote processing.
 
 %Recent improvements in microcontrollers go beyond lower power improvements\cite{kim2018system}. Many embedded processors now include hardware floating point, single cycle multiplies, and data-parallel instruction (SIMD) support. The promise of new dedicated accelerators provides the potential of significant improvements in inference performance on low power systems~\cite{armm55,himaxwiseeye}. This has led to renewed interest in performing complex local inference on a battery budget, especially as transmitting large data like images is traditionally very expensive. However, radios have also become far more power efficient, which again muddies the conventional wisdom. Indeed, it is now much cheaper to transmit large data to a more capable system. Desktop or server class machines handily outclass their low power microcontroller and accelerator brethren on performance, providing the ability to perform more complex and accurate inference, if only data can be efficiently delivered to them.
 %%Regardless of recent improvements, microcontroller and accelerator performance will continue to pale in comparison to desktop and server class computing systems. 

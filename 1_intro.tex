@@ -1,22 +1,22 @@
 \chapter{Introduction}
 \label{chap:intro}
 
-In the past two decades, we have experienced the proliferation of low power, autonomous, wirelessly connected devices.
+The past two decades have witnessed the proliferation of low power, autonomous, and wirelessly connected devices.
 The development and deployment of these devices were inspired by the vision of ubiquitous computing: computers that are pervasive in our environments, providing information about and intuitive control over our environments in such a way that they disappear into the background~\cite{weiser1991computer}.
-While initially inspired by this vision, today's internet of things (IoT) has failed to fully achieve this vision.
-There are many problems standing in the way of this vision, but one of the most pressing and fundamental problem is power.
+While initially inspired by this vision, today's internet of things (IoT) has failed to fully achieve it.
+There are many problems standing in the way of this vision, but one of the most pressing and fundamental problems is power.
 Low power embedded systems have experienced exponential increases in computational and power efficiency in the last two decades. Across the board, components used to build wireless systems have increased in power efficiency by one to two orders of magnitude.
 Our ability to process and infer meaning from vast amounts of collected data has also improved by orders of magnitude, with approachable and powerful frameworks for developing effective machine learning models for classification and detection.
-However, the methods of allocating and collecting energy to power wireless sensing systems to collect these data have not improved at the same rate.
-So, while today's small wireless sensing devices have become smaller, more efficient, and more capable of powerful and complex sensing and data processing, they are still limited by the power and energy available to them. 
+However, the methods of collecting and allocating energy to power wireless sensing systems have not improved at the same rate.
+So, while today's small wireless sensing devices have become smaller, more efficient, and more capable of powerful and complex sensing and data processing, their capabilities are limited by the power and energy available to them. 
 %The design, implementation, and deployment of low power wireless sensors has been studied and improved significantly over the past two decades. Despite this, wireless sensor networks can hardly be described as ubiquitous and pervasive in our environment. Sensor deployments are only commonly used with specific applications; they are from resembling the pervasive and invisible computer imagined by Mark Weiser and Xerox PARC~\cite{weiser1991computer}.
 
 \section{The Power and Energy Dilemma}
 Today, if you wanted to build a wireless sensor, perhaps the most important step in the design process is determining how to allocate or capture the energy to power that sensor. 
-Nowadays, there are many options for energy storage--- capacitors, supercapacitors, batteries, and even more options for energy harvesting, including photovoltaic panels, thermoelectric and piezoelectric generators, and microbial fuel cells.
+Nowadays, there are many options for energy storage--- capacitors, supercapacitors, batteries, and even more options for energy harvesting, including photovoltaic panels, thermoelectric and piezoelectric generators, and microbial fuel cells~\cite{yervaGrafting12,campbellThermes14,campbell2018energy,josephson2020farming}.
 This results in a vast system-level design space that can be difficult to navigate.
 To reduce the design space problem to something comprehensible, it is reasonable to consider existing industrial and research designs as templates for a design.
-You may look to modern commercial sensors for inspiration, like the Google Nest temperature sensor~\cite{googleNestTemperature}, or to a modern research device like the Flicker platform~\cite{hesterFlicker17}.
+We may look to modern commercial sensors for inspiration, like the Google Nest temperature sensor~\cite{googleNestTemperature}, or to a modern research device like the Flicker platform~\cite{hesterFlicker17}.
 While these two examples use similar sensors, microcontrollers, and radios, and are designed for a similar sensing purpose, they exhibit disparate differences in their power supply design.
 These two different designs represent a fork in the road for wireless system design.
 
@@ -30,9 +30,9 @@ Still, it is not uncommon for people to simply ignore a dying device like a smok
 Changing the battery of hundreds or thousands of devices within a building is a significant and costly undertaking.
 
 Recognizing the problem with short, finite lifetimes, researchers have forged ahead with designs that aspire for immortality.
-For a decade, many researchers have abandoned batteries completely and instead build systems that harvest energy to power themselves. 
+For a decade, many researchers have abandoned batteries completely and instead built systems that harvest energy to power themselves. 
 Sensors built with this technique possess indeterminate lifetimes. The cost of immortality is steep, however.
-These systems are generally much more complex to design, and operate unpredictably and without any quality of service guarantees.
+These systems generally require significantly more software and hardware design complexity, and operate unpredictably and without any quality of service guarantees.
 Due to this, energy harvesting systems without batteries have seem limited adoption by industry, despite significant excitement and a large corpus of work by researchers. 
 
 %Currently, as a community of wireless system designers, we lack a shared understanding regarding how to actually approach system-level power supply design. 
@@ -43,7 +43,7 @@ Due to this, energy harvesting systems without batteries have seem limited adopt
 %To achieve long lifetimes, battery-based sensors must sacrifice size to employ large batteries, while a purely energy-harvesting system must sacrifice any guarantees of availability and quality of service as their energy income may not be guaranteed.
 
 \section{The Difficulty of Gathering Data}
-In reality, neither option alone, battery or energy harvesting, is an entirely satisfactory solution for many sensing applications. 
+In reality, neither option on its own, battery or energy harvesting, is an entirely satisfactory solution for many sensing applications. 
 Modern data gathering applications often simultaneously demand longevity and consistent operation.
 It is often not worth the cost of deployment and frequent maintenance if sensors only last a short while, or if the data they produce is not ultimately useful for the end goal of the data gathering application.
 
@@ -140,13 +140,11 @@ This belief has led designers to make arbitrary design decisions regarding the t
 
 
 \section{Thesis Statement}
-
-\textit{
 An analytical and simulation driven design framework provides better guidance for system-level power supply design than current energy harvesting intuition. We can use design points determined through design space analysis and simulation to build systems that provide higher availability, lower latency, and long lifetimes, all without the need for complex techniques for managing intermittency.
-}
 
 \section{Contributions of this Dissertation}
 This dissertation attempts to address system-level power supply design in the context of real application requirements.
+Various parts of this dissertation have been published in part at ENSsys'18~\cite{jackson2018reconsidering} and IPSN'19~\cite{jackson2019capacity}. Content from these publications are included throughout the entire document, including \cref{chap:intuition}, \cref{chap:capacity}, and \cref{chap:battery}. 
 
 We begin with an examination of existing power supply designs and methods for providing energy to sensors. In \cref{chap:background}, we discuss traditional battery-based sensor design as well as the history of energy harvesting in wireless sensor research.
 We explore the design and trade-offs of batteryless system design, a newer class of energy harvesting sensors that forgo the use of batteries as energy storage in favor of capacitors and supercapacitors.
@@ -161,15 +159,17 @@ We finish this chapter with a deep dive into the effect of rechargeable energy c
 
 We expand upon the simple model and heuristics developed in \cref{chap:intuition} and build an wireless sensor energy state simulation in \cref{chap:capacity}.
 We use this simulation to verify our capacity sizing heuristics, consider additional design variables, and examine the performance of the hybrid battery and energy harvesting architecture.
-From the results of our energy simulation, we identify the benefits in energy capture and end system performance when rechargeable energy capacity is increased. From these results, we conclude that energy harvesting system performance can be increased dramatically (by 1.4--2$\times$) if capacity is increased several orders of magnitude more than is commonly offered by batteryless system's capacitor or supercapacitor energy buffers. 
+From the results of our energy simulation, we identify the benefits in energy capture and end system performance when rechargeable energy capacity is increased. From these results, we conclude that energy harvesting system performance can be increased by 1.4--2$\times$ if capacity is increased several orders of magnitude more than is commonly offered by batteryless system's capacitor or supercapacitor energy buffers. 
 
 In \cref{chap:battery}, we explore the design space of energy capacity, identifying the classes and options for charge and energy buffers. We compare capacitors, supercapacitors, and batteries, and examine common arguments made against the use of rechargeable batteries by batteryless researchers.
 We find that many of these arguments are unsubstantiated when examined quantitatively and conclude that small rechargeable batteries are the superior method for providing an energy dense buffer for low power applications.
 
-We consider the heuristics, tools, and conclusions from \cref{chap:intuition,chap:capacity,chap:battery} to implement sensors for two wireless sensing applications in \cref{chap:impl}. Both sensor designs utilize the hybrid architecture identified in \cref{chap:intuition,chap:capacity}, and utilize heuristic and simulation tools to size their power supply components to achieve higher energy capture and performance. 
+We consider the heuristics, tools, and conclusions from \cref{chap:intuition,chap:capacity} to implement sensors for two wireless sensing applications in \cref{chap:impl}. 
+These applications include illuminance sensing for automated lighting control applications as well as image-based person detection and counting for accurate space occupancy measurements, both of which require consistent and long-lived sensing. 
+Both sensor designs utilize the hybrid architecture identified in \cref{chap:intuition}, and the utilize heuristic and simulation tools developed in \cref{chap:intuition,chap:capacity} to size their power supply components to achieve high energy capture and system performance. 
 We implement and utilize our designs to evaluate and verify our energy simulation developed in \cref{chap:capacity}. 
 We evaluate an existing batteryless image sensing platform, quantify its performance using simulation, and identify design changes that could be made to improve performance.
 From these design changes, we build a new indoor image sensing platform that can capture image data with high consistency and availability and still offer a multi-year lifetime. 
 
-Finally, in \cref{chap:conc}, we identify technology trends that may change how sensors are designed and identify several improvements and features that would enable smarter, more autonomous energy harvesting wireless sensors. 
+Finally, in \cref{chap:conc}, we summarize the contributions of this dissertation and identify several new and improved primitives that would enable more efficient and autonomous energy harvesting wireless sensors. 
 
