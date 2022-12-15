@@ -8,8 +8,8 @@ Over the past two decades, microcontrollers have vastly improved in processing s
 Across the board, all wireless sensor components have also substantially increased their energy efficiency.
 However, the availability of power and energy remain limiting factors for wireless sensor designs. 
 
-The energy density of non-rechargeable batteries has not improved at the same rate. %as other wireless sensor components. 
-While newer, more efficient sensors are able to do more with the limited energy available to them, battery-based sensors are still limited in lifetime and have the potential to produce substantial battery waste when they must inevitably be replaced.
+The energy density of non-rechargeable batteries has not improved at the same rate as as other wireless sensor components. 
+While newer, more efficient sensors are able to do more with the limited energy available to them, battery-based sensors are still limited in lifetime and have the potential to produce substantial battery waste.
 For longer deployments, or in applications where the size and weight of a non-rechargeable battery was untenable, researchers have also developed energy harvesting solutions for wireless sensors. 
 Energy harvesting sensors do not have concretely limited lifetimes, but they are inherently limited by the availability and consistency of harvestable power.
 Like battery technology, the efficiency of energy harvesting methods have not increased at the same rate as other sensor technology, and specialized energy harvesting power management ICs are already highly optimized to extract energy from many sources~\cite{adp5091,bq25505,matrix_prometheus}, with few exceptions~\cite{josephson2020farming,marcano2022soil}.
@@ -31,10 +31,11 @@ with the goal of identifying common application requirements and how various pow
 All wireless sensors require electrical energy to function.
 Most simply and most commonly, energy can be provisioned in a finite energy storage such as a battery, also known as a primary cell. 
 In situations where there is harvestable energy, it can be captured and stored in rechargeable storage, or a secondary cell.
-The next couple of sections describe prior work in both research and industry regarding preallocation and energy harvesting wireless sensor design.
+The next sections describe prior work in both research and industry regarding preallocation and energy harvesting wireless sensor design.
 
 \subsection{Energy Preallocation}
-Non-rechargeable (primary-cell) batteries are the preferred
+Primary-cell
+batteries are the preferred
 method of powering sensors for both academic experimentation
 and commercial and industrial applications.
 The Telos family of motes, originally designed in 2004~\cite{polastre2005telos},
@@ -75,17 +76,16 @@ Capacitors, supercapacitors or batteries are all options to buffer energy when e
 %Its proximity to readily available AC power and its small form factor make the inclusion of a battery infeasible compared to scavenging off mains power.
 
 The majority of energy harvesting wireless sensors depend on unreliable external sources of energy. 
-They utilize photovoltaic, thermoelectric, piezoelectric, ambient RF harvesting or other methods to scavenge energy from their environment. 
+They utilize photovoltaic, thermoelectric, piezoelectric, ambient RF harvesting, or other methods to scavenge energy from their environment. 
 Parameters like harvester size or surface area, impact the amplitude of power delivered to the sensor, 
 while the size and capacity of the rechargeable storage determines how much energy can be buffered. 
 %This device class can be further differentiated by how captured energy is stored. Intermittent, or batteryless systems, eschew both non-rechargeable and rechargeable batteries and utilize capacitors and supercapacitors for energy buffering. The choice of a (super)capacitor buffer significantly limits the amount of energy capacity available to the system, reducing its capability to cache energy in times of drought. This choice is predicated on the assumption that rechargeable batteries are less suitable for energy harvesting applications. However, most energy harvesting systems, particularly those that utilize outdoor photovoltaic harvesting, utilize rechargeable batteries.
 Energy harvesting sensors
-have largely been developed for use in environments with plentiful harvestable energy
-.
+have largely been developed for use in environments with plentiful harvestable energy.
 %and have been designed with sufficient capacity to capture this energy
 Most examples of energy harvesting research devices are deployed outdoors with photovoltaics~\cite{jiang2005perpetual, kansal2007power, corke2007long, lin2005heliomote, taneja2008design, adkins2018signpost}.
 This is also true of many commercial and industrial sensor systems like weather and air quality monitoring stations~\cite{davis_weather}, trail cameras~\cite{spypoint_camera}, and traffic cameras~\cite{wanco_traffic}.
-Besides photovoltaic harvesting, industrial products have also leveraged temperature gradients and vibration to power sensors. The Perpetua Power Puck and Tile are thermoelectric generators designed for high temperature monitoring of critical infrastructure like steam pipes, hot tanks, and other high temperature equipment~\cite{perpetua}.
+Besides photovoltaic harvesting, industrial products have also leveraged temperature gradients and vibration to power sensors. The Perpetua Power Puck and Tile are thermoelectric generators designed for high temperature monitoring of critical infrastructure like steam pipes, hot tanks, and other equipment in high temperature environments~\cite{perpetua}.
 Perpetua harvesters are compatible with the same Emerson, GE, and Honeywell sensor systems as a drop in replacement for the default non-rechargeable power supplies. Other companies, like ReVibe and Kinergizer, are utilizing piezoelectric harvesting for industrial vibrational monitoring~\cite{revibe,kinergizer}.
 
 There have been fewer research, commercial, and industrial sensors developed for indoor environments, or other environments that lack light, a large temperature gradient, or perpetual motion and vibration.
@@ -159,10 +159,10 @@ The next section explores the design and development of batteryless systems in m
 
 \section{Batteryless Energy Harvesting}
 \label{sec:background:batteryless}
-The batteryless, or intermittent, wireless sensor movement has abandoned batteries (both rechargeable and non-rechargeable) under the assumption that current battery technology has too many detracting qualities to be suitable for energy-harvesting wireless sensor storage.
+The batteryless, or intermittent, sensor movement has abandoned batteries (both rechargeable and non-rechargeable) under the assumption that current battery technology has too many detracting qualities to be suitable for energy-harvesting wireless sensor storage.
 Most notably, they argue that batteries provide insufficient lifetimes to build long-lasting deployments~\cite{hesterTragedy15, hesterFlicker17, hesterTimely17, hester2017future, colinReconfigurable18, luciaIntermittent17, yervaGrafting12, majid2020continuous}.
 Batteryless systems instead utilize capacitors, some types of which offer functionally infinite lifetimes~\cite{kemetLife}.
-However, capacitors and supercapacitors provide very little energy storage when compared to batteries.
+However, capacitors and supercapacitors provide much less energy storage when compared to batteries.
 %. Ceramic and tantalum capacitors possess functionally infinite lifetimes, while supercapacitors offer lifetimes on the order of decades to a century~\cite{kemetLife}.
 %The relatively small energy storage afforded by capacitors and supercapacitors is a fundamental limitation and is the trade off when prioritizing power supply lifetime over any other performance metric.
 Due to this, the batteryless design decision results in two major drawbacks:
@@ -191,7 +191,7 @@ To this end, researchers have also built tools to recreate energy conditions to 
 %Platform builders have also experimented with novel hardware techniques to increase responsiveness by reducing charging hysteresis.
 In addition to software solutions, researchers have designed hardware platforms that maximize individual component availability, as well as platforms that dynamically tune capacitance to meet individual operation energy requirements.
 %The software solutions presented by batteryless researchers are solutions developed for self-imposed problems stemming from limited energy storage, and hardware solutions offer marginal improvements to system responsiveness at a prohibitive cost.
-The next sections discuss various system designs, tools, and software and hardware techniques meant to alleviate the two fundamental drawbacks to batteryless systems.
+The next sections discuss various system designs, tools, and software and hardware techniques meant to alleviate the drawbacks to batteryless systems.
 %Energy-harvesting systems that rely
 %on small (super)capacitor energy buffers are commonly referred to as intermittent systems, as they only store enough energy to perform single atomic tasks, and are unable to operate when external energy is not present.
 %Many choose to employ
@@ -210,6 +210,7 @@ The next sections discuss various system designs, tools, and software and hardwa
 The type and amount of work that is possible within the energy envelope of a single discharge cycle of capacitor or supercapacitor buffer is extremely limited.
 %Applications and devices that employ a one-shot technique are
 Batteryless systems are generally only able to perform a few seconds or less of computation, or send a single packet before depleting their capacitor storage and powering off, even with modestly sized supercapacitors.
+This section discusses the techniques developed by batteryless researchers to perform interesting sensing under unpredictable power loss. 
 
 \subsubsection{One-shot Intermittency}
 \label{cha:background:one-shot}
