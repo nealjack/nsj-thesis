@@ -82,17 +82,17 @@ for fname in fnames:
         to_append = dooroccu
     to_append.append([irradiance, period, np.load(fname, allow_pickle=True)])
 
-colors = [x for x in ['C0', 'C1', 'C2'] for _ in range(0, 3)]
+colors = ['C0', 'C1', 'C2'] * 3
+#[x for x in ['C0', 'C1', 'C2'] for _ in range(0, 3)]
 #colors = [x for x in [cmap(0.3), cmap(0.4), cmap(0.9)] for _ in range(0, 3)]
 markers = ['o', 's', '^'] * (4)
 
 custom_lines = [
                 Line2D([0],[0], color = 'C0', lw=2),
-                Line2D([0],[0], marker = markers[0], color='black', lw=2, markersize=8),
-                Line2D([0],[0], marker = markers[1], color='black', lw=2, markersize=8),
-                Line2D([0],[0], marker = markers[2], color='black', lw=2, markersize=8)]
+                Line2D([0],[0], color = 'C1', lw=2),
+                Line2D([0],[0], color = 'C2', lw=2),
+                ]
 lines_names = [
-               setup_name_to_irradiance["SetupA"],
                "CR927",
                "CR2032",
                "CR123A"]
@@ -123,13 +123,13 @@ for i, data in enumerate(sorted(sensensend, key=lambda x: (float(x[0].split(' ')
     if data[0] !='15.1 μW/cm$^2$': continue
     lab = str(label_to_capacity(data[1])) + " mWh"
     print(data[2][-1,1]/data[2][0,1])
-    plt.plot(data[2][:,0]/3600*1E3, data[2][:,1], color=colors[i], lw=2, markersize=8, marker=markers[i], label=lab + ', ' + data[0])
+    plt.plot(data[2][:,0]/3600*1E3, data[2][:,1], color=colors[i], lw=2, label=lab + ', ' + data[0])
 
 plt.xlabel('Rechargeable Energy Capacity (mWh)')
 plt.ylabel('Lifetime (years)')
 #lgd = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 #plt.savefig('sense_and_send_life_vs_sec_size.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight', format='pdf')
 lgd = plt.legend(custom_lines, lines_names)
-plt.savefig('sense_and_send_life_vs_sec_size_permamote.pdf', bbox_extra_artists=(lgd,text), bbox_inches='tight', format='pdf')
+plt.savefig('sense_and_send_life_vs_sec_size_permamote.png', bbox_extra_artists=(lgd,text), bbox_inches='tight', format='png')
 
 
