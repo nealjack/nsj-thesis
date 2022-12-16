@@ -4,11 +4,11 @@
 In this dissertation, we have developed an application-focused framework for the design of energy harvesting wireless sensor system power supplies.
 We have identified common application requirements, and common power supply design archetypes, and identified which requirements are met by different archetypes.
 In particular, we find that batteryless energy harvesting systems fail to address many common and critical application requirements, including reliable and consistent operation.
-We examine the efficacy of energy harvesting in general when compared to non-rechargeable batteries, and determine that energy harvesting is worthwhile investment \textit{if} there is enough harvestable energy \textit{and} the system has enough rechargeable capacity to capture the energy.
+We examine the efficacy of energy harvesting in general when compared to non-rechargeable batteries, and determine that energy harvesting is a worthwhile investment \textit{if} there is enough harvestable energy \textit{and} the system has enough rechargeable capacity to capture the energy.
 We identify that a hybrid power supply architecture that combines energy harvesting and non-rechargeable batteries results in a system that can achieve consistent operation coupled with a long lifetime.
 
 A main contribution of this work is the development of a reasoned approach to system-level rechargeable capacity sizing for energy harvesting sensor applications.
-Previous platforms in the literature have sized rechargeable capacity using ineffective heuristics or via arbitrary means.
+Previous platforms in the literature have sized rechargeable capacity using ill-conceived heuristics or via arbitrary means.
 We develop a more reasoned heuristic for capacity sizing that is based on the relationship between minimum sufficient capacity, energy harvesting income, and average workload power. 
 This novel heuristic allows system designers to select a rechargeable capacity based on their intended workload, expected income distribution, and a safety margin between the average income and workload power.
 
@@ -20,7 +20,7 @@ Finally, we utilize this new heuristic and simulation tool to design and impleme
 %Platforms that utilize exclusively non-rechargeable batteries or batteryless energy harvesting are poorly suited to address these requirements.
 %Instead, we combine energy harvesting with a non-rechargeable backup and utilize our design framework to properly select and size our energy harvesting element, and rechargeable and non-rechargeable energy storage to achieve our application goals.
 The result is two indoor energy harvesting sensors that utilize energy harvesting paired with non-rechargeable backup energy. 
-These systems simultaneously provide high sensing consistency and availability and five to ten year lifetimes under conservative energy harvesting conditions.
+These systems simultaneously provide high sensing availability and five to ten year lifetimes under conservative energy harvesting conditions.
 
 Essentially, the results of this work allows system designers to build energy harvesting sensors that can capture and utilize a greater amount of available energy. 
 %As we have shown, this additional energy allows a system to perform a workload more consistently and can be used to extend the lifetime of a system with a backup battery. 
@@ -57,7 +57,7 @@ Beyond the design changes mentioned in this work, future sensors will require ad
 %\section{Conclusion}
 
 \section{Design Directions for Energy Harvesting Sensors}
-With more energy, future sensors will capable of longer lifetimes, more consistent operation, and more capable local processing. To take full advantage of this energy and to maximize their lifetime, future sensors will need methods for dynamically reducing or increasing their quality of service to match that of available harvestable and stored energy.
+With more energy, future sensors will be capable of longer lifetimes, more reliable operation, and more capable local processing. To take full advantage of this energy and to maximize their lifetime, future sensors will need methods for dynamically reducing or increasing their quality of service to match that of available harvestable and stored energy.
 For applications suitable for batteryless designs, state retention can be greatly simplified with new SoC power domain architectures, resulting in more consistent and less wasteful operation. Future sensors will also require more processing and more memory to tackle increased computational complexity of new sensing modalities and inference methods.
 
 \subsection{Measuring Energy for Dynamic Adaptation}
@@ -89,7 +89,7 @@ In particular, it would be useful to separate the power domains for an embedded 
 With separate power domains for idle and active states, it would be easier to dedicate different energy storage options for either purpose.
 As we discussed in \cref{chap:background}, one of the most challenging problems that batteryless researchers have attempted to address is maintaining forward progress over system power outages.
 They have developed state retention strategies that save volatile state to non-volatile flash or other memory.
-All of these strategies assume that the entire system will lose power at some point, and some state will be lost and must be recomputed next time energy is available.
+All of these strategies assume that the entire system will lose power at some point, and some state will be lost and must be recomputed the next time energy is available.
 
 With a different power domain architecture that isolates active and idle operation, it would be possible to dedicate a small amount of non-rechargeable backup energy to greatly simplify and improve state retention for batteryless systems.
 This backup energy store would exist solely to retain state when the system runs out of harvested energy.
@@ -100,7 +100,7 @@ Separate power domains would provide a simple and long-lasting method for state 
 
 \subsection{Sensing Dimensionality Requires Interfaces and Memory}
 In addition to new power architectures, low power embedded processors and sensors would also benefit from the inclusion of standard, high-speed, parallel interfaces for fast data transfer, and additional memory to hold and manipulate that data.
-Sensing modalities will continue to increase in power efficiency and the data they produce will increase in dimensionality.
+Sensing modalities will continue to increase in power efficiency and the data they produce will increase in size and dimensionality.
 
 This increase in data will require high speed and high bandwidth interfaces that are not commonly built into existing off-the-shelf embedded processors.
 For this reason, many recent research systems built to interface with image sensors have resorted to developing slow and inefficient bit-bang protocols, or in \namec{}'s case, shoehorning existing interfaces to interface with image sensors~\cite{josephson2019wireless, desai2022camaroptera}. 
@@ -121,10 +121,10 @@ Partially, this is due to the workloads commonly performed on desktops and phone
 If embedded sensors are to collect and manipulate image data, or other sensor data with higher dimensionality, they will require more memory.
 \namec had enough memory to capture a single raw image frame, but did not have enough to demosaic the image locally.
 The nRF52840 used on \namec was capable of performing fast JPEG compression as well as other simple image manipulation like downsampling, but was limited by the amount of memory available to it.
-Similarly, the neural network models for image inference were limited by the memory on the system, resulting in model that sacrificed substantial accuracy just so it could feasibly fit and run within the memory constraints.
+Similarly, the neural network models for image inference were limited by the memory on the system, resulting in models that sacrificed substantial accuracy just so they could feasibly fit and run within the memory constraints.
 Future embedded SoCs will require greatly increased memory to match the increased complexity and data dimensionality of new sensing modalities and the inference to make sense of it.
 
-\section{The Implications for Future Sensing}
+\section{Implications for Future Sensing}
 This dissertation has developed and presented a novel design framework for building energy harvesting wireless sensors that can achieve application goals. 
 This design framework provides a novel heuristic for sizing capacity to better capture harvestable energy for a given application, and identifies a hybrid architecture that combines harvesting with non-rechargeable backup energy as a design point that provides longevity and reliability.
 

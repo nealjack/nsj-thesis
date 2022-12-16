@@ -2,7 +2,7 @@
 \label{chap:impl}
 
 This chapter considers two example sensing applications and the design and implementation of wireless sensor systems to achieve the goals of these applications.
-We explore the system design for these applications within the context of the conclusions of \cref{chap:intuition,chap:capacity,chap:battery}, which suggest that energy capacity is highly important for energy harvesting wireless sensor performance.
+We explore the system design for these applications within the context of the conclusions of \cref{chap:intuition,chap:capacity}, which suggest that energy capacity is highly important for energy harvesting wireless sensor performance.
 The first application that we consider is the measurement of fine-grained workplane illuminance. 
 Illuminance measurements at the desk or computer monitor can be used to inform the operation of a lighting control system to balance artificial and natural light for lighting efficiency and occupant comfort. 
 The goals of this application are to measure illuminance at high granularity with high availability and provide a lifetime of at least a decade. 
@@ -12,7 +12,7 @@ Human occupancy measurement can help inform building energy management and clima
 The goal of this application is to accurately and consistently detect the presence of humans within view while providing a lifetime of several years.
 This application considers an existing batteryless image sensing solution and reconsiders their design in the context of the conclusions of previous chapters.
 We propose designs for each of these applications, and detail their implementation and evaluation.
-Utilizing a hybrid energy harvesting architecture with sufficient rechargeable energy buffer and a backup non-rechargeable energy storage, our proposed sensor designs are able to provide significantly higher availability than batteryless designs, as well as much longer lifetimes than battery-based designs. 
+Utilizing a hybrid energy harvesting architecture with sufficient rechargeable energy buffer and a backup non-rechargeable energy storage, our proposed sensor designs are able to provide significantly higher availability than batteryless designs, as well as much longer lifetimes than designs that solely use non-rechargeable batteries. 
 
 \section{Measuring Workplane Illuminance}
 \label{sec:impl:permamote}
@@ -53,7 +53,7 @@ Since the intensity of daylight can be unpredictable as it depends on weather, i
 Artificial lighting can be used to augment insufficient natural light, but it requires fine-grained measurement to provide feedback to control and maintain a set point in a space.
 In particular, workplane illuminance for commercial buildings is important for occupant comfort and productivity, but is difficult to maintain with existing lighting control systems. 
 Modern lighting control systems that perform both measurement and control are generally limited to large zones of measurement and influence. 
-The cost of instrumentation and automation is often too exorbitant to justify fine-grained more fine-grained focus.
+The cost of instrumentation and automation is often too exorbitant to justify fine-grained sensing.
 This often results in inequitable and sometimes uncomfortable lighting for occupants.
 Wireless sensing could provide a solution for fine-grained workplane measurement for daylighting applications, assuming the sensor does not require frequent maintenance and provides high availability and consistent measurements for the lighting system feedback loop.
 For this specific example, our application goals are to provide at least a ten year lifetime with consistently high availability. 
@@ -92,10 +92,10 @@ Assuming the lower end of efficiency (10\%) and the upper bound of indoor irradi
 On average, this income power provides more than sufficient average power to support various frequencies of the sense and send workload.
 We can consult \cref{sec:intuition:capacity,sec:capacity:capture} to estimate the minimum required capacity for the sense and send workload.
 Considering the average power required by the sense and send workload with a 30 second period (24.5\ssi{\micro\watt}), 
-the minimum sufficient capacity should be \num{1.4E3} times the average workload power. 
+the minimum sufficient capacity should be \num{1.4E3} times the average workload power according to our capacity sizing heuristic. 
 This is if we assume an income distribution similar to the EnHANTs Setup D and an income margin of 300\% of the expected workload power\footnote{100\ssi{\micro\watt} represents a 300\% margin over the 24.5\ssi{\micro\watt} workload}.
-This suggests the capacity of the rechargeable energy storage should be on the order of 34\ssi{\milli\Wh}.
-This agrees with results from our simulation in \cref{fig:capacity:availability} suggesting energy capacity on the order of 1--10\ssi{\milli\Wh} will be sufficient to achieve near perfect availability in conditions like Setup D captures.
+Given this heuristic scaling factor, the capacity of the rechargeable energy storage should be on the order of 34\ssi{\milli\Wh}.
+This agrees with results from our simulation in \cref{fig:capacity:availability} that suggests energy capacity on the order of 1--10\ssi{\milli\Wh} will be sufficient to achieve near perfect availability in conditions like Setup D captures.
 The simulation suggests slightly less capacity is required compared to the heuristic estimate.
 This is because the simulations assume the energy buffer starts fully charged.
 Most systems, especially those that rely on rechargeable batteries, are deployed fully or partially charged.
@@ -432,7 +432,7 @@ Human occupancy is also a useful metric for regulating building heating and cool
 The presence and number of people in a space directly effects the amount of heating, ventilation, and air conditioning (HVAC) a building must perform to maintain a temperature set point~\cite{wei2020deep}.
 Compared to lighting, building HVAC is much more energy intensive, with cooling consisting of 10\% of the total U.S. electricity consumption in 2021~\cite{aeo2022}. 
 Occupancy is measured in lighting control systems, however they often rely on a binary indication of occupancy based on simple ultrasonic or PIR motion detection~\cite{levitonDecora}.
-This technique can not quantify the occupancy of a space, and it is prone to false positives and negatives.
+This technique cannot quantify the occupancy of a space, and it is prone to false positives and negatives.
 Non-human objects that move through a space can trigger an ultrasonic sensor, while any rapid changes in surface temperatures can result in false positives for a PIR sensor.
 When a person is not moving sufficiently, both ultrasonic and PIR sensors may sense a false negative.
 Instead of, or in addition to these binary occupancy measurements, image sensing can be used to more accurately capture the occupancy, including person count, of a space.
@@ -468,7 +468,7 @@ Camaroptera, like many batteryless systems, operates opportunistically.
 Whenever its capacitor is charged sufficiently, it turns on and  performs its workload. 
 Camaroptera's workload consists of capturing an image, performing some computations and inference on this image, compressing the image, and finally transmitting the packetized image. 
 Camaroptera's energy storage is sized to support the most energy intensive operation in its workload: transmitting a single LoRa packet.
-A single packet can not fit an entire compressed image, so Camaroptera relies on multiple power cycles to send between seven and eight packets to transmit an entire image.
+A single packet cannot fit an entire compressed image, so Camaroptera relies on multiple power cycles to send between seven and eight packets to transmit an entire image.
 All combined, a single image capture and transmission requires 781\ssi{\milli\joule}\footnote{3.06 (capture) + 0.253 (difference) + 66 (inference) + 40 (JPEG) + 96$\times$7 (transmission) = 781\ssi{\milli\joule}~\cite{desai2022camaroptera}}.
 When idle, Camaroptera's power subsystem consumes 197\ssi{\micro\watt}.
 With this information, along with operation timing provided by the authors~\cite{desai2022camaroptera}, we are able to complete a simulation configuration like \cref{tab:capacity:parameters} for Camaroptera's hardware design and workload.
@@ -480,7 +480,7 @@ We scale the mean of the synthesized outdoor trace to represent 10 and 50\ssi[pe
 The simulation results of Camaroptera's average packet distribution under these two harvesting conditions are summarized by \cref{fig:impl:camaroptera_pkt}.
 With either income, Camaroptera is able to maintain high image capture and transmit rates when light is available. 
 However, as expected of a batteryless system, when light is unavailable, Camaroptera is unable to capture and send many images.
-Since Camaroptera performs its workload in response to its energy storage state, it can not maintain a periodic schedule or reliably react and detect the presence of people.
+Since Camaroptera performs its workload in response to its energy storage state, it cannot maintain a periodic schedule or reliably react and detect the presence of people.
 
 \placefigure{fig:impl:camaroptera_pkt}
 
@@ -649,7 +649,9 @@ User applications can easily subscribe to incoming images and use them as inputs
 \begin{subfigure}{0.49\columnwidth}
 \includegraphics[width=\columnwidth]{figs/permacam/demosaic.jpeg}
 \end{subfigure}
-\caption{\normalfont{An image from \namec, displayed as a mosaiced image (left) and demosaiced (right).}}
+\caption{\normalfont{An image from \namec, displayed as a mosaiced image (left) and demosaiced (right).
+\namec is capable of capturing 320x320 resolution color images, which can be directly fed to machine learning inference tools for object, person, or in this case: dog detection.
+}}
 \end{definefigure}
 
 \begin{definetable}{tab:measurements}
@@ -798,7 +800,7 @@ We train this model for 80 epochs on the Visual Wake Word dataset~\cite{chowdher
 \caption{raw}
 \label{fig:raw}
 \end{subfigure}
-\caption{An image compressed with different quality factors. \normalfont{In this scene, we set smart lights to bright, intense colors to elucidate the effects of compression on color representation. Compression is performed on the mosaiced version of the image, which after transmission is demosaiced into the color representations displayed. Due to this, an image compressed with a low quality factor loses significant color information compared to the raw image. Luckily, high quality factors produce a near-indistinguishable representation of the raw image. We explore a more quantitative view of image similarity in \cref{fig:ssim}.}}
+\caption{An image compressed with different quality factors. \normalfont{In this scene, we set smart lights to bright, intense colors to determine the effects of compression on color representation. Compression is performed on the mosaiced version of the image, which after transmission is demosaiced into the color representations displayed. Due to this, an image compressed with a low quality factor loses significant color information compared to the raw image. Luckily, high quality factors produce a near-indistinguishable representation of the raw image. We explore a more quantitative view of image similarity in \cref{fig:ssim}.}}
 \end{definefigure}
 
 \begin{definefigure}{fig:size-time-energy}
@@ -857,7 +859,7 @@ We train this model for 80 epochs on the Visual Wake Word dataset~\cite{chowdher
     \centering
     \includegraphics[width=\columnwidth]{figs/permacam/permacam_processing/distance_detection.pdf}
     \caption{
-        Detection confidence as distance from camera to person is increased. Compared to a modern smartphone camera, the camera on \namec can not compete due to limited resolution. However, images captured by \namec still enable person detection at a distance of 15-20 meters. This distance is generally sufficient for most indoor spaces.
+        Detection confidence as distance from camera to person is increased. Compared to a modern smartphone camera, the camera on \namec cannot compete due to limited resolution. However, images captured by \namec still enable person detection at a distance of 15-20 meters. This distance is generally sufficient for most indoor spaces.
     }
 \end{definefigure}
 
@@ -959,7 +961,7 @@ In \cref{fig:map}, we display the mAP for different JPEG quality factors. Surpri
 \subsubsection{Limitations of resolution}
 \name{}'s camera is limited in resolution and color representation compared to most image sensors in modern cameras and cell phones. For example, the Google Pixel 3 features a 12.2 megapixel image sensor, which offers two orders of magnitude more resolution than the HM01B0's 0.1 megapixel. A lower resolution places a limit on the size of objects and the distance at which they can be detected. If an object is only represented by a few pixels, there is unlikely to be enough information to successfully detect it. To evaluate the capability to perform object detection with images captured by \name{}, we compare detection accuracy to images captured by a modern cell phone camera. We successively capture images of a person at varying distances and measure the resultant detection accuracy, if any. The results are summarized in \cref{fig:distance}.
 
-A person is successfully detected at a distance of 20 meters with images from \name{}, though confidence is only 16\%. Unsurprisingly, a person is easily detected at all distances tested with images taken by a Pixel 3. While images captured by \name{} can not compete with the resolution of those captured by cell phones, they are sufficient for detection at reasonable distances. Many indoor spaces do not have sight lines longer than 20 meters, and if they do, additional camera coverage can help mitigate the lack of resolution of a single camera. The ability to clearly depict objects in the distance is partially dependent on the lens configuration of a camera. During this experiment, \name{} was configured with a 200\textdegree\xspace, wide angle lens. Better performance could be achieved with a lens with a narrower field of view and more magnification, at the cost of less coverage. We envision most applications will prioritize field of view to cover large areas instead of additional magnification.
+A person is successfully detected at a distance of 20 meters with images from \name{}, though confidence is only 16\%. Unsurprisingly, a person is easily detected at all distances tested with images taken by a Pixel 3. While images captured by \name{} cannot compete with the resolution of those captured by cell phones, they are sufficient for detection at reasonable distances. Many indoor spaces do not have sight lines longer than 20 meters, and if they do, additional camera coverage can help mitigate the lack of resolution of a single camera. The ability to clearly depict objects in the distance is partially dependent on the lens configuration of a camera. During this experiment, \name{} was configured with a 200\textdegree\xspace, wide angle lens. Better performance could be achieved with a lens with a narrower field of view and more magnification, at the cost of less coverage. We envision most applications will prioritize field of view to cover large areas instead of additional magnification.
 
 \placefigure{fig:distance}
 
@@ -988,7 +990,7 @@ Considering the effort to deploy machine learning inference to a microcontroller
 
 \section{Summary}
 The designs of \name and \namec are results of the design process developed in \cref{chap:intuition}, \cref{chap:capacity}, and \cref{chap:battery}. These designs are simultaneously long-lived and highly available solutions for illuminance sensing and image sensing.
-We avoid adhering to a single design strategy, such as a batteryless or preallocation-only design.
+We avoid adhering to a single design strategy, such as a batteryless or energy preallocation-only design.
 Instead, we consider the requirements of each application and identify the type and size of energy harvesting, rechargeable buffers, and non rechargeable storage to achieve these goals.
 The end results are hybrid energy harvesting systems that utilizes a rechargeable LTO battery for buffering, and either coin cell or cylindrical non-rechargeable batteries for backup.
 Through simulation, we show that these designs can achieve the intended application goals better than any other proposed battery-based or batteryless wireless sensor power supply in the literature.

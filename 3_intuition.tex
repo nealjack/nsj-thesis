@@ -1,5 +1,7 @@
 \chapter[Developing System-Level Power Supply Design Heuristics][Developing System-Level Design Heuristics]{
-Developing System-Level Power Supply Design Heuristics
+Developing System-Level
+\\
+Power Supply Design Heuristics
 }
 %system level
 
@@ -19,8 +21,9 @@ Harvesting and storage technologies are often difficult to directly compare, and
 Many times, the type and size of harvesters, batteries, or capacitors are chosen arbitrarily~\cite{hamiltoniot,lee2013modular,juang2002energy}, or are chosen to make the design minimally feasible~\cite{yervaGrafting12,debruin2013monjolo,hesterFlicker17,afanasov2020battery}.
 
 The goal of this chapter is to provide high-level guidance for navigating the design space of wireless sensor power supplies.
-With the common application requirements from \cref{sec:background:app} in mind, this chapter provides guidance for designers as to when energy harvesting is a beneficial technique for energy income instead of, or in addition to, a non-rechargeable storage, how prospective income and workloads drive component types and sizing, and if energy-harvesting is utilized, what techniques are required to ensure a minimum useful operation or what is required to capture sufficient energy to maximize system availability.
-To limit scope of this chapter among those following to a manageable size we choose to focus exclusively on indoor photovoltaic energy harvesting.
+With the common application requirements from \cref{sec:background:app} in mind, this chapter provides guidance for designers as to when energy harvesting is a beneficial technique for energy income instead of, or in addition to, a non-rechargeable storage. We also explore how prospective income and workloads drive component types and sizing, and if energy-harvesting is utilized, what software and hardware techniques are required to ensure a feasible design, or what is  
+required to capture sufficient energy to achieve acceptable system availability.
+To limit scope of this chapter to be manageable, we focus exclusively on indoor photovoltaic energy harvesting.
 %This is because in the conditions of the majority of human-occupied indoor locations, photovoltaic harvesting offers an order of magnitude more energy than other methods.
 %Despite this focus, similar explorations can be made with other harvesting methods.
 Occupied indoor environments are the focus of a significant
@@ -52,17 +55,17 @@ indoor photovoltaic harvesting in this chapter, the conclusions drawn from the f
 
 \section{Energy Income}
 \label{sec:intuition:energy_income}
-A wireless sensor must source energy from somewhere.
-Energy-harvesting has the potential to supply energy indefinitely. However, harvested energy is often unreliable and unpredictable, and instantaneous power delivery is limited.
+A wireless sensor requires a source of electrical energy to function. 
+Energy-harvesting has the potential to supply energy indefinitely. However, harvested energy is often variable and unpredictable, and instantaneous power delivery is limited.
 Conversely, primary-only systems have a limited amount of energy, but can use that energy at any rate they please, within the power limits of the battery.
 Because of these differences, it can be difficult to directly compare their performance and determine at what scale and in which conditions harvesting, energy preallocation, or a hybrid of the two, is the preferable power source strategy for any given application.
 This section begins with a description of constraints for properly sizing components to ensure a sufficient lifetime and energy income.
 Next, it provides a method of comparison of energy capture potential between harvesting and preallocation methods.
-The constraints and relations defined and explored in the following section can be used to estimate proper harvester and battery selection to achieve application requirements.
+Finally, the constraints and relations defined and explored in the following section can be used to estimate proper harvester and primary battery selection to achieve application requirements.
 
 \subsection{Sizing}
 \label{sec:intuition:energy_income_sizing}
-Regardless of how a sensor is powered, it must receive sufficient energy at the right times to continuously and reliably operate.
+Regardless of how a sensor is powered, it must have sufficient energy at the right times to continuously and reliably operate.
 Assuming that the average power required to drive an application is known at design time, it is relatively straightforward to determine the correct size of a battery to achieve an expected lifetime, or a photovoltaic panel to achieve an average power income.
 %The improvement in energy density of batteries and the efficiency of energy harvesting sources has not improved at the same rate as the energy efficiency of CMOS and low power radio technology.
 %Barring any transformative improvements in energy storage, energy income is primarily dependent on the volume or area available for a battery or harvester, respectively.
@@ -80,8 +83,8 @@ If the nominal voltage of the battery is known, it can be used to estimate lifet
 %\end{equation}
 
 \noindent
-\Cref{eqn:intuition:energy_battery_estimation} describes the energy contained in a battery of capacity $C$ and a nominal voltage $U$.
-Assuming a desired lifetime $T$, \cref{eqn:intuition:power_battery_estimation} describes the maximum achievable average power supplied by such a battery.
+\Cref{eqn:intuition:energy_battery_estimation} describes the energy contained in a battery with a charge capacity $C$ and a nominal voltage $U$. For example, a 1\ssi{\Ah} battery with a nominal voltage of 3\ssi{\volt} would provide 3\ssi{\Wh} of energy.
+Assuming a desired lifetime $T$, \cref{eqn:intuition:power_battery_estimation} describes the maximum achievable average power supplied by such a battery over that lifetime.
 Likewise, the average power provided by a photovoltaic of area $A$ is described by \cref{eqn:intuition:p_power}.
 
 \begin{equation} \label{eqn:intuition:p_power}
@@ -90,9 +93,9 @@ Likewise, the average power provided by a photovoltaic of area $A$ is described 
 
 \noindent
 Where
-$\eta$ denotes the efficiency of the photovoltaic, and is often between 18 and 20\%.
-The average energetic spectral irradiance, $\bar{E_e}$, is generally between 10 and 100\ssi{\micro\watt\per\centi\meter\squared} for photovoltaics in indoor conditions~\cite{yervaGrafting12,gorlatova2013networking}.
-Given an average workload power ($\bar{P_w}$) and a desired lifetime $T$,
+$\eta$ denotes the efficiency of the photovoltaic, and is often between 15 and 20\%.
+The average energetic spectral irradiance, $\bar{E_e}$, is generally between 10 and 100\ssi{\micro\watt\per\centi\meter\squared} for indoor conditions~\cite{yervaGrafting12,gorlatova2013networking}.
+Given an average workload power $\bar{P_w}$ and a desired lifetime $T$,
 \cref{eqn:intuition:battery_capacity,eqn:intuition:panel_size}
 describe the necessary battery capacity and solar cell size.
 
@@ -106,22 +109,22 @@ describe the necessary battery capacity and solar cell size.
 For some applications, it is obvious when utilizing energy harvesting is a better design choice over a battery.
 Such is the case with Zebranet collars~\cite{juang2002energy}. Powering the collar would require a large and heavy battery, beyond the weight constraints of application, and would only power the system for 5 days, far below the lifetime goal of a year or more of operation.
 In other cases, it is much more difficult to determine which method is appropriate.
-This is especially apparent in environments where available harvestable energy is limited, like indoor environments.
+This is especially apparent when available harvestable energy is limited, like indoor environments.
 
 
 \subsection{Harvesting can Provide More Energy than Preallocation}
 \label{sec:intuition:energy_income_pvh}
 When potential harvestable energy is limited, it is difficult to determine whether energy preallocation or harvesting is the most suitable technique.
-It is very difficult to directly compare these methods, as the power and energy supplied by either option is dependent on many factors, including the availability, variance, and magnitude of available harvestable energy, the size of the battery or harvester, and the expected sensor workload.
+It is very difficult to directly compare these methods, as the power and energy supplied by either option is dependent on many factors, including the variance and magnitude of available harvestable energy, the size of the battery or harvester, and the intended sensor workload.
 %The most important metrics for consideration are the power and energy supplied by battery preallocation or energy harvesting.
 %Energy income defines both the lifetime of a sensor, as well as a maximum supportable power available for a workload.
-Prior work has attempted to approach a comparison of non-rechargeable energy storage and energy harvesting by comparing the expected average power supplied by either option.
+Prior work has attempted to approach a comparison of preallocated energy storage and energy harvesting by comparing the expected average power supplied by either option.
 They simplify the problem by considering a theoretical cubic sensor of volume $V = L^3$,
 with the assumption that the entire cubic sensor volume is dominated by a lithium primary battery, or the entire area of one $A = L^2$ face is dominated by a photovoltaic panel~\cite{yervaGrafting12}.
 The authors compare the power provided by the battery cube, with that of the photovoltaic square, over the shelf-life of the battery.
 %concluding that as sensors continue to reduce in size, they will derive more benefit from harvesting over battery preallocation.
 
-For this analysis, \cref{eqn:intuition:energy_battery_estimation} is not as useful for direct comparisons.
+For this analysis, \cref{eqn:intuition:energy_battery_estimation} is not useful for direct comparisons.
 %for comparing battery energy capacity with photovoltaic energy capture.
 A more appropriate method utilizes volumetric energy density.
 Battery energy capacity ($E_b$) can be estimated based on the volume of the battery ($V$) and its volumetric energy density ($\rho$).
@@ -152,8 +155,6 @@ E_b = \rho V
 %\noindent Where the energy density of the battery is $\rho$
 %and $T$ is the lifetime of the battery.
 
-\placefigure{fig:intuition:eh_worth_it}
-
 \noindent When considering \cref{eqn:intuition:b_energy,eqn:intuition:b_power}, the authors use a more conservative 653\ssi[per-mode=symbol]{\milli\Wh\per\cm\cubed} for $\rho$,
 and assume a 7 year lifetime based on shelf-life. They use this lifetime in order to calculate the maximum power that a primary cell can provide over this period~\cite{yervaGrafting12}.
 This assumption for battery lifetime is very conservative, as it considers a primary battery entirely empty or unusable after its reported shelf-life.
@@ -174,21 +175,22 @@ Any aging effects other than self-discharge are unpredictable and we do not cons
 With this new definition of battery lifetime, the comparison of power is not as useful a metric, as workload power provided by the battery ($P_w$) is independent of the battery capacity.
 The power provided by a battery \textit{is} technically limited by its maximum rated load current, which is often related to its capacity.
 However, this limit is not usually relevant when considering low power operation.
+
 Conversely, the power provided by an energy harvester is unrelated to the requisite workload power at all, and is incomparable with that of an on-demand preallocated power source.
-Instead of power, the energy provided to a workload by a primary cell and the energy captured by a similarly sized photovoltaic over the course of the lifetime of the primary cell are directly comparable.
+Instead of power, the energy provided by a primary cell and the energy captured by a similarly sized photovoltaic over the course of the lifetime of a primary cell are directly comparable.
 The energy captured by a photovoltaic over a time period $T$ is represented by \cref{eqn:intuition:p_energy}.
 The authors of \cite{yervaGrafting12} assume the lower end of irradiance to provide a conservative estimate, but ignore photovoltaic efficiency $\eta$. This results in an overestimation of harvestable power and energy.
 This analysis assumes a conservative photovoltaic efficiency of 17\%.
-\Cref{eqn:intuition:p_power,eqn:intuition:p_energy} are more realistic representations of photovoltaic power and energy.
+\Cref{eqn:intuition:p_energy} is a more realistic representation of captured photovoltaic energy.
 
 \begin{equation} \label{eqn:intuition:p_energy}
 E_h = \eta \bar{E_e} A T
 \end{equation}
 
 
-\placefigure{fig:intuition:eh_worth_it_nano}
+\placefigure{fig:intuition:eh_worth_it}
 
-With these relations, it is possible to calculate the energy contained in a battery of size $L^3$, the lifetime of that battery given an average workload power $P_w$, and the energy captured by a photovoltaic panel of size $L^2$ over the lifetime of the similarly sized battery.
+With \cref{eqn:intuition:b_energy,eqn:intuition:p_energy}, it is possible to calculate the energy contained in a battery of size $L^3$, the lifetime of that battery given an average workload power $P_w$, and the energy captured by a photovoltaic panel of size $L^2$ over the battery lifetime.
 This is visually presented in \cref{fig:intuition:eh_worth_it},
 an updated energy-harvesting reality check~\cite{yervaGrafting12}.
 This figure compares the preallocated energy provided by a battery with that of the potential harvestable solar energy over the same time period.
@@ -202,28 +204,29 @@ The extents of average indoor photovoltaic harvesting are represented by dashed
 (100\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}) lines.
 The point at which the harvesting lines (orange, red) cross the battery line (blue) indicate the size at which a solar panel of size $L^2$ will harvest the same amount of energy provided by a battery of size $L^3$ over the lifetime ($T$) of the battery.
 These crossing points also indicate the size at which harvesting collects sufficient average power to drive its intended workload, approaching energy neutral operation.
-For appropriate workloads and lighting conditions, the crossing points suggest that a sensor with a driving dimension larger than 4\ssi{\centi\meter} will be able to harvest more energy than is contained in a similarly sized battery over its lifetime.
+For appropriate workloads and lighting conditions, the crossing points suggest that a sensor with a driving dimension larger than 4\ssi{\centi\meter} will be able to harvest more energy than is contained in a similarly sized battery for all but the most taxing income and workload scenarios. 
 
+\placefigure{fig:intuition:eh_worth_it_nano}
 
 The same analysis can be done for designs that scale down in both size and power. Millimeter-scale systems like the Michigan Micro Mote occupies 1\ssi{\milli\meter\squared} and requires on the order of 100s of \ssi{\nano\watt} to power its workload~\cite{lee2013modular}.
-\Cref{fig:intuition:eh_worth_it_nano} is a reconfigured analysis, tuned for \ssi{\nano\watt} workloads and millimeter-scale systems. The same dark blue line represents the energy preallocated with a lithium battery of size $L^2$. The green lines represent a 100\ssi{\nano\watt} average workload, and the teal lines represent 25\ssi{\nano\watt} workload. This figure considers the same lighting conditions as the previous figure.
-Likewise, there are sensor sizes where workloads and lighting conditions result in a sensor that will be able to collect more energy over time with energy harvesting than can be preallocated with a battery.
+\Cref{fig:intuition:eh_worth_it_nano} is a reconfigured analysis, tuned for \si{\nano\watt} workloads and millimeter-scale systems. The same dark blue line represents the energy preallocated with a lithium battery of size $L^2$. The green lines represent a 100\ssi{\nano\watt} average workload, and the teal lines represent 25\ssi{\nano\watt} workload. This figure considers the same lighting conditions as the previous figure.
+Like for \si{\micro\watt} systems, there are sensor sizes where workloads and lighting conditions result in a sensor that will be able to collect more energy over time with energy harvesting than can be preallocated with a battery.
 This reaffirms the design decisions made by the designers of many of the millimeter-scale systems, who chose to utilize energy harvesting to prolong the lifetime beyond that of a non-rechargeable battery.
 
 \placefigure{fig:intuition:compound}
 
-\subsection{A Hybrid System Maximizes Energy and Reliability}
+\subsection{A Hybrid System Maximizes Energy Capture and Reliability}
 \label{sec:intuition:hybrid}
 At the crossing points in \cref{fig:intuition:eh_worth_it,fig:intuition:eh_worth_it_nano}, the benefits of energy harvesting are compounded when considering that energy capture will continue indefinitely, beyond that of the lifetime of a battery.
 However, this energy is not guaranteed to be supplied at times when the system requires it, even when harvesting supplies enough on average to match that of workload. This reality has the potential to result in unexpected system outages and system resets.
-To ensure that a system always has sufficient energy available, a hybrid system can utilize energy harvesting with a backup preallocated energy storage.
-This section considers an cubic sensor with length $L$, with a non-rechargeable battery comprising a volume of $L^3$, and a harvester taking up one $L^2$ side of the cube face.
+To ensure that a system always has sufficient energy to operate, a hybrid system can utilize energy harvesting with a backup preallocated energy storage.
+This section considers the same cubic sensor as before, but combines the energy preallocated by the battery and captured by the photovoltaic panel. 
 A hybrid system can operate even in the absence any ambient or accumulated harvestable energy. A hybrid system will possess a finite lifetime, but will have guaranteed reliability during its lifetime.
 This lifetime primarily depends on the disparity between its intended workload and the availability of harvestable energy.
 This disparity can be expressed by \cref{eqn:intuition:p_total}.
-If the average power supplied by a photovoltaic harvester is sufficient to drive the intended workload, the total drain, $P_t$, on the battery is equal to its self-discharge power, $P_l$.
+If the average power supplied by a photovoltaic harvester is sufficient to drive the intended workload, the total power drain, $P_t$, on the battery is equal to its self-discharge power, $P_l$.
 If the photovoltaic does not harvest sufficient power for the workload, the battery is drained at an average rate of the difference, plus the battery self-discharge.
-Given this new definition of battery drain power, the lifetime of its battery now resembles \cref{eqn:intuition:compound}.
+Given this new definition of sensor power, the lifetime of its battery now resembles \cref{eqn:intuition:compound}.
 \begin{equation} \label{eqn:intuition:p_total}
     \bar{P_t} =
     \begin{cases}
@@ -238,33 +241,32 @@ If the amount of average harvestable power is greater than required for a sensor
 The additional energy captured lengthens the lifetime of the system, and the longer lifetime allows for additional energy capture.
 \Cref{fig:intuition:compound} explores this relationship visually, using the same workloads, lighting conditions, and visual scale and line types as \cref{fig:intuition:eh_worth_it}. The additional energy capture results in the battery line crossing points shifting to the left, meaning that in a hybrid system a smaller harvester and battery are required to capture the same amount of energy as that provided by a battery when compared to a harvester-only system.
 For a hybrid system, these crossing points represent a design point that is able to harvest the same amount of energy as it has preallocated, in effect providing twice the energy as a battery-only system of the same dimensions.
-As the size of the system increases beyond the size at which the harvesting lines and battery line cross, the energy supplied by harvesting begins to approach a vertical line.
-This represents the size at which the average income from harvesting is sufficient to power the workload.
-When harvesting can sustain the system indefinitely, the backup primary battery is infrequently or never utilized, and its lifetime is only limited by its self discharge.
-These locations where the harvesting energy lines approach verticality represent the ideal sizing for a hybrid system given an intended workload and lighting conditions.
+As the size of the system increases beyond the size at which the harvesting lines and battery line cross, the energy supplied by harvesting begins to approach a vertical asymptote.
+This represents the size at which the average income from harvesting is sufficient to power the workload on its own. 
+When harvesting can sustain the system indefinitely, the backup primary battery is infrequently or never utilized, and its lifetime is limited by its self discharge.
+These locations where the harvesting energy lines approach a vertical asymptote represent the ideal sizing for a hybrid system given an intended workload and lighting conditions.
 This ideal sizing results in a harvester large enough to capture enough average power to results in energy neutrality, where the system harvests enough energy to sustain its operation.
 
 \subsection{Limitations}
 
 The above analysis is a simplified view of a complex reality.
 The analysis assumes that a sensor's workload and income can be treated as static averages.
-While a case can be made that on a timescale of hours to days, for many applications a sensor's workload power can be consolidated into an average.
-The same assumption can not easily be made for energy income.
+While it can be argued that on a timescale of hours to days, a sensor's workload power can be consolidated into an average for many applications.
+The same assumption cannot easily be made for energy income.
 For example, lighting conditions are often both diurnal and seasonal, meaning that a daily or even weekly average income from a photovoltaic will vary significantly over the course of a day or year depending on the angle and intensity of sunlight, or the occupancy and activation of artificial lighting.
-It is a common challenge for energy harvesting systems to continue operating when there is insufficient harvestable energy.
-For this problem, the reliability and uptime benefits of adding non-rechargeable backup energy storage in a hybrid sensor are not highlighted in this analysis.
 
 For simplicity's sake, the analysis of this section also assumes the whole sensor volume is available for energy storage, and a whole face is available for energy harvesting.
-This assumption breaks down when considering sensors and PCB elements that require substantial volume, such as a PIR sensor, or a sensor that can not be covered by a harvesting element, such as an image sensor or light sensor.
+This assumption breaks down when considering sensors and PCB elements that require substantial volume, such as a PIR sensor, or a sensor that cannot be covered by a harvesting element, such as an image or light sensor.
 However, the relationship to energy capacity and harvesting capability are directly and linearly related to volume and area respectively. The general conclusions should hold, even if some percentage of the volume and area of a sensor are occupied by elements other than energy storage or harvesting.
 
 The above analysis also does not consider the effect of rechargeable energy capacity on energy income from harvesting.
 The analysis assumes an ideal rechargeable energy storage with limitless storage.
 In reality, energy storage elements are far from limitless or ideal.
 A small energy capacity will fill up often, requiring shunting of any additional harvested energy.
-By shunting, or wasting this energy, a system with insufficient capacity will effectively reduce the average energy income power available to it. \Cref{sec:intuition:feasibility,sec:intuition:capacity} explore the effect of capacity in further detail.
+By shunting, or wasting this energy, a system with insufficient capacity will effectively reduce the average energy income power available to it. 
+\Cref{sec:intuition:feasibility,sec:intuition:capacity} explore the effect of capacity in further detail.
 
-The analysis of this section also does not consider the effects of miniaturization, especially as components approach the scale of millimeters and their packaging begins to dominate their volume. As batteries reduce in size, the proportion of volume available for energy storage versus the volume taken by packaging decreases, resulting in less energy density. This analysis assumes a static energy density for lithium primary cells, when in reality the density would also decrease as the size of the battery decreases. Similarly, harvesting elements experience less surface area for the actual harvester versus area required to hold and provide electrical connections at smaller scales.
+The analysis of this section also does not consider the effects of miniaturization, especially as components approach the scale of millimeters and their packaging begins to dominate their volume. As batteries reduce in size, the proportion of volume available for energy storage versus the volume taken by packaging decreases, resulting in less energy density. This analysis assumes a static energy density for lithium primary cells, when in reality the density would also decrease as the size of the battery decreases. Similarly, harvesting elements experience less surface area for the actual harvester versus area required to affix and provide electrical connections at smaller scales.
 System designers seeking to build extremely small devices will have to consider additional factors when considering element sizing.
 Despite these limitations, the analysis of this chapter has enough basis to serve as a guiding rule-of-thumb when considering methods for energy income as well as component sizing requirements for various applications.
 
@@ -340,8 +342,8 @@ This section seeks to illustrate the relationship of income and storage on the r
 \subsection{Design Regimes}
 \label{sec:framework:regime}
 \Cref{fig:intuition:framework} represents an illustration of a wireless sensor design framework.
-This framework splits the design space into four main regimes: \textbf{Always on},
-\textbf{Infeasible}, \textbf{State retention required}, and \textbf{State retention not required}.
+This framework splits the design space into four main regimes: \textsf{Always on},
+\textsf{Infeasible}, \textsf{State retention required}, and \textsf{State retention not required}.
 Additionally, the figure illustrates the conditions in which hysteresis management techniques are helpful or less helpful.
 The following sections describe these regimes and their constraints in more detail.
 
@@ -363,7 +365,7 @@ This green region of \cref{fig:intuition:framework} represents design points tha
 \subsubsection{Infeasible}
 If the energy harvester supplies less average power than
 the system self discharge and leakage, the system will very infrequently be able to charge its energy buffer.
-Leakage can exist in a system via component quiescent currents, energy storage self-discharge, and parasitic current paths that are not eliminated when the system is powered off.
+Leakage can exist in a system via component quiescent currents, energy storage self-discharge, and parasitic current paths that are not eliminated when the system is idle or powered off.
 The constraint on minimum harvesting income and system leakage is described by \cref{eqn:intuition:leakage}.
 \begin{equation}
     \label{eqn:intuition:leakage}
@@ -391,7 +393,7 @@ This constraint is described by  \cref{eqn:intuition:atomic}.
     \label{eqn:intuition:atomic}
     E_{capacity} \geq \max X
 \end{equation}
-Designs that do not satisfy this the constraints of \cref{eqn:intuition:leakage,eqn:intuition:atomic} have insufficient income to ever power on, or have insufficient energy capacity to perform a necessary operation and are
+Designs that do not satisfy the constraints of \cref{eqn:intuition:leakage,eqn:intuition:atomic} have insufficient income to ever power on, or insufficient energy capacity to perform operations and are
 therefore infeasible.
 The red regions of \cref{fig:intuition:framework} represent design points that are \textsf{Infeasible}.
 
@@ -454,7 +456,7 @@ These designs occupy the space in \cref{fig:intuition:framework} above the horiz
 This region is represented by a gradient, as the regime is not as clearly delineated as others as it depends on factors other than harvesting input power and energy capacity.
 
 Designs that would not benefit from hysteresis management represent designs with sufficient energy income and capacity.
-With enough income and capacity, sensors can willfully enter low power sleep states for long periods, avoiding powering off and subsequent cold starting.
+With enough income and capacity, sensors can willfully enter low power sleep states for long periods, avoiding powering off and subsequent cold starts.
 These sleep states can be managed by the sensor itself, instead of being imposed by the variability of energy income.
 When sleeping, deep sleep power becomes analogous to leakage power, and hysteresis management techniques will not improve recharge times.
 While it is relatively straightforward to determine component sizing to achieve proper energy income, as described in \cref{sec:intuition:energy_income_sizing}, it is more difficult to determine the proper energy capacity to avoid power loss and frequent cold starts even with sufficient income. \Cref{sec:intuition:capacity} attempts to identify and quantify the proper energy capacity that maximizes energy capture and minimizes cold starts.
@@ -513,7 +515,6 @@ conditions.
 %We explore the lifetime of energy-harvesting
 %designs with backup energy stores in \cref{sec:primary}.
 
-\placefigure{fig:intuition:continuum}
 \section{A Case for Capacity}
 \label{sec:intuition:capacity}
 There are currently many approaches to determining the energy capacity for energy harvesting sensor designs.
@@ -524,6 +525,8 @@ They size their energy storage to support the largest atomic operation required 
 For example, the sensors developed for the aforementioned deployment at Mithræum of Circus Maximus have energy storage sized to provide enough instantaneous energy to ensure the completion of a few atomic operations and subsequent forward progress~\cite{afanasov2020battery}. Other platforms also adopt this approach for sizing: Both the previously mentioned cathodic protection system and Camaroptera size their supercapacitor bank to support sending a single atomic LoRa radio packet~\cite{nardello2019camaroptera,jagtap2021repurposing},  SkinnyPower sizes its capacitor to provide enough energy for the boot cycle of its SoC~\cite{shukla2019skinnypower}, and the Flicker platform's federated capacitors are all sized to support predefined atomic operations for its peripherals~\cite{hesterFlicker17}.
 Similarly, one-shot batteryless platforms size their energy buffer to support the entirety of their small workload~\cite{yervaGrafting12,debruin2013monjolo,campbellEnergy14,campbellThermes14}.
 
+\placefigure{fig:intuition:continuum}
+
 Other more traditional energy harvesting systems size their energy buffer to support an arbitrary amount of runtime without harvestable energy.
 The Pible platform uses a supercapacitor that allows 2 hours of BLE advertizing at a 100ms period, but employs a dynamic power management technique to scale back advertising frequency when available energy is low~\cite{fraternali2018pible}.
 The ZebraNet collar has enough battery energy capacity to support five days of operation without harvestable energy~\cite{juang2002energy}.
@@ -531,20 +534,20 @@ This approach is also taken by millimeter-scale systems. The M\textsuperscript{3
 The energy capacity allocated by all of these examples is arbitrarily chosen.
 In cases like the ZebraNet collar and the M\textsuperscript{3} platform, physical size constraints likely drive the limits of energy capacity.
 However, no consideration or analysis is given regarding the consequence of the chosen energy capacity.
-Like energy income or the size of preallocated energy, the sizing of capacity of an energy buffer must be considered in a similarly principled manner.
+Like energy income or the size of preallocated energy, the sizing of capacity of an energy buffer must be considered in a principled manner.
 
 The proper capacity of a charge buffer for a given purpose exists on a continuum of how it averages or filters temporal power variation.
 We illustrate this continuum in \cref{fig:intuition:continuum}.
 In electrical circuits, the buffer provided by capacitors generally acts as a low pass filter of incoming and outgoing power, averaging out noise, ripples, and general supply variation.
-As a capacitor or other type of charge buffer increases in capacity, it smooths out larger and larger temporal variations in power.
-For example, smaller capacitors are generally used for filtering out noise, slightly larger capacitors are used to stabilize and smooth out power supply ripple, and even larger capacitors can be used to provide instantaneous power spikes to circuits when needed.
-The capacity of a supercapacitor energy buffer increases the timescale of averaging variance in power income to hours and days.
-Rechargeable batteries offer even greater density and can smooth out energy income variation over the course of weeks, months, and seasons.
+As a capacitor or other type of charge buffer increases in capacity, it smooths out larger and larger temporal power variations. 
+For example, smaller capacitors are generally used for filtering out noise, slightly larger capacitors are used to stabilize and smooth out power supply ripple, and large capacitors can be used to provide a rush of instantaneous power to circuits when needed.
+The capacity of a supercapacitor energy buffer increases the timescale of averaging variance in power income to hours to days, depending on its capacitance.
+Rechargeable batteries offer even greater energy density and can smooth out energy income variation over the course of weeks, months, and seasons.
 
 By making arbitrary choices regarding the size of energy capacity, system designers may be impacting the efficiency of their energy harvesting and ultimately the performance of their system.
 This section seeks to identify the relationships between energy capacity, sensor workload, and potential energy income.
 By understanding these relationships, future system designers can determine suitable energy capacity analytically
-instead of making arbitrary design decisions.
+instead of arbitrarily.  
 
 % what does power subsystem need to provide?
 % upsizing battery? what are interfaces
@@ -560,7 +563,7 @@ instead of making arbitrary design decisions.
 Conversely, photovoltaic energy harvesting can differ significantly over the course of a day, a week, or even a year.
 To accurately consider the effects of capacity on energy capture, the full trace of income power must be considered, not simply an average.
 For a photovoltaic, this potential income power is dependent on the time series of energetic spectral irradiance, $E_e$, the photovoltaic efficiency $\eta$, and panel area $A$.
-The irradiance trace $E_e$ is described by \cref{eqn:intuition:irradiance}, and the resulting power available to a harvesting system based on this irradiance is given by \cref{eqn:intuition:harvest_sequence}.
+The irradiance trace $E_e$ is described by \cref{eqn:intuition:irradiance}, and the resulting trace of power available to a harvesting system based on this irradiance is given by \cref{eqn:intuition:harvest_sequence}.
 \begin{equation}
     \label{eqn:intuition:irradiance}
     E_e = (e_t) ^ {T}_{t=0}
@@ -582,12 +585,12 @@ irradiance traces, capturing over a year of data in several environments.
 The four longest running traces are summarized in \cref{tab:intuition:enhants,fig:intuition:traces}.
 In \cref{fig:intuition:traces} all irradiance traces have been min-max normalized to show the characteristics of each trace.
 Artificial light accounts for the majority of income for Setup A and B.
-The irradiance for Setup B is very clearly almost all artificial light, as it consists of a pattern of five days with the irradiance from artificial lighting followed by two days where humans are rarely present during the weekend to turn the lights on.
-Conversely, C and D have significant income from sunlight that follows a seasonal pattern throughout the year.
+The irradiance for Setup B is very clearly almost all artificial light, as it consists of a pattern of five weekdays of artificial lighting followed by two weekend days with very little light when humans are not present. 
+Conversely, traces C and D have significant income from sunlight that follows a seasonal pattern throughout the year.
 This indicates that A and B mostly follow a diurnal pattern, while C and D are simultaneously diurnal and seasonal.
 These traces exhibit different variances, which will impact the necessary capacity required to support a given workload.
 To isolate the impact of the variance of energy income, as well as the magnitude of the income, we synthesize income traces with arbitrary average power from mean-scaled EnHANTs traces. The traces are divided by their mean to achieve a mean of one, and then scaled by the multiplication of any average power.
-This allows us to sweep average power while maintaining the characteristics of each trace, resulting in a higher granularity analysis.
+This allows us to generate synthetic traces with different intensities while maintaining the characteristics of each trace, resulting in an analysis with higher granularity.
 
 \subsection{Defining a Workload}
 A sensor workload can be represented as the time series of instantaneous powers over a time period $T$, as described by \cref{eqn:intuition:work_sequence}.
@@ -634,12 +637,13 @@ While systems with large energy capacities are normally deployed with fully or p
 for later analysis using these relations, starting empty will produce a more accurate estimation of required energy capacity over long periods of time.
 For simplicity, the $\Delta t$ between each element of $P_h$ and $P_w$ can be assumed to be one second. This simplifies future calculations for energy. Also, as mentioned previously, $w_t$ is replaced by the average of the workload sequence $\bar{P_w}$.
 
-The key metric of interest given the trace of energy storage, $Y = (y_t)_{t=0}^T$, is
+The key metric of interest given the trace of stored energy, $Y = (y_t)_{t=0}^T$, is
 the amount of available energy income that was captured by the energy buffer.
 Given that the average income power is equal to the average workload power for this analysis, capturing all of the available energy also indicates enough energy was captured to run the workload continuously.
 Insufficient capacity will fill up prematurely and be unable to capture any additional energy.
 Capacity, if too small, can severely limit the total energy captured by an energy harvesting system.
 The trace of instantaneous energy captured by an energy buffer is represented by the sequence $Z = (z_t)^T_{t=0}$, and each element $z_t$ is defined by \cref{eqn:intuition:captured}. The total energy captured by an energy harvesting system over a time period $T$ is represented by the sum of the elements in $Z$, defined in \cref{eqn:intuition:captured_total}.
+At any given time, the energy captured depends on whether the energy storage is full or not. If the storage is not full, the entire $p_t \delta t$ is captured. If nearly full, only a part of the available energy is captured. 
 
 \begin{equation} \label{eqn:intuition:captured}
     z_t = \begin{cases}
@@ -651,14 +655,14 @@ The trace of instantaneous energy captured by an energy buffer is represented by
     E_{captured} = \sum^T_{t=0} z_t
 \end{equation}
 Due to the conditional and iterative nature of the elements of the capacity sequence ($Y$) and captured sequence ($Z$), there is no way to directly solve for $E_{capacity}$.
-Instead, we can use \cref{eqn:intuition:iterative_capacity,eqn:intuition:captured} to perform a parameter sweep of average workload power, income power, and capacity.
+Instead, we can use \cref{eqn:intuition:iterative_capacity,eqn:intuition:captured} to perform a parameter sweep of average workload power, income power magnitude, and capacity.
 To simplify the sweep, we assume that the sensor workload has been tailored to match the expected income, such that the average workload power is equivalent to the average energy income ($\bar{P_w} = \bar{P_h}$).
 This is a conservative assumption, as it is usually beneficial to tailor the workload to require less average power than its income.
-This provides a margin to ensure performance even if energy income is worse than expected. However, for this analysis a conservative estimate is ideal. We explore the impact of including a margin in \cref{sec:intuition:margin}.
+This provides a margin to ensure performance even if energy income is worse than expected. However, for this analysis a conservative estimate is ideal. We explore the impact of considering income margins in \cref{sec:intuition:margin}.
 
 To determine a minimum sufficient capacity, we are essentially sweeping two variables: capacity and average power.
 One of the sweeps of capacity is illustrated in \cref{fig:intuition:capacity_sweep}.
-This figure has a fixed income and workload power of 50\ssi{\micro\watt}, but sweeps capacity from that offered by a ceramic capacitor to that offered by a small rechargeable battery.
+This figure has a fixed income and workload power of 50\ssi{\micro\watt}, but capacity is varied from capacity offered by a ceramic capacitor to that of a small rechargeable battery.
 As capacity available to the system increases, the amount of harvestable energy also increases.
 There are two instances where the percentage of energy captured increases rapidly. The first occurs around a capacity of 1\ssi{\milli\Wh}, which represents sufficient capacity to overcome diurnal variation. All trace types experience a substantial increase at this point, as they all exhibit diurnal variation.
 The second rapid increase, which occurs around 100\ssi{\milli\Wh}, represents the sufficient capacity to overcome seasonal variation, which Setups C and D exhibit. Setup A also has some seasonal variation, but to a lesser extent. Setup B does not exhibit the same second rapid increase as it does not vary substantially between seasons.
@@ -680,7 +684,7 @@ Traces synthesized from Setup A require amounts of energy capacity in between th
 Energy harvesting applications that can expect an amount of natural light should size their rechargeable capacity according to either the Setup C or D lines.
 Such an application would have to scale its capacity by at least \num{2.3e3} times the expected magnitude of the income and workload power.
 For indoor applications that expect to harvest the majority of light from artificial sources, capacity can be sized according to the Setup A and B lines, to be at least \num{4E2} to \num{1E3} times the magnitude of income and workload power.
-This result is a significantly more reasoned method for determining the minimum sufficient rechargeable energy capacity than other methods, like sizing capacity to support a single atomic operation in a workload, or sizing to support arbitrary amounts of operating time.
+This result is a significantly more reasoned heuristic for determining the minimum sufficient rechargeable energy capacity than other methods, like sizing capacity to support a single atomic operation in a workload, or sizing to support arbitrary amounts of operating time.
 %Capacity sizing depends on the temporal behavior of energy income in addition to the magnitude of income and workload power.
 \placefigure{fig:intuition:required_capacity}
 
@@ -689,18 +693,18 @@ This result is a significantly more reasoned method for determining the minimum 
 Throughout this section, we have assumed that the average workload power was equivalent to the average income power. This is a very conservative assumption, and engineers rarely design systems that operate on the edge of feasibility.
 Usually, systems are over-provisioned to allow for a margin of error, usually between 20-50\%.
 For energy harvesting, this would represent altering a workload to require less than the expected available harvestable power, increasing the size of the harvester, or deploying in a location with more ambient harvestable energy.
-In \cref{fig:intuition:capacity_margin}, we model the impact of a income safety margin on the required capacity to capture sufficient energy.
+In \cref{fig:intuition:capacity_margin}, we model the impact of an income safety margin on the required capacity to capture sufficient energy.
 We utilize the Setup D EnHANTs trace as it represents the worst case seasonal light distribution out of all of the traces.
 \Cref{fig:intuition:capacity_margin} presents required capacity for multiple sweeps of workload power under different safety margins.
-The different sweeps consider different safety margins of income power, from no margin to an 300\% margin.
-No margin indicates that the average workload power is equal to the income power, while an 300\% margin indicates the income power is 4$\times$ the amount required by the workload, on average\footnote{A safety margin is calculated as a percent difference, $100 \times \frac{\text{Income} - \text{Workload}}{\text{Workload}}$}.
+The different sweeps consider different safety margins of income power, from no margin to a 300\% margin.
+No margin indicates that the average workload power is equal to the average income power, while an 300\% margin indicates the income power is 4$\times$ the amount required by the workload, on average\footnote{A safety margin is calculated as a percent difference, $100 \times \frac{\text{Income} - \text{Workload}}{\text{Workload}}$}.
 As expected, when a workload requires less energy than is available to harvest, it requires less energy capacity to harvest that energy.
 With a 25\% margin, where the income provides 1.2$\times$ the average required workload power, a design that can expect an energy income with a similar distribution to the Setup D trace will require a capacity scaled by \num{2.3E3} multiplied by the average workload power.
 
 \placefigure{fig:intuition:capacity_margin}
 
 \subsection{Limitations}
-The analytical model presented in \cref{eqn:intuition:iterative_capacity} is a simple model that assumes a perfect energy buffer. In reality, energy storage technologies are imperfect. They feature less than perfect efficiency; they leak and have parasitic internal impedance.
+The analytical model presented in \cref{eqn:intuition:iterative_capacity} is simple and assumes a perfect energy buffer. In reality, energy storage technologies are imperfect. They feature less than perfect efficiency; they leak and have parasitic internal impedance.
 The efficiency of an energy harvesting front end is also more complex than presented in this section.
 Beyond the efficiency of a harvester, the DC-DC regulation of a harvesting IC does not provide 100\% efficiency.
 Any further system voltage regulation has similar limits to efficiency.
@@ -716,10 +720,10 @@ We present heuristics for determining the proper sizing of non-rechargeable batt
 For energy harvesting sensors, they may require batteryless and intermittent techniques to ensure feasibility and forward progress.
 The requirement for intermittent techniques is solely dependent on energy income and rechargeable energy storage, and they are avoidable by properly sizing a harvester and energy storage.
 We also present a simple model for energy capacity and analysis that indicates that the size of rechargeable capacity in energy harvesting systems directly impacts the amount of energy that is actually captured by a system.
-The end result of the analysis of this chapter is a reasoned heuristic for determining appropriate rechargeable capacity sizing for a system based on its income and workload that is superior to other arbitrary methods used by other platform designs.
+The end result of the analysis of this chapter is a reasoned heuristic for determining appropriate rechargeable capacity sizing for a system based on its income and workload that is superior to arbitrary methods used by other platform designs.
 
 The next chapter seeks to expand upon the iterative model of capacity presented in \cref{sec:intuition:capacity} by developing an energy simulation for wireless sensors.
-It will seek to address the three previously mentioned limitations by modelling energy income and storage more realistically, modelling sensor workload more dynamically, and considers the impact of non-rechargeable backup energy.
+It will seek to address the three previously mentioned limitations by modelling energy income and storage more realistically, modelling sensor workload more dynamically, and consider the impact of non-rechargeable backup energy.
 
 %    How to express size of secondary mathematically?
 %    Energy capacity represents a moving capped sum, is this like a moving average? What is the smallest window that gives us the most return on energy capture?
@@ -860,7 +864,7 @@ It will seek to address the three previously mentioned limitations by modelling 
                 EnHANTS D   & 326  & 97.5     & 256.5     & 24.8\\
             \end{tabularx}
             \caption{Summary statistics for the indoor photovoltaic irradiance traces from the EnHANTs dataset~\cite{gorlatova2013networking}.
-            Irradiance is expressed in units of \ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared.}
+            Irradiance is expressed in units of \ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}.
             }
 \end{definetable*}
 
