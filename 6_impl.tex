@@ -57,7 +57,7 @@ The cost of instrumentation and automation is often too exorbitant to justify fi
 This often results in inequitable and sometimes uncomfortable lighting for occupants.
 Wireless sensing could provide a solution for fine-grained workplane measurement for daylighting applications, assuming the sensor does not require frequent maintenance and provides high availability and consistent measurements for the lighting system feedback loop.
 For this specific example, our application goals are to provide at least a ten year lifetime with consistently high availability. 
-This section details the realization of a design to meet these requirements, and utilizes this design to verify our the results of the simulation and design conclusions detailed in earlier chapters.
+This section details the realization of a design to meet these requirements, and utilizes this design to verify the results of the simulation and design conclusions detailed in earlier chapters.
 
 \placefigure{fig:permamote}
 
@@ -74,7 +74,6 @@ A picture
 and system diagram of \name is shown in \cref{fig:permamote}. All hardware
 and software for the platform is open source\footnote{\url{https://github.com/lab11/permamote/tree/master/hardware/permamote}}.
 
-\placefigure{fig:impl:permamote_life}
 \subsubsection{Energy Harvesting and Storage.}
 Some of the primary goals of \name are to provide workplane illuminance measurements with high availability for a long lifetime of greater than ten years. 
 Given the results of our simulation, a design that relies solely on energy preallocation is unlikely to achieve a sufficiently long lifetime. 
@@ -113,6 +112,7 @@ The resulting energy storage provides 24\ssi{\milli\Wh} of
 energy storage, more than the capacity required to achieve the reliability and energy utilization
 improvements of the workloads that were simulated in \cref{sec:capacity:primary,fig:capacity:primary}.
 
+\placefigure{fig:impl:permamote_life}
 In some cases, the available harvestable power may be lower than expected and insufficient to operate in an energy neutral fashion. 
 This justifies the addition of a reliable, non-rechargeable backup energy source.
 \Cref{fig:impl:permamote_life} is a recreation of \cref{fig:capacity:primary} presenting the estimated lifetime of \name with its configured 24\ssi{\micro\Wh} rechargeable storage and various non-rechargeable backup energy storage options. We assume a 30 second sense and send workload period.
@@ -133,17 +133,13 @@ is boosted by a MAX17222 regulator, which features high conversion efficiency
 %power.\\
 
 \subsubsection{Processor, Radio and Sensor Selection}
-In designing \name, we strive to select modern and low power components.
-%We feel that it may
-To benefit other
-platform builders, we document our component selections
-along with their key performance metrics. A summary of these
-components can be found in \cref{tab:capacity:components}.
-
+The components used in the implementation of \name are the same that were benchmarked for our simulation configuration in \cref{chap:capacity}.
+These components are summarized in \cref{tab:capacity:components}.
 We note our choice of the Nordic NRF52840 MCU over the more commonly used MSP430FR series
 because of its higher active power efficiency while offering comparable sleep currents.
 Specifically, it only draws 56\,\uA/MHz compared to over 100\,uA/MHz
-for the MSP430, which is a common choice for batteryless systems. 
+for the MSP430.
+The MSP430 is a common choice for batteryless systems because of its integrated non-volatile FRAM. 
 Unlike batteryless systems,
 \name is designed with sufficient rechargeable capacity and backup energy and is intended to never power off and lose volatile state. 
 This eliminates any reliance on state retention techniques and the need for the non-volatile FRAM present on the MSP430FR series chips. 
@@ -375,7 +371,7 @@ For some workloads, \name can provide over double the availability of similar ba
     \centering
     \includegraphics[width=\linewidth]{figs/capacity/primary/sense_and_send_life_vs_sec_size_permamote.pdf}
     \caption{
-        Lifetime estimation of the \name sense and send workload given different rechargeable buffer sizes and different primary cell sizes. This figure utilizes the low irradiance Setup A environment and the 30 second sense and send workload period.
+        Lifetime estimation of the \name sense and send workload given different rechargeable buffer sizes and different primary cell sizes. This figure utilizes the low irradiance Setup A environment (15\ssi[per-mode=symbol]{\micro\watt\per\centi\meter\squared}) and the 30 second sense and send workload period (24.5\ssi{\micro\watt}).
       This is a different presentation of \cref{fig:capacity:primary} that identifies the rechargeable capacity of \name with a red vertical line.
       }
     
@@ -480,7 +476,7 @@ We scale the mean of the synthesized outdoor trace to represent 10 and 50\ssi[pe
 The simulation results of Camaroptera's average packet distribution under these two harvesting conditions are summarized by \cref{fig:impl:camaroptera_pkt}.
 With either income, Camaroptera is able to maintain high image capture and transmit rates when light is available. 
 However, as expected of a batteryless system, when light is unavailable, Camaroptera is unable to capture and send many images.
-Since Camaroptera performs its workload in response to its energy storage state, it cannot maintain a periodic schedule or reliably react and detect the presence of people.
+Since Camaroptera performs its workload in response to its energy storage state, it cannot maintain a periodic schedule or react and detect the presence of people.
 
 \placefigure{fig:impl:camaroptera_pkt}
 
@@ -570,7 +566,7 @@ Like \name, to support fully wireless operation for a long lifetime, \namec opti
 As we have explored previously in our analysis of Camaroptera, vision applications require significant energy to capture images, process them, and transmit them. 
 We size \namec's battery in the same manner as \name, utilizing the heuristics and simulation tool from \cref{chap:intuition,chap:capacity} to determine a sufficient capacity.
 To determine this, we take benchmarks of capturing and transmitting images over an 802.15.4 network, and utilize these benchmarks to estimate an average power.
-We utilize the same indoor irradiance traces that we considered previously.
+We utilize the same indoor EnHANTs irradiance traces that we considered previously~\cite{gorlatova2013networking}.
 
 Indoor energy harvesting is inconsistent and variable, and \namec will operate close to the edge of harvestable power that is reasonably available in many indoor environments.
 To augment harvested energy, we include a backup nonrechargable battery on \namec. A backup battery allows continuous operation regardless of energy harvesting conditions. 
@@ -709,6 +705,8 @@ An example of a mosaiced image and its demosaiced counterpart are displayed in \
 \namec{}'s processor does not possess enough memory to locally demosaic an full image so any inference or transmission must be done with the mosaiced image. 
 We power-gate the HM01B0 camera on \namec, allowing the system to completely power the camera off and enter the lowest possible power state.
 
+\placefigure{fig:demosaic}
+
 Other systems that utilize the Himax HM01B0 camera including BackCam, Camaroptera, and the Sparkfun Edge have developed a bit bang protocol to emulate a parallel interface \cite{josephson2019wireless, nardello2019camaroptera, sparkfunedge}. This is possible because their processors support GPIO direct memory access (DMA). This allows the GPIO peripheral to directly write to memory, avoiding costly processor cycles to load GPIO state into registers and then write it to memory. This optimization allows a bit-bang protocol on these platforms to operate faster than the HM01B0's minimum operating frequency. However, a bit-bang protocol is undesirable because it requires the processor to be on during an image transfer, consuming additional energy. The nRF52840 does not support GPIO DMA. 
 Because of this, developing a bit-bang protocol that adheres to the required camera timing is infeasible. 
 Instead, we note that the camera serial protocol closely resembles SPI, and the nRF52840 implements an 8\,MHz SPI peripheral with DMA support. 
@@ -716,11 +714,9 @@ The camera PCLKO signal is identical to SCLK, and can be gated by the LVLD signa
 The LVLD signal from the camera indicates when a line of the image is being transmitted, and is analogous to a SPI chip select line. However, this line is active high, and most SPI implementations, including the hardware on the nRF52840, expect active low. Inserting a low latency inverter in between the LVLD output of the camera and the MCU allows the nRF52840 SPI peripheral to interface with the camera. 
 This has the added benefit of reducing power required to read in images as the processor can sleep while the SPI peripheral directly writes images to memory.
 
-\placefigure{fig:demosaic}
-
 \subsubsection{Image Compression}
 To reduce energy and time required to transmit images, we employ JPEG compression on images prior to transmission. We use the Moodstocks JPEC encoder, a simple and portable monochrome JPEG encoder written in C \cite{moodstocks}. JPEG compression, like most DSP algorithms, relies heavily on floating point arithmetic. Due to its integrated FPU, \namec{}'s processor is able to compress full resolution 320x320 images in 210\,ms.
-This encoder is also used in Camaroptera \cite{nardello2019camaroptera}, although this platform is based on the MSP430, which lacks an FPU. It requires 25 s to compress an downsampled 160x120 image using floating point emulation, and 7s when JPEC is adapted to fixed point math. This fixed point adaptation also reduces image quality slightly. It is clear that a camera platform like \namec{} benefits greatly from the inclusion of a faster, more capable processor.
+This encoder is also used in Camaroptera \cite{nardello2019camaroptera}, although this platform is based on the MSP430, which lacks an FPU. It requires 25\ssi{second} to compress an downsampled 160x120 image using floating point emulation, and 7\ssi{second} when JPEC is adapted to fixed point math. This fixed point adaptation also reduces image quality slightly. It is clear that a camera platform like \namec{} benefits greatly from the inclusion of a faster, more capable processor.
 JPEG is not designed to compress mosaiced images. However, we find that monochrome compression with a high quality setting does not overly degrade image fidelity or color representation. We explore the effects of monochrome compression on \namec's captured images further in \cref{eval:compression}.
 
 \placefigure{tab:measurements}
@@ -915,14 +911,14 @@ We explore the capability of the platform by writing an object detection applica
 \label{eval:compression}
 A raw, full frame image from \name{}'s camera is over 100\,kB in size. Sending these raw images requires a significant amount of time and energy. We employ JPEG compression to significantly reduce image size. This decrease in size comes at the cost of reduced image fidelity and color representation.
 
-We use the Moodstocks JPEC encoder to compress captured images in JPEG format. JPEC is a monochrome JPEG encoder, and we have configured \name{} to use the color version of the HM01B0 image sensor. The images captured are a "mosaiced" color filter array, and performing monochrome JPEG compression on a mosaiced image reduces color representation in addition to image fidelity. JPEG can be configured with different quality factors from 1 to 100. A lower quality factor results in a less accurate representation and smaller compressed size. Image size relates linearly to the time and energy required to send images. 
-We configure \name to capture images, compress them with 6 different JPEG quality factors and transmit them. We collect 60 images, each with 6 compressed versions, and analyze the effect of compression on image size, time to send, and energy to send.
+We use the Moodstocks JPEC encoder to compress captured images in JPEG format. JPEC is a monochrome JPEG encoder, and we have configured \name{} to use the color version of the HM01B0 image sensor. The images captured are a "mosaiced" color filter array, and performing monochrome JPEG compression on a mosaiced image reduces color representation in addition to image fidelity. JPEG can be configured with different quality factors from 1 to 100. A lower quality factor results in a less accurate representation and smaller compressed size. Image size relates linearly to the time and energy required to send images.
+The nRF52840's FPU is capable of performing floating point JPEG compression on 320x320 images in 210\ssi{\milli\second}, compared to 25 seconds with Camaroptera's MSP430. 
+
+To evaluate the effect of compression on image quality, latency, and energy, we configure \name to capture images, compress them with 6 different JPEG quality factors and transmit them. We collect 60 images, each with 6 compressed versions, and analyze the effects of compression. 
 The results are displayed in \cref{fig:size-time-energy}. 
-
 \placefigure{fig:compression}
-
 JPEG image compression allows an exponential decrease in image size with respect to the quality factor.
-Compressing images at a high quality factor (JPEC's default 93) results in greater than a 2x reduction in image size, time to send, and energy required. There are diminishing gains after the knee of the curve at quality 90, but an image compressed with quality 30 is only 8\% the size of a raw image, on average. Image compression on mosaiced images from \name also does not appear to degrade the perceived quality of the image. We display four compressed and raw versions of the same image in \cref{fig:compression}. Qualitatively, and from a distance, these images appear nearly identical. However, closer inspection reveals artifacts and a significant loss in color fidelity with lower compression quality factors. Quality 93 and a raw image are nearly identical, while quality 30 is more obviously a lower quality compression. However, the important details in the image are preserved and still visible to the human eye.
+Compressing images at a high quality factor (JPEC's default 93) results in greater than a 2x reduction in image size, time to send, and energy required. There are diminishing gains after the knee of the curve at quality 90, but an image compressed with quality 30 is only 8\% the size of a raw image, on average. Image compression on mosaiced images from \name also does not appear to degrade the perceived quality of the image. We display four compressed and raw versions of the same image in \cref{fig:compression}. Qualitatively, and from a distance, these images appear nearly identical. However, closer inspection reveals artifacts and a significant loss in color fidelity with lower compression quality factors. Quality 93 and a raw image are nearly identical, while quality 30 is more obviously a lower quality compression. Even at low quality compression levels, important image details are preserved and still visible to the human eye.
 
 \placefigure{fig:ssim}
 
