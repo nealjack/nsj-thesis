@@ -130,6 +130,6 @@ plt.ylabel('Lifetime (years)')
 #lgd = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 #plt.savefig('sense_and_send_life_vs_sec_size.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight', format='pdf')
 lgd = plt.legend(custom_lines, lines_names)
-plt.savefig('sense_and_send_life_vs_sec_size_permamote.png', bbox_extra_artists=(lgd,text), bbox_inches='tight', format='png')
+plt.savefig('sense_and_send_life_vs_sec_size_permamote.pdf', bbox_extra_artists=(lgd,text), bbox_inches='tight', format='pdf')
 
 
