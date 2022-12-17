@@ -263,7 +263,7 @@ The advent of FRAM (as well as other non-volatile RAM technologies) results in m
 While this seems like a straightforward solution to preserving state, it is complicated by the shrinking
 boundary between volatile and non-volatile state. Often both SRAM and FRAM are memory mapped and accessed the same way. Writes and reads to either are indistinguishable to the programmer and compiler.
 Code is often executed multiple times through the course of intermittent execution, and if volatile and non-volatile state are not carefully managed and accessed by the program, re-execution of various code sections can result in consistency violations~\cite{maeng2017alpaca}.
-The aftermentioned debugging tools can help to detect and fix intermittency bugs during runtime testing. However, many researchers have developed solutions to avoid these bugs by design.
+The aforementioned debugging tools can help to detect and fix intermittency bugs during runtime testing. However, many researchers have developed solutions to avoid these bugs by design.
 Task-based programming frameworks and models like
 Chain~\cite{colin2016chain} and Alpaca~\cite{maeng2017alpaca}
 ensure forward progress and prevent intermittent consistency bugs.
@@ -400,7 +400,7 @@ Over the course of operation, a batteryless system will experience many repeated
 \subsubsection{Redundancy for Statistical Availability}
 Beyond software and hardware techniques for forward progress, timeliness, availability, and reactivity, researchers have also explored approaches that utilize cooperation within a network of batteryless devices.
 Most notably, the Coalesced Intermittent Sensor (CIS) is an abstraction of a group of intermittent sensors that combines the availability of each sensor to increase the availability of the group as a whole~\cite{majid2020continuous}.
-The CIS approach leverages the theoretical uniform distribution of uptimes of an ensemble of sensors, each of which is intermittently operating, to maximize the probability that at least one sensor is on and able to detect a phenomena at any given time.
+The CIS approach leverages the theoretical uniform distribution of the availability of an ensemble of sensors, each of which is intermittently operating, to maximize the probability that at least one sensor is on and able to detect a phenomena at any given time.
 While this approach may work in controlled environments, it is dependent on several assumptions that are difficult to justify when considering real world conditions.
 
 All nodes within a CIS ensemble are assumed to have a priori knowledge about the size of the deployment and are sufficiently co-located to experience the same harvesting conditions and sense the same phenomena.
