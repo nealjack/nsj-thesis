@@ -85,7 +85,7 @@ have largely been developed for use in environments with plentiful harvestable e
 %and have been designed with sufficient capacity to capture this energy
 Most examples of energy harvesting research devices are deployed outdoors with photovoltaic cells~\cite{jiang2005perpetual, kansal2007power, corke2007long, lin2005heliomote, taneja2008design, adkins2018signpost}.
 This is also true of many commercial and industrial sensor systems like weather and air quality monitoring stations~\cite{davis_weather}, trail cameras~\cite{spypoint_camera}, and traffic cameras~\cite{wanco_traffic}.
-Besides photovoltaic harvesting, industrial products have also leveraged temperature gradients and vibration to power sensors. The Perpetua Power Puck and Tile are thermoelectric generators designed for high temperature monitoring of critical infrastructure like steam pipes, hot tanks, and other equipment in high temperature environments~\cite{perpetua}.
+Industrial products have also leveraged temperature gradients and vibration to power sensors. The Perpetua Power Puck and Tile are thermoelectric generators designed for high temperature monitoring of critical infrastructure like steam pipes, hot tanks, and other equipment in high temperature environments~\cite{perpetua}.
 Perpetua harvesters are compatible with the same Emerson, GE, and Honeywell sensor systems as a drop in replacement for the default non-rechargeable power supplies. Other companies, like ReVibe and Kinergizer, are utilizing piezoelectric harvesting for industrial vibrational monitoring~\cite{revibe,kinergizer}.
 
 There have been fewer research, commercial, and industrial sensors developed for indoor environments, or other environments that lack light, a large temperature gradient, or perpetual motion and vibration.
@@ -401,7 +401,7 @@ Over the course of operation, a batteryless system will experience many repeated
 Beyond software and hardware techniques for forward progress, timeliness, availability, and reactivity, researchers have also explored approaches that utilize cooperation within a network of batteryless devices.
 Most notably, the Coalesced Intermittent Sensor (CIS) is an abstraction of a group of intermittent sensors that combines the availability of each sensor to increase the availability of the group as a whole~\cite{majid2020continuous}.
 The CIS approach leverages the theoretical uniform distribution of the availability of an ensemble of sensors, each of which is intermittently operating, to maximize the probability that at least one sensor is on and able to detect a phenomena at any given time.
-While this approach may work in controlled environments, it is dependent on several assumptions that are difficult to justify when considering real world conditions.
+While this approach may work in controlled environments, it is dependent on several assumptions that are difficult to justify in real world conditions.
 
 All nodes within a CIS ensemble are assumed to have a priori knowledge about the size of the deployment and are sufficiently co-located to experience the same harvesting conditions and sense the same phenomena.
 These assumptions are unrealistic when considering real-world deployment scenarios.
@@ -501,8 +501,8 @@ In \cref{sec:background:app}, we explore applications in the context of their re
 %spanning both the hardware and software domains
 %measure the energy required for specific code operations
 %and restore energy state during code breakpoints~\cite{colin2016energy}.
-
-\section{Wireless Sensor Applications and Their Requirements}
+\clearpage
+\section{Wireless Sensor Applications\\and Their Requirements}
 \label{sec:background:app}
 Real applications have requirements for availability, latency, and reliability. For many, these requirements may be at odds with what can currently be provided by batteryless systems, and in some cases energy harvesting methods as a whole.
 There is a clear niche for batteryless systems for applications that can tolerate relaxed requirements, or are designed for reliable energy income, however it is disingenuous to argue that batteryless systems represent the future for all sensing applications~\cite{hester2017future}.

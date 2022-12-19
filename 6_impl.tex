@@ -92,7 +92,8 @@ On average, this income power provides more than sufficient average power to sup
 We can consult \cref{sec:intuition:capacity,sec:capacity:capture} to estimate the minimum required capacity for the sense and send workload.
 Considering the average power required by the sense and send workload with a 30 second period (24.5\ssi{\micro\watt}), 
 the minimum sufficient capacity should be \num{1.4E3} times the average workload power according to our capacity sizing heuristic. 
-This is if we assume an income distribution similar to the EnHANTs Setup D and an income margin of 300\% of the expected workload power\footnote{100\ssi{\micro\watt} represents a 300\% margin over the 24.5\ssi{\micro\watt} workload}.
+This is if we assume an income distribution similar to the EnHANTs Setup D and an income margin of 300\% of the expected workload power
+\footnote{100\ssi{\micro\watt} represents a 300\% margin over a 24.5\ssi{\micro\watt} workload}.
 Given this heuristic scaling factor, the capacity of the rechargeable energy storage should be on the order of 34\ssi{\milli\Wh}.
 This agrees with results from our simulation in \cref{fig:capacity:availability} that suggests energy capacity on the order of 1--10\ssi{\milli\Wh} will be sufficient to achieve near perfect availability in conditions like Setup D captures.
 The simulation suggests slightly less capacity is required compared to the heuristic estimate.
@@ -487,7 +488,7 @@ Given the design heuristics developed in \cref{chap:intuition}, we can determine
 From these averages and using the capacity sizing heuristics from \cref{sec:intuition:capacity}, we can determine an estimate for the minimum sufficient capacity to sustain this workload given our synthesized incomes.
 As mentioned earlier, each Camaroptera activation requires 781\ssi{\milli\joule} over 40 seconds, assuming all images go through the entire inference pipeline. The platform's idle power is 197\ssi{\micro\watt}.
 While the platform is capable of transmitting an image every 45 seconds to two minutes depending on lighting conditions, we assume a relaxed periodic rate of capturing and transmitting an image every five minutes.
-This results in a 2.8\ssi{\milli\watt} average workload power\footnote{~$\frac{781\si{\milli\joule} + (197\ssi{\micro\watt} \times (300 - 40)\si{\second})}{300\si{\second}} = 2.77\si{\milli\watt}$}.
+This results in a 2.8\ssi{\milli\watt} average workload power\footnote{~$\frac{781\ssi{\milli\joule} + (197\ssi{\micro\watt} \times (300 - 40)\ssi{\second})}{300\ssi{\second}} = 2.77\ssi{\milli\watt}$}.
 
 \placefigure{fig:impl:cam_sweep}
 From this example workload and Camaroptera's income, we can use the heuristics developed in \cref{chap:intuition} to determine the proper capacity sizing for the platform.
@@ -727,7 +728,8 @@ The output of the BQ25505's power OR is boosted to the system voltage by a MAX17
 We use a 10.9\ssi{\centi\meter\squared} amorphous photovoltaic to charge a rechargeable LTO battery.
 We size this LTO battery according to the capacity heuristic from \cref{sec:intuition:capacity}.
 The \namec workload consists of an image capture, JPEG compression, and image transfer. These operations are benchmarked on the nRF52840 SoC and HM01B0 image sensor and summarized in \cref{tab:measurements}.
-If we assume a periodic workload, capturing, compressing (at JPEG quality 90), and transmitting an image very ten minutes, \namec will require 148\ssi{\micro\watt} on average\footnote{~$\frac{80.5\ssi{\milli\joule} + 14.5\ssi{\micro\watt}\times(600-7.97)}{600}$}.
+If we assume a periodic workload, capturing, compressing (at JPEG quality 90), and transmitting an image very ten minutes, \namec will require 148\ssi{\micro\watt} on average
+\footnote{~$\frac{80.5\ssi{\milli\joule} + 14.5\ssi{\micro\watt}\times(600 - 7.97)\ssi{\second}}{600\ssi{\second}} = 148\ssi{\micro\watt}$}.
 This workload for \namec is pushing the bound on the energy that is harvestable within an indoor environment. 
 If we consider there is no harvesting margin, this suggests a minimum sufficient capacity on the order of \ssi{\milli\Wh}. 
 This capacity corresponds closely to a 125\ssi{\milli\Ah} LTO battery with a nominal 2.4\ssi{\volt}, which is the closest size available for purchase.
