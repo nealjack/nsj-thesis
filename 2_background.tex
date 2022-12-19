@@ -83,7 +83,7 @@ while the size and capacity of the rechargeable storage determines how much ener
 Energy harvesting sensors
 have largely been developed for use in environments with plentiful harvestable energy.
 %and have been designed with sufficient capacity to capture this energy
-Most examples of energy harvesting research devices are deployed outdoors with photovoltaics~\cite{jiang2005perpetual, kansal2007power, corke2007long, lin2005heliomote, taneja2008design, adkins2018signpost}.
+Most examples of energy harvesting research devices are deployed outdoors with photovoltaic cells~\cite{jiang2005perpetual, kansal2007power, corke2007long, lin2005heliomote, taneja2008design, adkins2018signpost}.
 This is also true of many commercial and industrial sensor systems like weather and air quality monitoring stations~\cite{davis_weather}, trail cameras~\cite{spypoint_camera}, and traffic cameras~\cite{wanco_traffic}.
 Besides photovoltaic harvesting, industrial products have also leveraged temperature gradients and vibration to power sensors. The Perpetua Power Puck and Tile are thermoelectric generators designed for high temperature monitoring of critical infrastructure like steam pipes, hot tanks, and other equipment in high temperature environments~\cite{perpetua}.
 Perpetua harvesters are compatible with the same Emerson, GE, and Honeywell sensor systems as a drop in replacement for the default non-rechargeable power supplies. Other companies, like ReVibe and Kinergizer, are utilizing piezoelectric harvesting for industrial vibrational monitoring~\cite{revibe,kinergizer}.
@@ -97,7 +97,7 @@ Some of the first attempts at bringing energy harvesting indoors consisted of po
 The EnHANTs sensor used an indoor photovoltaic panel to charge an intentionally oversized nickel-metal hydride (NiMH)
 battery, with plans to eventually use a thin-film battery~\cite{gorlatova2009challenge,margolies2015energy}.
 DoubleDip utilized thermoelectric harvesting to charge a lithium-manganese battery~\cite{martin2012doubledip}.
-The batteries used by EnHANTs and DoubleDip are examples of older technology that had numerous limitations. 
+The batteries used by EnHANTs and DoubleDip are examples of older technology that had numerous limitations.
 Early rechargeable batteries offered short cycle lifetimes and low charge and discharge current capabilities.
 The cycle lifetime limit results in systems with limited longevity, even though they utilize energy harvesting.
 
@@ -625,7 +625,7 @@ The Williot battery-assisted tag occupies 2.8\ssi{\centi\meter\cubed}, has a pur
 This suggests that the battery-assisted Pixel only requires 17.8\ssi{\nano\watt} on average.
 This figure is very low for an actively broadcasting system, and it would not be surprising that a four year lifetime is an overestimate for the battery-assisted Pixel.
 We would expect an average power requirement multiple orders of magnitude more for active BLE beaconing. For example, a modern low power SoC like the nRF52 series requires 15\ssi{\micro\watt} to beacon every four seconds~\cite{nrf52Power}.
-A tag like those that Jeeva is developing utilizes backscatter and will require very little power to transmit data, usually much less than a \ssi{\micro\watt}. 
+A tag like those that Jeeva is developing utilizes backscatter and will require very little power to transmit data, usually much less than a \ssi{\micro\watt}.
 This average power is well below the capabilities for directed RF harvesting from a device similar to an RFID reader, which can typically supply hundreds of \ssi{\micro\watt} at a minimum at reasonable ranges~\cite{sample2008design}.
 
 In environments with plentiful and reliable harvestable energy, like in the case of asset trackers within a factory or warehouse with widely deployed RFID readers, the batteryless design point allows for simple, small, and inexpensive wireless devices that require essentially no maintenance.
@@ -643,9 +643,9 @@ For a wearable, a human is naturally always present and able to provide light ma
 This allows wearables to have shorter one-charge lifetimes, use smaller batteries, and achieve smaller form factors.
 Wearable maintenance is less costly when humans are always present and are already conditioned to maintain their devices.
 Humans have generally accepted the cost of nightly smartphone recharging, making daily or weekly wearable charging also acceptable.
-However, not all populations are as diligent or willing to utilize wearable sensors if they have to repeatedly remove and charge them. 
+However, not all populations are as diligent or willing to utilize wearable sensors if they have to repeatedly remove and charge them.
 Particularly, elderly populations have usability issues with discomfort and difficulties with taking wearables off to charge them and putting them back on~\cite{valk2018designing}.
-For these populations, a wearable that does not need to be charged would be beneficial. 
+For these populations, a wearable that does not need to be charged would be beneficial.
 A batteryless wearable would not have a charging constraint, however
 the expectation of constant and immediate wearable human interactivity demands a baseline of availability that may not be feasible with a batteryless design.
 It is hard to imagine a user being willing to adapt their behavior to accommodate a sporadically operating device.
@@ -729,7 +729,7 @@ SkinnyPower represents an unique approach to batteryless systems by exploiting t
 
 The SkinnyPower prototype consists of a wrist-worn battery-powered power transmitter
 and a finger-worn batteryless sensor that operates on the transmitted power.
-The authors target a smartwatch-sized form factor for the power transmitter while the finger-worn sensor requires a surface area of 2.5x2.5\ssi{\centi\meter\squared}, about the size of a smart watch underside. 
+The authors target a smartwatch-sized form factor for the power transmitter while the finger-worn sensor requires a surface area of 2.5x2.5\ssi{\centi\meter\squared}, about the size of a smart watch underside.
 The wrist-worn transmitter powers the batteryless sensor by transmitting an alternating current through the skin of the user's hand.
 With this prototype, SkinnyPower is able to provide average power on the order of 1\ssi{\milli\watt} at an efficiency of 14.5\%. This is enough power to operate a batteryless sensor system continuously.
 Assuming a 100\ssi{\milli\Ah} rechargeable lithium polymer battery powering the transmitter, a SkinnyPower system could provide 1\ssi{\milli\watt} to a batteryless finger sensor for 54 hours.
@@ -951,7 +951,7 @@ Researchers have begun prototyping a new class of
 millimeter-scale computers and sensors, known colloquially as ``smart dust''~\cite{warneke2001smart}.
 
 While some developed millimeter-scale systems are one-off demonstrations of the feasibility of the device class, some have been developed for specific applications.
-In particular, millimeter-scale sensors are uniquely appropriate for injectible or implantible medical applications.
+In particular, millimeter-scale sensors are uniquely appropriate for injectable or implantable medical applications.
 Millimeter-scale devices have been proposed as syringe-implantable medical sensors to to measure and monitor
 intraocular pressure for glaucoma diagnosis and management~\cite{ghaed2013circuits},
 heart arrhythmia~\cite{chen2014injectable},
@@ -995,7 +995,7 @@ However, in \cref{sec:background:app}, we have described several niches of appli
 They excel in environments with robust and widespread infrastructure for power transfer or a reliable source of harvested energy. They are a reasonable option in applications where the sensing modality can simultaneously be harvested from.
 Outside of these situations, a batteryless-based application must relax its requirements for data consistency or availability. For applications in adversarial environments where any data is better than no data, a batteryless design may be appropriate.
 For any other application without the convenience of infrastructure or other reliable harvesting source, any quality of service requirements regarding the frequency, consistency, and availability of collected and reported data necessitate a different design path.
-Additionally, any application that cannot justify the design cost of the extra complexity that a batteryless design requires will require an alternate design approach. 
+Additionally, any application that cannot justify the design cost of the extra complexity that a batteryless design requires will require an alternate design approach.
 %There are many applications described in literature that are designed as batteryless solutions
 
 In the next chapter, we make the argument that

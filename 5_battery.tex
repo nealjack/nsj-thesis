@@ -37,7 +37,7 @@ The selected batteries represent some of the smallest lithium-based cells that a
 This section serves to explain the characteristics of various possible energy storage technologies for low power energy harvesting applications, as a prelude to deeper dives on particular aspects and comparisons.
 
 \subsection{Ceramic and Tantalum Capacitors}
-Along with chip resistors, the multilayer ceramic capacitor (MLCC) is the most widely used passive component in modern electronics. MLCCs are essentially a parallel connection of many cearamic plate capacitors, packaged in a small form factor~\cite{pan2010brief}. Traditionally, MLCCs are used for two applications: resonant circuits and filters and power supply bypass and decoupling~\cite{pan2010brief}. With sufficient capacitance, MLCC capacitors meant for power supply decoupling can act as the sole energy storage in a system~\cite{hesterFlicker17,yervaGrafting12,campbellEnergy14}. However, the energy storage and density of MLCC components is limited, and is often only enough to support a single small operation, like measuring and transmitting sensor results over a radio. Similarly, tantalum capacitors are often used for power supply bypass and decoupling. Tantalum capacitors consist of a tantalum metal anode and a solid electrolyte as a cathode, separated by a solid dielectric~\cite{gill1994basic}. They generally provide more capacitance per volume than MLCCs, but are polar and have worse efficiency.
+Along with chip resistors, the multilayer ceramic capacitor (MLCC) is the most widely used passive component in modern electronics. MLCCs are essentially a parallel connection of many ceramic plate capacitors, packaged in a small form factor~\cite{pan2010brief}. Traditionally, MLCCs are used for two applications: resonant circuits and filters and power supply bypass and decoupling~\cite{pan2010brief}. With sufficient capacitance, MLCC capacitors meant for power supply decoupling can act as the sole energy storage in a system~\cite{hesterFlicker17,yervaGrafting12,campbellEnergy14}. However, the energy storage and density of MLCC components is limited, and is often only enough to support a single small operation, like measuring and transmitting sensor results over a radio. Similarly, tantalum capacitors are often used for power supply bypass and decoupling. Tantalum capacitors consist of a tantalum metal anode and a solid electrolyte as a cathode, separated by a solid dielectric~\cite{gill1994basic}. They generally provide more capacitance per volume than MLCCs, but are polar and have worse efficiency.
 Tantalum capacitors also do not exhibit any noticeable aging effects, whereas MLCCs experience slight capacitance change over long periods of time~\cite{kemetUpdate}.
 Compared to batteries and supercapacitors, MLCC and tantalum capacitors provide infinitely longer lifetimes and higher power density, but are severely limited in energy capacity and density.
 
@@ -53,7 +53,7 @@ Lithium-ion batteries encompass all batteries that utilize lithium ions for char
 Like all batteries, Li-ion batteries consist of two oppositely charged electrodes separated by an electrolyte. The electrodes consist of a negatively charged anode and positively charged cathode. During discharge, Li\textsuperscript{-} ions move from the anode through the electrolyte to the cathode, and during charge they move from the cathode to the anode.
 Lithium polymer (LiPo) batteries, most commonly used in consumer electronics, utilize a dry or gel electrolyte, while coin cells or cylindrical Li-ion cells utilize a liquid electrolyte. 
 
-There are many different types of li-ion batteries, utilizing different anode, cathode, and electrolyte materials. Most modern Li-ion cells primarily utilize graphite as an anode material, and lithium nickel manganese cobalt oxide
+There are many different types of Li-ion batteries, utilizing different anode, cathode, and electrolyte materials. Most modern Li-ion cells primarily utilize graphite as an anode material, and lithium nickel manganese cobalt oxide
 (LiNi\textsubscript{0.33}Mn\textsubscript{0.33}Co\textsubscript{0.33}O\textsubscript{2} or NMC for short) as a cathode material~\cite{nitta2015li}.
 These cells offer a nominal voltage of 3.7\ssi{\volt}, high energy density, and long lifetimes. 
 The choice of NMC provides several benefits over earlier designs that utilize 
@@ -268,7 +268,7 @@ While ceramic and tantalum capacitors can potentially last a million years or mo
 Conversely, the cycle lifetime of a battery is generally the number of full cycles at a rated continuous discharge/charge current (usually 0.5C or 1C) before the battery's capacity diminishes to 80\% of its original rated capacity.
 Generally, NMC lithium batteries offer a cycle lifetime between 3000 and 5000 cycles~\cite{richter2017measurements,preger2020degradation}, compared to 300-700 cycles for LCO and LMO batteries.
 For small form factor batteries, this cycle lifetime is less, and for those in \cref{tab:battery:cost}, they offer only 300-500 cycles~\cite{lipoDatasheet, millibatNimbus} at a 0.5~C charge/discharge rate.
-However, new battery chemestries like LTO and LFP batteries offer between 2000 and 7000 cycles at 0.5~C~\cite{hallExperimental18, LTODatasheet, LTODatasheet2,omarLithium14, sarasketaCycle15, wangCycle11,lifepo4Datasheet, preger2020degradation}. Solid-state batteries also offer long cycle lifetimes, between 1000 and 4000 cycles for commercially available cells~\cite{stEnfilm,tdkCeraCharge}.
+However, new battery chemistries like LTO and LFP batteries offer between 2000 and 7000 cycles at 0.5~C~\cite{hallExperimental18, LTODatasheet, LTODatasheet2,omarLithium14, sarasketaCycle15, wangCycle11,lifepo4Datasheet, preger2020degradation}. Solid-state batteries also offer long cycle lifetimes, between 1000 and 4000 cycles for commercially available cells~\cite{stEnfilm,tdkCeraCharge}.
 
 These rated cycle lifetimes represent the cycle life at 100\% depth-of-discharge (DoD), however battery cycle lifetime is heavily influenced by the rate of discharge, as well as the depth of discharge.
 The reduction of battery DoD to 10\%
@@ -721,7 +721,7 @@ Solid State
     (total) volume. Total volumes and energy storage are listed above the respective device.
     Configuration
     \textbf{(a)}, \textbf{(c)} and \textbf{(f)} represent the energy storage configurations used
-    in the Flicker platfrom with BLE and several sensors~\cite{hesterFlicker17}, the Solar Monjolo~\cite{campbellEnergy14} and the Capybara temperature
+    in the Flicker platform with BLE and several sensors~\cite{hesterFlicker17}, the Solar Monjolo~\cite{campbellEnergy14} and the Capybara temperature
     monitor and alarm~\cite{colinReconfigurable18}, which have total
     capacitances and energy capacities of 119\ssi{\micro\farad} (0.41\ssi{\micro\Wh} at 5~V), 500\ssi{\micro\farad} (1.7\ssi{\micro\Wh} at 5~V)
     and 8.8\ssi{\milli\farad} (8.3\ssi{\micro\Wh} at 2.6~V), respectively. Capacitors

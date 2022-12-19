@@ -9,23 +9,23 @@ We identify that a hybrid power supply architecture that combines energy harvest
 
 A main contribution of this work is the development of a reasoned approach to system-level rechargeable capacity sizing for energy harvesting sensor applications.
 Previous platforms in the literature have sized rechargeable capacity using ill-conceived heuristics or via arbitrary means.
-We develop a more reasoned heuristic for capacity sizing that is based on the relationship between minimum sufficient capacity, energy harvesting income, and average workload power. 
+We develop a more reasoned heuristic for capacity sizing that is based on the relationship between minimum sufficient capacity, energy harvesting income, and average workload power.
 This novel heuristic allows system designers to select a rechargeable capacity based on their intended workload, expected income distribution, and a safety margin between the average income and workload power.
 
 We expand upon this heuristic by developing an energy simulation of wireless sensor systems.
-We use this simulation tool in tandem with our heuristic to determine appropriate rechargeable capacity sizing to meet the requirements of a desired application. 
+We use this simulation tool in tandem with our heuristic to determine appropriate rechargeable capacity sizing to meet the requirements of a desired application.
 This simulation tool also aids in determining the appropriate non-rechargeable backup capacity to achieve high availability, reliability, and lifetime should an application require it.
 
 Finally, we utilize this new heuristic and simulation tool to design and implement two new wireless sensor systems to address real indoor sensing applications that require high sensing availability and long sensor lifetimes.
 %Platforms that utilize exclusively non-rechargeable batteries or batteryless energy harvesting are poorly suited to address these requirements.
 %Instead, we combine energy harvesting with a non-rechargeable backup and utilize our design framework to properly select and size our energy harvesting element, and rechargeable and non-rechargeable energy storage to achieve our application goals.
-The result is two indoor energy harvesting sensors that utilize energy harvesting paired with non-rechargeable backup energy. 
+The result is two indoor energy harvesting sensors that utilize energy harvesting paired with non-rechargeable backup energy.
 These systems simultaneously provide high sensing availability and five to ten year lifetimes under conservative energy harvesting conditions.
 
-Essentially, the results of this work allows system designers to build energy harvesting sensors that can capture and utilize a greater amount of available energy. 
-%As we have shown, this additional energy allows a system to perform a workload more consistently and can be used to extend the lifetime of a system with a backup battery. 
+Essentially, the results of this work allows system designers to build energy harvesting sensors that can capture and utilize a greater amount of available energy.
+%As we have shown, this additional energy allows a system to perform a workload more consistently and can be used to extend the lifetime of a system with a backup battery.
 %This energy can alternatively be used for previously infeasible energy and power intensive tasks, such as more complex local data processing and inference, or the inclusion of a more technologically advanced and power hungry sensor.
-Beyond the design changes mentioned in this work, future sensors will require additional primitives, architectures, and more sophisticated embedded processing to capitalize on this additional energy. 
+Beyond the design changes mentioned in this work, future sensors will require additional primitives, architectures, and more sophisticated embedded processing to capitalize on this additional energy.
 
 %\section{The Local Compute versus Transmit Trade-Off}
 %
@@ -41,7 +41,7 @@ Beyond the design changes mentioned in this work, future sensors will require ad
 %Introduction and improvement of low power embedded accelerators for DSP and neural net inference. What are the trends? How to compare with conventional Cortex M cores and each other?
 %
 %\subsection{The Constant Need for More Energy}
-%As computing efficiency increases, sensor data processing complexity will continue to increase, resulting in sensors that do more for the same amount of power. These sensors will require all the energy they can get. 
+%As computing efficiency increases, sensor data processing complexity will continue to increase, resulting in sensors that do more for the same amount of power. These sensors will require all the energy they can get.
 %
 %\section{What Primitives will Future Energy Harvesting Sensors Need?}
 %
@@ -63,25 +63,25 @@ For applications suitable for batteryless designs, state retention can be greatl
 \subsection{Measuring Energy for Dynamic Adaptation}
 With greater capacity compared to what is usually allocated on batteryless sensors, embedded programmers do not need to optimize and develop intermittent software that reacts to energy state that changes on time scales of milliseconds or seconds. With greater capacity, programmers can instead develop software that reacts over days, weeks, months, or seasons~\cite{ahmed2019optimal}.
 These long-term adaptation strategies are accurate and effective, but would improve greatly with a new primitive: an accurate measure of the state of charge of a battery and the rate of energy entering or leaving it.
-Estimating the state of charge of a battery via its voltage potential alone is difficult. 
+Estimating the state of charge of a battery via its voltage potential alone is difficult.
 This is due to the relatively flat voltage charge and discharge curve of many battery technologies, compared to the linear curve of capacitors.
 Many commercially-available integrated circuits exist to estimate the state of charge of batteries via the battery's voltage and coulomb counting of the charge entering and exiting the battery.
-However, they are generally power prohibitive for many ultra low power applications. 
-For example, the MAX17260, an "ultralow" power battery fuel gauge IC requires nearly 20\ssi{\micro\watt} to estimate battery state of charge~\cite{max17260}.
+However, they are generally power prohibitive for many ultra low power applications.
+For example, the MAX17260, an ``ultralow'' power battery fuel gauge IC requires nearly 20\ssi{\micro\watt} to estimate battery state of charge~\cite{max17260}.
 The inclusion of this fuel gauge would increase \name{}'s idle power from 3\ssi{\micro\watt} to 23\ssi{\micro\watt}.
-While acceptable for consumer devices like wearables or smartwatches that are frequently recharged, this increase in idle power is inappropriate for long-lived energy harvesting sensors in adverse harvesting environments. 
-These fuel gauges generally utilize periodic coulomb counting with a sense resistor and an ADC. 
+While acceptable for consumer devices like wearables or smartwatches that are frequently recharged, this increase in idle power is inappropriate for long-lived energy harvesting sensors in adverse harvesting environments.
+These fuel gauges generally utilize periodic coulomb counting with a sense resistor and an ADC.
 
 An alternate method for coulomb counting proposes counting the switching cycles of a DC-DC regulator~\cite{duttaEnergy08} In the iCount approach, each cycle represents a fixed quanta of energy, and the switching frequency of regulators increases linearly with current supplied to a load.
 This measurement has the potential to be low power in comparison to other approaches.
 For the initial implementation of iCount, a counter peripheral on an MCU was used and only required an extra 90\ssi{\nano\ampere} quiescent current to implement. This current draw could be improved further with dedicated hardware and the benefits of newer technology.
-The iCount technique has been included and improved upon in commercial products like the LTC3335, a buck-boost DC-DC regulator with an integrated coulomb counter. 
+The iCount technique has been included and improved upon in commercial products like the LTC3335, a buck-boost DC-DC regulator with an integrated coulomb counter.
 The LTC3335 only requires a little over 2\ssi{\micro\watt} quiescent power for simultaneous regulation and coulomb counting.
 Integrated circuits like the LTC3335 provide a solution for measuring energy expended from a rechargeable battery, but there is currently no commercially available counterpart for measuring the energy being captured and stored in the battery.
 It is slightly more difficult to implement iCount on an energy harvesting DC-DC regulator, as the voltage of the harvester can vary significantly compared to that of a battery.
 Having an accurate measure of voltage is important for the iCount approach as the switching frequency of a DC-DC regulator is dependent on both the difference in voltage between the input and output as well as the current draw on the output.
-Implementing a iCount-based coulomb counter for a 
-energy harvesting front end regulator would solve this problem and provide system designers the low power tools to accurately measure energy entering and leaving the system and write algorithms to adjust workload dynamically to detect and mitigate energy failure. 
+Implementing a iCount-based coulomb counter for a
+energy harvesting front end regulator would solve this problem and provide system designers the low power tools to accurately measure energy entering and leaving the system and write algorithms to adjust workload dynamically to detect and mitigate energy failure.
 
 \subsection{Alternate Power Domain Architectures}
 Beyond measuring the energy entering and leaving an energy harvesting sensor system, there also exists opportunities for exploring the utility of new power domain architectures for embedded processors.
@@ -93,27 +93,27 @@ All of these strategies assume that the entire system will lose power at some po
 
 With a different power domain architecture that isolates active and idle operation, it would be possible to dedicate a small amount of non-rechargeable backup energy to greatly simplify and improve state retention for batteryless systems.
 This backup energy store would exist solely to retain state when the system runs out of harvested energy.
-For example, the Nordic nRF52840 utilizes 256\ssi{\kilo\byte} of volatile SRAM and requires 2.35\ssi{\micro\watt} for full register and RAM retention~\cite{nrf52840}. 
+For example, the Nordic nRF52840 utilizes 256\ssi{\kilo\byte} of volatile SRAM and requires 2.35\ssi{\micro\watt} for full register and RAM retention~\cite{nrf52840}.
 A small CR2032 coin cell battery, with 240\ssi{\milli\Ah} capacity, could preserve the state of registers and RAM for over a decade.
-New processors that utilize non-volatile memory like FRAM or MRAM would allow for even longer idle lifetimes, as they would only require energy to finish storing data on power outages or load data on restoration. 
-Separate power domains would provide a simple and long-lasting method for state retention that is incorporated into the processor power management architecture, making it easy for designers to use compared to current software-based approaches. 
+New processors that utilize non-volatile memory like FRAM or MRAM would allow for even longer idle lifetimes, as they would only require energy to finish storing data on power outages or load data on restoration.
+Separate power domains would provide a simple and long-lasting method for state retention that is incorporated into the processor power management architecture, making it easy for designers to use compared to current software-based approaches.
 
 \subsection{Sensing Dimensionality Requires Interfaces and Memory}
 In addition to new power architectures, low power embedded processors and sensors would also benefit from the inclusion of standard, high-speed, parallel interfaces for fast data transfer, and additional memory to hold and manipulate that data.
 Sensing modalities will continue to increase in power efficiency and the data they produce will increase in size and dimensionality.
 
 This increase in data will require high speed and high bandwidth interfaces that are not commonly built into existing off-the-shelf embedded processors.
-For this reason, many recent research systems built to interface with image sensors have resorted to developing slow and inefficient bit-bang protocols, or in \namec{}'s case, shoehorning existing interfaces to interface with image sensors~\cite{josephson2019wireless, desai2022camaroptera}. 
-The lack of appropriate interfaces for image sensors is not ideal, and future commercial embedded processors should consider the addition of a standard high speed data streaming interface. 
+For this reason, many recent research systems built to interface with image sensors have resorted to developing slow and inefficient bit-bang protocols, or in \namec{}'s case, shoehorning existing interfaces to interface with image sensors~\cite{josephson2019wireless, desai2022camaroptera}.
+The lack of appropriate interfaces for image sensors is not ideal, and future commercial embedded processors should consider the addition of a standard high speed data streaming interface.
 
 Even with an appropriate interface, the increase in sensor data dimensionality requires significant memory to store it, manipulate it, or infer meaning from it.
 While the memory built into embedded processors has steadily increased in size, the ratio of memory size to processor performance is outpaced by other classes of computing.
-For example, a desktop personal computer may have 
-16\ssi{\giga\byte} of RAM and a processor clocked at 3\ssi{\giga\hertz}. 
+For example, a desktop personal computer may have
+16\ssi{\giga\byte} of RAM and a processor clocked at 3\ssi{\giga\hertz}.
 This represents a ratio of 5.3\ssi[per-mode=symbol]{\byte\per\hertz}.
 Likewise, an iPhone 14 has 6\ssi{\giga\byte} and a processor speed of 3.24\ssi{\giga\hertz}~\cite{iphone14}, with a ratio of 1.9\ssi[per-mode=symbol]{\byte\per\hertz}.
-Conversely, the nRF52840 
-has 256\ssi{\kilo\byte} of SRAM and  
+Conversely, the nRF52840
+has 256\ssi{\kilo\byte} of SRAM and
 is clocked at 64\ssi{\mega\hertz}. This represents a ratio of only \num{0.004}\ssi[per-mode=symbol]{\byte\per\hertz}.
 Compared to user-oriented devices, embedded SoCs provide significantly less memory when normalized for processor clock.
 While the multi-core CISC processors in desktop personal computers and smartphones are not necessarily comparable to single-core RISC embedded processors, the multiple orders of magnitude disparity in memory is notable.
@@ -125,22 +125,22 @@ Similarly, the neural network models for image inference were limited by the mem
 Future embedded SoCs will require greatly increased memory to match the increased complexity and data dimensionality of new sensing modalities and the inference to make sense of them.
 
 \section{Implications for Future Sensing}
-This dissertation has developed and presented a novel design framework for building energy harvesting wireless sensors that can achieve application goals. 
+This dissertation has developed and presented a novel design framework for building energy harvesting wireless sensors that can achieve application goals.
 This design framework provides a novel heuristic for sizing capacity to better capture harvestable energy for a given application, and identifies a hybrid architecture that combines harvesting with non-rechargeable backup energy as a design point that provides longevity and reliability.
 
 At its core, this work enables wireless system designers to combine the reliability of traditional battery powered sensors with the longevity of energy harvesting technology.
 Designers are now able to determine correct capacity sizing, increasing their sensor energy budget.
 This increased budget not only enables longer-lived sensor deployments, but also permits the development of new and more complex sensing systems.
-Applications like image-based person detection and counting are now possible in indoor environments with off-the-shelf components. 
+Applications like image-based person detection and counting are now possible in indoor environments with off-the-shelf components.
 We believe that the tools developed and presented in this dissertation will allow future sensor designers to not only utilize more complex and power intensive sensors but also create systems that utilize sophisticated local inference and data processing than is currently practical.
 This will enable future sensors to better utilize improvements in machine learning to detect complex phenomena and to do so locally, preserving privacy and reducing costly network communication.
-Regardless of what direction future wireless sensors take, one thing has always proven true: sensor designers will always find a way to better utilize any available energy, and this work will enable them to capture as much as they need. 
+Regardless of what direction future wireless sensors take, one thing has always proven true: sensor designers will always find a way to better utilize any available energy, and this work will enable them to capture as much as they need.
 
 %Energy harvesting sensors that can capture and utilize more energy are able to sense more consistently and reliably, perform more interesting and complex sensing, and persist longer with a non-rechargeable backup.
 %With the architectural and technology improvements mentioned previously, energy harvesting sensors will become more autonomous and capable.
-%The ability to accurately measure incoming and expended energy as well as reliably maintain volatile state 
+%The ability to accurately measure incoming and expended energy as well as reliably maintain volatile state
 %will result in sensors that can dynamically adjust their behavior to avoid energy failure and state loss.
-%Future sensors that increase computing power along with increased memory will 
-%be capable of sophisticated local inference and processing. 
+%Future sensors that increase computing power along with increased memory will
+%be capable of sophisticated local inference and processing.
 %This will help preserve privacy, reduce costly communication,  and enable the experimentation of new models and algorithms on a vast dataset provided by distributed sensors.
 %Regardless of the improvements of future energy harvesting wireless sensors, they will always need as much energy as they can capture. This dissertation provides a design framework to enable this.

@@ -408,7 +408,7 @@ A design requires state preservation techniques if \cref{eqn:intuition:checkpoin
     \label{eqn:intuition:checkpointing}
     \max X \leq E_{capacity} < \sum_{e \in X} e
 \end{equation}
-In \cref{fig:intuition:framework} the blue region labelled \textsf{State retention required} encompasses designs that satisfy \cref{eqn:intuition:checkpointing} and require state retention techniques to ensure proper operation.
+In \cref{fig:intuition:framework} the blue region labeled \textsf{State retention required} encompasses designs that satisfy \cref{eqn:intuition:checkpointing} and require state retention techniques to ensure proper operation.
 %composed of multiple, chained
 %atomic operations (such as sampling a sensor and then sending a radio packet), then
 %a mechanism for saving state and continuing progress on the next reboot
@@ -445,7 +445,7 @@ A design with average harvestable income ($\bar{P_h}$) less than what it takes t
     \label{eqn:intuition:hysteresis}
     P_l < \bar{P_h} \leq P_s
 \end{equation}
-Sensors within this regime will benefit from hysteresis techniques to reduce the amount of charge and time it takes for them to cold start. They will occupy the purple region in \cref{fig:intuition:framework} labelled \textsf{Hysteresis management helpful}.
+Sensors within this regime will benefit from hysteresis techniques to reduce the amount of charge and time it takes for them to cold start. They will occupy the purple region in \cref{fig:intuition:framework} labeled \textsf{Hysteresis management helpful}.
 
 Sensors that are able to harvest more power than it takes to maintain a deep sleep state will still benefit from hysteresis management if they frequently must cold start, or they have a lengthy and energy intensive cold start.
 The utility of hysteresis management is diminished
@@ -528,7 +528,7 @@ Similarly, one-shot batteryless platforms size their energy buffer to support th
 \placefigure{fig:intuition:continuum}
 
 Other more traditional energy harvesting systems size their energy buffer to support an arbitrary amount of runtime without harvestable energy.
-The Pible platform uses a supercapacitor that allows 2 hours of BLE advertizing at a 100ms period, but employs a dynamic power management technique to scale back advertising frequency when available energy is low~\cite{fraternali2018pible}.
+The Pible platform uses a supercapacitor that allows 2 hours of BLE advertising at a 100ms period, but employs a dynamic power management technique to scale back advertising frequency when available energy is low~\cite{fraternali2018pible}.
 The ZebraNet collar has enough battery energy capacity to support five days of operation without harvestable energy~\cite{juang2002energy}.
 This approach is also taken by millimeter-scale systems. The M\textsuperscript{3} platform has allocated enough energy storage to persist for just over two days in sleep mode~\cite{lee2013modular}.
 The energy capacity allocated by all of these examples is arbitrarily chosen.
@@ -723,7 +723,7 @@ We also present a simple model for energy capacity and analysis that indicates t
 The end result of the analysis of this chapter is a reasoned heuristic for determining appropriate rechargeable capacity sizing for a system based on its income and workload that is superior to arbitrary methods used by other platform designs.
 
 The next chapter seeks to expand upon the iterative model of capacity presented in \cref{sec:intuition:capacity} by developing an energy simulation for wireless sensors.
-It will seek to address the three previously mentioned limitations by modelling energy income and storage more realistically, modelling sensor workload more dynamically, and consider the impact of non-rechargeable backup energy.
+It will seek to address the three previously mentioned limitations by modeling energy income and storage more realistically, modeling sensor workload more dynamically, and consider the impact of non-rechargeable backup energy.
 
 %    How to express size of secondary mathematically?
 %    Energy capacity represents a moving capped sum, is this like a moving average? What is the smallest window that gives us the most return on energy capture?
@@ -797,7 +797,7 @@ It will seek to address the three previously mentioned limitations by modelling 
   %energy-harvesting
   %sensors have different capabilities and requirements
   \normalfont Design space for energy-harvesting sensors based on their energy
-  income (assumed constantant for this analysis), energy storage capacity, and workload.
+  income (assumed constant for this analysis), energy storage capacity, and workload.
   Workload is represented by the set of atomic operations required by an application,
   as well as the deep sleep and leakage power.  The plot breaks
   into four regions: \textsf{\color{Green} Always On}
